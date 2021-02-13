@@ -193,6 +193,9 @@
   <ItemGroup>
     <None Include="Resources\Error-Symbol-icon.png" />
     <None Include="Resources\Open-icon.png" />
+    <None Include="Resources\color-wheel-icon.png" />
+    <None Include="Resources\hashcheck.png" />
+    <None Include="Resources\qrCode.png" />
     <Content Include="Resources\TEST_DATA.ico" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

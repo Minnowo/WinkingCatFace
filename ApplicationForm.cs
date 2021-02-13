@@ -232,6 +232,7 @@ namespace WinkingCat
 
         private void mainForm_LostFocus(object sender, EventArgs e)
         {
+            forceDropDownClose = true;
             ToolStripDropDownButton_Capture.DropDown.Close();
             ToolStripDropDownButton_Clips.DropDown.Close();
             ToolStripDropDownButton_Tools.DropDown.Close();
@@ -278,7 +279,10 @@ namespace WinkingCat
             switch (e.CloseReason)
             {
                 case ToolStripDropDownCloseReason.AppFocusChange:
-                    e.Cancel = true;
+                    if (!forceDropDownClose)
+                        e.Cancel = true;
+                    else
+                        forceDropDownClose = false;
                     break;
 
                 case ToolStripDropDownCloseReason.CloseCalled:

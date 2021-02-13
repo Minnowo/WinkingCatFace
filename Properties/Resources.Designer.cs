@@ -103,6 +103,16 @@ namespace WinkingCat.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
+        internal static System.Drawing.Bitmap color_wheel_icon {
+            get {
+                object obj = ResourceManager.GetObject("color_wheel_icon", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
         internal static System.Drawing.Bitmap cursor_icon {
             get {
                 object obj = ResourceManager.GetObject("cursor_icon", resourceCulture);
@@ -153,6 +163,16 @@ namespace WinkingCat.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
+        internal static System.Drawing.Bitmap hashcheck {
+            get {
+                object obj = ResourceManager.GetObject("hashcheck", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
         internal static System.Drawing.Bitmap lastRegion_icon {
             get {
                 object obj = ResourceManager.GetObject("lastRegion-icon", resourceCulture);
@@ -196,6 +216,16 @@ namespace WinkingCat.Properties {
         internal static System.Drawing.Bitmap Open_icon {
             get {
                 object obj = ResourceManager.GetObject("Open_icon", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap qrCode {
+            get {
+                object obj = ResourceManager.GetObject("qrCode", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }
