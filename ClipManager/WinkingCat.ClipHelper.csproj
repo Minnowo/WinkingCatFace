@@ -34,7 +34,8 @@
     <SignAssembly>false</SignAssembly>
   </PropertyGroup>
   <PropertyGroup>
-    <AssemblyOriginatorKeyFile>what am i even doing.pfx</AssemblyOriginatorKeyFile>
+    <AssemblyOriginatorKeyFile>
+    </AssemblyOriginatorKeyFile>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="System" />
@@ -77,9 +78,6 @@
       <Project>{9d5d4aa3-5ff0-46b3-aca4-af277f4713cd}</Project>
       <Name>WinkingCat.HelperLibs</Name>
     </ProjectReference>
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="what am i even doing.pfx" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Resources\Clipboard-2-icon.png" />

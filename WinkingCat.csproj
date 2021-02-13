@@ -40,7 +40,8 @@
     <SignAssembly>false</SignAssembly>
   </PropertyGroup>
   <PropertyGroup>
-    <AssemblyOriginatorKeyFile>what am i even doing.pfx</AssemblyOriginatorKeyFile>
+    <AssemblyOriginatorKeyFile>
+    </AssemblyOriginatorKeyFile>
   </PropertyGroup>
   <PropertyGroup>
     <SignManifests>false</SignManifests>
@@ -101,8 +102,6 @@
       <DependentUpon>Settings.settings</DependentUpon>
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
     </Compile>
-    <None Include="what am i even doing.pfx" />
-    <None Include="WinkingCat_TemporaryKey.pfx" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
@@ -174,9 +173,9 @@
     <None Include="Resources\gear-in-icon.png" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="ClipManager\ClipHelper.csproj">
+    <ProjectReference Include="ClipManager\WinkingCat.ClipHelper.csproj">
       <Project>{e9346324-4f31-4035-b72c-22d79335112d}</Project>
-      <Name>ClipHelper</Name>
+      <Name>WinkingCat.ClipHelper</Name>
     </ProjectReference>
     <ProjectReference Include="HelperLibs\WinkingCat.HelperLibs.csproj">
       <Project>{9d5d4aa3-5ff0-46b3-aca4-af277f4713cd}</Project>
@@ -192,11 +191,9 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <Content Include="Icon1.ico" />
     <None Include="Resources\Error-Symbol-icon.png" />
     <None Include="Resources\Open-icon.png" />
     <Content Include="Resources\TEST_DATA.ico" />
-    <Content Include="TEST_DATA.ico" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
