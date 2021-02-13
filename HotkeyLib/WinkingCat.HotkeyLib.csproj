@@ -50,7 +50,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Enums.cs" />
-    <Compile Include="HotkeyForm.cs">
+    <Compile Include="Forms\HotkeyForm.cs">
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="HotkeyManager.cs" />

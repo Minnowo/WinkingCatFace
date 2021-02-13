@@ -20,4 +20,13 @@ namespace WinkingCat.HelperLibs
         ColorWheelPicker,
         HashCheck,
     }
+
+    public enum ColorFormat
+    {
+        ARGB,
+        Hex,
+        Decminal,
+        CMYK,
+        HSB
+    }
 }

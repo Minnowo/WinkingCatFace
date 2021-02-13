@@ -31,16 +31,15 @@
             this.components = new System.ComponentModel.Container();
             this.ResizePanel = new System.Windows.Forms.Panel();
             this.ContextMenu = new System.Windows.Forms.ContextMenuStrip(this.components);
-            this.toolStripSeparator2 = new System.Windows.Forms.ToolStripSeparator();
-            this.toolStripSeparator1 = new System.Windows.Forms.ToolStripSeparator();
-            this.clipDisplayPictureBox = new System.Windows.Forms.PictureBox();
             this.copyToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.allowResizeToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.oCRToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.saveToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.toolStripSeparator2 = new System.Windows.Forms.ToolStripSeparator();
             this.destroyToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.toolStripSeparator1 = new System.Windows.Forms.ToolStripSeparator();
             this.destroyAllClipsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.bringAllClipsFrontToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.clipDisplayPictureBox = new System.Windows.Forms.PictureBox();
             this.ContextMenu.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.clipDisplayPictureBox)).BeginInit();
             this.SuspendLayout();
@@ -65,36 +64,10 @@
             this.toolStripSeparator2,
             this.destroyToolStripMenuItem,
             this.toolStripSeparator1,
-            this.destroyAllClipsToolStripMenuItem,
-            this.bringAllClipsFrontToolStripMenuItem});
+            this.destroyAllClipsToolStripMenuItem});
             this.ContextMenu.LayoutStyle = System.Windows.Forms.ToolStripLayoutStyle.VerticalStackWithOverflow;
             this.ContextMenu.Name = "contextMenuStrip1";
-            this.ContextMenu.Size = new System.Drawing.Size(197, 304);
-            // 
-            // toolStripSeparator2
-            // 
-            this.toolStripSeparator2.Name = "toolStripSeparator2";
-            this.toolStripSeparator2.Size = new System.Drawing.Size(193, 6);
-            // 
-            // toolStripSeparator1
-            // 
-            this.toolStripSeparator1.Name = "toolStripSeparator1";
-            this.toolStripSeparator1.Size = new System.Drawing.Size(193, 6);
-            // 
-            // clipDisplayPictureBox
-            // 
-            this.clipDisplayPictureBox.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.clipDisplayPictureBox.BackgroundImageLayout = System.Windows.Forms.ImageLayout.None;
-            this.clipDisplayPictureBox.ContextMenuStrip = this.ContextMenu;
-            this.clipDisplayPictureBox.Location = new System.Drawing.Point(1, 1);
-            this.clipDisplayPictureBox.Margin = new System.Windows.Forms.Padding(0);
-            this.clipDisplayPictureBox.Name = "clipDisplayPictureBox";
-            this.clipDisplayPictureBox.Size = new System.Drawing.Size(100, 50);
-            this.clipDisplayPictureBox.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
-            this.clipDisplayPictureBox.TabIndex = 0;
-            this.clipDisplayPictureBox.TabStop = false;
+            this.ContextMenu.Size = new System.Drawing.Size(197, 266);
             // 
             // copyToolStripMenuItem
             // 
@@ -133,6 +106,11 @@
             this.saveToolStripMenuItem.Size = new System.Drawing.Size(196, 38);
             this.saveToolStripMenuItem.Text = "Save";
             // 
+            // toolStripSeparator2
+            // 
+            this.toolStripSeparator2.Name = "toolStripSeparator2";
+            this.toolStripSeparator2.Size = new System.Drawing.Size(193, 6);
+            // 
             // destroyToolStripMenuItem
             // 
             this.destroyToolStripMenuItem.Image = global::WinkingCat.ClipHelper.Properties.Resources.Error_Symbol_icon;
@@ -142,6 +120,11 @@
             this.destroyToolStripMenuItem.Size = new System.Drawing.Size(196, 38);
             this.destroyToolStripMenuItem.Text = "Destroy";
             // 
+            // toolStripSeparator1
+            // 
+            this.toolStripSeparator1.Name = "toolStripSeparator1";
+            this.toolStripSeparator1.Size = new System.Drawing.Size(193, 6);
+            // 
             // destroyAllClipsToolStripMenuItem
             // 
             this.destroyAllClipsToolStripMenuItem.Image = global::WinkingCat.ClipHelper.Properties.Resources.fire_icon;
@@ -150,13 +133,20 @@
             this.destroyAllClipsToolStripMenuItem.Size = new System.Drawing.Size(196, 38);
             this.destroyAllClipsToolStripMenuItem.Text = "DestroyAllClips";
             // 
-            // bringAllClipsFrontToolStripMenuItem
+            // clipDisplayPictureBox
             // 
-            this.bringAllClipsFrontToolStripMenuItem.Image = global::WinkingCat.ClipHelper.Properties.Resources.layer_stack_arrange_back_icon;
-            this.bringAllClipsFrontToolStripMenuItem.ImageScaling = System.Windows.Forms.ToolStripItemImageScaling.None;
-            this.bringAllClipsFrontToolStripMenuItem.Name = "bringAllClipsFrontToolStripMenuItem";
-            this.bringAllClipsFrontToolStripMenuItem.Size = new System.Drawing.Size(196, 38);
-            this.bringAllClipsFrontToolStripMenuItem.Text = "BringAllClipsFront";
+            this.clipDisplayPictureBox.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.clipDisplayPictureBox.BackgroundImageLayout = System.Windows.Forms.ImageLayout.None;
+            this.clipDisplayPictureBox.ContextMenuStrip = this.ContextMenu;
+            this.clipDisplayPictureBox.Location = new System.Drawing.Point(1, 1);
+            this.clipDisplayPictureBox.Margin = new System.Windows.Forms.Padding(0);
+            this.clipDisplayPictureBox.Name = "clipDisplayPictureBox";
+            this.clipDisplayPictureBox.Size = new System.Drawing.Size(100, 50);
+            this.clipDisplayPictureBox.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
+            this.clipDisplayPictureBox.TabIndex = 0;
+            this.clipDisplayPictureBox.TabStop = false;
             // 
             // ClipForm
             // 
@@ -191,6 +181,5 @@
         private System.Windows.Forms.ToolStripMenuItem destroyToolStripMenuItem;
         private System.Windows.Forms.ToolStripSeparator toolStripSeparator1;
         private System.Windows.Forms.ToolStripMenuItem destroyAllClipsToolStripMenuItem;
-        private System.Windows.Forms.ToolStripMenuItem bringAllClipsFrontToolStripMenuItem;
     }
 }

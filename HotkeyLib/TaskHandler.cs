@@ -31,6 +31,7 @@ namespace WinkingCat.HotkeyLib
             switch (task)
             {
                 case Tasks.RegionCapture:
+                    RegionCaptureOptions.mode = RegionCaptureMode.Default;
                     ImageHandler.RegionCapture();
                     break;
 
@@ -38,6 +39,7 @@ namespace WinkingCat.HotkeyLib
                     return false;
 
                 case Tasks.NewClipFromRegionCapture:
+                    RegionCaptureOptions.mode = RegionCaptureMode.Default;
                     RegionCaptureOptions.createSingleClipAfterRegionCapture = true;
                     ImageHandler.RegionCapture();
                     return false;
@@ -49,6 +51,8 @@ namespace WinkingCat.HotkeyLib
                     return false;
 
                 case Tasks.ScreenColorPicker:
+                    RegionCaptureOptions.mode = RegionCaptureMode.ColorPicker;
+                    ImageHandler.RegionCapture();
                     return false;
 
                 case Tasks.CaptureLastRegion:

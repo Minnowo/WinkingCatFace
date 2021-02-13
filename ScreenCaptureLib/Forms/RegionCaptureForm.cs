@@ -63,17 +63,19 @@ namespace WinkingCat
 
             clipWinPictureBox.Image = ScreenShotManager.CaptureRectangle(region);
 
-            ResumeLayout();
+            
             //Show();
 
             MaximizeBox = false;
-            //TopMost = true;
+            TopMost = true;
 
             Cursor = new Cursor(DirectoryManager.currentDirectory + ResourceManager.regionCaptureCursor);
 
             clipWinPictureBox.MouseDown += clipWinPictureBox_Click;
             clipWinPictureBox.MouseUp += clipWinPictureBox_ClickRelease;
             clipWinPictureBox.Paint += new PaintEventHandler(OnPaint);
+            clipWinPictureBox.MouseMove += clipWinPictureBox_MouseMove;
+            ResumeLayout();
         }
         protected override CreateParams CreateParams
         {
@@ -85,6 +87,11 @@ namespace WinkingCat
             }
         }
 
+        private void clipWinPictureBox_MouseMove(object sender, MouseEventArgs e)
+        {
+            Invalidate();
+            //Refresh();
+        }
 
         private void clipWinPictureBox_ClickRelease(object sender, EventArgs e)
         {
@@ -184,8 +191,6 @@ namespace WinkingCat
             
 
             DrawMouseGraphics(g);
-            Invalidate();
-
         }
 
         private void DrawMouseGraphics(Graphics g)
@@ -264,7 +269,7 @@ namespace WinkingCat
                         ScreenShotManager.CropImage(ScreenHelper.GetActiveScreenBounds0Based(), clipWinPictureBox.Image));
 
                 case RegionResult.Color:
-                    return null;
+                    return new LastRegionCaptureInfo(RegionResult.Color, leftClickStart, leftClickStop, ((Bitmap)clipWinPictureBox.Image).GetPixel(leftClickStop.X, leftClickStop.Y));
             }
             return null;
         }

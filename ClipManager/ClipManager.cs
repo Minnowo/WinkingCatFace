@@ -45,14 +45,5 @@ namespace WinkingCat.ClipHelper
                 Clips.Remove(clipName);
             }
         }
-
-        public static void BringAllFront()
-        {
-            string[] names = Clips.Keys.ToArray();
-            foreach (string clipName in names)
-            {
-                Clips[clipName]?.BringFront();
-            }
-        }
     }
 }

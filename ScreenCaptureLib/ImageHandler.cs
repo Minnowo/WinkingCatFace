@@ -50,12 +50,11 @@ namespace WinkingCat.ScreenCaptureLib
                                 ClipOptions ops = new ClipOptions();
                                 ops.location = ScreenHelper.GetRectangle0Based(LastInfo.Region).Location;
                                 ClipManager.CreateClip(LastInfo.Img, ops);
-                            }
-                                
+                            }    
                         }
                         else
                         {
-
+                            HandleRegionReturnColor(LastInfo.color);
                         }
                     }
                     regionCapture.Destroy();
@@ -89,7 +88,7 @@ namespace WinkingCat.ScreenCaptureLib
 
         public static void HandleRegionReturnColor(Color color)
         {
-
+            ClipboardHelpers.FormatCopyColor(ClipboardHelpers.copyFormat, color);
         }
 
         public static void HandleRegionReturnImage(Image img)

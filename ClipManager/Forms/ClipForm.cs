@@ -78,7 +78,6 @@ namespace WinkingCat.ClipHelper
             saveToolStripMenuItem.Click += Save_Click;
             destroyToolStripMenuItem.Click += Destroy_Click;
             destroyAllClipsToolStripMenuItem.Click += DestroyAllClips_Click;
-            bringAllClipsFrontToolStripMenuItem.Click += BringAllClipsFront_Click;
 
             if (isResizable) allowResizeToolStripMenuItem.Checked = true;
             #endregion
@@ -137,10 +136,6 @@ namespace WinkingCat.ClipHelper
             ClipManager.DestroyAllClips();
         }
 
-        public void BringAllClipsFront_Click(object sedner = null, EventArgs e = null)
-        {
-            ClipManager.BringAllFront();
-        }
         #endregion
 
         #region form events

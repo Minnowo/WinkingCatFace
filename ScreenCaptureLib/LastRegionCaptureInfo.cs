@@ -11,6 +11,7 @@ namespace WinkingCat.ScreenCaptureLib
     public class LastRegionCaptureInfo
     {
         public Image Img { get; private set; }
+        public Color color { get; private set; }
         public Point StartLeftClick { get; private set; }
         public Point StopLeftClick { get; private set; }
         public Rectangle Region { get; private set; }
@@ -26,7 +27,6 @@ namespace WinkingCat.ScreenCaptureLib
 
         public LastRegionCaptureInfo(RegionResult result, Point startLeftClick = default, Point stopLeftClick = default, Rectangle region = default, Image img = null) : this(result)
         {
-            Result = result;
             StartLeftClick = startLeftClick;
             StopLeftClick = stopLeftClick;
             Region = region;
@@ -36,6 +36,13 @@ namespace WinkingCat.ScreenCaptureLib
         public LastRegionCaptureInfo(RegionResult result, bool capturedFullscreen = false, Image img = null) : this(result, default, default, default, img)
         {
             CapturedFullscreeen = capturedFullscreen;
+        }
+
+        public LastRegionCaptureInfo(RegionResult result, Point startLeftClick = default, Point stopLeftClick = default, Color color = default) : this(result)
+        {
+            this.color = color;
+            StartLeftClick = startLeftClick;
+            StopLeftClick = stopLeftClick;
         }
 
         public LastRegionCaptureInfo(RegionResult result, Screen capturedMonitor = null, Image img = null) : this(result, false, img)
