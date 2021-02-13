@@ -1,0 +1,49 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.30621.155
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WinkingCat", "WinkingCat.csproj", "{D3039595-1B90-451D-B853-3B6FD48C19E5}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WinkingCat.HelperLibs", "HelperLibs\WinkingCat.HelperLibs.csproj", "{9D5D4AA3-5FF0-46B3-ACA4-AF277F4713CD}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WinkingCat.ScreenCaptureLib", "ScreenCaptureLib\WinkingCat.ScreenCaptureLib.csproj", "{3A626C93-B19A-48D7-9DC4-92F4063FF857}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WinkingCat.HotkeyLib", "HotkeyLib\WinkingCat.HotkeyLib.csproj", "{1C74E0AE-DCD0-45BB-AD5C-A80791FFA054}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ClipHelper", "ClipManager\ClipHelper.csproj", "{E9346324-4F31-4035-B72C-22D79335112D}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{D3039595-1B90-451D-B853-3B6FD48C19E5}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D3039595-1B90-451D-B853-3B6FD48C19E5}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D3039595-1B90-451D-B853-3B6FD48C19E5}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D3039595-1B90-451D-B853-3B6FD48C19E5}.Release|Any CPU.Build.0 = Release|Any CPU
+		{9D5D4AA3-5FF0-46B3-ACA4-AF277F4713CD}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{9D5D4AA3-5FF0-46B3-ACA4-AF277F4713CD}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{9D5D4AA3-5FF0-46B3-ACA4-AF277F4713CD}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{9D5D4AA3-5FF0-46B3-ACA4-AF277F4713CD}.Release|Any CPU.Build.0 = Release|Any CPU
+		{3A626C93-B19A-48D7-9DC4-92F4063FF857}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{3A626C93-B19A-48D7-9DC4-92F4063FF857}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{3A626C93-B19A-48D7-9DC4-92F4063FF857}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{3A626C93-B19A-48D7-9DC4-92F4063FF857}.Release|Any CPU.Build.0 = Release|Any CPU
+		{1C74E0AE-DCD0-45BB-AD5C-A80791FFA054}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{1C74E0AE-DCD0-45BB-AD5C-A80791FFA054}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{1C74E0AE-DCD0-45BB-AD5C-A80791FFA054}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{1C74E0AE-DCD0-45BB-AD5C-A80791FFA054}.Release|Any CPU.Build.0 = Release|Any CPU
+		{E9346324-4F31-4035-B72C-22D79335112D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E9346324-4F31-4035-B72C-22D79335112D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E9346324-4F31-4035-B72C-22D79335112D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E9346324-4F31-4035-B72C-22D79335112D}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {11A1AE24-28C7-4846-9EB0-9C01DA39BC78}
+	EndGlobalSection
+EndGlobal
