@@ -55,6 +55,7 @@ namespace WinkingCat
             #region Tools dropdown buttons
             ToolStripDropDownButton_Tools.DropDown.Closing += toolStripDropDown_Closing;
 
+            ToolStripDropDownButton_screenColorPicker.Click += ScreenColorPicker_Click;
             #endregion
 
             #region Style button
@@ -204,6 +205,13 @@ namespace WinkingCat
         private void CreateClipAfterRegionCapture_Click(object sender, EventArgs e)
         {
 
+        }
+        #endregion
+
+        #region Tools dropdown buttons
+        private void ScreenColorPicker_Click(object sender, EventArgs e)
+        {
+            TaskHandler.ExecuteTask(Tasks.ScreenColorPicker);
         }
         #endregion
 

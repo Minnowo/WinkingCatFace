@@ -45,7 +45,7 @@
             this.ToolStripMenuItem_clipFromFile = new System.Windows.Forms.ToolStripMenuItem();
             this.ToolStripMenuItem_createClipAfterRegionCapture = new System.Windows.Forms.ToolStripMenuItem();
             this.ToolStripDropDownButton_Tools = new System.Windows.Forms.ToolStripDropDownButton();
-            this.toolStripMenuItem1 = new System.Windows.Forms.ToolStripMenuItem();
+            this.ToolStripDropDownButton_screenColorPicker = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripMenuItem7 = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripMenuItem8 = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripMenuItem9 = new System.Windows.Forms.ToolStripMenuItem();
@@ -232,7 +232,7 @@
             // ToolStripDropDownButton_Tools
             // 
             this.ToolStripDropDownButton_Tools.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.toolStripMenuItem1,
+            this.ToolStripDropDownButton_screenColorPicker,
             this.toolStripMenuItem7,
             this.toolStripMenuItem8,
             this.toolStripMenuItem9});
@@ -245,13 +245,13 @@
             this.ToolStripDropDownButton_Tools.Size = new System.Drawing.Size(167, 36);
             this.ToolStripDropDownButton_Tools.Text = "Tools";
             // 
-            // toolStripMenuItem1
+            // ToolStripDropDownButton_screenColorPicker
             // 
-            this.toolStripMenuItem1.Image = global::WinkingCat.Properties.Resources.new_document_icon;
-            this.toolStripMenuItem1.ImageScaling = System.Windows.Forms.ToolStripItemImageScaling.None;
-            this.toolStripMenuItem1.Name = "toolStripMenuItem1";
-            this.toolStripMenuItem1.Size = new System.Drawing.Size(316, 38);
-            this.toolStripMenuItem1.Text = "NewClip";
+            this.ToolStripDropDownButton_screenColorPicker.Image = ((System.Drawing.Image)(resources.GetObject("ToolStripDropDownButton_screenColorPicker.Image")));
+            this.ToolStripDropDownButton_screenColorPicker.ImageScaling = System.Windows.Forms.ToolStripItemImageScaling.None;
+            this.ToolStripDropDownButton_screenColorPicker.Name = "ToolStripDropDownButton_screenColorPicker";
+            this.ToolStripDropDownButton_screenColorPicker.Size = new System.Drawing.Size(316, 38);
+            this.ToolStripDropDownButton_screenColorPicker.Text = "ScreenColorPicker";
             // 
             // toolStripMenuItem7
             // 
@@ -582,7 +582,7 @@
         private System.Windows.Forms.ToolStripMenuItem ToolStripMenuItem_clipFromFile;
         private System.Windows.Forms.ToolStripMenuItem ToolStripMenuItem_createClipAfterRegionCapture;
         private System.Windows.Forms.ToolStripDropDownButton ToolStripDropDownButton_Tools;
-        private System.Windows.Forms.ToolStripMenuItem toolStripMenuItem1;
+        private System.Windows.Forms.ToolStripMenuItem ToolStripDropDownButton_screenColorPicker;
         private System.Windows.Forms.ToolStripMenuItem toolStripMenuItem7;
         private System.Windows.Forms.ToolStripMenuItem toolStripMenuItem8;
         private System.Windows.Forms.ToolStripMenuItem toolStripMenuItem9;
