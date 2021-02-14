@@ -8,28 +8,29 @@ using System.Windows.Forms;
 
 namespace WinkingCat.HotkeyLib
 {
-    public class HotkeyManager
+    public static class HotkeyManager
     {
-        public HotkeyForm hotkeyForm { get; private set; }
-        public List<HotkeySettings> hotKeys { get; private set; }
+        public static HotkeyForm hotkeyForm { get; private set; }
+        public static List<HotkeySettings> hotKeys { get; private set; }
+        public static bool ignoreHotkeyPress { get; set; } = false;
 
-        public HotkeyManager()
+        public static void Init()
         {
             hotkeyForm = new HotkeyForm();
             hotkeyForm.HotkeyPress += Nyah;
         }
 
-        public void Nyah(ushort id, Keys key, Modifiers modifier)
+        public static void Nyah(ushort id, Keys key, Modifiers modifier)
         {
             HotkeySettings hotkeySetting = hotKeys.Find(x => x.HotkeyInfo.ID == id);
 
-            if (hotkeySetting != null)
+            if (hotkeySetting != null && !ignoreHotkeyPress)
             {
                 TaskHandler.ExecuteTask(hotkeySetting.Task);
             }
         }
 
-        public void UpdateHotkeys(List<HotkeySettings> hotkeys, bool showFailedHotkeys)
+        public static void UpdateHotkeys(List<HotkeySettings> hotkeys, bool showFailedHotkeys)
         {
             if (hotKeys != null)
             {
@@ -46,7 +47,7 @@ namespace WinkingCat.HotkeyLib
             }
         }
 
-        public void RegisterHotkey(HotkeySettings hotkeySetting)
+        public static void RegisterHotkey(HotkeySettings hotkeySetting)
         {
             UnRegisterHotkey(hotkeySetting, false);
 
@@ -71,7 +72,7 @@ namespace WinkingCat.HotkeyLib
             }
         }
 
-        public void UnRegisterHotkey(HotkeySettings hotkeySetting, bool removeFromList)
+        public static void UnRegisterHotkey(HotkeySettings hotkeySetting, bool removeFromList)
         {
             if (hotkeySetting.HotkeyInfo.Status == HotkeyStatus.Registered)
             {
@@ -93,7 +94,7 @@ namespace WinkingCat.HotkeyLib
             }
         }
 
-        public void RegisterAllHotkeys()
+        public static void RegisterAllHotkeys()
         {
             foreach (HotkeySettings hotkeySetting in hotKeys.ToArray())
             {
@@ -101,7 +102,7 @@ namespace WinkingCat.HotkeyLib
             }
         }
 
-        public void UnRegisterAllHotkeys(bool removeFromList = true, bool temporary = false)
+        public static void UnRegisterAllHotkeys(bool removeFromList = true, bool temporary = false)
         {
             if (hotKeys != null)
             {
@@ -112,7 +113,7 @@ namespace WinkingCat.HotkeyLib
             }
         }
 
-        public void ShowFailedHotkeys()
+        public static void ShowFailedHotkeys()
         {
             List<HotkeySettings> failedHotkeysList = hotKeys.Where(x => x.HotkeyInfo.Status == HotkeyStatus.Failed).ToList();
 

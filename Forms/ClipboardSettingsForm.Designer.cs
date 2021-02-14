@@ -57,9 +57,9 @@
             // comboBox3
             // 
             this.comboBox3.FormattingEnabled = true;
-            this.comboBox3.Location = new System.Drawing.Point(250, 72);
+            this.comboBox3.Location = new System.Drawing.Point(168, 72);
             this.comboBox3.Name = "comboBox3";
-            this.comboBox3.Size = new System.Drawing.Size(261, 21);
+            this.comboBox3.Size = new System.Drawing.Size(307, 21);
             this.comboBox3.TabIndex = 4;
             // 
             // label1
@@ -75,7 +75,7 @@
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(524, 396);
+            this.ClientSize = new System.Drawing.Size(488, 396);
             this.Controls.Add(this.label1);
             this.Controls.Add(this.comboBox3);
             this.Controls.Add(this.checkBox2);

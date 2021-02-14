@@ -56,9 +56,9 @@
             // 
             // PathBrowseButton
             // 
-            this.PathBrowseButton.Location = new System.Drawing.Point(377, 40);
+            this.PathBrowseButton.Location = new System.Drawing.Point(377, 41);
             this.PathBrowseButton.Name = "PathBrowseButton";
-            this.PathBrowseButton.Size = new System.Drawing.Size(134, 20);
+            this.PathBrowseButton.Size = new System.Drawing.Size(91, 20);
             this.PathBrowseButton.TabIndex = 2;
             this.PathBrowseButton.Text = "Browse...";
             this.PathBrowseButton.UseVisualStyleBackColor = true;
@@ -100,7 +100,7 @@
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(524, 396);
+            this.ClientSize = new System.Drawing.Size(485, 396);
             this.Controls.Add(this.SubFolderPathLabel);
             this.Controls.Add(this.OpenButton);
             this.Controls.Add(this.textBox2);

@@ -20,7 +20,6 @@ namespace WinkingCat
     public partial class ApplicationForm : Form
     {
         private Image image { get; set; } = null;
-        private HotkeyManager HKmanager;
         public SettingsForm settingsForm { get; private set; }
 
         public bool forceClose { get; set; } = false;
@@ -87,9 +86,7 @@ namespace WinkingCat
             openMainWindowToolStripMenuItem.Click += OpenMainWindow_Click;
             exitToolStripMenuItem.Click += ExitApplication_Click;
             #endregion
-
-            HKmanager = new HotkeyManager();
-            HKmanager.UpdateHotkeys(HotkeyManager.GetDefaultHotkeyList(), true);
+            HotkeyManager.UpdateHotkeys(HotkeyManager.GetDefaultHotkeyList(), true);
         }
 
         #region Capture dropdown buttons

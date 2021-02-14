@@ -53,7 +53,7 @@
             // comboBox1
             // 
             this.comboBox1.FormattingEnabled = true;
-            this.comboBox1.Location = new System.Drawing.Point(250, 95);
+            this.comboBox1.Location = new System.Drawing.Point(209, 95);
             this.comboBox1.Name = "comboBox1";
             this.comboBox1.Size = new System.Drawing.Size(261, 21);
             this.comboBox1.TabIndex = 1;
@@ -61,7 +61,7 @@
             // comboBox2
             // 
             this.comboBox2.FormattingEnabled = true;
-            this.comboBox2.Location = new System.Drawing.Point(250, 122);
+            this.comboBox2.Location = new System.Drawing.Point(209, 122);
             this.comboBox2.Name = "comboBox2";
             this.comboBox2.Size = new System.Drawing.Size(261, 21);
             this.comboBox2.TabIndex = 2;
@@ -69,7 +69,7 @@
             // comboBox3
             // 
             this.comboBox3.FormattingEnabled = true;
-            this.comboBox3.Location = new System.Drawing.Point(250, 149);
+            this.comboBox3.Location = new System.Drawing.Point(209, 149);
             this.comboBox3.Name = "comboBox3";
             this.comboBox3.Size = new System.Drawing.Size(261, 21);
             this.comboBox3.TabIndex = 3;
@@ -77,7 +77,7 @@
             // AlwaysOnTopCheckbox
             // 
             this.AlwaysOnTopCheckbox.AutoSize = true;
-            this.AlwaysOnTopCheckbox.Location = new System.Drawing.Point(250, 18);
+            this.AlwaysOnTopCheckbox.Location = new System.Drawing.Point(209, 18);
             this.AlwaysOnTopCheckbox.Name = "AlwaysOnTopCheckbox";
             this.AlwaysOnTopCheckbox.Size = new System.Drawing.Size(98, 17);
             this.AlwaysOnTopCheckbox.TabIndex = 4;
@@ -135,7 +135,7 @@
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(524, 396);
+            this.ClientSize = new System.Drawing.Size(483, 396);
             this.Controls.Add(this.label3);
             this.Controls.Add(this.label2);
             this.Controls.Add(this.label1);

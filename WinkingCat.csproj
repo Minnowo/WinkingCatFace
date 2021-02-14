@@ -70,6 +70,12 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Controls\HotkeyInputControl.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Controls\HotkeyInputControl.Designer.cs">
+      <DependentUpon>HotkeyInputControl.cs</DependentUpon>
+    </Compile>
     <Compile Include="Forms\ClipboardSettingsForm.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -120,6 +126,9 @@
     <Compile Include="Forms\UploadSettingsForm.Designer.cs">
       <DependentUpon>UploadSettingsForm.cs</DependentUpon>
     </Compile>
+    <EmbeddedResource Include="Controls\HotkeyInputControl.resx">
+      <DependentUpon>HotkeyInputControl.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Forms\ApplicationForm.resx">
       <DependentUpon>ApplicationForm.cs</DependentUpon>
     </EmbeddedResource>
@@ -128,6 +137,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\GeneralSettingsForm.resx">
       <DependentUpon>GeneralSettingsForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\HotkeySettingsForm.resx">
+      <DependentUpon>HotkeySettingsForm.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\PathSettingsForm.resx">
       <DependentUpon>PathSettingsForm.cs</DependentUpon>

@@ -29,11 +29,11 @@
         private void InitializeComponent()
         {
             this.panel1 = new System.Windows.Forms.Panel();
-            this.SideButton1 = new System.Windows.Forms.Button();
-            this.SideButton2 = new System.Windows.Forms.Button();
-            this.SideButton3 = new System.Windows.Forms.Button();
-            this.SideButton4 = new System.Windows.Forms.Button();
             this.SideButton5 = new System.Windows.Forms.Button();
+            this.SideButton4 = new System.Windows.Forms.Button();
+            this.SideButton3 = new System.Windows.Forms.Button();
+            this.SideButton2 = new System.Windows.Forms.Button();
+            this.SideButton1 = new System.Windows.Forms.Button();
             this.FormDockPanel = new System.Windows.Forms.Panel();
             this.panel1.SuspendLayout();
             this.SuspendLayout();
@@ -51,35 +51,15 @@
             this.panel1.Size = new System.Drawing.Size(200, 396);
             this.panel1.TabIndex = 0;
             // 
-            // SideButton1
+            // SideButton5
             // 
-            this.SideButton1.Dock = System.Windows.Forms.DockStyle.Top;
-            this.SideButton1.Location = new System.Drawing.Point(0, 0);
-            this.SideButton1.Name = "SideButton1";
-            this.SideButton1.Size = new System.Drawing.Size(200, 40);
-            this.SideButton1.TabIndex = 0;
-            this.SideButton1.Text = "General";
-            this.SideButton1.UseVisualStyleBackColor = true;
-            // 
-            // SideButton2
-            // 
-            this.SideButton2.Dock = System.Windows.Forms.DockStyle.Top;
-            this.SideButton2.Location = new System.Drawing.Point(0, 40);
-            this.SideButton2.Name = "SideButton2";
-            this.SideButton2.Size = new System.Drawing.Size(200, 40);
-            this.SideButton2.TabIndex = 1;
-            this.SideButton2.Text = "Paths";
-            this.SideButton2.UseVisualStyleBackColor = true;
-            // 
-            // SideButton3
-            // 
-            this.SideButton3.Dock = System.Windows.Forms.DockStyle.Top;
-            this.SideButton3.Location = new System.Drawing.Point(0, 80);
-            this.SideButton3.Name = "SideButton3";
-            this.SideButton3.Size = new System.Drawing.Size(200, 40);
-            this.SideButton3.TabIndex = 2;
-            this.SideButton3.Text = "Upload";
-            this.SideButton3.UseVisualStyleBackColor = true;
+            this.SideButton5.Dock = System.Windows.Forms.DockStyle.Top;
+            this.SideButton5.Location = new System.Drawing.Point(0, 160);
+            this.SideButton5.Name = "SideButton5";
+            this.SideButton5.Size = new System.Drawing.Size(200, 40);
+            this.SideButton5.TabIndex = 4;
+            this.SideButton5.Text = "Hotkeys";
+            this.SideButton5.UseVisualStyleBackColor = true;
             // 
             // SideButton4
             // 
@@ -91,15 +71,35 @@
             this.SideButton4.Text = "Clipboard";
             this.SideButton4.UseVisualStyleBackColor = true;
             // 
-            // SideButton5
+            // SideButton3
             // 
-            this.SideButton5.Dock = System.Windows.Forms.DockStyle.Top;
-            this.SideButton5.Location = new System.Drawing.Point(0, 160);
-            this.SideButton5.Name = "SideButton5";
-            this.SideButton5.Size = new System.Drawing.Size(200, 40);
-            this.SideButton5.TabIndex = 4;
-            this.SideButton5.Text = "Hotkeys";
-            this.SideButton5.UseVisualStyleBackColor = true;
+            this.SideButton3.Dock = System.Windows.Forms.DockStyle.Top;
+            this.SideButton3.Location = new System.Drawing.Point(0, 80);
+            this.SideButton3.Name = "SideButton3";
+            this.SideButton3.Size = new System.Drawing.Size(200, 40);
+            this.SideButton3.TabIndex = 2;
+            this.SideButton3.Text = "Upload";
+            this.SideButton3.UseVisualStyleBackColor = true;
+            // 
+            // SideButton2
+            // 
+            this.SideButton2.Dock = System.Windows.Forms.DockStyle.Top;
+            this.SideButton2.Location = new System.Drawing.Point(0, 40);
+            this.SideButton2.Name = "SideButton2";
+            this.SideButton2.Size = new System.Drawing.Size(200, 40);
+            this.SideButton2.TabIndex = 1;
+            this.SideButton2.Text = "Paths";
+            this.SideButton2.UseVisualStyleBackColor = true;
+            // 
+            // SideButton1
+            // 
+            this.SideButton1.Dock = System.Windows.Forms.DockStyle.Top;
+            this.SideButton1.Location = new System.Drawing.Point(0, 0);
+            this.SideButton1.Name = "SideButton1";
+            this.SideButton1.Size = new System.Drawing.Size(200, 40);
+            this.SideButton1.TabIndex = 0;
+            this.SideButton1.Text = "General";
+            this.SideButton1.UseVisualStyleBackColor = true;
             // 
             // FormDockPanel
             // 
@@ -116,6 +116,7 @@
             this.ClientSize = new System.Drawing.Size(724, 396);
             this.Controls.Add(this.FormDockPanel);
             this.Controls.Add(this.panel1);
+            this.MinimumSize = new System.Drawing.Size(690, 235);
             this.Name = "SettingsForm";
             this.Text = "SettingsForm";
             this.panel1.ResumeLayout(false);
