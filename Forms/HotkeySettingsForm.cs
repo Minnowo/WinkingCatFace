@@ -8,6 +8,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using WinkingCat.HotkeyLib;
+using WinkingCat.HelperLibs;
 
 namespace WinkingCat
 {
@@ -27,11 +28,23 @@ namespace WinkingCat
                     HotkeyInputControl control = new HotkeyInputControl(hotkey);
                     control.Margin = new Padding(0, 0, 0, 2);
                     control.Dock = DockStyle.Top;
-                    //control.SelectedChanged += control_SelectedChanged;
-                    //control.HotkeyChanged += control_HotkeyChanged;
+                    control.TaskChanged += control_SelectedChanged;
+                    control.HotkeyChanged += control_HotkeyChanged;
                     //control.EditRequested += control_EditRequested;
-                    this.Controls.Add(control);
+                    flowLayoutPanel1.Controls.Add(control);
                 }
+        }
+
+        private void control_HotkeyChanged(object sender, EventArgs e)
+        {
+            HotkeyManager.RegisterHotkey(((HotkeyInputControl)sender).setting);
+            Logger.WriteLine(string.Format("Hotkey changed: {0}", ((HotkeyInputControl)sender).setting));
+        }
+
+        private void control_SelectedChanged(object sender, EventArgs e)
+        {
+            HotkeyManager.RegisterHotkey(((HotkeyInputControl)sender).setting);
+            Logger.WriteLine(string.Format("Hotkey changed: {0}", ((HotkeyInputControl)sender).setting));
         }
     }
 }

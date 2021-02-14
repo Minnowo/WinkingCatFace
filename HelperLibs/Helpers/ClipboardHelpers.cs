@@ -56,19 +56,16 @@ namespace WinkingCat.HelperLibs
                 case ColorFormat.ARGB:
                     formatedColor += string.Format("{0}, {1}, {2}", color.R, color.G, color.B);
                     Logger.WriteLine("RGB Format Color Copied: " + formatedColor);
-                    Console.WriteLine("RGB Format Color Copied: " + formatedColor);
                     break;
 
                 case ColorFormat.Hex:
                     formatedColor += string.Format("#{0:X2}{1:X2}{2:X2}", color.R, color.G, color.B);
                     Logger.WriteLine("Hex Format Color Copied: " + formatedColor);
-                    Console.WriteLine("Hex Format Color Copied: " + formatedColor);
                     break;
 
                 case ColorFormat.Decminal:
                     formatedColor += string.Format("{0}", (color.R * 65536) + (color.G * 256) + color.B);
                     Logger.WriteLine("Decminal Format Color Copied: " + formatedColor);
-                    Console.WriteLine("Decminal Format Color Copied: " + formatedColor);
                     break;
 
                 case ColorFormat.CMYK:
@@ -85,13 +82,11 @@ namespace WinkingCat.HelperLibs
 
                     formatedColor += string.Format("{0}, {1}, {2}, {3}", Math.Round(c * 100), Math.Round(m * 100), Math.Round(y * 100), Math.Round(k * 100));
                     Logger.WriteLine("CMYK Format Color Copied: " + formatedColor);
-                    Console.WriteLine("CMYK Format Color Copied: " + formatedColor);
                     break;
 
                 case ColorFormat.HSB:
                     formatedColor += string.Format("{0}, {1}, {2}", color.GetHue(), color.GetSaturation(), color.GetBrightness());
                     Logger.WriteLine("HSB Format Color Copied: " + formatedColor);
-                    Console.WriteLine("HSB Format Color Copied: " + formatedColor);
                     break;
             }
             return CopyStringDefault(formatedColor);

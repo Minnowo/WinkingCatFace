@@ -69,6 +69,7 @@ namespace WinkingCat
             childForm.TopLevel = false;
             childForm.FormBorderStyle = FormBorderStyle.None;
             childForm.Dock = DockStyle.Fill;
+            //childForm.Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Left | AnchorStyles.Right;
             FormDockPanel.Controls.Add(childForm);
             FormDockPanel.Tag = childForm;
             childForm.BringToFront();

@@ -8,26 +8,61 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using WinkingCat.HotkeyLib;
+using WinkingCat.HelperLibs;
+ 
 
 namespace WinkingCat
 {
     public partial class HotkeyInputControl : UserControl
     {
-        public bool editingHotkey { get; private set; } = false;
+        public event EventHandler HotkeyChanged;
+        public event EventHandler TaskChanged;
         public HotkeySettings setting { get; private set; }
 
+        public bool editingHotkey { get; private set; } = false;
+        public Tasks currentSelectedItem { get; private set; }
+        
         public HotkeyInputControl(HotkeySettings hotkey)
         {
             InitializeComponent();
             setting = hotkey;
+            currentSelectedItem = hotkey.Task;
+
+            foreach (Tasks task in Enum.GetValues(typeof(Tasks)))
+                HotkeyTask.Items.Add(task);
+
             UpdateDescription();
             UpdateHotkeyText();
             UpdateHotkeyStatus();
         }
+        private void HotkeyTask_MouseWheel(object sender, EventArgs e)
+        {
+            if (currentSelectedItem != (Tasks)HotkeyTask.SelectedItem)
+            {
+                setting.Task = (Tasks)HotkeyTask.SelectedItem;
+                OnTaskChanged();
+            }
+        }
+
+        protected void OnTaskChanged()
+        {
+            if (TaskChanged != null)
+            {
+                TaskChanged(this, EventArgs.Empty);
+            }
+        }
+
+        protected void OnHotkeyChanged()
+        {
+            if (HotkeyChanged != null)
+            {
+                HotkeyChanged(this, EventArgs.Empty);
+            }
+        }
 
         private void UpdateDescription()
         {
-            labelDescription.Text = setting.Task.ToString();
+            HotkeyTask.Text = setting.Task.ToString();
         }
 
         private void UpdateHotkeyText()
@@ -44,10 +79,10 @@ namespace WinkingCat
                     labelHotkeySuccess.BackColor = Color.LightGoldenrodYellow;
                     break;
                 case HotkeyStatus.Failed:
-                    labelHotkeySuccess.BackColor = Color.IndianRed;
+                    labelHotkeySuccess.BackColor = Color.Red;
                     break;
                 case HotkeyStatus.Registered:
-                    labelHotkeySuccess.BackColor = Color.PaleGreen;
+                    labelHotkeySuccess.BackColor = Color.Green;
                     break;
             }
         }
@@ -63,7 +98,7 @@ namespace WinkingCat
 
             setting.HotkeyInfo.Hotkey = Keys.None;
             setting.HotkeyInfo.Win = false;
-            //OnHotkeyChanged();
+            OnHotkeyChanged();
             UpdateHotkeyStatus();
         }
 
@@ -81,7 +116,7 @@ namespace WinkingCat
             buttonHotkey.BackColor = SystemColors.Control;
             buttonHotkey.UseVisualStyleBackColor = true;
 
-            //OnHotkeyChanged();
+            OnHotkeyChanged();
             UpdateHotkeyStatus();
             UpdateHotkeyText();
         }
@@ -99,11 +134,6 @@ namespace WinkingCat
         {
             if (editingHotkey)
                 StopEditing();
-        }
-
-        private void buttonTask_Click(object sender, MouseEventArgs e)
-        {
-
         }
 
         private void buttonTask_KeyDown(object sender, KeyEventArgs e)
