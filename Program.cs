@@ -26,7 +26,7 @@ namespace WinkingCat
             DirectoryManager.LoadLocalSettings();
 
             Logger.Init(DirectoryManager.logPath + "\\" + DateTime.Now.ToString("yyyy MM dd") + ".txt");
-            Console.WriteLine("log path" + DirectoryManager.logPath + "\\" + DateTime.Now.ToString("yyyy M dd") + ".txt");
+            Console.WriteLine("log path: " + DirectoryManager.logPath + "\\" + DateTime.Now.ToString("yyyy M dd") + ".txt");
              
             Logger.WriteLine(";3c starting...");
             Logger.WriteLine("path settings loaded");
@@ -36,13 +36,17 @@ namespace WinkingCat
             Logger.WriteLine(DirectoryManager.screenshotPath);
             Logger.WriteLine(DirectoryManager.logPath);
 
-            Console.WriteLine(DirectoryManager.currentDirectory);
-            Console.WriteLine(DirectoryManager.configPath);
-            Console.WriteLine(DirectoryManager.resourcePath);
-            Console.WriteLine(DirectoryManager.screenshotPath);
-            Console.WriteLine(DirectoryManager.logPath);
-            
-            
+            if (SettingsLoader.LoadMainFormSettings())
+            {
+                Logger.WriteLine("MainForm settings loaded successfully");
+            }
+
+            if (SettingsLoader.LoadRegionCaptureSettings())
+            {
+                Logger.WriteLine("RegionCapture settings loaded successfully");
+            }
+
+
             Application.Run(new ApplicationForm());
         }
     }

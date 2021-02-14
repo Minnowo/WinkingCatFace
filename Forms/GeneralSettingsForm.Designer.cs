@@ -43,7 +43,7 @@
             // ShowTrayIconCheckBox
             // 
             this.ShowTrayIconCheckBox.AutoSize = true;
-            this.ShowTrayIconCheckBox.Location = new System.Drawing.Point(15, 51);
+            this.ShowTrayIconCheckBox.Location = new System.Drawing.Point(13, 18);
             this.ShowTrayIconCheckBox.Name = "ShowTrayIconCheckBox";
             this.ShowTrayIconCheckBox.Size = new System.Drawing.Size(101, 17);
             this.ShowTrayIconCheckBox.TabIndex = 0;
@@ -53,7 +53,7 @@
             // comboBox1
             // 
             this.comboBox1.FormattingEnabled = true;
-            this.comboBox1.Location = new System.Drawing.Point(251, 143);
+            this.comboBox1.Location = new System.Drawing.Point(250, 95);
             this.comboBox1.Name = "comboBox1";
             this.comboBox1.Size = new System.Drawing.Size(261, 21);
             this.comboBox1.TabIndex = 1;
@@ -61,7 +61,7 @@
             // comboBox2
             // 
             this.comboBox2.FormattingEnabled = true;
-            this.comboBox2.Location = new System.Drawing.Point(251, 170);
+            this.comboBox2.Location = new System.Drawing.Point(250, 122);
             this.comboBox2.Name = "comboBox2";
             this.comboBox2.Size = new System.Drawing.Size(261, 21);
             this.comboBox2.TabIndex = 2;
@@ -69,7 +69,7 @@
             // comboBox3
             // 
             this.comboBox3.FormattingEnabled = true;
-            this.comboBox3.Location = new System.Drawing.Point(251, 197);
+            this.comboBox3.Location = new System.Drawing.Point(250, 149);
             this.comboBox3.Name = "comboBox3";
             this.comboBox3.Size = new System.Drawing.Size(261, 21);
             this.comboBox3.TabIndex = 3;
@@ -77,7 +77,7 @@
             // AlwaysOnTopCheckbox
             // 
             this.AlwaysOnTopCheckbox.AutoSize = true;
-            this.AlwaysOnTopCheckbox.Location = new System.Drawing.Point(251, 51);
+            this.AlwaysOnTopCheckbox.Location = new System.Drawing.Point(250, 18);
             this.AlwaysOnTopCheckbox.Name = "AlwaysOnTopCheckbox";
             this.AlwaysOnTopCheckbox.Size = new System.Drawing.Size(98, 17);
             this.AlwaysOnTopCheckbox.TabIndex = 4;
@@ -87,7 +87,7 @@
             // MinimizeToTrayOnCloseCheckBox
             // 
             this.MinimizeToTrayOnCloseCheckBox.AutoSize = true;
-            this.MinimizeToTrayOnCloseCheckBox.Location = new System.Drawing.Point(15, 74);
+            this.MinimizeToTrayOnCloseCheckBox.Location = new System.Drawing.Point(13, 41);
             this.MinimizeToTrayOnCloseCheckBox.Name = "MinimizeToTrayOnCloseCheckBox";
             this.MinimizeToTrayOnCloseCheckBox.Size = new System.Drawing.Size(152, 17);
             this.MinimizeToTrayOnCloseCheckBox.TabIndex = 5;
@@ -97,7 +97,7 @@
             // MinimizeToTrayOnStartCheckBox
             // 
             this.MinimizeToTrayOnStartCheckBox.AutoSize = true;
-            this.MinimizeToTrayOnStartCheckBox.Location = new System.Drawing.Point(15, 97);
+            this.MinimizeToTrayOnStartCheckBox.Location = new System.Drawing.Point(13, 64);
             this.MinimizeToTrayOnStartCheckBox.Name = "MinimizeToTrayOnStartCheckBox";
             this.MinimizeToTrayOnStartCheckBox.Size = new System.Drawing.Size(148, 17);
             this.MinimizeToTrayOnStartCheckBox.TabIndex = 6;
@@ -107,7 +107,7 @@
             // label1
             // 
             this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(12, 146);
+            this.label1.Location = new System.Drawing.Point(10, 98);
             this.label1.Name = "label1";
             this.label1.Size = new System.Drawing.Size(116, 13);
             this.label1.TabIndex = 7;
@@ -116,7 +116,7 @@
             // label2
             // 
             this.label2.AutoSize = true;
-            this.label2.Location = new System.Drawing.Point(12, 173);
+            this.label2.Location = new System.Drawing.Point(10, 125);
             this.label2.Name = "label2";
             this.label2.Size = new System.Drawing.Size(157, 13);
             this.label2.TabIndex = 8;
@@ -125,7 +125,7 @@
             // label3
             // 
             this.label3.AutoSize = true;
-            this.label3.Location = new System.Drawing.Point(12, 200);
+            this.label3.Location = new System.Drawing.Point(10, 152);
             this.label3.Name = "label3";
             this.label3.Size = new System.Drawing.Size(129, 13);
             this.label3.TabIndex = 9;
@@ -148,6 +148,7 @@
             this.Controls.Add(this.ShowTrayIconCheckBox);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.None;
             this.Name = "GeneralSettingsForm";
+            this.Padding = new System.Windows.Forms.Padding(10, 15, 10, 10);
             this.Text = "GeneralSettingsForm";
             this.ResumeLayout(false);
             this.PerformLayout();

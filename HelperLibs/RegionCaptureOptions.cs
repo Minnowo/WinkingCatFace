@@ -1,5 +1,5 @@
 ﻿
-namespace WinkingCat.ScreenCaptureLib
+namespace WinkingCat.HelperLibs
 {
     public static class RegionCaptureOptions
     {

@@ -23,6 +23,7 @@ namespace WinkingCat.HelperLibs
                 {
                     message = string.Format(messageFormat, DateTime.Now, message);
                     File.AppendAllText(logFile, message+Environment.NewLine);
+                    Console.WriteLine(message);
                 }
             }
             else

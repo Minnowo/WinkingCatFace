@@ -21,8 +21,9 @@ namespace WinkingCat
     {
         private Image image { get; set; } = null;
         private HotkeyManager HKmanager;
+        public SettingsForm settingsForm { get; private set; }
 
-        public bool forceClose = false;
+        public bool forceClose { get; set; } = false;
         private bool forceDropDownClose = false;
         public ApplicationForm()
         {
@@ -89,7 +90,6 @@ namespace WinkingCat
 
             HKmanager = new HotkeyManager();
             HKmanager.UpdateHotkeys(HotkeyManager.GetDefaultHotkeyList(), true);
-//comment line ;3c
         }
 
         #region Capture dropdown buttons
@@ -358,11 +358,11 @@ namespace WinkingCat
 
         private void ToolStripDropDownButton_Settings_Click(object sender, EventArgs e)
         {
-            using (SettingsForm settings = new SettingsForm())
-            {
-                settings.ShowDialog();
-                settings.Close();
-            }
+            settingsForm?.Close();
+            settingsForm?.Dispose();
+            settingsForm = new SettingsForm();
+            settingsForm.Owner = this;
+            settingsForm.Show();
         }
     }
 }

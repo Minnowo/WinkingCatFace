@@ -63,6 +63,8 @@
     <Compile Include="Helpers\ScreenHelpers.cs" />
     <Compile Include="Helpers\WindowHelpers.cs" />
     <Compile Include="Logger.cs" />
+    <Compile Include="MainFormSettings.cs" />
+    <Compile Include="MainFormStyles.cs" />
     <Compile Include="Native\NativeEnums.cs" />
     <Compile Include="Native\NativeConstants.cs" />
     <Compile Include="Native\NativeMethods.cs" />
@@ -79,6 +81,8 @@
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
       <DependentUpon>Settings.settings</DependentUpon>
     </Compile>
+    <Compile Include="RegionCaptureOptions.cs" />
+    <Compile Include="SettingsLoader.cs" />
     <Compile Include="WindowInfo.cs" />
   </ItemGroup>
   <ItemGroup>

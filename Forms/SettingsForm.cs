@@ -13,11 +13,9 @@ namespace WinkingCat
     public partial class SettingsForm : Form
     {
         public Form activeForm { get; private set; }
-
         public SettingsForm()
         {
             InitializeComponent();
-            Resize += OnResizeEvent;
 
             #region Buttons
             SideButton1.Click += SideButton1_Click;
@@ -26,16 +24,13 @@ namespace WinkingCat
             SideButton4.Click += SideButton4_Click;
             SideButton5.Click += SideButton5_Click;
             #endregion
+
+            OpenChildForm(new GeneralSettingsForm());
         }
 
         #region MainForm events
-        private void OnResizeEvent(object sender, EventArgs e)
-        {
-            if (this.WindowState == FormWindowState.Minimized)
-            {
 
-            }
-        }
+        
         #endregion
 
         #region Button events

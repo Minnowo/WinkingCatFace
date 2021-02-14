@@ -79,11 +79,11 @@ namespace WinkingCat.HotkeyLib
 
                 if (hotkeySetting.HotkeyInfo.Status == HotkeyStatus.NotSet)
                 {
-                    Console.WriteLine("Hotkey unregistered: " + hotkeySetting);
+                    Logger.WriteLine("Hotkey unregistered: " + hotkeySetting);
                 }
                 else if (hotkeySetting.HotkeyInfo.Status == HotkeyStatus.Failed)
                 {
-                    Console.WriteLine("Hotkey unregister failed: " + hotkeySetting);
+                    Logger.WriteLine("Hotkey unregister failed: " + hotkeySetting);
                 }
             }
 
@@ -120,7 +120,6 @@ namespace WinkingCat.HotkeyLib
             {
                 foreach(HotkeySettings hotkey in failedHotkeysList)
                 {
-                    Console.WriteLine(hotkey.ToString());
                     MessageBox.Show(hotkey.ToString());
                 }
             }

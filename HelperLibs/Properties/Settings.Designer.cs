@@ -81,5 +81,49 @@ namespace WinkingCat.HelperLibs.Properties
                 return ((string)(this["screenshotFolderPathDefault"]));
             }
         }
+
+        [global::System.Configuration.ApplicationScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("\\AppConfig\\Settings\\MainForm.config")]
+        public string mainFormSettings
+        {
+            get
+            {
+                return ((string)(this["mainFormSettings"]));
+            }
+        }
+
+        [global::System.Configuration.ApplicationScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("\\AppConfig\\Settings\\MainFormStyles.config")]
+        public string mainFormStyles
+        {
+            get
+            {
+                return ((string)(this["mainFormStyles"]));
+            }
+        }
+
+        [global::System.Configuration.ApplicationScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("\\AppConfig\\Settings\\Hotkeys.config")]
+        public string hotkeySettings
+        {
+            get
+            {
+                return ((string)(this["hotkeySettings"]));
+            }
+        }
+
+        [global::System.Configuration.ApplicationScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("\\AppConfig\\Settings\\RegionCapture.config")]
+        public string regionCaptureSettings
+        {
+            get
+            {
+                return ((string)(this["regionCaptureSettings"]));
+            }
+        }
     }
 }

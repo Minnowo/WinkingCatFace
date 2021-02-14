@@ -5,7 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Drawing;
 
-namespace WinkingCat
+namespace WinkingCat.HelperLibs
 {
     public class ClipOptions
     {

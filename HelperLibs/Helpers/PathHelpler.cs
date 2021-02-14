@@ -60,6 +60,8 @@ namespace WinkingCat.HelperLibs
 
         public static void UpdateRelativePaths()
         {
+            currentDirectory = Directory.GetCurrentDirectory();
+
             configPath = currentDirectory + Settings.Default.configFolderPath;
 
             resourcePath = currentDirectory + Settings.Default.resourceFolderPath;

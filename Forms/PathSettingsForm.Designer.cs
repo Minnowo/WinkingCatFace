@@ -39,7 +39,7 @@
             // 
             // textBox1
             // 
-            this.textBox1.Location = new System.Drawing.Point(11, 45);
+            this.textBox1.Location = new System.Drawing.Point(13, 41);
             this.textBox1.Name = "textBox1";
             this.textBox1.Size = new System.Drawing.Size(358, 20);
             this.textBox1.TabIndex = 0;
@@ -47,7 +47,7 @@
             // checkBox1
             // 
             this.checkBox1.AutoSize = true;
-            this.checkBox1.Location = new System.Drawing.Point(12, 22);
+            this.checkBox1.Location = new System.Drawing.Point(13, 18);
             this.checkBox1.Name = "checkBox1";
             this.checkBox1.Size = new System.Drawing.Size(180, 17);
             this.checkBox1.TabIndex = 1;
@@ -56,9 +56,9 @@
             // 
             // PathBrowseButton
             // 
-            this.PathBrowseButton.Location = new System.Drawing.Point(376, 45);
+            this.PathBrowseButton.Location = new System.Drawing.Point(377, 40);
             this.PathBrowseButton.Name = "PathBrowseButton";
-            this.PathBrowseButton.Size = new System.Drawing.Size(135, 20);
+            this.PathBrowseButton.Size = new System.Drawing.Size(134, 20);
             this.PathBrowseButton.TabIndex = 2;
             this.PathBrowseButton.Text = "Browse...";
             this.PathBrowseButton.UseVisualStyleBackColor = true;
@@ -66,7 +66,7 @@
             // SubFolderPatternLabel
             // 
             this.SubFolderPatternLabel.AutoSize = true;
-            this.SubFolderPatternLabel.Location = new System.Drawing.Point(9, 85);
+            this.SubFolderPatternLabel.Location = new System.Drawing.Point(13, 81);
             this.SubFolderPatternLabel.Name = "SubFolderPatternLabel";
             this.SubFolderPatternLabel.Size = new System.Drawing.Size(98, 13);
             this.SubFolderPatternLabel.TabIndex = 3;
@@ -74,14 +74,14 @@
             // 
             // textBox2
             // 
-            this.textBox2.Location = new System.Drawing.Point(11, 101);
+            this.textBox2.Location = new System.Drawing.Point(13, 97);
             this.textBox2.Name = "textBox2";
             this.textBox2.Size = new System.Drawing.Size(358, 20);
             this.textBox2.TabIndex = 4;
             // 
             // OpenButton
             // 
-            this.OpenButton.Location = new System.Drawing.Point(11, 128);
+            this.OpenButton.Location = new System.Drawing.Point(13, 123);
             this.OpenButton.Name = "OpenButton";
             this.OpenButton.Size = new System.Drawing.Size(75, 20);
             this.OpenButton.TabIndex = 5;
@@ -91,7 +91,7 @@
             // SubFolderPathLabel
             // 
             this.SubFolderPathLabel.AutoSize = true;
-            this.SubFolderPathLabel.Location = new System.Drawing.Point(92, 132);
+            this.SubFolderPathLabel.Location = new System.Drawing.Point(94, 127);
             this.SubFolderPathLabel.Name = "SubFolderPathLabel";
             this.SubFolderPathLabel.Size = new System.Drawing.Size(0, 13);
             this.SubFolderPathLabel.TabIndex = 6;
@@ -110,6 +110,7 @@
             this.Controls.Add(this.textBox1);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.None;
             this.Name = "PathSettingsForm";
+            this.Padding = new System.Windows.Forms.Padding(10, 15, 10, 10);
             this.Text = "PathSettingsForm";
             this.ResumeLayout(false);
             this.PerformLayout();

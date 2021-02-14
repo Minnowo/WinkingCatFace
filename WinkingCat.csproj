@@ -94,8 +94,6 @@
     <Compile Include="Forms\HotkeySettingsForm.Designer.cs">
       <DependentUpon>HotkeySettingsForm.cs</DependentUpon>
     </Compile>
-    <Compile Include="MainFormSettings.cs" />
-    <Compile Include="MainFormStyles.cs" />
     <Compile Include="Forms\PathSettingsForm.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -124,6 +122,9 @@
     </Compile>
     <EmbeddedResource Include="Forms\ApplicationForm.resx">
       <DependentUpon>ApplicationForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\ClipboardSettingsForm.resx">
+      <DependentUpon>ClipboardSettingsForm.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\GeneralSettingsForm.resx">
       <DependentUpon>GeneralSettingsForm.cs</DependentUpon>
