@@ -17,9 +17,11 @@ namespace WinkingCat
     {
         public event EventHandler HotkeyChanged;
         public event EventHandler TaskChanged;
+        public event EventHandler SelectionChanged;
         public HotkeySettings setting { get; private set; }
 
         public bool editingHotkey { get; private set; } = false;
+        private bool supressCheckboxEvent { get; set; } = false;
         public Tasks currentSelectedItem { get; private set; }
         
         public HotkeyInputControl(HotkeySettings hotkey)
@@ -35,12 +37,35 @@ namespace WinkingCat
             UpdateHotkeyText();
             UpdateHotkeyStatus();
         }
+
+        public void Deselect(bool supressEvent = false)
+        {
+            supressCheckboxEvent = supressEvent;
+            isSelectedCheckbox.Checked = false;
+        }
+
+        private void SelectedCheckbox_Checked(object sender, EventArgs e)
+        {
+            OnSelectionChanged();
+        }
+
         private void HotkeyTask_MouseWheel(object sender, EventArgs e)
         {
             if (currentSelectedItem != (Tasks)HotkeyTask.SelectedItem)
             {
                 setting.Task = (Tasks)HotkeyTask.SelectedItem;
                 OnTaskChanged();
+            }
+        }
+
+        protected void OnSelectionChanged()
+        {
+            if (SelectionChanged != null)
+            {
+                if (supressCheckboxEvent == false)
+                    SelectionChanged(this, (EventArgs)new CheckboxCheckedEvent(isSelectedCheckbox));
+                else
+                    supressCheckboxEvent = false;
             }
         }
 

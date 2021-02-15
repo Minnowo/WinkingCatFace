@@ -39,7 +39,6 @@ namespace WinkingCat.HelperLibs
         CaptureFullScreen,
         CaptureActiveMonitor,
         CaptureActiveWindow,
-        CaptureWindow,
         CaptureGif,
         NewOCRCapture,
         ColorWheelPicker,

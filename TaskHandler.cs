@@ -16,7 +16,6 @@ namespace WinkingCat
         public static Image img;
         public static bool CaptureWindow(WindowInfo window)
         {
-            Console.WriteLine(window.Rectangle);
             if (ScreenHelper.IsValidCropArea(window.Rectangle))
             {
                 img = ScreenShotManager.CaptureRectangle(window.Rectangle);
@@ -51,7 +50,7 @@ namespace WinkingCat
                     RegionCaptureOptions.mode = RegionCaptureMode.Default;
                     RegionCaptureOptions.createSingleClipAfterRegionCapture = true;
                     ImageHandler.RegionCapture();
-                    return false;
+                    break;
 
                 case Tasks.NewClipFromFile:
                     return false;
@@ -62,12 +61,13 @@ namespace WinkingCat
                 case Tasks.ScreenColorPicker:
                     RegionCaptureOptions.mode = RegionCaptureMode.ColorPicker;
                     ImageHandler.RegionCapture();
-                    return false;
+                    break;
 
                 case Tasks.CaptureLastRegion:
                     if (ImageHandler.LastInfo != null && ScreenHelper.IsValidCropArea(ImageHandler.LastInfo.Region))
                     {
-                        ImageHandler.Save(img: ScreenShotManager.CaptureRectangle(ScreenHelper.GetRectangle0Based(ImageHandler.LastInfo.Region)));
+                        img = ScreenShotManager.CaptureRectangle(ScreenHelper.GetRectangle0Based(ImageHandler.LastInfo.Region));
+                        ImageHandler.Save(img: img);
                     }
                     else
                         return false;
@@ -76,20 +76,17 @@ namespace WinkingCat
                 case Tasks.CaptureFullScreen:
                     img = ScreenShotManager.CaptureFullscreen();
                     ImageHandler.Save(img: img);
-                    img.Dispose();
                     break;
 
                 case Tasks.CaptureActiveMonitor:
                     img = ScreenShotManager.CaptureActiveMonitor();
                     ImageHandler.Save(img: img);
-                    img.Dispose();
                     break;
 
                 case Tasks.CaptureActiveWindow:
                     img = ScreenShotManager.CaptureRectangle(ScreenHelper.GetWindowRectangle(NativeMethods.GetForegroundWindow()));
                     ImageHandler.Save(img: img);
-                    img.Dispose();
-                    return false;
+                    break;
 
                 case Tasks.CaptureGif:
                     return false;
@@ -105,8 +102,9 @@ namespace WinkingCat
 
                 case Tasks.OpenMainForm:
                     Helpers.ForceActivate(Program.mainForm);
-                    return false;
+                    break;
             }
+            img?.Dispose();
             return true;
         }
     }

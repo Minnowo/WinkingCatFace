@@ -30,6 +30,7 @@ namespace WinkingCat.HotkeyLib
             }
         }
 
+
         public static void UpdateHotkeys(List<HotkeySettings> hotkeys, bool showFailedHotkeys)
         {
             if (hotKeys != null)

@@ -31,6 +31,7 @@
             this.buttonHotkey = new System.Windows.Forms.Button();
             this.labelHotkeySuccess = new System.Windows.Forms.Label();
             this.HotkeyTask = new System.Windows.Forms.ComboBox();
+            this.isSelectedCheckbox = new System.Windows.Forms.CheckBox();
             this.SuspendLayout();
             // 
             // buttonHotkey
@@ -63,16 +64,27 @@
             | System.Windows.Forms.AnchorStyles.Right)));
             this.HotkeyTask.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.HotkeyTask.FormattingEnabled = true;
-            this.HotkeyTask.Location = new System.Drawing.Point(0, 1);
+            this.HotkeyTask.Location = new System.Drawing.Point(28, 1);
             this.HotkeyTask.Name = "HotkeyTask";
-            this.HotkeyTask.Size = new System.Drawing.Size(227, 21);
+            this.HotkeyTask.Size = new System.Drawing.Size(199, 21);
             this.HotkeyTask.TabIndex = 3;
             this.HotkeyTask.SelectedIndexChanged += HotkeyTask_MouseWheel;
+            // 
+            // isSelectedCheckbox
+            // 
+            this.isSelectedCheckbox.AutoSize = true;
+            this.isSelectedCheckbox.Location = new System.Drawing.Point(7, 6);
+            this.isSelectedCheckbox.Name = "isSelectedCheckbox";
+            this.isSelectedCheckbox.Size = new System.Drawing.Size(15, 14);
+            this.isSelectedCheckbox.TabIndex = 4;
+            this.isSelectedCheckbox.UseVisualStyleBackColor = true;
+            this.isSelectedCheckbox.CheckStateChanged += SelectedCheckbox_Checked;
             // 
             // HotkeyInputControl
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+            this.Controls.Add(this.isSelectedCheckbox);
             this.Controls.Add(this.HotkeyTask);
             this.Controls.Add(this.labelHotkeySuccess);
             this.Controls.Add(this.buttonHotkey);
@@ -80,6 +92,7 @@
             this.Name = "HotkeyInputControl";
             this.Size = new System.Drawing.Size(446, 23);
             this.ResumeLayout(false);
+            this.PerformLayout();
 
         }
 
@@ -87,5 +100,6 @@
         private System.Windows.Forms.Button buttonHotkey;
         private System.Windows.Forms.Label labelHotkeySuccess;
         private System.Windows.Forms.ComboBox HotkeyTask;
+        private System.Windows.Forms.CheckBox isSelectedCheckbox;
     }
 }
