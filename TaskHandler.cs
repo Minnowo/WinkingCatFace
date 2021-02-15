@@ -8,20 +8,29 @@ using WinkingCat.HelperLibs;
 using System.Drawing.Imaging;
 using System.Drawing;
 
-namespace WinkingCat.HotkeyLib
+namespace WinkingCat
 {
 
     public static class TaskHandler
     {
-
+        public static Image img;
         public static bool CaptureWindow(WindowInfo window)
         {
             Console.WriteLine(window.Rectangle);
-            if (ScreenHelper.IsValidCropArea(window.Rectangle))              
-                if (string.IsNullOrEmpty(ImageHandler.Save(img: ScreenShotManager.CaptureRectangle(window.Rectangle))))
+            if (ScreenHelper.IsValidCropArea(window.Rectangle))
+            {
+                img = ScreenShotManager.CaptureRectangle(window.Rectangle);
+                if (string.IsNullOrEmpty(ImageHandler.Save(img: img)))
+                {
+                    img.Dispose();
                     return false;
+                }
                 else
+                {
+                    img.Dispose();
                     return true;
+                }
+            }
             else
                 return false; 
         }
@@ -65,14 +74,21 @@ namespace WinkingCat.HotkeyLib
                     break;
 
                 case Tasks.CaptureFullScreen:
-                    ImageHandler.Save(img: ScreenShotManager.CaptureFullscreen());                    
+                    img = ScreenShotManager.CaptureFullscreen();
+                    ImageHandler.Save(img: img);
+                    img.Dispose();
                     break;
 
                 case Tasks.CaptureActiveMonitor:
-                    ImageHandler.Save(img: ScreenShotManager.CaptureActiveMonitor());
+                    img = ScreenShotManager.CaptureActiveMonitor();
+                    ImageHandler.Save(img: img);
+                    img.Dispose();
                     break;
 
                 case Tasks.CaptureActiveWindow:
+                    img = ScreenShotManager.CaptureRectangle(ScreenHelper.GetWindowRectangle(NativeMethods.GetForegroundWindow()));
+                    ImageHandler.Save(img: img);
+                    img.Dispose();
                     return false;
 
                 case Tasks.CaptureGif:
@@ -85,6 +101,10 @@ namespace WinkingCat.HotkeyLib
                     return false;
 
                 case Tasks.HashCheck:
+                    return false;
+
+                case Tasks.OpenMainForm:
+                    Helpers.ForceActivate(Program.mainForm);
                     return false;
             }
             return true;

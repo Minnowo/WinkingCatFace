@@ -16,14 +16,39 @@ namespace WinkingCat
         public GeneralSettingsForm()
         {
             InitializeComponent();
-
+            SuspendLayout();
             MinimizeToTrayOnCloseCheckBox.Checked = MainFormSettings.minimizeToTray;
             ShowTrayIconCheckBox.Checked = MainFormSettings.showInTray;
             AlwaysOnTopCheckbox.Checked = MainFormSettings.alwaysOnTop;
             MinimizeToTrayOnStartCheckBox.Checked = MainFormSettings.startInTray;
 
+            foreach (Tasks task in Enum.GetValues(typeof(Tasks)))
+            {
+                comboBox1.Items.Add(task);
+                comboBox2.Items.Add(task);
+                comboBox3.Items.Add(task);
+            }
             if (!MainFormSettings.showInTray)
                 MinimizeToTrayOnCloseCheckBox.Enabled = false;
+            ResumeLayout();
+            UpdateComboBox();
+        }
+
+        private void ComboBox_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            if (comboBox1.SelectedItem != null && comboBox2.SelectedItem != null && comboBox3.SelectedItem != null)
+            {
+                MainFormSettings.onTrayLeftClick = (Tasks)comboBox1.SelectedItem;
+                MainFormSettings.onTrayDoubleLeftClick = (Tasks)comboBox2.SelectedItem;
+                MainFormSettings.onTrayMiddleClick = (Tasks)comboBox3.SelectedItem;
+            }
+        }
+
+        private void UpdateComboBox()
+        {
+            comboBox1.SelectedItem = MainFormSettings.onTrayLeftClick;
+            comboBox2.SelectedItem = MainFormSettings.onTrayDoubleLeftClick;
+            comboBox3.SelectedItem = MainFormSettings.onTrayMiddleClick;
         }
 
         private void AlwaysOnTopCheckbox_CheckedChanged(object sender, EventArgs e)

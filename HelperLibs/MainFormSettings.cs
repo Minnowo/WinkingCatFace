@@ -15,6 +15,10 @@ namespace WinkingCat.HelperLibs
         public static bool alwaysOnTop { get; set; } = true;
         public static int waitHideTime { get; set; } = 500;
 
-        
+        public static Tasks onTrayLeftClick { get; set; } = Tasks.RegionCapture;
+        public static Tasks onTrayDoubleLeftClick { get; set; } = Tasks.OpenMainForm;
+        public static Tasks onTrayMiddleClick { get; set; } = Tasks.NewClipFromClipboard;
+
+
     }
 }

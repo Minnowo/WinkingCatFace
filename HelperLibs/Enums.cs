@@ -21,7 +21,12 @@ namespace WinkingCat.HelperLibs
         ActiveMonitor,
         Color
     }
-
+    public enum HotkeyStatus
+    {
+        Registered,
+        Failed,
+        NotSet
+    }
     public enum Tasks
     {
         RegionCapture,
@@ -39,6 +44,7 @@ namespace WinkingCat.HelperLibs
         NewOCRCapture,
         ColorWheelPicker,
         HashCheck,
+        OpenMainForm
     }
 
     public enum ColorFormat

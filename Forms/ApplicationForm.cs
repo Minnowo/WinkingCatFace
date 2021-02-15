@@ -20,8 +20,11 @@ namespace WinkingCat
     public partial class ApplicationForm : Form
     {
         private Image image { get; set; } = null;
+        private System.Windows.Forms.Timer trayClickTimer { get; set; }
         public SettingsForm settingsForm { get; private set; }
 
+
+        public int trayClickCount { get; private set; } = 0;
         public bool forceClose { get; set; } = false;
         public bool allowShowDisplay { get; set; } = !MainFormSettings.startInTray;
         private bool forceDropDownClose = false;
@@ -32,17 +35,12 @@ namespace WinkingCat
             TopMost = MainFormSettings.alwaysOnTop;
             niTrayIcon.Visible = MainFormSettings.showInTray;
 
-            FormClosing += new FormClosingEventHandler(MainForm_FormClosing);
-            LostFocus += mainForm_LostFocus;
-
 
             #region Capture dropdown buttons
             ToolStripDropDownButton_Capture.DropDown.Closing += toolStripDropDown_Closing;
             ToolStripDropDownButton_Capture.DropDownOpening += tsmiCapture_DropDownOpening;
 
             ToolStripMenuItem_region.Click += RegionCapture_Click;
-            //ToolStripMenuItem_monitor.MouseHover += MonitorCapture_Click;
-            //ToolStripMenuItem_window.Click += WindowCapture_Click;
             ToolStripMenuItem_fullscreen.Click += FullscreenCapture_Click;
             ToolStripMenuItem_lastRegion.Click += LastRegionCapture_Click;
             ToolStripMenuItem_captureCursor.Click += CursorCapture_Click;
@@ -68,7 +66,9 @@ namespace WinkingCat
 
             #endregion
 
-            #region Tray icon context menu
+            #region Tray icon
+            trayClickTimer = new System.Windows.Forms.Timer();
+            trayClickTimer.Tick += TrayClickTimer_Interval;
             cmTray.Opening += tsmiCapture_DropDownOpening;
 
             // capture
@@ -91,6 +91,8 @@ namespace WinkingCat
             ResumeLayout();
             HotkeyManager.UpdateHotkeys(HotkeyManager.GetDefaultHotkeyList(), true);
         }
+
+
 
         #region Capture dropdown buttons
         private async void tsmiCapture_DropDownOpening(object sender, EventArgs e)
@@ -215,10 +217,47 @@ namespace WinkingCat
         }
         #endregion
 
-        #region tray icon context menu
+        #region tray icon
+        private void TrayClickTimer_Interval(object sender, EventArgs e)
+        {
+            if (trayClickCount == 1)
+            {
+                trayClickCount = 0;
+                trayClickTimer.Stop();
+
+                TaskHandler.ExecuteTask(MainFormSettings.onTrayLeftClick);
+            }
+        }
+
+        private void NiTrayIcon_MouseClick1Up(object sender, MouseEventArgs e)
+        {
+            switch (e.Button)
+            {
+                case MouseButtons.Left:
+                    trayClickCount++;
+
+                    if (trayClickCount == 1)
+                    {
+                        trayClickTimer.Interval = SystemInformation.DoubleClickTime;
+                        trayClickTimer.Start();
+                    }
+                    else
+                    {
+                        trayClickCount = 0;
+                        trayClickTimer.Stop();
+
+                        TaskHandler.ExecuteTask(MainFormSettings.onTrayDoubleLeftClick);
+                    }
+                    break;
+                case MouseButtons.Middle:
+                    TaskHandler.ExecuteTask(MainFormSettings.onTrayMiddleClick);
+                    break;
+            }
+        }
+
         private void OpenMainWindow_Click(object sender, EventArgs e)
         {
-            ForceActivate(this);
+            Helpers.ForceActivate(this);
         }
 
         private void ExitApplication_Click(object sender, EventArgs e)
@@ -253,26 +292,6 @@ namespace WinkingCat
         }
         #endregion
 
-        #region main form functions
-        public static void ForceActivate(Form form)
-        {
-            if (!form.IsDisposed)
-            {
-                if (!form.Visible)
-                {
-                    form.Show();
-                }
-
-                if (form.WindowState == FormWindowState.Minimized)
-                {
-                    form.WindowState = FormWindowState.Normal;
-                }
-
-                form.BringToFront();
-                form.Activate();
-            }
-        }
-        #endregion
         private void toolStripDropDown_Closing(object sender, ToolStripDropDownClosingEventArgs e)
         {
             switch (e.CloseReason)

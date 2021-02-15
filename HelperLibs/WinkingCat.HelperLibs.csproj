@@ -61,6 +61,8 @@
     <Compile Include="Helpers\MathHelper.cs" />
     <Compile Include="Helpers\ScreenHelpers.cs" />
     <Compile Include="Helpers\WindowHelpers.cs" />
+    <Compile Include="HotkeyInfo.cs" />
+    <Compile Include="HotkeySettings.cs" />
     <Compile Include="Logger.cs" />
     <Compile Include="MainFormSettings.cs" />
     <Compile Include="MainFormStyles.cs" />

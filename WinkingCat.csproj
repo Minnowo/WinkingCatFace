@@ -95,6 +95,9 @@
     <Compile Include="Forms\GeneralSettingsForm.Designer.cs">
       <DependentUpon>GeneralSettingsForm.cs</DependentUpon>
     </Compile>
+    <Compile Include="Forms\HotkeyForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
     <Compile Include="Forms\HotkeySettingsForm.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -107,6 +110,7 @@
     <Compile Include="Forms\PathSettingsForm.Designer.cs">
       <DependentUpon>PathSettingsForm.cs</DependentUpon>
     </Compile>
+    <Compile Include="HotkeyManager.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Forms\SettingsForm.cs">
@@ -127,6 +131,7 @@
     <Compile Include="Forms\UploadSettingsForm.Designer.cs">
       <DependentUpon>UploadSettingsForm.cs</DependentUpon>
     </Compile>
+    <Compile Include="TaskHandler.cs" />
     <EmbeddedResource Include="Controls\HotkeyInputControl.resx">
       <DependentUpon>HotkeyInputControl.cs</DependentUpon>
     </EmbeddedResource>
@@ -245,10 +250,6 @@
     <ProjectReference Include="HelperLibs\WinkingCat.HelperLibs.csproj">
       <Project>{9d5d4aa3-5ff0-46b3-aca4-af277f4713cd}</Project>
       <Name>WinkingCat.HelperLibs</Name>
-    </ProjectReference>
-    <ProjectReference Include="HotkeyLib\WinkingCat.HotkeyLib.csproj">
-      <Project>{1c74e0ae-dcd0-45bb-ad5c-a80791ffa054}</Project>
-      <Name>WinkingCat.HotkeyLib</Name>
     </ProjectReference>
     <ProjectReference Include="ScreenCaptureLib\WinkingCat.ScreenCaptureLib.csproj">
       <Project>{3a626c93-b19a-48d7-9dc4-92f4063ff857}</Project>

@@ -12,6 +12,24 @@ namespace WinkingCat.HelperLibs
 {
     public class Helpers
     {
+        public static void ForceActivate(Form form)
+        {
+            if (!form.IsDisposed)
+            {
+                if (!form.Visible)
+                {
+                    form.Show();
+                }
+
+                if (form.WindowState == FormWindowState.Minimized)
+                {
+                    form.WindowState = FormWindowState.Normal;
+                }
+
+                form.BringToFront();
+                form.Activate();
+            }
+        }
         public static string GetUniqueID()
         {
             return Guid.NewGuid().ToString("N");

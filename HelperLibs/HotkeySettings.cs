@@ -1,8 +1,7 @@
 ﻿
 using System.Windows.Forms;
-using WinkingCat.HelperLibs;
 
-namespace WinkingCat.HotkeyLib
+namespace WinkingCat.HelperLibs
 {
     public class HotkeySettings
     {

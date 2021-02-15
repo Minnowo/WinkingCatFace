@@ -333,6 +333,7 @@
             this.niTrayIcon.Icon = ((System.Drawing.Icon)(resources.GetObject("niTrayIcon.Icon")));
             this.niTrayIcon.Text = ";3c";
             this.niTrayIcon.Visible = true;
+            this.niTrayIcon.MouseUp += NiTrayIcon_MouseClick1Up;
             // 
             // cmTray
             // 
@@ -526,6 +527,8 @@
             this.toolStrip1.PerformLayout();
             this.cmTray.ResumeLayout(false);
             this.ResumeLayout(false);
+            this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(MainForm_FormClosing);
+            this.LostFocus += mainForm_LostFocus;
 
         }
 

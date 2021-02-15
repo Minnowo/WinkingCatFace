@@ -7,7 +7,7 @@ using System.Windows.Forms;
 using System.Diagnostics;
 using WinkingCat.HelperLibs;
 
-namespace WinkingCat.HotkeyLib
+namespace WinkingCat
 {
     public class HotkeyForm : Form
     {

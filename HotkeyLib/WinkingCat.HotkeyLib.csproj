@@ -50,15 +50,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Enums.cs" />
-    <Compile Include="Forms\HotkeyForm.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="HotkeyManager.cs" />
-    <Compile Include="HotkeyInfo.cs" />
-    <Compile Include="HotkeySettings.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="TaskHandler.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\HelperLibs\WinkingCat.HelperLibs.csproj">
@@ -69,6 +61,9 @@
       <Project>{3a626c93-b19a-48d7-9dc4-92f4063ff857}</Project>
       <Name>WinkingCat.ScreenCaptureLib</Name>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Forms\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

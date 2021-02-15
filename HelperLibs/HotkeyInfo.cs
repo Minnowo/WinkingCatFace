@@ -4,9 +4,8 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
-using WinkingCat.HelperLibs;
 
-namespace WinkingCat.HotkeyLib
+namespace WinkingCat.HelperLibs
 {
     public class HotkeyInfo
     {

@@ -30,6 +30,9 @@ namespace WinkingCat.HelperLibs
         [return: MarshalAs(UnmanagedType.Bool)]
         public static extern bool SetForegroundWindow(IntPtr hWnd);
 
+        [DllImport("user32.dll")]
+        public static extern IntPtr GetForegroundWindow();
+
         /// <summary>Determines the visibility state of the specified window.</summary>
         [DllImport("user32.dll")]
         [return: MarshalAs(UnmanagedType.Bool)]
