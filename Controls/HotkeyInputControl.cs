@@ -87,7 +87,7 @@ namespace WinkingCat
 
         private void UpdateDescription()
         {
-            HotkeyTask.Text = setting.Task.ToString();
+            HotkeyTask.SelectedItem = setting.Task;
         }
 
         private void UpdateHotkeyText()

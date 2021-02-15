@@ -92,6 +92,26 @@ namespace WinkingCat.HelperLibs
             return CopyStringDefault(formatedColor);
         }
 
+        public static Bitmap GetImage(bool checkContainsImage = false)
+        {
+            try
+            {
+                lock (ClipboardLock)
+                {
+                    if (!checkContainsImage || Clipboard.ContainsImage())
+                    {
+                        return (Bitmap)Clipboard.GetImage();
+                    }
+                }
+            }
+            catch (Exception e)
+            {
+                Logger.WriteException(e, "Clipboard get image failed.");
+            }
+
+            return null;
+        }
+
         public static bool CopyStringDefault(string str)
         {
             IDataObject dataObject = new DataObject();

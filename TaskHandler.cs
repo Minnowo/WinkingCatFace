@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using WinkingCat.ScreenCaptureLib;
 using WinkingCat.HelperLibs;
 using System.Drawing.Imaging;
+using WinkingCat.ClipHelper;
 using System.Drawing;
 
 namespace WinkingCat
@@ -56,6 +57,14 @@ namespace WinkingCat
                     return false;
 
                 case Tasks.NewClipFromClipboard:
+                    img = ClipboardHelpers.GetImage();
+                    if (img != null)
+                    {
+                        Point p = ScreenHelper.GetCursorPosition();
+                        ClipOptions ops = new ClipOptions();
+                        ops.location = new Point(p.X - img.Width / 2, p.Y - img.Height / 2);
+                        ClipManager.CreateClip(img, ops);
+                    }
                     return false;
 
                 case Tasks.ScreenColorPicker:

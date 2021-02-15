@@ -92,7 +92,7 @@ namespace WinkingCat.HelperLibs
             {
                 try
                 {
-                    if (keys.AllKeys.Length != 9)
+                    if (keys.AllKeys.Length != 10)
                         throw new Exception("Keys have been modified RegionCapture.config will be reset with default values");
                     foreach (string key in keys.AllKeys)
                         switch (key)
@@ -111,6 +111,12 @@ namespace WinkingCat.HelperLibs
                                 break;
                             case "createClipAfterRegionCapture":
                                 RegionCaptureOptions.createClipAfterRegionCapture = bool.Parse(keys["createClipAfterRegionCapture"].Value);
+                                break;
+                            case "autoCopyImage":
+                                RegionCaptureOptions.autoCopyImage = bool.Parse(keys["autoCopyImage"].Value);
+                                break;
+                            case "autoCopyColor":
+                                RegionCaptureOptions.autoCopyColor = bool.Parse(keys["autoCopyColor"].Value);
                                 break;
                             case "cursorInfoOffset":
                                 RegionCaptureOptions.cursorInfoOffset = int.Parse(keys["cursorInfoOffset"].Value);
@@ -145,6 +151,8 @@ namespace WinkingCat.HelperLibs
             keys.Add("drawInfoText", "true");
             keys.Add("marchingAnts", "true");
             keys.Add("createClipAfterRegionCapture", "false");
+            keys.Add("autoCopyImage", "true");
+            keys.Add("autoCopyColor", "true");
             keys.Add("cursorInfoOffset", "10");
             keys.Add("MagnifierPixelCount", "15");
             keys.Add("MagnifierPixelSize", "10");

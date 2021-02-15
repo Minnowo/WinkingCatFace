@@ -58,7 +58,7 @@ namespace WinkingCat.ClipHelper
             #region picturebox
             clipDisplayPictureBox.Location = new Point(Options.borderThickness, Options.borderThickness);
             clipDisplayPictureBox.Size = imageSize;
-            clipDisplayPictureBox.Image = displayImage;
+            //clipDisplayPictureBox.Image = displayImage;
 
             clipDisplayPictureBox.MouseDown += PictureBox_MouseDown;
             clipDisplayPictureBox.MouseUp += PictureBox_MouseUp;

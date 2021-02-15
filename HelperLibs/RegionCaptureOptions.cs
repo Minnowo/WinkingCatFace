@@ -12,6 +12,8 @@ namespace WinkingCat.HelperLibs
 
         public static bool createSingleClipAfterRegionCapture { get; set; } = false;
         public static bool createClipAfterRegionCapture { get; set; } = false;
+        public static bool autoCopyImage { get; set; } = true;
+        public static bool autoCopyColor { get; set; } = true;
 
         public static int MagnifierPixelCount = 15; // Must be odd number like 11, 13, 15 etc.
         public static int MagnifierPixelSize = 10;

@@ -44,6 +44,9 @@ namespace WinkingCat.ScreenCaptureLib
                         {
                             HandleRegionReturnImage(LastInfo.Img);
 
+                            if (RegionCaptureOptions.autoCopyImage)
+                                ClipboardHelpers.CopyImageDefault(LastInfo.Img);
+
                             if (RegionCaptureOptions.createClipAfterRegionCapture || RegionCaptureOptions.createSingleClipAfterRegionCapture)
                             {
                                 RegionCaptureOptions.createSingleClipAfterRegionCapture = false;
@@ -88,7 +91,8 @@ namespace WinkingCat.ScreenCaptureLib
 
         public static void HandleRegionReturnColor(Color color)
         {
-            ClipboardHelpers.FormatCopyColor(ClipboardHelpers.copyFormat, color);
+            if (RegionCaptureOptions.autoCopyColor)
+                ClipboardHelpers.FormatCopyColor(ClipboardHelpers.copyFormat, color);
         }
 
         public static void HandleRegionReturnImage(Image img)

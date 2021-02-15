@@ -126,6 +126,7 @@ namespace WinkingCat
             }
         }
 
+        // restore default button click
         private void button6_Click(object sender, EventArgs e)
         {
             foreach(HotkeyInputControl control in flowLayoutPanel1.Controls)
