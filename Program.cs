@@ -10,12 +10,12 @@ using System.IO;
 
 namespace WinkingCat
 {
-    static class Program
+    public static class Program
     {
         /// <summary>
         /// The main entry point for the application.
         /// </summary>
-
+        public static ApplicationForm mainForm;
 
         [STAThread]
         static void Main()
@@ -48,7 +48,9 @@ namespace WinkingCat
             }
 
             HotkeyManager.Init();
-            Application.Run(new ApplicationForm());
+            mainForm = new ApplicationForm();
+            
+            Application.Run(mainForm);
         }
     }
 }

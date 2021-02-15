@@ -2,6 +2,7 @@
 
 namespace WinkingCat.HelperLibs
 {
+
     public enum RegionCaptureMode
     {
         Default,

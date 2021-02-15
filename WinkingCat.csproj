@@ -70,6 +70,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Events\CheckboxCheckedEvent.cs" />
     <Compile Include="Controls\HotkeyInputControl.cs">
       <SubType>UserControl</SubType>
     </Compile>

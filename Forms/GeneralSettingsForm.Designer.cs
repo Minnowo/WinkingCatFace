@@ -49,6 +49,7 @@
             this.ShowTrayIconCheckBox.TabIndex = 0;
             this.ShowTrayIconCheckBox.Text = "Show Tray Icon";
             this.ShowTrayIconCheckBox.UseVisualStyleBackColor = true;
+            this.ShowTrayIconCheckBox.CheckedChanged += new System.EventHandler(this.ShowTrayIconCheckBox_CheckedChanged);
             // 
             // comboBox1
             // 
@@ -83,6 +84,7 @@
             this.AlwaysOnTopCheckbox.TabIndex = 4;
             this.AlwaysOnTopCheckbox.Text = "Always On Top";
             this.AlwaysOnTopCheckbox.UseVisualStyleBackColor = true;
+            this.AlwaysOnTopCheckbox.CheckedChanged += new System.EventHandler(this.AlwaysOnTopCheckbox_CheckedChanged);
             // 
             // MinimizeToTrayOnCloseCheckBox
             // 
@@ -93,6 +95,7 @@
             this.MinimizeToTrayOnCloseCheckBox.TabIndex = 5;
             this.MinimizeToTrayOnCloseCheckBox.Text = "Minimize To Tray On Close";
             this.MinimizeToTrayOnCloseCheckBox.UseVisualStyleBackColor = true;
+            this.MinimizeToTrayOnCloseCheckBox.CheckedChanged += new System.EventHandler(this.MinimizeToTrayOnCloseCheckBox_CheckedChanged);
             // 
             // MinimizeToTrayOnStartCheckBox
             // 
@@ -103,6 +106,7 @@
             this.MinimizeToTrayOnStartCheckBox.TabIndex = 6;
             this.MinimizeToTrayOnStartCheckBox.Text = "Minimize To Tray On Start";
             this.MinimizeToTrayOnStartCheckBox.UseVisualStyleBackColor = true;
+            this.MinimizeToTrayOnStartCheckBox.CheckedChanged += new System.EventHandler(this.MinimizeToTrayOnStartCheckBox_CheckedChanged);
             // 
             // label1
             // 

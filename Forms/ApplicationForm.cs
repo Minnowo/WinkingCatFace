@@ -23,10 +23,15 @@ namespace WinkingCat
         public SettingsForm settingsForm { get; private set; }
 
         public bool forceClose { get; set; } = false;
+        public bool allowShowDisplay { get; set; } = !MainFormSettings.startInTray;
         private bool forceDropDownClose = false;
         public ApplicationForm()
         {
             InitializeComponent();
+            SuspendLayout();
+            TopMost = MainFormSettings.alwaysOnTop;
+            niTrayIcon.Visible = MainFormSettings.showInTray;
+
             FormClosing += new FormClosingEventHandler(MainForm_FormClosing);
             LostFocus += mainForm_LostFocus;
 
@@ -63,11 +68,6 @@ namespace WinkingCat
 
             #endregion
 
-            #region Settings button
-            //ToolStripDropDownButton_Settings.DropDown.Closing += toolStripDropDown_Closing;
-
-            #endregion
-
             #region Tray icon context menu
             cmTray.Opening += tsmiCapture_DropDownOpening;
 
@@ -83,9 +83,12 @@ namespace WinkingCat
             clipFromFileToolStripMenuItem.Click += ClipFromFile_Click;
 
             // other
+            settingsToolStripMenuItem.Click += ToolStripDropDownButton_Settings_Click;
             openMainWindowToolStripMenuItem.Click += OpenMainWindow_Click;
             exitToolStripMenuItem.Click += ExitApplication_Click;
             #endregion
+
+            ResumeLayout();
             HotkeyManager.UpdateHotkeys(HotkeyManager.GetDefaultHotkeyList(), true);
         }
 
@@ -242,7 +245,7 @@ namespace WinkingCat
 
         private void MainForm_FormClosing(object sender, FormClosingEventArgs e)
         {
-            if (e.CloseReason == CloseReason.UserClosing && MainFormSettings.showInTray && !forceClose)
+            if (e.CloseReason == CloseReason.UserClosing && MainFormSettings.minimizeToTray && !forceClose)
             {
                 e.Cancel = true;
                 Hide();
@@ -359,7 +362,14 @@ namespace WinkingCat
             settingsForm?.Dispose();
             settingsForm = new SettingsForm();
             settingsForm.Owner = this;
+            settingsForm.TopMost = MainFormSettings.alwaysOnTop;
             settingsForm.Show();
+        }
+
+        protected override void SetVisibleCore(bool value)
+        {
+            base.SetVisibleCore(allowShowDisplay ? value : allowShowDisplay);
+            allowShowDisplay = true;
         }
     }
 }
