@@ -16,7 +16,7 @@ namespace WinkingCat.HelperLibs
         private const string FORMAT_17 = "Format17";
 
         private static readonly object ClipboardLock = new object();
-        public static ColorFormat copyFormat { get; set; } = ColorFormat.ARGB;
+        public static ColorFormat copyFormat { get; set; } = ColorFormat.RGB;
 
         public static bool CopyData(IDataObject data, bool copy = true)
         {
@@ -47,46 +47,81 @@ namespace WinkingCat.HelperLibs
 
             return false;
         }
-
         public static bool FormatCopyColor(ColorFormat format, Color color)
+        {
+            return FormatCopyColor(format, new _Color(color));
+        }
+
+        public static bool FormatCopyColor(ColorFormat format, _Color color)
         {
             string formatedColor = "";
             switch (format)
             {
                 case ColorFormat.ARGB:
-                    formatedColor += string.Format("{0}, {1}, {2}", color.R, color.G, color.B);
+                    formatedColor += string.Format("{0}, {1}, {2}, {3}", color.alpha, color.r, color.g, color.b);
+                    Logger.WriteLine("ARGB Format Color Copied: " + formatedColor);
+                    break;
+
+                case ColorFormat.RGB:
+                    formatedColor += string.Format("{0}, {1}, {2}", color.r, color.g, color.b);
                     Logger.WriteLine("RGB Format Color Copied: " + formatedColor);
                     break;
 
                 case ColorFormat.Hex:
-                    formatedColor += string.Format("#{0:X2}{1:X2}{2:X2}", color.R, color.G, color.B);
+                    formatedColor += color.hex;
                     Logger.WriteLine("Hex Format Color Copied: " + formatedColor);
                     break;
 
                 case ColorFormat.Decminal:
-                    formatedColor += string.Format("{0}", (color.R * 65536) + (color.G * 256) + color.B);
+                    formatedColor += color.Decimal.ToString();
                     Logger.WriteLine("Decminal Format Color Copied: " + formatedColor);
                     break;
 
                 case ColorFormat.CMYK:
-                    double modifiedR, modifiedG, modifiedB, c, m, y, k;
-
-                    modifiedR = color.R / 255.0;
-                    modifiedG = color.G / 255.0;
-                    modifiedB = color.B / 255.0;
-
-                    k = 1 - new List<double>() { modifiedR, modifiedG, modifiedB }.Max();
-                    c = (1 - modifiedR - k) / (1 - k);
-                    m = (1 - modifiedG - k) / (1 - k);
-                    y = (1 - modifiedB - k) / (1 - k);
-
-                    formatedColor += string.Format("{0}, {1}, {2}, {3}", Math.Round(c * 100), Math.Round(m * 100), Math.Round(y * 100), Math.Round(k * 100));
+                    formatedColor += color.cmyk.ToString();
                     Logger.WriteLine("CMYK Format Color Copied: " + formatedColor);
                     break;
 
+                case ColorFormat.HSL:
+                    formatedColor += color.hsl.ToString();
+                    Logger.WriteLine("HSL Format Color Copied: " + formatedColor);
+                    break;
+
+                case ColorFormat.HSV:
+                    formatedColor += color.hsb.ToString();
+                    Logger.WriteLine("HSV Format Color Copied: " + formatedColor);
+                    break;
+
                 case ColorFormat.HSB:
-                    formatedColor += string.Format("{0}, {1}, {2}", color.GetHue(), color.GetSaturation(), color.GetBrightness());
+                    formatedColor += color.hsb.ToString();
                     Logger.WriteLine("HSB Format Color Copied: " + formatedColor);
+                    break;
+
+                case ColorFormat.XYZ:
+                    formatedColor += color.ToXYZ().ToString();
+                    Logger.WriteLine("XYZ Format Color Copied: " + formatedColor);
+                    break;
+
+                case ColorFormat.Yxy:
+                    formatedColor += color.ToYxy().ToString();
+                    Logger.WriteLine("Yxy Format Color Copied: " + formatedColor);
+                    break;
+
+                case ColorFormat.AdobeRGB:
+                    formatedColor += color.ToAdobeRGB().ToString();
+                    Logger.WriteLine("AdobeRGB Format Color Copied: " + formatedColor);
+                    break;
+
+                case ColorFormat.All:
+                    formatedColor += string.Format("{0}, {1}, {2}", color.r, color.g, color.b) + "\n"; // rgb
+                    formatedColor += string.Format("{0}, {1}, {2}, {3}", color.alpha, color.r, color.g, color.b) + "\n"; // argb
+                    formatedColor += color.hex + "\n"; // hex
+                    formatedColor += color.Decimal.ToString() + "\n"; // decimal
+                    formatedColor += color.cmyk.ToString() + "\n"; // cmyk
+                    formatedColor += color.hsb.ToString() + "\n"; // hsb
+                    formatedColor += color.hsb.ToString() + "\n"; // hsv
+                    formatedColor += color.hsl.ToString(); // hsl
+                    Logger.WriteLine("All Formats Color Copied: " + formatedColor);
                     break;
             }
             return CopyStringDefault(formatedColor);

@@ -48,10 +48,17 @@ namespace WinkingCat.HelperLibs
 
     public enum ColorFormat
     {
+        RGB,
         ARGB,
         Hex,
         Decminal,
         CMYK,
-        HSB
+        HSB,
+        HSV,
+        HSL,
+        XYZ,
+        Yxy,
+        AdobeRGB,
+        All
     }
 }
