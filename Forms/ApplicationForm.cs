@@ -9,6 +9,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using System.IO;
 using System.Threading;
 using WinkingCat.HelperLibs;
 using WinkingCat.ScreenCaptureLib;
@@ -89,9 +90,19 @@ namespace WinkingCat
             #endregion
 
             ImageHandler.CaptureEvent += AfterCaptureEvent;
+            ImageHandler.ImageSaved += ImageSaved_Event;
 
             ResumeLayout();
             HotkeyManager.UpdateHotkeys(HotkeyManager.GetDefaultHotkeyList(), true);
+        }
+
+        public void ImageSaved_Event(object sender, ImageSavedEvent e)
+        {
+            string[] row1 = { e.info.Extension,  // name
+                $"{e.dimensions.Width}, {e.dimensions.Height}", // dimensions
+                Helpers.SizeSuffix(e.size), // size
+                File.GetLastWriteTime(e.info.FullName).ToString() }; // date modified
+            noCheckboxListView1.Items.Add(e.info.Name).SubItems.AddRange(row1);
         }
 
         public void AfterCaptureEvent(object sender, LastRegionCaptureInfo e)

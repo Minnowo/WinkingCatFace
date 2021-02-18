@@ -132,6 +132,7 @@
     <Compile Include="Forms\UploadSettingsForm.Designer.cs">
       <DependentUpon>UploadSettingsForm.cs</DependentUpon>
     </Compile>
+    <Compile Include="Events\TaskExecutedEvent.cs" />
     <Compile Include="TaskHandler.cs" />
     <EmbeddedResource Include="Controls\HotkeyInputControl.resx">
       <DependentUpon>HotkeyInputControl.cs</DependentUpon>

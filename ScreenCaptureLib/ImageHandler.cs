@@ -14,6 +14,7 @@ namespace WinkingCat.ScreenCaptureLib
     public static class ImageHandler
     {
         public static event EventHandler<LastRegionCaptureInfo> CaptureEvent;
+        public static event EventHandler<ImageSavedEvent> ImageSaved;
         public static List<String> images { get; private set; } = new List<string> { };
         public static ImageFormat defaultImageType { get; private set; } = ImageFormat.Png;
         public static LastRegionCaptureInfo LastInfo { get; private set; }
@@ -28,6 +29,18 @@ namespace WinkingCat.ScreenCaptureLib
                 CaptureEvent(null, info);
             }
         }
+        public static void OnImageSaved(string info)
+        {
+            OnImageSaved(new ImageSavedEvent(info));
+        }
+        public static void OnImageSaved(ImageSavedEvent info)
+        {
+            if (CaptureEvent != null)
+            {
+                ImageSaved(null, info);
+            }
+        }
+
         public static void Update(int maxImg, ImageFormat _default)
         {
             imagesToHandle = maxImg;
@@ -94,6 +107,7 @@ namespace WinkingCat.ScreenCaptureLib
                 Logger.WriteException(e);
                 return string.Empty;
             }
+            OnImageSaved(imageName);
             return imageName;
         }
 

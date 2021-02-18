@@ -76,12 +76,12 @@
             this.toolStripSeparator3 = new System.Windows.Forms.ToolStripSeparator();
             this.openMainWindowToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.exitToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.ListView = new System.Windows.Forms.ListView();
-            this.Column1_FileName = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
-            this.Column2_Dimensions = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
-            this.Column3_Modified = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
-            this.Column5_FileType = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
-            this.Column4_Size = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
+            this.noCheckboxListView1 = new WinkingCat.HelperLibs.NoCheckboxListView();
+            this.columnHeader1 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
+            this.columnHeader2 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
+            this.columnHeader3 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
+            this.columnHeader4 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
+            this.columnHeader5 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.DisplayPanel.SuspendLayout();
             this.toolStrip1.SuspendLayout();
             this.cmTray.SuspendLayout();
@@ -90,12 +90,12 @@
             // DisplayPanel
             // 
             this.DisplayPanel.BackColor = System.Drawing.Color.White;
-            this.DisplayPanel.Controls.Add(this.ListView);
+            this.DisplayPanel.Controls.Add(this.noCheckboxListView1);
             this.DisplayPanel.Controls.Add(this.toolStrip1);
             this.DisplayPanel.Dock = System.Windows.Forms.DockStyle.Fill;
             this.DisplayPanel.Location = new System.Drawing.Point(0, 0);
             this.DisplayPanel.Name = "DisplayPanel";
-            this.DisplayPanel.Size = new System.Drawing.Size(871, 231);
+            this.DisplayPanel.Size = new System.Drawing.Size(871, 211);
             this.DisplayPanel.TabIndex = 1;
             // 
             // toolStrip1
@@ -114,7 +114,7 @@
             this.toolStrip1.Location = new System.Drawing.Point(0, 0);
             this.toolStrip1.Name = "toolStrip1";
             this.toolStrip1.ShowItemToolTips = false;
-            this.toolStrip1.Size = new System.Drawing.Size(169, 231);
+            this.toolStrip1.Size = new System.Drawing.Size(184, 211);
             this.toolStrip1.TabIndex = 1;
             this.toolStrip1.Text = "toolStrip1";
             // 
@@ -133,7 +133,7 @@
             this.ToolStripDropDownButton_Capture.ImageScaling = System.Windows.Forms.ToolStripItemImageScaling.None;
             this.ToolStripDropDownButton_Capture.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.ToolStripDropDownButton_Capture.Name = "ToolStripDropDownButton_Capture";
-            this.ToolStripDropDownButton_Capture.Size = new System.Drawing.Size(167, 36);
+            this.ToolStripDropDownButton_Capture.Size = new System.Drawing.Size(182, 36);
             this.ToolStripDropDownButton_Capture.Text = "Capture";
             this.ToolStripDropDownButton_Capture.ToolTipText = "Capture";
             // 
@@ -199,7 +199,7 @@
             this.ToolStripDropDownButton_Clips.ImageScaling = System.Windows.Forms.ToolStripItemImageScaling.None;
             this.ToolStripDropDownButton_Clips.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.ToolStripDropDownButton_Clips.Name = "ToolStripDropDownButton_Clips";
-            this.ToolStripDropDownButton_Clips.Size = new System.Drawing.Size(167, 36);
+            this.ToolStripDropDownButton_Clips.Size = new System.Drawing.Size(182, 36);
             this.ToolStripDropDownButton_Clips.Text = "Clips";
             // 
             // ToolStripMenuItem_newClip
@@ -246,7 +246,7 @@
             this.ToolStripDropDownButton_Tools.ImageScaling = System.Windows.Forms.ToolStripItemImageScaling.None;
             this.ToolStripDropDownButton_Tools.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.ToolStripDropDownButton_Tools.Name = "ToolStripDropDownButton_Tools";
-            this.ToolStripDropDownButton_Tools.Size = new System.Drawing.Size(167, 36);
+            this.ToolStripDropDownButton_Tools.Size = new System.Drawing.Size(182, 36);
             this.ToolStripDropDownButton_Tools.Text = "Tools";
             // 
             // ToolStripDropDownButton_screenColorPicker
@@ -301,7 +301,7 @@
             this.ToolStripDropDownButton_Style.ImageScaling = System.Windows.Forms.ToolStripItemImageScaling.None;
             this.ToolStripDropDownButton_Style.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.ToolStripDropDownButton_Style.Name = "ToolStripDropDownButton_Style";
-            this.ToolStripDropDownButton_Style.Size = new System.Drawing.Size(167, 36);
+            this.ToolStripDropDownButton_Style.Size = new System.Drawing.Size(182, 36);
             this.ToolStripDropDownButton_Style.Text = "Styles";
             // 
             // toolStripMenuItem10
@@ -343,7 +343,7 @@
             this.ToolStripDropDownButton_Settings.ImageScaling = System.Windows.Forms.ToolStripItemImageScaling.None;
             this.ToolStripDropDownButton_Settings.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.ToolStripDropDownButton_Settings.Name = "ToolStripDropDownButton_Settings";
-            this.ToolStripDropDownButton_Settings.Size = new System.Drawing.Size(167, 36);
+            this.ToolStripDropDownButton_Settings.Size = new System.Drawing.Size(108, 36);
             this.ToolStripDropDownButton_Settings.Text = "Settings";
             this.ToolStripDropDownButton_Settings.Click += new System.EventHandler(this.ToolStripDropDownButton_Settings_Click);
             // 
@@ -520,56 +520,55 @@
             this.exitToolStripMenuItem.Size = new System.Drawing.Size(196, 38);
             this.exitToolStripMenuItem.Text = "Exit";
             // 
-            // ListView
+            // noCheckboxListView1
             // 
-            this.ListView.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.ListView.CheckBoxes = true;
-            this.ListView.Columns.AddRange(new System.Windows.Forms.ColumnHeader[] {
-            this.Column1_FileName,
-            this.Column2_Dimensions,
-            this.Column3_Modified,
-            this.Column4_Size,
-            this.Column5_FileType});
-            this.ListView.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.ListView.FullRowSelect = true;
-            this.ListView.HideSelection = false;
-            this.ListView.Location = new System.Drawing.Point(169, 0);
-            this.ListView.Name = "ListView";
-            this.ListView.Size = new System.Drawing.Size(702, 231);
-            this.ListView.TabIndex = 2;
-            this.ListView.UseCompatibleStateImageBehavior = false;
-            this.ListView.View = System.Windows.Forms.View.Details;
+            this.noCheckboxListView1.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.noCheckboxListView1.Columns.AddRange(new System.Windows.Forms.ColumnHeader[] {
+            this.columnHeader1,
+            this.columnHeader5,
+            this.columnHeader2,
+            this.columnHeader3,
+            this.columnHeader4});
+            this.noCheckboxListView1.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.noCheckboxListView1.FullRowSelect = true;
+            this.noCheckboxListView1.HideSelection = false;
+            this.noCheckboxListView1.Location = new System.Drawing.Point(184, 0);
+            this.noCheckboxListView1.Name = "noCheckboxListView1";
+            this.noCheckboxListView1.Size = new System.Drawing.Size(687, 211);
+            this.noCheckboxListView1.TabIndex = 2;
+            this.noCheckboxListView1.UseCompatibleStateImageBehavior = false;
+            this.noCheckboxListView1.View = System.Windows.Forms.View.Details;
             // 
-            // Column1_FileName
+            // columnHeader1
             // 
-            this.Column1_FileName.Text = "Filename";
-            this.Column1_FileName.Width = 100;
+            this.columnHeader1.Text = "Name";
+            this.columnHeader1.Width = 200;
             // 
-            // Column2_Dimensions
+            // columnHeader2
             // 
-            this.Column2_Dimensions.Text = "Dimensions";
-            this.Column2_Dimensions.Width = 100;
+            this.columnHeader2.Text = "Dimensions";
+            this.columnHeader2.Width = 120;
             // 
-            // Column3_Modified
+            // columnHeader3
             // 
-            this.Column3_Modified.Text = "LastModified";
-            this.Column3_Modified.Width = 100;
+            this.columnHeader3.Text = "Size";
+            this.columnHeader3.Width = 120;
             // 
-            // Column5_FileType
+            // columnHeader4
             // 
-            this.Column5_FileType.Text = "Type";
-            this.Column5_FileType.Width = 100;
+            this.columnHeader4.Text = "DateModified";
+            this.columnHeader4.Width = 200;
             // 
-            // Column4_Size
+            // columnHeader5
             // 
-            this.Column4_Size.Text = "Size";
-            this.Column4_Size.Width = 100;
+            this.columnHeader5.Text = "Type";
+            this.columnHeader5.Width = 100;
             // 
             // ApplicationForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(871, 231);
+            this.ClientSize = new System.Drawing.Size(871, 211);
             this.Controls.Add(this.DisplayPanel);
             this.MinimumSize = new System.Drawing.Size(666, 250);
             this.Name = "ApplicationForm";
@@ -630,12 +629,12 @@
         private System.Windows.Forms.ToolStripMenuItem clipFromClipboardToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem clipFromFileToolStripMenuItem;
         private System.Windows.Forms.ToolStripButton ToolStripDropDownButton_Settings;
-        private System.Windows.Forms.ListView ListView;
-        private System.Windows.Forms.ColumnHeader Column1_FileName;
-        private System.Windows.Forms.ColumnHeader Column2_Dimensions;
-        private System.Windows.Forms.ColumnHeader Column3_Modified;
-        private System.Windows.Forms.ColumnHeader Column4_Size;
-        private System.Windows.Forms.ColumnHeader Column5_FileType;
+        private HelperLibs.NoCheckboxListView noCheckboxListView1;
+        private System.Windows.Forms.ColumnHeader columnHeader1;
+        private System.Windows.Forms.ColumnHeader columnHeader2;
+        private System.Windows.Forms.ColumnHeader columnHeader3;
+        private System.Windows.Forms.ColumnHeader columnHeader4;
+        private System.Windows.Forms.ColumnHeader columnHeader5;
     }
 }
 

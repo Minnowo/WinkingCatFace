@@ -57,6 +57,7 @@
     <Compile Include="Forms\RegionCaptureForm.Designer.cs">
       <DependentUpon>RegionCaptureForm.cs</DependentUpon>
     </Compile>
+    <Compile Include="ImageSavedEvent.cs" />
     <Compile Include="LastRegionCaptureInfo.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="ScreenShotManager.cs" />

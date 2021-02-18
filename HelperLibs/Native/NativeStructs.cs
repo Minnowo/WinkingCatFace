@@ -5,7 +5,6 @@ using System.Globalization;
 
 namespace WinkingCat.HelperLibs
 {
-
     [StructLayout(LayoutKind.Sequential)]
     public struct RECT
     {
