@@ -88,11 +88,16 @@ namespace WinkingCat
             exitToolStripMenuItem.Click += ExitApplication_Click;
             #endregion
 
+            ImageHandler.CaptureEvent += AfterCaptureEvent;
+
             ResumeLayout();
             HotkeyManager.UpdateHotkeys(HotkeyManager.GetDefaultHotkeyList(), true);
         }
 
+        public void AfterCaptureEvent(object sender, LastRegionCaptureInfo e)
+        {
 
+        }
 
         #region Capture dropdown buttons
         private async void tsmiCapture_DropDownOpening(object sender, EventArgs e)

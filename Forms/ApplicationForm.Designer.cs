@@ -55,6 +55,7 @@
             this.toolStripMenuItem11 = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripMenuItem12 = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripMenuItem13 = new System.Windows.Forms.ToolStripMenuItem();
+            this.ToolStripDropDownButton_Settings = new System.Windows.Forms.ToolStripButton();
             this.niTrayIcon = new System.Windows.Forms.NotifyIcon(this.components);
             this.cmTray = new System.Windows.Forms.ContextMenuStrip(this.components);
             this.captureToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -75,7 +76,12 @@
             this.toolStripSeparator3 = new System.Windows.Forms.ToolStripSeparator();
             this.openMainWindowToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.exitToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.ToolStripDropDownButton_Settings = new System.Windows.Forms.ToolStripButton();
+            this.ListView = new System.Windows.Forms.ListView();
+            this.Column1_FileName = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
+            this.Column2_Dimensions = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
+            this.Column3_Modified = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
+            this.Column5_FileType = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
+            this.Column4_Size = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.DisplayPanel.SuspendLayout();
             this.toolStrip1.SuspendLayout();
             this.cmTray.SuspendLayout();
@@ -83,7 +89,8 @@
             // 
             // DisplayPanel
             // 
-            this.DisplayPanel.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(32)))), ((int)(((byte)(30)))), ((int)(((byte)(45)))));
+            this.DisplayPanel.BackColor = System.Drawing.Color.White;
+            this.DisplayPanel.Controls.Add(this.ListView);
             this.DisplayPanel.Controls.Add(this.toolStrip1);
             this.DisplayPanel.Dock = System.Windows.Forms.DockStyle.Fill;
             this.DisplayPanel.Location = new System.Drawing.Point(0, 0);
@@ -95,6 +102,7 @@
             // 
             this.toolStrip1.AutoSize = false;
             this.toolStrip1.Dock = System.Windows.Forms.DockStyle.Left;
+            this.toolStrip1.GripStyle = System.Windows.Forms.ToolStripGripStyle.Hidden;
             this.toolStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.ToolStripDropDownButton_Capture,
             this.ToolStripDropDownButton_Clips,
@@ -327,13 +335,24 @@
             this.toolStripMenuItem13.Size = new System.Drawing.Size(316, 38);
             this.toolStripMenuItem13.Text = "CreateClipAfterRegionCapture";
             // 
+            // ToolStripDropDownButton_Settings
+            // 
+            this.ToolStripDropDownButton_Settings.Font = new System.Drawing.Font("Consolas", 11.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.ToolStripDropDownButton_Settings.Image = global::WinkingCat.Properties.Resources.gear_in_icon;
+            this.ToolStripDropDownButton_Settings.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            this.ToolStripDropDownButton_Settings.ImageScaling = System.Windows.Forms.ToolStripItemImageScaling.None;
+            this.ToolStripDropDownButton_Settings.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.ToolStripDropDownButton_Settings.Name = "ToolStripDropDownButton_Settings";
+            this.ToolStripDropDownButton_Settings.Size = new System.Drawing.Size(167, 36);
+            this.ToolStripDropDownButton_Settings.Text = "Settings";
+            this.ToolStripDropDownButton_Settings.Click += new System.EventHandler(this.ToolStripDropDownButton_Settings_Click);
+            // 
             // niTrayIcon
             // 
             this.niTrayIcon.ContextMenuStrip = this.cmTray;
             this.niTrayIcon.Icon = ((System.Drawing.Icon)(resources.GetObject("niTrayIcon.Icon")));
             this.niTrayIcon.Text = ";3c";
             this.niTrayIcon.Visible = true;
-            this.niTrayIcon.MouseUp += NiTrayIcon_MouseClick1Up;
             // 
             // cmTray
             // 
@@ -501,17 +520,50 @@
             this.exitToolStripMenuItem.Size = new System.Drawing.Size(196, 38);
             this.exitToolStripMenuItem.Text = "Exit";
             // 
-            // ToolStripDropDownButton_Settings
+            // ListView
             // 
-            this.ToolStripDropDownButton_Settings.Font = new System.Drawing.Font("Consolas", 11.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.ToolStripDropDownButton_Settings.Image = global::WinkingCat.Properties.Resources.gear_in_icon;
-            this.ToolStripDropDownButton_Settings.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            this.ToolStripDropDownButton_Settings.ImageScaling = System.Windows.Forms.ToolStripItemImageScaling.None;
-            this.ToolStripDropDownButton_Settings.ImageTransparentColor = System.Drawing.Color.Magenta;
-            this.ToolStripDropDownButton_Settings.Name = "ToolStripDropDownButton_Settings";
-            this.ToolStripDropDownButton_Settings.Size = new System.Drawing.Size(167, 36);
-            this.ToolStripDropDownButton_Settings.Text = "Settings";
-            this.ToolStripDropDownButton_Settings.Click += new System.EventHandler(this.ToolStripDropDownButton_Settings_Click);
+            this.ListView.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.ListView.CheckBoxes = true;
+            this.ListView.Columns.AddRange(new System.Windows.Forms.ColumnHeader[] {
+            this.Column1_FileName,
+            this.Column2_Dimensions,
+            this.Column3_Modified,
+            this.Column4_Size,
+            this.Column5_FileType});
+            this.ListView.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.ListView.FullRowSelect = true;
+            this.ListView.HideSelection = false;
+            this.ListView.Location = new System.Drawing.Point(169, 0);
+            this.ListView.Name = "ListView";
+            this.ListView.Size = new System.Drawing.Size(702, 231);
+            this.ListView.TabIndex = 2;
+            this.ListView.UseCompatibleStateImageBehavior = false;
+            this.ListView.View = System.Windows.Forms.View.Details;
+            // 
+            // Column1_FileName
+            // 
+            this.Column1_FileName.Text = "Filename";
+            this.Column1_FileName.Width = 100;
+            // 
+            // Column2_Dimensions
+            // 
+            this.Column2_Dimensions.Text = "Dimensions";
+            this.Column2_Dimensions.Width = 100;
+            // 
+            // Column3_Modified
+            // 
+            this.Column3_Modified.Text = "LastModified";
+            this.Column3_Modified.Width = 100;
+            // 
+            // Column5_FileType
+            // 
+            this.Column5_FileType.Text = "Type";
+            this.Column5_FileType.Width = 100;
+            // 
+            // Column4_Size
+            // 
+            this.Column4_Size.Text = "Size";
+            this.Column4_Size.Width = 100;
             // 
             // ApplicationForm
             // 
@@ -522,13 +574,12 @@
             this.MinimumSize = new System.Drawing.Size(666, 250);
             this.Name = "ApplicationForm";
             this.Text = "Form1";
+            this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.MainForm_FormClosing);
             this.DisplayPanel.ResumeLayout(false);
             this.toolStrip1.ResumeLayout(false);
             this.toolStrip1.PerformLayout();
             this.cmTray.ResumeLayout(false);
             this.ResumeLayout(false);
-            this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(MainForm_FormClosing);
-            this.LostFocus += mainForm_LostFocus;
 
         }
 
@@ -579,6 +630,12 @@
         private System.Windows.Forms.ToolStripMenuItem clipFromClipboardToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem clipFromFileToolStripMenuItem;
         private System.Windows.Forms.ToolStripButton ToolStripDropDownButton_Settings;
+        private System.Windows.Forms.ListView ListView;
+        private System.Windows.Forms.ColumnHeader Column1_FileName;
+        private System.Windows.Forms.ColumnHeader Column2_Dimensions;
+        private System.Windows.Forms.ColumnHeader Column3_Modified;
+        private System.Windows.Forms.ColumnHeader Column4_Size;
+        private System.Windows.Forms.ColumnHeader Column5_FileType;
     }
 }
 

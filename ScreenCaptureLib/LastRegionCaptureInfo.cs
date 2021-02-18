@@ -9,7 +9,7 @@ using WinkingCat.HelperLibs;
 
 namespace WinkingCat.ScreenCaptureLib
 {
-    public class LastRegionCaptureInfo
+    public class LastRegionCaptureInfo : EventArgs
     {
         public Image Img { get; private set; }
         public Color color { get; private set; }

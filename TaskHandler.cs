@@ -14,9 +14,20 @@ namespace WinkingCat
 
     public static class TaskHandler
     {
+        public static event EventHandler TaskExecuted;
         public static Image img;
+
+        public static void OnTaskExecuted(Tasks t)
+        {
+            if (TaskExecuted != null)
+            {
+                TaskExecuted(null, new TaskExecutedEvent(t));
+            }
+        }
+
         public static bool CaptureWindow(WindowInfo window)
         {
+            OnTaskExecuted(Tasks.CaptureWindow);
             if (ScreenHelper.IsValidCropArea(window.Rectangle))
             {
                 img = ScreenShotManager.CaptureRectangle(window.Rectangle);
@@ -37,6 +48,7 @@ namespace WinkingCat
 
         public static bool ExecuteTask(Tasks task)
         {
+            OnTaskExecuted(task);
             switch (task)
             {
                 case Tasks.RegionCapture:

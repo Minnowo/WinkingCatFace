@@ -13,6 +13,7 @@ namespace WinkingCat.ScreenCaptureLib
 {
     public static class ImageHandler
     {
+        public static event EventHandler<LastRegionCaptureInfo> CaptureEvent;
         public static List<String> images { get; private set; } = new List<string> { };
         public static ImageFormat defaultImageType { get; private set; } = ImageFormat.Png;
         public static LastRegionCaptureInfo LastInfo { get; private set; }
@@ -20,7 +21,13 @@ namespace WinkingCat.ScreenCaptureLib
         public static int imagesToHandle { get; private set; } = 10;
         public static bool isUsingRegionCaptureWindow { get; private set; } = false;
 
-
+        public static void OnCaptureEvent(LastRegionCaptureInfo info)
+        {
+            if (CaptureEvent != null)
+            {
+                CaptureEvent(null, info);
+            }
+        }
         public static void Update(int maxImg, ImageFormat _default)
         {
             imagesToHandle = maxImg;
@@ -59,6 +66,7 @@ namespace WinkingCat.ScreenCaptureLib
                         {
                             HandleRegionReturnColor(LastInfo.color);
                         }
+                        OnCaptureEvent(LastInfo);
                     }
                     regionCapture.Destroy();
                 }
