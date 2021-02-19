@@ -67,12 +67,12 @@ namespace WinkingCat.HelperLibs
 
             foreach (string key in keys.AllKeys)
                 keys.Remove(key);
-            keys.Add("hideMainFormOnCapture", "true");
-            keys.Add("showInTray", "true");
-            keys.Add("minimizeToTray", "true");
-            keys.Add("startInTray", "true");
-            keys.Add("alwaysOnTop", "true");
-            keys.Add("waitHideTime", "500");
+            keys.Add("hideMainFormOnCapture", MainFormSettings.hideMainFormOnCapture.ToString());
+            keys.Add("showInTray", MainFormSettings.showInTray.ToString());
+            keys.Add("minimizeToTray", MainFormSettings.minimizeToTray.ToString());
+            keys.Add("startInTray", MainFormSettings.startInTray.ToString());
+            keys.Add("alwaysOnTop", MainFormSettings.alwaysOnTop.ToString());
+            keys.Add("waitHideTime", MainFormSettings.waitHideTime.ToString());
             conf.Save();
             return false;
         }
@@ -92,7 +92,7 @@ namespace WinkingCat.HelperLibs
             {
                 try
                 {
-                    if (keys.AllKeys.Length != 10)
+                    if (keys.AllKeys.Length != 11)
                         throw new Exception("Keys have been modified RegionCapture.config will be reset with default values");
                     foreach (string key in keys.AllKeys)
                         switch (key)
@@ -146,16 +146,16 @@ namespace WinkingCat.HelperLibs
 
             foreach (string key in keys.AllKeys)
                 keys.Remove(key);
-            keys.Add("drawMagnifier", "false");
-            keys.Add("drawCrossHair", "true");
-            keys.Add("drawInfoText", "true");
-            keys.Add("marchingAnts", "true");
-            keys.Add("createClipAfterRegionCapture", "false");
-            keys.Add("autoCopyImage", "true");
-            keys.Add("autoCopyColor", "true");
-            keys.Add("cursorInfoOffset", "10");
-            keys.Add("MagnifierPixelCount", "15");
-            keys.Add("MagnifierPixelSize", "10");
+            keys.Add("drawMagnifier", RegionCaptureOptions.drawMagnifier.ToString());  // bool
+            keys.Add("drawCrossHair", RegionCaptureOptions.drawCrossHair.ToString());  // bool
+            keys.Add("drawInfoText", RegionCaptureOptions.drawInfoText.ToString());    // bool
+            keys.Add("marchingAnts", RegionCaptureOptions.marchingAnts.ToString());    // bool
+            keys.Add("createClipAfterRegionCapture", RegionCaptureOptions.createClipAfterRegionCapture.ToString());// bool
+            keys.Add("autoCopyImage", RegionCaptureOptions.autoCopyImage.ToString());  // bool
+            keys.Add("autoCopyColor", RegionCaptureOptions.autoCopyColor.ToString());  // bool
+            keys.Add("cursorInfoOffset", RegionCaptureOptions.cursorInfoOffset.ToString()); // int
+            keys.Add("MagnifierPixelCount", RegionCaptureOptions.MagnifierPixelCount.ToString());   // int
+            keys.Add("MagnifierPixelSize", RegionCaptureOptions.MagnifierPixelSize.ToString());     // int
             keys.Add("mode", RegionCaptureMode.Default.ToString("D"));
             conf.Save();
             return false;

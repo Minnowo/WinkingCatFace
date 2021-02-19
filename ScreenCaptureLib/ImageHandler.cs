@@ -102,7 +102,7 @@ namespace WinkingCat.ScreenCaptureLib
             try
             {
                 img.Save(imageName, format);
-                Console.WriteLine(imageName);
+                Logger.WriteLine(imageName);
             }catch (Exception e)
             {
                 Logger.WriteException(e);

@@ -160,15 +160,7 @@ namespace WinkingCat
             Thread.Sleep(MainFormSettings.waitHideTime);
             ImageHandler.Save(img: ScreenShotManager.CaptureRectangle((Rectangle)tsi.Tag));
             Thread.Sleep(MainFormSettings.waitHideTime);
-            /*
-                        Task t = Task.Run(async delegate
-                        {
-                            await Task.Delay(MainFormSettings.waitHideTime);
-                            ImageHandler.Save(img : ScreenShotManager.CaptureRectangle((Rectangle)tsi.Tag));
-                            await Task.Delay(MainFormSettings.waitHideTime);
-                        });
 
-                        t.Wait(); t.Dispose();*/
             Show();
         }
 

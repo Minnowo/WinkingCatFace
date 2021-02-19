@@ -353,6 +353,7 @@
             this.niTrayIcon.Icon = ((System.Drawing.Icon)(resources.GetObject("niTrayIcon.Icon")));
             this.niTrayIcon.Text = ";3c";
             this.niTrayIcon.Visible = true;
+            this.niTrayIcon.MouseUp += NiTrayIcon_MouseClick1Up;
             // 
             // cmTray
             // 

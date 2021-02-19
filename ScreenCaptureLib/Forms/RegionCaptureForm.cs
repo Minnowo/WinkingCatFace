@@ -58,7 +58,7 @@ namespace WinkingCat
             //Show();
 
             MaximizeBox = false;
-            TopMost = true;
+            //TopMost = true;
 
             Cursor = new Cursor(DirectoryManager.currentDirectory + ResourceManager.regionCaptureCursor);
 
@@ -79,6 +79,7 @@ namespace WinkingCat
 
                 backgroundBrush = new TextureBrush(DimmedCanvas) { WrapMode = WrapMode.Clamp };
             }
+            DimmedCanvas.Dispose();
             // used to make the selection box fill with the same color as background
             backgroundHighlightBrush = new TextureBrush(image) { WrapMode = WrapMode.Clamp }; 
         }
@@ -210,7 +211,7 @@ namespace WinkingCat
 
             if (RegionCaptureOptions.drawMagnifier)
             {
-                
+                DrawMagnifier(g, mousePos);
             }
 
             if (RegionCaptureOptions.drawCrossHair)
@@ -222,13 +223,51 @@ namespace WinkingCat
             {
                 DrawInfoText(g, $"X: {mousePos.X} Y: {mousePos.Y}", infoFont, textFontBrush, textBackgroundBrush, borderPen, mousePos);
             }
-
-            DrawCursorGraphics();
-
         }
-        private void DrawCursorGraphics()
-        {
 
+        private void DrawMagnifier(Graphics g, Point mousePos)
+        {
+            int pixelCount = RegionCaptureOptions.MagnifierPixelCount.Clamp(1, 200);
+            int pixelSize = RegionCaptureOptions.MagnifierPixelSize.Clamp(1, 20);
+
+            int width = MathHelper.MakeOdd(pixelCount * pixelSize);
+            int height = MathHelper.MakeOdd(pixelCount * pixelSize);
+
+            pixelCount = MathHelper.MakeOdd(pixelCount);
+            pixelSize = MathHelper.MakeOdd(pixelSize);
+
+            Bitmap bmp = new Bitmap(width, height);
+            using (Graphics gr = Graphics.FromImage(bmp))
+            {
+                gr.InterpolationMode = InterpolationMode.NearestNeighbor;
+                gr.PixelOffsetMode = PixelOffsetMode.Half;
+
+                gr.DrawImage(image, new Rectangle(0, 0, width, height),
+                    new Rectangle(
+                        mousePos.X - pixelCount / 2, mousePos.Y - pixelCount / 2,
+                        pixelCount, pixelCount),
+                    GraphicsUnit.Pixel);
+
+                gr.PixelOffsetMode = PixelOffsetMode.None;
+
+
+                using (Pen pen = new Pen(Color.FromArgb(25, Color.White)))
+                {
+                    for (int x = 1; x < pixelCount; x++)
+                    {
+                        gr.DrawLine(pen, new Point((x * pixelSize) - 1, 0), new Point((x * pixelSize) - 1, height - 1));
+                    }
+
+                    for (int y = 1; y < pixelCount; y++)
+                    {
+                        gr.DrawLine(pen, new Point(0, (y * pixelSize) - 1), new Point(width - 1, (y * pixelSize) - 1));
+                    }
+                }
+
+                g.DrawImage(bmp,
+                        new Point(mousePos.X - MathHelper.MakeEven(width / 2), mousePos.Y - MathHelper.MakeEven(width / 2)));
+                bmp.Dispose();
+            }
         }
         private void DrawSelectionBox(Graphics g, Point mousePos)
         {
@@ -291,17 +330,14 @@ namespace WinkingCat
 
         public void Destroy()
         {
-            //timer?.Stop();
-            //timer?.Dispose();
-
             borderDotPen?.Dispose();
             borderPen?.Dispose();
             infoFont?.Dispose();
-            backgroundHighlightBrush?.Dispose();
+
 
             image?.Dispose();
             backgroundBrush?.Dispose();
-            //clipWinPictureBox?.Dispose();
+            backgroundHighlightBrush?.Dispose();
 
             base.Dispose(true);
         }

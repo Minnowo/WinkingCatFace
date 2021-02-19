@@ -32,7 +32,7 @@
             // 
             // ClippingWindowForm
             // 
-            SetStyle(System.Windows.Forms.ControlStyles.OptimizedDoubleBuffer | System.Windows.Forms.ControlStyles.UserPaint | System.Windows.Forms.ControlStyles.AllPaintingInWmPaint, true);
+            this.SetStyle(System.Windows.Forms.ControlStyles.OptimizedDoubleBuffer | System.Windows.Forms.ControlStyles.UserPaint | System.Windows.Forms.ControlStyles.AllPaintingInWmPaint, true);
             FormBorderStyle = System.Windows.Forms.FormBorderStyle.None;
             StartPosition = System.Windows.Forms.FormStartPosition.Manual;
             AutoScaleMode = System.Windows.Forms.AutoScaleMode.None; // might remove

@@ -9,6 +9,19 @@ namespace WinkingCat.HelperLibs
 {
     public static class Extensions
     {
+        public static string ToLowerString(this bool input)
+        {
+            if (input)
+                return "true";
+            else
+                return "false";
+        }
+        public static int Clamp(this int input, int min, int max)
+        {
+            if (input.CompareTo(min) <= 0) return min;
+            if (input.CompareTo(max) >= 0) return max;
+            return input;
+        }
         public static IList<T> Swap<T>(this IList<T> list, int indexA, int indexB)
         {
             T tmp = list[indexA];

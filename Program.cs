@@ -42,10 +42,11 @@ namespace WinkingCat
                 Logger.WriteLine("MainForm settings loaded successfully");
             }
 
-            if (SettingsLoader.LoadRegionCaptureSettings())
-            {
-                Logger.WriteLine("RegionCapture settings loaded successfully");
-            }
+            /*            if (SettingsLoader.LoadRegionCaptureSettings())
+                        {
+                            Logger.WriteLine("RegionCapture settings loaded successfully");
+                        }*/
+
 
             HotkeyManager.Init();
             mainForm = new ApplicationForm();
