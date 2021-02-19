@@ -12,6 +12,7 @@ namespace WinkingCat.HelperLibs
 {
     public static class MathHelper
     {
+
         public static Size PictureBoxZoomSize(PictureBox pictureBox, Size imageSize)
         {
             double wfactor = (double)imageSize.Width / pictureBox.ClientSize.Width;

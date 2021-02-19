@@ -138,15 +138,11 @@ namespace WinkingCat
                     Hide();
                 }
             }
-            
-            Task t = Task.Run(async delegate
-            {
-                await Task.Delay(MainFormSettings.waitHideTime);
-                TaskHandler.CaptureWindow(win);
-                await Task.Delay(MainFormSettings.waitHideTime);
-            });
 
-            t.Wait(); t.Dispose();
+            Thread.Sleep(MainFormSettings.waitHideTime);
+            TaskHandler.CaptureWindow(win);
+            Thread.Sleep(MainFormSettings.waitHideTime);
+
             Show();
         }
 
@@ -161,15 +157,18 @@ namespace WinkingCat
             {
                 Hide();
             }
+            Thread.Sleep(MainFormSettings.waitHideTime);
+            ImageHandler.Save(img: ScreenShotManager.CaptureRectangle((Rectangle)tsi.Tag));
+            Thread.Sleep(MainFormSettings.waitHideTime);
+            /*
+                        Task t = Task.Run(async delegate
+                        {
+                            await Task.Delay(MainFormSettings.waitHideTime);
+                            ImageHandler.Save(img : ScreenShotManager.CaptureRectangle((Rectangle)tsi.Tag));
+                            await Task.Delay(MainFormSettings.waitHideTime);
+                        });
 
-            Task t = Task.Run(async delegate
-            {
-                await Task.Delay(MainFormSettings.waitHideTime);
-                ImageHandler.Save(img : ScreenShotManager.CaptureRectangle((Rectangle)tsi.Tag));
-                await Task.Delay(MainFormSettings.waitHideTime);
-            });
-
-            t.Wait(); t.Dispose();
+                        t.Wait(); t.Dispose();*/
             Show();
         }
 

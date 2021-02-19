@@ -28,34 +28,26 @@
         /// </summary>
         private void InitializeComponent()
         {
-            this.clipWinPictureBox = new System.Windows.Forms.PictureBox();
-            ((System.ComponentModel.ISupportInitialize)(this.clipWinPictureBox)).BeginInit();
             this.SuspendLayout();
-            // 
-            // clipWinPictureBox
-            // 
-            this.clipWinPictureBox.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.clipWinPictureBox.Location = new System.Drawing.Point(0, 0);
-            this.clipWinPictureBox.Name = "clipWinPictureBox";
-            this.clipWinPictureBox.Size = new System.Drawing.Size(605, 381);
-            this.clipWinPictureBox.TabIndex = 0;
-            this.clipWinPictureBox.TabStop = false;
             // 
             // ClippingWindowForm
             // 
+            SetStyle(System.Windows.Forms.ControlStyles.OptimizedDoubleBuffer | System.Windows.Forms.ControlStyles.UserPaint | System.Windows.Forms.ControlStyles.AllPaintingInWmPaint, true);
+            FormBorderStyle = System.Windows.Forms.FormBorderStyle.None;
+            StartPosition = System.Windows.Forms.FormStartPosition.Manual;
+            AutoScaleMode = System.Windows.Forms.AutoScaleMode.None; // might remove
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(605, 381);
-            this.Controls.Add(this.clipWinPictureBox);
             this.Name = "ClippingWindowForm";
             this.Text = "Region Capture";
-            ((System.ComponentModel.ISupportInitialize)(this.clipWinPictureBox)).EndInit();
+            MouseDown += Click_Event;
+            MouseUp += ClickRelease_Event;
+            MouseMove += MouseMove_Event;
             this.ResumeLayout(false);
 
         }
 
         #endregion
-
-        private System.Windows.Forms.PictureBox clipWinPictureBox;
     }
 }

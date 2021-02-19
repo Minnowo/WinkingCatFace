@@ -20,12 +20,10 @@ namespace WinkingCat
 
         //private Timer timer;
 
-        private Pen borderDotPen, borderPen;
-        private Brush textBackgroundBrush, textFontBrush;
-        private Font infoFont;
 
         public bool isLeftClicking { get; private set; } = false;
 
+        public Bitmap image { get; private set; }
         public Point leftClickStart { get; private set; } = new Point();
         public Point leftClickStop { get; private set; } = new Point();
 
@@ -34,12 +32,13 @@ namespace WinkingCat
         public RegionResult result;
         public RegionCaptureMode mode;
 
+        private TextureBrush backgroundBrush;
+        private Pen borderDotPen, borderPen;
+        private Brush textBackgroundBrush, textFontBrush, backgroundHighlightBrush;
+        private Font infoFont;
 
         public ClippingWindowForm(Rectangle region)
         {
-            InitializeComponent();
-            SetStyle(ControlStyles.OptimizedDoubleBuffer | ControlStyles.UserPaint | ControlStyles.AllPaintingInWmPaint, true);
-
             clientArea = region;
             mode = RegionCaptureOptions.mode;
 
@@ -52,18 +51,10 @@ namespace WinkingCat
             textFontBrush = new SolidBrush(System.Drawing.Color.FromArgb(255, 255, 255));
 
             SuspendLayout();
-            FormBorderStyle = FormBorderStyle.None;
 
-            StartPosition = FormStartPosition.Manual;
-            Location = new Point(region.X, region.Y);
-
-            MinimumSize = new Size(clientArea.Width, clientArea.Height);
-            MaximumSize = new Size(clientArea.Width, clientArea.Height);            
-            Size = clientArea.Size;
-
-            clipWinPictureBox.Image = ScreenShotManager.CaptureRectangle(region);
-
-            
+            //clipWinPictureBox.Image = ScreenShotManager.CaptureRectangle(region);
+            image = ScreenShotManager.CaptureRectangle(region);
+            BackColor = Color.Black;
             //Show();
 
             MaximizeBox = false;
@@ -71,12 +62,28 @@ namespace WinkingCat
 
             Cursor = new Cursor(DirectoryManager.currentDirectory + ResourceManager.regionCaptureCursor);
 
-            clipWinPictureBox.MouseDown += clipWinPictureBox_Click;
-            clipWinPictureBox.MouseUp += clipWinPictureBox_ClickRelease;
-            clipWinPictureBox.Paint += new PaintEventHandler(OnPaint);
-            clipWinPictureBox.MouseMove += clipWinPictureBox_MouseMove;
+
             ResumeLayout();
+            InitializeComponent();
+
+            MinimumSize = new Size(clientArea.Width, clientArea.Height);
+            MaximumSize = new Size(clientArea.Width, clientArea.Height);
+            Bounds = region;
+
+            Bitmap DimmedCanvas = (Bitmap)image.Clone();
+
+            using (Graphics g = Graphics.FromImage(DimmedCanvas))
+            using (Brush brush = new SolidBrush(Color.FromArgb(50, Color.Black)))
+            {
+                g.FillRectangle(brush, 0, 0, DimmedCanvas.Width, DimmedCanvas.Height);
+
+                backgroundBrush = new TextureBrush(DimmedCanvas) { WrapMode = WrapMode.Clamp };
+            }
+            // used to make the selection box fill with the same color as background
+            backgroundHighlightBrush = new TextureBrush(image) { WrapMode = WrapMode.Clamp }; 
         }
+
+
         protected override CreateParams CreateParams
         {
             get
@@ -87,13 +94,13 @@ namespace WinkingCat
             }
         }
 
-        private void clipWinPictureBox_MouseMove(object sender, MouseEventArgs e)
+        private void MouseMove_Event(object sender, MouseEventArgs e)
         {
             Invalidate();
             //Refresh();
         }
 
-        private void clipWinPictureBox_ClickRelease(object sender, EventArgs e)
+        private void ClickRelease_Event(object sender, EventArgs e)
         {
             switch (((MouseEventArgs)e).Button)
             {
@@ -143,7 +150,7 @@ namespace WinkingCat
             }
         }
 
-        private void clipWinPictureBox_Click(object sender, EventArgs e)
+        private void Click_Event(object sender, EventArgs e)
         {
             switch (((MouseEventArgs)e).Button)
             {
@@ -166,8 +173,9 @@ namespace WinkingCat
             }
         }
 
-        protected void OnPaint(object sender, PaintEventArgs e)
+        protected override void OnPaint(PaintEventArgs e)
         {
+
             mousePos = ScreenHelper.ScreenToClient(ScreenHelper.GetCursorPosition());
 
             Graphics g = e.Graphics;
@@ -184,14 +192,14 @@ namespace WinkingCat
                 if (borderDotPen.DashOffset > 10) borderDotPen.DashOffset = 0;
             }
 
-            using (Brush b = new SolidBrush(Color.FromArgb(30, Color.Black)))
-            {
-                g.FillRectangle(b, new Rectangle(new Point(0 ,0), clientArea.Size));
-            }
-            
+            g.CompositingMode = CompositingMode.SourceCopy;
+            g.FillRectangle(backgroundBrush, clientArea);
+            g.CompositingMode = CompositingMode.SourceOver;
 
             DrawMouseGraphics(g);
+            //Invalidate()
         }
+
 
         private void DrawMouseGraphics(Graphics g)
         {
@@ -215,10 +223,17 @@ namespace WinkingCat
                 DrawInfoText(g, $"X: {mousePos.X} Y: {mousePos.Y}", infoFont, textFontBrush, textBackgroundBrush, borderPen, mousePos);
             }
 
-        }
+            DrawCursorGraphics();
 
+        }
+        private void DrawCursorGraphics()
+        {
+
+        }
         private void DrawSelectionBox(Graphics g, Point mousePos)
         {
+            g.FillRectangle(backgroundHighlightBrush, ScreenHelper.CreateValidCropArea(leftClickStart, mousePos));
+            
             g.DrawLine(borderDotPen, leftClickStart, new Point(mousePos.X, leftClickStart.Y));
             g.DrawLine(borderDotPen, leftClickStart, new Point(leftClickStart.X, mousePos.Y));
         }
@@ -254,22 +269,22 @@ namespace WinkingCat
                 case RegionResult.Region:
                     return new LastRegionCaptureInfo(RegionResult.Region, leftClickStart, leftClickStop, 
                         ScreenHelper.CreateValidCropArea(leftClickStart, leftClickStop), 
-                        ScreenShotManager.CropImage(leftClickStart, leftClickStop, clipWinPictureBox.Image));                    //return ScreenShotManager.CropImage(leftClickStart, leftClickStop, clipWinPictureBox.Image);
+                        ScreenShotManager.CropImage(leftClickStart, leftClickStop, image));                    //return ScreenShotManager.CropImage(leftClickStart, leftClickStop, clipWinPictureBox.Image);
 
                 case RegionResult.LastRegion: 
                     return new LastRegionCaptureInfo(RegionResult.LastRegion, ImageHandler.LastInfo.StartLeftClick, 
                         ImageHandler.LastInfo.StopLeftClick, ImageHandler.LastInfo.Region,
-                        ScreenShotManager.CropImage(ImageHandler.LastInfo.Region, clipWinPictureBox.Image));
+                        ScreenShotManager.CropImage(ImageHandler.LastInfo.Region, image));
 
                 case RegionResult.Fullscreen:
-                    return new LastRegionCaptureInfo(RegionResult.Fullscreen, true, (Image)clipWinPictureBox.Image.Clone());
+                    return new LastRegionCaptureInfo(RegionResult.Fullscreen, true, image);
 
                 case RegionResult.ActiveMonitor:
                     return new LastRegionCaptureInfo(RegionResult.ActiveMonitor, Screen.FromPoint(ScreenHelper.GetCursorPosition()),
-                        ScreenShotManager.CropImage(ScreenHelper.GetActiveScreenBounds0Based(), clipWinPictureBox.Image));
+                        ScreenShotManager.CropImage(ScreenHelper.GetActiveScreenBounds0Based(), image));
 
                 case RegionResult.Color:
-                    return new LastRegionCaptureInfo(RegionResult.Color, leftClickStart, leftClickStop, ((Bitmap)clipWinPictureBox.Image).GetPixel(leftClickStop.X, leftClickStop.Y));
+                    return new LastRegionCaptureInfo(RegionResult.Color, leftClickStart, leftClickStop, (image).GetPixel(leftClickStop.X, leftClickStop.Y));
             }
             return null;
         }
@@ -282,9 +297,11 @@ namespace WinkingCat
             borderDotPen?.Dispose();
             borderPen?.Dispose();
             infoFont?.Dispose();
+            backgroundHighlightBrush?.Dispose();
 
-            clipWinPictureBox?.Image.Dispose();
-            clipWinPictureBox?.Dispose();
+            image?.Dispose();
+            backgroundBrush?.Dispose();
+            //clipWinPictureBox?.Dispose();
 
             base.Dispose(true);
         }
