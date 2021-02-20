@@ -1,4 +1,4 @@
-﻿namespace WinkingCat
+﻿namespace WinkingCat.ScreenCaptureLib
 {
     partial class ClippingWindowForm
     {
@@ -35,6 +35,7 @@
             this.SetStyle(System.Windows.Forms.ControlStyles.OptimizedDoubleBuffer | System.Windows.Forms.ControlStyles.UserPaint | System.Windows.Forms.ControlStyles.AllPaintingInWmPaint, true);
             FormBorderStyle = System.Windows.Forms.FormBorderStyle.None;
             StartPosition = System.Windows.Forms.FormStartPosition.Manual;
+            MaximizeBox = false;
             AutoScaleMode = System.Windows.Forms.AutoScaleMode.None; // might remove
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
@@ -44,6 +45,7 @@
             MouseDown += Click_Event;
             MouseUp += ClickRelease_Event;
             MouseMove += MouseMove_Event;
+            MouseWheel += MouseWheel_Event;
             this.ResumeLayout(false);
 
         }

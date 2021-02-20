@@ -9,10 +9,10 @@ using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.Drawing.Drawing2D;
 using WinkingCat.HelperLibs;
-using WinkingCat.ScreenCaptureLib;
 using System.Diagnostics;
+using System.IO;
 
-namespace WinkingCat
+namespace WinkingCat.ScreenCaptureLib
 {
     public partial class ClippingWindowForm : Form
     {
@@ -27,7 +27,7 @@ namespace WinkingCat
         public Point leftClickStart { get; private set; } = new Point();
         public Point leftClickStop { get; private set; } = new Point();
 
-
+        public Rectangle activeMonitor;
         public Point mousePos;
         public RegionResult result;
         public RegionCaptureMode mode;
@@ -40,28 +40,26 @@ namespace WinkingCat
         public ClippingWindowForm(Rectangle region)
         {
             clientArea = region;
+            image = ScreenShotManager.CaptureRectangle(region);
             mode = RegionCaptureOptions.mode;
 
             borderPen = new Pen(Color.Black);            
             borderDotPen = new Pen(Color.White) { DashPattern = new float[] { 5, 5 } };
             infoFont = new Font("Verdana", 12); // 10
-            //infoFont = new Font("Consolas", 25);
 
             textBackgroundBrush = new SolidBrush(System.Drawing.Color.FromArgb(39, 43, 50));
             textFontBrush = new SolidBrush(System.Drawing.Color.FromArgb(255, 255, 255));
 
             SuspendLayout();
 
-            //clipWinPictureBox.Image = ScreenShotManager.CaptureRectangle(region);
-            image = ScreenShotManager.CaptureRectangle(region);
             BackColor = Color.Black;
-            //Show();
 
-            MaximizeBox = false;
             //TopMost = true;
-
-            Cursor = new Cursor(DirectoryManager.currentDirectory + ResourceManager.regionCaptureCursor);
-
+            var buffer = Properties.Resources.ResourceManager.GetObject(ResourceManager.regionCaptureCursor) as byte[];
+            using (MemoryStream m = new MemoryStream(buffer))
+            {
+                Cursor = new Cursor(m);
+            }
 
             ResumeLayout();
             InitializeComponent();
@@ -95,10 +93,14 @@ namespace WinkingCat
             }
         }
 
+        private void MouseWheel_Event(object sender, MouseEventArgs e)
+        {
+
+        }
+
         private void MouseMove_Event(object sender, MouseEventArgs e)
         {
             Invalidate();
-            //Refresh();
         }
 
         private void ClickRelease_Event(object sender, EventArgs e)
@@ -178,6 +180,7 @@ namespace WinkingCat
         {
 
             mousePos = ScreenHelper.ScreenToClient(ScreenHelper.GetCursorPosition());
+            activeMonitor = ScreenHelper.GetActiveScreenBounds();
 
             Graphics g = e.Graphics;
 
@@ -209,32 +212,75 @@ namespace WinkingCat
                 DrawSelectionBox(g, mousePos);
             }
 
-            if (RegionCaptureOptions.drawMagnifier)
-            {
-                DrawMagnifier(g, mousePos);
-            }
-
             if (RegionCaptureOptions.drawCrossHair)
             {
                 DrawCrosshair(g, mousePos);               
             }
 
+            DrawMouseInfo(g);
+        }
+
+        private void DrawMouseInfo(Graphics g)
+        {
+            Bitmap magnifier = null;
+            int magX = mousePos.X;
+            int magY = mousePos.Y;
+            int totalWidth = RegionCaptureOptions.cursorInfoOffset;
+            int totalHeight = RegionCaptureOptions.cursorInfoOffset;
+
+            if (RegionCaptureOptions.drawMagnifier)
+            {
+                magnifier = DrawMagnifier(mousePos);
+
+                totalWidth += magnifier.Width;
+                totalHeight += magnifier.Height;
+            }
+
             if (RegionCaptureOptions.drawInfoText)
             {
-                DrawInfoText(g, $"X: {mousePos.X} Y: {mousePos.Y}", infoFont, textFontBrush, textBackgroundBrush, borderPen, mousePos);
+                totalHeight += infoFont.Height + 2;
+                totalHeight += RegionCaptureOptions.cursorInfoOffset;
+            }
+
+            if (magX + totalWidth > activeMonitor.Width + activeMonitor.X)
+            {
+                totalWidth *= -1;
+                magX += totalWidth;
+            }
+            else
+            {
+                magX += RegionCaptureOptions.cursorInfoOffset;
+            }
+
+            if (magY + totalHeight > activeMonitor.Height + activeMonitor.Y)
+            {
+                totalHeight *= -1;
+                magY += totalHeight;
+            }
+            else
+            {
+                magY += RegionCaptureOptions.cursorInfoOffset;
+            }
+
+            if (RegionCaptureOptions.drawInfoText)
+            {
+                DrawInfoText(g, $"X: {mousePos.X} Y: {mousePos.Y}", infoFont, textFontBrush, textBackgroundBrush, borderPen, new Point(magX, magY + Math.Abs(totalHeight)));
+            }
+
+            if (RegionCaptureOptions.drawMagnifier)
+            {
+                g.DrawImage(magnifier, new Point(magX, magY));
+                magnifier.Dispose();
             }
         }
 
-        private void DrawMagnifier(Graphics g, Point mousePos)
+        private Bitmap DrawMagnifier(Point mousePos)
         {
-            int pixelCount = RegionCaptureOptions.MagnifierPixelCount.Clamp(1, 200);
-            int pixelSize = RegionCaptureOptions.MagnifierPixelSize.Clamp(1, 20);
+            int pixelCount = MathHelper.MakeOdd(RegionCaptureOptions.magnifierPixelCount.Clamp(1, 500));
+            int pixelSize = RegionCaptureOptions.magnifierPixelSize.Clamp(1, 50);
 
-            int width = MathHelper.MakeOdd(pixelCount * pixelSize);
-            int height = MathHelper.MakeOdd(pixelCount * pixelSize);
-
-            pixelCount = MathHelper.MakeOdd(pixelCount);
-            pixelSize = MathHelper.MakeOdd(pixelSize);
+            int width = pixelCount * pixelSize;
+            int height = pixelCount * pixelSize;
 
             Bitmap bmp = new Bitmap(width, height);
             using (Graphics gr = Graphics.FromImage(bmp))
@@ -264,10 +310,18 @@ namespace WinkingCat
                     }
                 }
 
-                g.DrawImage(bmp,
-                        new Point(mousePos.X - MathHelper.MakeEven(width / 2), mousePos.Y - MathHelper.MakeEven(width / 2)));
-                bmp.Dispose();
+                if (!RegionCaptureOptions.tryCenterMagnifier)
+                {
+                    using (SolidBrush crosshairBrush = new SolidBrush(Color.FromArgb(125, Color.LightBlue)))
+                    {
+                        gr.FillRectangle(crosshairBrush, new Rectangle(0, (height - pixelSize) / 2, (width - pixelSize) / 2, pixelSize)); // Left
+                        gr.FillRectangle(crosshairBrush, new Rectangle((width + pixelSize) / 2, (height - pixelSize) / 2, (width - pixelSize) / 2, pixelSize)); // Right
+                        gr.FillRectangle(crosshairBrush, new Rectangle((width - pixelSize) / 2, 0, pixelSize, (height - pixelSize) / 2)); // Top
+                        gr.FillRectangle(crosshairBrush, new Rectangle((width - pixelSize) / 2, (height + pixelSize) / 2, pixelSize, (height - pixelSize) / 2)); // Bottom
+                    }
+                }
             }
+            return bmp;
         }
         private void DrawSelectionBox(Graphics g, Point mousePos)
         {
@@ -277,13 +331,21 @@ namespace WinkingCat
             g.DrawLine(borderDotPen, leftClickStart, new Point(leftClickStart.X, mousePos.Y));
         }
 
-        private void DrawInfoText(Graphics g, string text, Font font, Brush textFontBrush ,Brush backgroundBrush, Pen outerBorderPen,  Point cursor)
+        private void DrawInfoText(Graphics g, string text, Font font, Brush textFontBrush ,Brush backgroundBrush, Pen outerBorderPen, Point pos)
         {
-            Rectangle rect = new Rectangle(new Point(cursor.X + RegionCaptureOptions.cursorInfoOffset, cursor.Y + RegionCaptureOptions.cursorInfoOffset), new Size(font.Height/2 * text.Length, font.Height + 2));
+            int width = font.Height / 2 * text.Length;
+            int height = font.Height + 2;
+            int mX = pos.X;
+            int mY = pos.Y - height - RegionCaptureOptions.cursorInfoOffset;
+
+            Rectangle rect = new Rectangle(
+                new Point(mX, mY), 
+                new Size(width, height));
+
             g.DrawRectangle(outerBorderPen, rect);         
             g.FillRectangle(backgroundBrush, rect);
 
-            g.DrawString(text, font, textFontBrush, cursor.X + RegionCaptureOptions.cursorInfoOffset + 1, cursor.Y + RegionCaptureOptions.cursorInfoOffset + 1);            
+            g.DrawString(text, font, textFontBrush, mX + 1, mY + 1);            
         }
 
         private void DrawCrosshair(Graphics g, Point mousePos)
@@ -300,6 +362,14 @@ namespace WinkingCat
 
         public LastRegionCaptureInfo GetResultImage()
         {
+            if (leftClickStart.X < leftClickStop.X)
+                leftClickStop = new Point(leftClickStop.X + 1, leftClickStop.Y);
+            else
+                leftClickStop = new Point(leftClickStop.X - 1, leftClickStop.Y);
+            if (leftClickStart.Y < leftClickStop.Y)
+                leftClickStop = new Point(leftClickStop.X, leftClickStop.Y + 1);
+            else
+                leftClickStop = new Point(leftClickStop.X, leftClickStop.Y - 1);
             switch (result)
             {
                 case RegionResult.Close:

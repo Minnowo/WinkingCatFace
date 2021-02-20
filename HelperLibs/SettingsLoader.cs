@@ -122,10 +122,10 @@ namespace WinkingCat.HelperLibs
                                 RegionCaptureOptions.cursorInfoOffset = int.Parse(keys["cursorInfoOffset"].Value);
                                 break;
                             case "MagnifierPixelCount":
-                                RegionCaptureOptions.MagnifierPixelCount = int.Parse(keys["MagnifierPixelCount"].Value);
+                                RegionCaptureOptions.magnifierPixelCount = int.Parse(keys["MagnifierPixelCount"].Value);
                                 break;
                             case "MagnifierPixelSize":
-                                RegionCaptureOptions.MagnifierPixelSize = int.Parse(keys["MagnifierPixelSize"].Value);
+                                RegionCaptureOptions.magnifierPixelSize = int.Parse(keys["MagnifierPixelSize"].Value);
                                 break;
                             case "mode":
                                 RegionCaptureOptions.mode = (RegionCaptureMode)int.Parse(keys["mode"].Value);
@@ -154,8 +154,8 @@ namespace WinkingCat.HelperLibs
             keys.Add("autoCopyImage", RegionCaptureOptions.autoCopyImage.ToString());  // bool
             keys.Add("autoCopyColor", RegionCaptureOptions.autoCopyColor.ToString());  // bool
             keys.Add("cursorInfoOffset", RegionCaptureOptions.cursorInfoOffset.ToString()); // int
-            keys.Add("MagnifierPixelCount", RegionCaptureOptions.MagnifierPixelCount.ToString());   // int
-            keys.Add("MagnifierPixelSize", RegionCaptureOptions.MagnifierPixelSize.ToString());     // int
+            keys.Add("MagnifierPixelCount", RegionCaptureOptions.magnifierPixelCount.ToString());   // int
+            keys.Add("MagnifierPixelSize", RegionCaptureOptions.magnifierPixelSize.ToString());     // int
             keys.Add("mode", RegionCaptureMode.Default.ToString("D"));
             conf.Save();
             return false;

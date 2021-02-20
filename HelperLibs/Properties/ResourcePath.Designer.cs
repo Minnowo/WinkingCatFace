@@ -29,7 +29,7 @@ namespace WinkingCat.HelperLibs.Properties
 
         [global::System.Configuration.ApplicationScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("\\AppConfig\\Resources\\crosshair.cur")]
+        [global::System.Configuration.DefaultSettingValueAttribute("crosshair")]
         public string regionCapturCrosshair
         {
             get
