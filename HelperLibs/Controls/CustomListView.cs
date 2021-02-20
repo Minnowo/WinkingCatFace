@@ -32,7 +32,7 @@ namespace WinkingCat.HelperLibs
                 }
             }
         }
-
+        private System.Windows.Forms.ContextMenuStrip contextMenuStrip1;
         public NoCheckboxListView()
         {
             SetStyle(ControlStyles.OptimizedDoubleBuffer | ControlStyles.AllPaintingInWmPaint | ControlStyles.EnableNotifyMessage, true);
@@ -41,6 +41,45 @@ namespace WinkingCat.HelperLibs
             BorderStyle = BorderStyle.FixedSingle;
             FullRowSelect = true;
             CheckBoxes = false;
+
+            contextMenuStrip1 = new ContextMenuStrip();
+            this.contextMenuStrip1.Items.AddRange(new ToolStripMenuItem[] {
+            new ToolStripMenuItem(){Text = "copy", Name = "tsmiCopy"},
+            new ToolStripMenuItem(){Text = "open", Name = "tsmiOpen"},
+            new ToolStripMenuItem(){Text = "delete", Name = "tsmiDelete" },
+});
+            ContextMenuStrip = contextMenuStrip1;
+            ContextMenuStrip.Opening += ContextMenuStrip_Opening;
+
+        }
+
+        private void ContextMenuStrip_Opening(object sender, CancelEventArgs e)
+        {
+            if (SelectedIndex != -1) 
+            {
+                if (Items[SelectedIndex].Selected)
+                {
+                    foreach (ToolStripMenuItem a in ContextMenuStrip.Items)
+                    {
+                        a.Enabled = true;
+                    }
+                }
+                Console.WriteLine(SelectedIndex);
+            } 
+            else
+            {
+                foreach (ToolStripMenuItem a in ContextMenuStrip.Items)
+                {
+                    a.Enabled = false;
+                }
+            }
+            if(this.Items.Count > 0)
+            {
+                foreach(ListViewItem item in Items)
+                {
+                    Console.WriteLine(item.Selected);
+                }
+            }
         }
 
         public void UnselectAll()

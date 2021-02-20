@@ -94,7 +94,9 @@ namespace WinkingCat
 
             ResumeLayout();
             HotkeyManager.UpdateHotkeys(HotkeyManager.GetDefaultHotkeyList(), true);
+            //contextMenuStrip1.Visible = true;
         }
+
 
         public void ImageSaved_Event(object sender, ImageSavedEvent e)
         {
@@ -102,7 +104,7 @@ namespace WinkingCat
                 $"{e.dimensions.Width}, {e.dimensions.Height}", // dimensions
                 Helpers.SizeSuffix(e.size), // size
                 File.GetLastWriteTime(e.info.FullName).ToString() }; // date modified
-            noCheckboxListView1.Items.Add(e.info.Name).SubItems.AddRange(row1);
+            lvListView.Items.Add(e.info.Name).SubItems.AddRange(row1);
         }
 
         public void AfterCaptureEvent(object sender, LastRegionCaptureInfo e)

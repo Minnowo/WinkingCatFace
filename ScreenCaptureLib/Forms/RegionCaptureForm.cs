@@ -95,7 +95,21 @@ namespace WinkingCat.ScreenCaptureLib
 
         private void MouseWheel_Event(object sender, MouseEventArgs e)
         {
-
+            if(e.Delta > 0)
+            {
+                if (RegionCaptureOptions.magnifierZoomLevel + 1 < 10)
+                    RegionCaptureOptions.magnifierZoomLevel += 1;
+                if (RegionCaptureOptions.magnifierZoomLevel > 0)
+                    RegionCaptureOptions.drawMagnifier = true;
+            }
+            else
+            {
+                if (RegionCaptureOptions.magnifierZoomLevel - 1 >=  0)
+                    RegionCaptureOptions.magnifierZoomLevel -= 1;
+                if (RegionCaptureOptions.magnifierZoomLevel == 0)
+                    RegionCaptureOptions.drawMagnifier = false;
+            }
+            Invalidate();
         }
 
         private void MouseMove_Event(object sender, MouseEventArgs e)
@@ -212,12 +226,12 @@ namespace WinkingCat.ScreenCaptureLib
                 DrawSelectionBox(g, mousePos);
             }
 
+            DrawMouseInfo(g);
+
             if (RegionCaptureOptions.drawCrossHair)
             {
                 DrawCrosshair(g, mousePos);               
-            }
-
-            DrawMouseInfo(g);
+            }            
         }
 
         private void DrawMouseInfo(Graphics g)
@@ -228,56 +242,69 @@ namespace WinkingCat.ScreenCaptureLib
             int totalWidth = RegionCaptureOptions.cursorInfoOffset;
             int totalHeight = RegionCaptureOptions.cursorInfoOffset;
 
-            if (RegionCaptureOptions.drawMagnifier)
+            if (RegionCaptureOptions.tryCenterMagnifier && RegionCaptureOptions.drawMagnifier)
             {
                 magnifier = DrawMagnifier(mousePos);
+                totalWidth = magnifier.Width;
+                totalHeight = magnifier.Height;
 
-                totalWidth += magnifier.Width;
-                totalHeight += magnifier.Height;
-            }
 
-            if (RegionCaptureOptions.drawInfoText)
-            {
-                totalHeight += infoFont.Height + 2;
-                totalHeight += RegionCaptureOptions.cursorInfoOffset;
-            }
-
-            if (magX + totalWidth > activeMonitor.Width + activeMonitor.X)
-            {
-                totalWidth *= -1;
-                magX += totalWidth;
-            }
-            else
-            {
-                magX += RegionCaptureOptions.cursorInfoOffset;
-            }
-
-            if (magY + totalHeight > activeMonitor.Height + activeMonitor.Y)
-            {
-                totalHeight *= -1;
-                magY += totalHeight;
-            }
-            else
-            {
-                magY += RegionCaptureOptions.cursorInfoOffset;
-            }
-
-            if (RegionCaptureOptions.drawInfoText)
-            {
-                DrawInfoText(g, $"X: {mousePos.X} Y: {mousePos.Y}", infoFont, textFontBrush, textBackgroundBrush, borderPen, new Point(magX, magY + Math.Abs(totalHeight)));
-            }
-
-            if (RegionCaptureOptions.drawMagnifier)
-            {
-                g.DrawImage(magnifier, new Point(magX, magY));
+                g.DrawImage(magnifier, new Point(magX - totalWidth/2, magY - totalHeight/2));
                 magnifier.Dispose();
+            }
+            else
+            {
+                if (RegionCaptureOptions.drawMagnifier)
+                {
+                    magnifier = DrawMagnifier(mousePos);
+
+                    totalWidth += magnifier.Width;
+                    totalHeight += magnifier.Height;
+                }
+
+                if (RegionCaptureOptions.drawInfoText)
+                {
+                    totalHeight += infoFont.Height + 2;
+                    totalHeight += RegionCaptureOptions.cursorInfoOffset;
+                }
+
+                if (magX + totalWidth > activeMonitor.Width + activeMonitor.X)
+                {
+                    totalWidth *= -1;
+                    magX += totalWidth;
+                }
+                else
+                {
+                    magX += RegionCaptureOptions.cursorInfoOffset;
+                }
+
+                if (magY + totalHeight > activeMonitor.Height + activeMonitor.Y)
+                {
+                    totalHeight *= -1;
+                    magY += totalHeight;
+                }
+                else
+                {
+                    magY += RegionCaptureOptions.cursorInfoOffset;
+                }
+
+                if (RegionCaptureOptions.drawInfoText)
+                {
+                    DrawInfoText(g, $"X: {mousePos.X} Y: {mousePos.Y}", infoFont, textFontBrush, textBackgroundBrush, borderPen, new Point(magX, magY + Math.Abs(totalHeight)));
+                }
+
+                if (RegionCaptureOptions.drawMagnifier)
+                {
+                    g.DrawImage(magnifier, new Point(magX, magY));
+                    magnifier.Dispose();
+                }
             }
         }
 
         private Bitmap DrawMagnifier(Point mousePos)
         {
-            int pixelCount = MathHelper.MakeOdd(RegionCaptureOptions.magnifierPixelCount.Clamp(1, 500));
-            int pixelSize = RegionCaptureOptions.magnifierPixelSize.Clamp(1, 50);
+            int pixelCount = MathHelper.MakeOdd(((int)(RegionCaptureOptions.magnifierPixelCount * RegionCaptureOptions.magnifierZoomLevel)).Clamp(1, 500));
+            int pixelSize = MathHelper.MakeOdd(RegionCaptureOptions.magnifierPixelSize.Clamp(1, 50));
 
             int width = pixelCount * pixelSize;
             int height = pixelCount * pixelSize;
@@ -296,21 +323,23 @@ namespace WinkingCat.ScreenCaptureLib
 
                 gr.PixelOffsetMode = PixelOffsetMode.None;
 
-
-                using (Pen pen = new Pen(Color.FromArgb(25, Color.White)))
+                if (RegionCaptureOptions.drawMagnifierGrid)
                 {
-                    for (int x = 1; x < pixelCount; x++)
+                    using (Pen pen = new Pen(Color.FromArgb(25, Color.White)))
                     {
-                        gr.DrawLine(pen, new Point((x * pixelSize) - 1, 0), new Point((x * pixelSize) - 1, height - 1));
-                    }
+                        for (int x = 1; x < pixelCount; x++)
+                        {
+                            gr.DrawLine(pen, new Point((x * pixelSize) - 1, 0), new Point((x * pixelSize) - 1, height - 1));
+                        }
 
-                    for (int y = 1; y < pixelCount; y++)
-                    {
-                        gr.DrawLine(pen, new Point(0, (y * pixelSize) - 1), new Point(width - 1, (y * pixelSize) - 1));
+                        for (int y = 1; y < pixelCount; y++)
+                        {
+                            gr.DrawLine(pen, new Point(0, (y * pixelSize) - 1), new Point(width - 1, (y * pixelSize) - 1));
+                        }
                     }
                 }
 
-                if (!RegionCaptureOptions.tryCenterMagnifier)
+                if (RegionCaptureOptions.drawMagnifierCrosshair)
                 {
                     using (SolidBrush crosshairBrush = new SolidBrush(Color.FromArgb(125, Color.LightBlue)))
                     {

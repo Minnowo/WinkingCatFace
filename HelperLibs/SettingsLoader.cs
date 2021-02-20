@@ -92,7 +92,7 @@ namespace WinkingCat.HelperLibs
             {
                 try
                 {
-                    if (keys.AllKeys.Length != 11)
+                    if (keys.AllKeys.Length != 15)
                         throw new Exception("Keys have been modified RegionCapture.config will be reset with default values");
                     foreach (string key in keys.AllKeys)
                         switch (key)
@@ -117,6 +117,18 @@ namespace WinkingCat.HelperLibs
                                 break;
                             case "autoCopyColor":
                                 RegionCaptureOptions.autoCopyColor = bool.Parse(keys["autoCopyColor"].Value);
+                                break;
+                            case "tryCenterMagnifier":
+                                RegionCaptureOptions.tryCenterMagnifier = bool.Parse(keys["tryCenterMagnifier"].Value);
+                                break;
+                            case "drawMagnifierCrosshair":
+                                RegionCaptureOptions.drawMagnifierCrosshair = bool.Parse(keys["drawMagnifierCrosshair"].Value);
+                                break;
+                            case "drawMagnifierGrid":
+                                RegionCaptureOptions.drawMagnifierGrid = bool.Parse(keys["drawMagnifierGrid"].Value);
+                                break;
+                            case "magnifierZoomLevel":
+                                RegionCaptureOptions.magnifierZoomLevel = float.Parse(keys["magnifierZoomLevel"].Value);
                                 break;
                             case "cursorInfoOffset":
                                 RegionCaptureOptions.cursorInfoOffset = int.Parse(keys["cursorInfoOffset"].Value);
@@ -153,6 +165,10 @@ namespace WinkingCat.HelperLibs
             keys.Add("createClipAfterRegionCapture", RegionCaptureOptions.createClipAfterRegionCapture.ToString());// bool
             keys.Add("autoCopyImage", RegionCaptureOptions.autoCopyImage.ToString());  // bool
             keys.Add("autoCopyColor", RegionCaptureOptions.autoCopyColor.ToString());  // bool
+            keys.Add("tryCenterMagnifier", RegionCaptureOptions.tryCenterMagnifier.ToString());  // bool
+            keys.Add("drawMagnifierCrosshair", RegionCaptureOptions.drawMagnifierCrosshair.ToString());  // bool
+            keys.Add("drawMagnifierGrid", RegionCaptureOptions.drawMagnifierGrid.ToString());  // bool
+            keys.Add("magnifierZoomLevel", RegionCaptureOptions.magnifierZoomLevel.ToString());  // float
             keys.Add("cursorInfoOffset", RegionCaptureOptions.cursorInfoOffset.ToString()); // int
             keys.Add("MagnifierPixelCount", RegionCaptureOptions.magnifierPixelCount.ToString());   // int
             keys.Add("MagnifierPixelSize", RegionCaptureOptions.magnifierPixelSize.ToString());     // int
