@@ -9,7 +9,7 @@ namespace WinkingCat.HelperLibs
 {
     public class ClipOptions
     {
-        public Size maxClipSize { get; set; } = new Size(9999, 9999);
+        public Size maxClipSize { get; set; } = new Size(5000, 5000);
         public Color borderColor { get; set; } = Color.FromArgb(249, 0, 187);
         public Point location { get; set; } = new Point(0, 0);
         public int borderThickness { get; set; } = 2;

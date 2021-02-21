@@ -25,20 +25,6 @@ namespace WinkingCat.ClipHelper
     {
         private const int RESIZE_HANDLE_SIZE = 7;
 
-        private const int WM_NCLBUTTONDOWN = 0xA1;
-
-        private const int HTLEFT = 10;
-        private const int HTRIGHT = 11;
-
-        private const int HTTOP = 12;
-        private const int HTTOPLEFT = 13;
-        private const int HTTOPRIGHT = 14;
-
-        private const int HTBOTTOM = 15;
-        private const int HTBOTTOMLEFT = 16;
-        private const int HTBOTTOMRIGHT = 17;
-
-
         public Size imageSize { get; private set; }
         public Size imageDefaultSize { get; private set; }
         public Size startWindowSize { get; private set; }
@@ -60,18 +46,15 @@ namespace WinkingCat.ClipHelper
         {
             InitializeComponent();
             SuspendLayout();
-            SetStyle(ControlStyles.ResizeRedraw, true);
-            SetStyle(ControlStyles.UserPaint, true);
-            SetStyle(ControlStyles.AllPaintingInWmPaint, true);
-            SetStyle(ControlStyles.OptimizedDoubleBuffer, true);
 
             Options = options;
-            Options.borderThickness = 5;
+            Options.borderThickness = 2;
             imageSize = displayImage.Size;
             imageDefaultSize = displayImage.Size;
             ClipName = clipName;
             image = (Bitmap)displayImage;
-            startWindowSize = new Size(imageSize.Width + Options.borderThickness * 2 + 1, imageSize.Height + Options.borderThickness * 2 + 1);
+            //startWindowSize = new Size(imageSize.Width + Options.borderThickness * 2 + 1, imageSize.Height + Options.borderThickness * 2 + 1);
+            startWindowSize = new Size(imageSize.Width + Options.borderThickness, imageSize.Height + Options.borderThickness);
             Console.WriteLine(startWindowSize);
 
             Location = options.location;
@@ -83,22 +66,10 @@ namespace WinkingCat.ClipHelper
 
             BackColor = Options.borderColor;
 
-            #region picturebox
-            //clipDisplayPictureBox.Location = new Point(Options.borderThickness, Options.borderThickness);
-            //clipDisplayPictureBox.Size = imageSize;
-            //clipDisplayPictureBox.Image = displayImage;
 
             MouseDown += MouseDown_Event;
             MouseUp += MouseUp_Event;
             MouseMove += MouseMove_Event;
-            #endregion
-
-            #region resizePanel
-            ResizePanel.Size = new Size(25, 25);
-            ResizePanel.Location = new Point(startWindowSize.Width - 25, startWindowSize.Height - 25);
-            ResizePanel.Visible = false;
-            //ResizePanel.MouseDown += FakeResize;
-            #endregion
 
             #region context menu
             copyToolStripMenuItem.Click += CopyClipImage;
@@ -113,7 +84,6 @@ namespace WinkingCat.ClipHelper
 
             #region form
             ResizeEnd += ResizeEnded;
-            KeyUp += FormKeyUp;
             KeyDown += FormKeyDown;
 
             TopMost = true;
@@ -132,12 +102,6 @@ namespace WinkingCat.ClipHelper
 
         }
 
-        private void UpdateMaxSizeTimerTick_Event(object sender, EventArgs e)
-        {
-            ((Timer)sender)?.Stop();
-            ((Timer)sender)?.Dispose();
-            MaximumSize = Options.maxClipSize;
-        }
 
         protected override void OnPaint(PaintEventArgs e)
         {
@@ -147,10 +111,12 @@ namespace WinkingCat.ClipHelper
             g.InterpolationMode = InterpolationMode.NearestNeighbor;
             e.Graphics.SmoothingMode = SmoothingMode.HighQuality; // for some reason highspeed crashes the window
             g.CompositingQuality = CompositingQuality.HighSpeed;
-            g.CompositingMode = CompositingMode.SourceCopy;
-
-            g.FillRectangle(backgroundBrush, new Rectangle(new Point(Options.borderThickness, Options.borderThickness), imageSize));
             g.CompositingMode = CompositingMode.SourceOver;
+
+            g.FillRectangle(backgroundBrush, new Rectangle(
+                new Point(Options.borderThickness, Options.borderThickness), 
+                new Size(Width, Height)));
+            
 
             base.OnPaint(e);
         }
@@ -167,13 +133,11 @@ namespace WinkingCat.ClipHelper
             {
                 isResizable = false;
                 allowResizeToolStripMenuItem.Checked = false;
-                ResizePanel.Visible = false;
             }
             else
             {
                 isResizable = true;
                 allowResizeToolStripMenuItem.Checked = true;
-                ResizePanel.Visible = true;
             }
             Invalidate();
         }
@@ -221,14 +185,7 @@ namespace WinkingCat.ClipHelper
                 case (Keys.S | Keys.Control):
                     Save_Click();
                     break;
-            }
-        }
 
-        private void FormKeyUp(object sender, KeyEventArgs e)
-        {
-            e.Handled = true;
-            switch (e.KeyData)
-            {
                 case Keys.Escape:
                     ClipManager.DestroyClip(ClipName);
                     break;
@@ -241,18 +198,28 @@ namespace WinkingCat.ClipHelper
 
         private void ResizeEnded(object sender, EventArgs e)
         {
-            Console.WriteLine("resize end");
-            if (Size != startWindowSize)
-            {
-                /*Size a = MathHelper.PictureBoxZoomSize(clipDisplayPictureBox, imageSize);
-                a.Width += Options.borderThickness * 2;
-                a.Height += Options.borderThickness * 2;
-                Size = new Size(a.Width, a.Height);*/
-                //windowSize = Size;
-            }
             Invalidate();
         }
         #endregion
+
+        private void NewBrush()
+        {
+            backgroundBrush?.Dispose();
+            Bitmap bmp = new Bitmap(Width - Options.borderThickness, Height - Options.borderThickness);
+            using (Graphics gr = Graphics.FromImage(bmp))
+            {
+                gr.InterpolationMode = InterpolationMode.NearestNeighbor;
+                gr.PixelOffsetMode = PixelOffsetMode.Half;
+
+                gr.DrawImage(image, new Rectangle(0, 0, Width - Options.borderThickness, Height - Options.borderThickness),
+                    new Rectangle(0, 0, image.Width, image.Height),
+                    GraphicsUnit.Pixel);
+
+                gr.PixelOffsetMode = PixelOffsetMode.None;
+            }
+            backgroundBrush = new TextureBrush(bmp) { WrapMode = WrapMode.Clamp };
+            bmp.Dispose();
+        }
 
         #region Mouse Events
         private void MouseMove_Event(object sender, MouseEventArgs e)
@@ -282,17 +249,18 @@ namespace WinkingCat.ClipHelper
                             if (mousepos.X > Location.X)
                             {
                                 ResizeWidth(mousepos.X - Location.X);
-                                Console.WriteLine("resize from right");
                             }
                             break;
                         case DragLoc.Bottom:
                             if (mousepos.Y > Location.Y)
                             {
                                 ResizeHeight(mousepos.Y - Location.Y);
-                                Console.WriteLine("resize from bottom");
                             }
                             break;
                     }
+                    
+                    NewBrush();
+                    Invalidate();
                 }
                 else
                 {
@@ -342,12 +310,12 @@ namespace WinkingCat.ClipHelper
                         }
                     }
                 }
-                if (isLeftClicking && !isResizing)
-                {
-                    Point p = PointToScreen(e.Location);
-                    Location = new Point(p.X - lastLocation.X, p.Y - lastLocation.Y);
-                    isMoving = true;
-                }
+            }
+            if (isLeftClicking && !isResizing)
+            {
+                Point p = PointToScreen(e.Location);
+                Location = new Point(p.X - lastLocation.X, p.Y - lastLocation.Y);
+                isMoving = true;
             }
         }
 
@@ -389,6 +357,13 @@ namespace WinkingCat.ClipHelper
         #endregion
 
         #region other
+        private void UpdateMaxSizeTimerTick_Event(object sender, EventArgs e)
+        {
+            ((Timer)sender)?.Stop();
+            ((Timer)sender)?.Dispose();
+            MaximumSize = Options.maxClipSize;
+        }
+
         private void ResizeWidth(int newWidth)
         {
             float aspectRatio = (startWindowSize.Height / (float)startWindowSize.Width);
@@ -408,20 +383,15 @@ namespace WinkingCat.ClipHelper
             NativeMethods.SetForegroundWindow(Handle);
             NativeMethods.ShowWindow(Handle, (int)WindowShowStyle.Restore);
         }
-        #endregion
-
-
 
         public void Destroy()
         {
-
             ContextMenu?.Dispose();
-
-            ResizePanel?.Dispose();
-
+            image?.Dispose();
+            zoomImage?.Dispose();
+            backgroundBrush?.Dispose();
             base.Dispose(true);
         }
-
 
         protected override CreateParams CreateParams
         {
@@ -432,6 +402,9 @@ namespace WinkingCat.ClipHelper
                 return cp;
             }
         }
+        #endregion
+
+
 
     }
 }

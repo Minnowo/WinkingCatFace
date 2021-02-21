@@ -70,6 +70,7 @@ namespace WinkingCat
             #region Tray icon
             trayClickTimer = new System.Windows.Forms.Timer();
             trayClickTimer.Tick += TrayClickTimer_Interval;
+            niTrayIcon.MouseUp += NiTrayIcon_MouseClick1Up;
             cmTray.Opening += tsmiCapture_DropDownOpening;
 
             // capture
