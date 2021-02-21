@@ -92,7 +92,7 @@ namespace WinkingCat.HelperLibs
             {
                 try
                 {
-                    if (keys.AllKeys.Length != 15)
+                    if (keys.AllKeys.Length != 16)
                         throw new Exception("Keys have been modified RegionCapture.config will be reset with default values");
                     foreach (string key in keys.AllKeys)
                         switch (key)
@@ -129,6 +129,9 @@ namespace WinkingCat.HelperLibs
                                 break;
                             case "magnifierZoomLevel":
                                 RegionCaptureOptions.magnifierZoomLevel = float.Parse(keys["magnifierZoomLevel"].Value);
+                                break;
+                            case "magnifierZoomScale":
+                                RegionCaptureOptions.magnifierZoomScale = float.Parse(keys["magnifierZoomScale"].Value);
                                 break;
                             case "cursorInfoOffset":
                                 RegionCaptureOptions.cursorInfoOffset = int.Parse(keys["cursorInfoOffset"].Value);
@@ -169,6 +172,7 @@ namespace WinkingCat.HelperLibs
             keys.Add("drawMagnifierCrosshair", RegionCaptureOptions.drawMagnifierCrosshair.ToString());  // bool
             keys.Add("drawMagnifierGrid", RegionCaptureOptions.drawMagnifierGrid.ToString());  // bool
             keys.Add("magnifierZoomLevel", RegionCaptureOptions.magnifierZoomLevel.ToString());  // float
+            keys.Add("magnifierZoomScale", RegionCaptureOptions.magnifierZoomScale.ToString()); // float
             keys.Add("cursorInfoOffset", RegionCaptureOptions.cursorInfoOffset.ToString()); // int
             keys.Add("MagnifierPixelCount", RegionCaptureOptions.magnifierPixelCount.ToString());   // int
             keys.Add("MagnifierPixelSize", RegionCaptureOptions.magnifierPixelSize.ToString());     // int

@@ -97,17 +97,20 @@ namespace WinkingCat.ScreenCaptureLib
         {
             if(e.Delta > 0)
             {
-                if (RegionCaptureOptions.magnifierZoomLevel + 1 < 10)
-                    RegionCaptureOptions.magnifierZoomLevel += 1;
+                if (RegionCaptureOptions.magnifierZoomLevel + RegionCaptureOptions.magnifierZoomScale < 6)
+                    RegionCaptureOptions.magnifierZoomLevel += RegionCaptureOptions.magnifierZoomScale;
                 if (RegionCaptureOptions.magnifierZoomLevel > 0)
                     RegionCaptureOptions.drawMagnifier = true;
             }
             else
             {
-                if (RegionCaptureOptions.magnifierZoomLevel - 1 >=  0)
-                    RegionCaptureOptions.magnifierZoomLevel -= 1;
-                if (RegionCaptureOptions.magnifierZoomLevel == 0)
+                if (RegionCaptureOptions.magnifierZoomLevel - RegionCaptureOptions.magnifierZoomScale >  0)
+                    RegionCaptureOptions.magnifierZoomLevel -= 0.25f;
+                else
+                {
+                    RegionCaptureOptions.magnifierZoomLevel = 0;
                     RegionCaptureOptions.drawMagnifier = false;
+                }                
             }
             Invalidate();
         }
@@ -261,11 +264,25 @@ namespace WinkingCat.ScreenCaptureLib
                     totalWidth += magnifier.Width;
                     totalHeight += magnifier.Height;
                 }
+                else
+                {
+                    if (RegionCaptureOptions.drawInfoText)
+                    {
+                        totalWidth += infoFont.Height / 2 * $"X: {mousePos.X} Y: {mousePos.Y}".Length;
+                    }
+                }
 
                 if (RegionCaptureOptions.drawInfoText)
                 {
                     totalHeight += infoFont.Height + 2;
                     totalHeight += RegionCaptureOptions.cursorInfoOffset;
+
+                    // if the width of the info text is greater than the magnifier width use that for totalWidth
+                    if (RegionCaptureOptions.drawMagnifier && magnifier.Width < (infoFont.Height / 2 * $"X: {mousePos.X} Y: {mousePos.Y}".Length))
+                    {
+                        totalWidth -= magnifier.Width;
+                        totalWidth += infoFont.Height / 2 * $"X: {mousePos.X} Y: {mousePos.Y}".Length;
+                    }
                 }
 
                 if (magX + totalWidth > activeMonitor.Width + activeMonitor.X)

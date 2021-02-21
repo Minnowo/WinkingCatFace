@@ -213,7 +213,7 @@ namespace WinkingCat.ClipHelper
                     new Rectangle(0, 0, image.Width, image.Height),
                     GraphicsUnit.Pixel);
 
-                gr.PixelOffsetMode = PixelOffsetMode.None;
+                //gr.PixelOffsetMode = PixelOffsetMode.None;
             }
             backgroundBrush = new TextureBrush(bmp) { WrapMode = WrapMode.Clamp };
             bmp.Dispose();
@@ -356,15 +356,13 @@ namespace WinkingCat.ClipHelper
 
         private void ResizeWidth(int newWidth)
         {
-            float aspectRatio = (startWindowSize.Height / (float)startWindowSize.Width);
-            Height = (int)(newWidth * aspectRatio);
+            Height = (int)(newWidth * (startWindowSize.Height / (float)startWindowSize.Width));
             Width = newWidth;
         }
 
         private void ResizeHeight(int newHeight)
         {
-            float aspectRatio = (startWindowSize.Width / (float)startWindowSize.Height);
-            Width = (int)(newHeight * aspectRatio);
+            Width = (int)(newHeight * (startWindowSize.Width / (float)startWindowSize.Height));
             Height = newHeight;
         }
 

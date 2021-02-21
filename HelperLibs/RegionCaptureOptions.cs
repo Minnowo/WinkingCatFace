@@ -19,6 +19,7 @@ namespace WinkingCat.HelperLibs
         public static bool autoCopyColor { get; set; } = true;
 
         public static float magnifierZoomLevel { get; set; } = 2;
+        public static float magnifierZoomScale { get; set; } = 0.25f;
         public static int magnifierPixelCount = 25; 
         public static int magnifierPixelSize = 11;
         public static int cursorInfoOffset { get; set; } = 10;
