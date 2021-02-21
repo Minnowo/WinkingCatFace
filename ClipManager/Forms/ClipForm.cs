@@ -44,6 +44,7 @@ namespace WinkingCat.ClipHelper
 
         public ClipForm(ClipOptions options, Image displayImage, string clipName)
         {
+            NativeMethods.SetProcessDpiAwarenessContext(-3);
             InitializeComponent();
             SuspendLayout();
 
@@ -53,17 +54,14 @@ namespace WinkingCat.ClipHelper
             imageDefaultSize = displayImage.Size;
             ClipName = clipName;
             image = (Bitmap)displayImage;
-            //startWindowSize = new Size(imageSize.Width + Options.borderThickness * 2 + 1, imageSize.Height + Options.borderThickness * 2 + 1);
             startWindowSize = new Size(imageSize.Width + Options.borderThickness, imageSize.Height + Options.borderThickness);
             Console.WriteLine(startWindowSize);
-
-            Location = options.location;
-
-            Size = startWindowSize;
 
             MinimumSize = startWindowSize;
             MaximumSize = startWindowSize;
 
+            // why tf can't you make the width / height of a windows form bigger than the screen width + 12 its bs
+            Bounds = new Rectangle(options.location, startWindowSize); 
             BackColor = Options.borderColor;
 
 
@@ -87,7 +85,7 @@ namespace WinkingCat.ClipHelper
             KeyDown += FormKeyDown;
 
             TopMost = true;
-            ResumeLayout();
+            ResumeLayout(true);
             Show();
             #endregion
 
@@ -362,6 +360,10 @@ namespace WinkingCat.ClipHelper
             ((Timer)sender)?.Stop();
             ((Timer)sender)?.Dispose();
             MaximumSize = Options.maxClipSize;
+            Height = startWindowSize.Height;
+            //Size = startWindowSize;
+            Console.WriteLine(Size);
+            Refresh();
         }
 
         private void ResizeWidth(int newWidth)
