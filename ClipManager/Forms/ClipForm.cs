@@ -14,25 +14,49 @@ using System.Windows.Forms.VisualStyles;
 
 namespace WinkingCat.ClipHelper
 {
+    public enum DragLoc
+    {
+        Top,
+        Left,
+        Right,
+        Bottom
+    }
     public partial class ClipForm : Form
     {
-        private const int RESIZE_HANDLE_SIZE = 20;
+        private const int RESIZE_HANDLE_SIZE = 7;
+
+        private const int WM_NCLBUTTONDOWN = 0xA1;
+
+        private const int HTLEFT = 10;
+        private const int HTRIGHT = 11;
+
+        private const int HTTOP = 12;
+        private const int HTTOPLEFT = 13;
+        private const int HTTOPRIGHT = 14;
+
+        private const int HTBOTTOM = 15;
+        private const int HTBOTTOMLEFT = 16;
+        private const int HTBOTTOMRIGHT = 17;
 
 
         public Size imageSize { get; private set; }
-        public Size windowSize { get; private set; }
-        public Size minSize { get; private set; }
-        public Size maxSize { get; private set; }
+        public Size imageDefaultSize { get; private set; }
+        public Size startWindowSize { get; private set; }
         public Point lastLocation { get; private set; }
-        
+
         public ClipOptions Options { get; private set; }
         public string ClipName { get; private set; }
+        public Bitmap image { get; private set; }
+        public Bitmap zoomImage { get; private set; }
+        private TextureBrush backgroundBrush { get; set; }
 
+        private DragLoc drag { get; set; }
         private bool isLeftClicking { get; set; } = false;
+        private bool isResizing { get; set; } = false;
         public bool isResizable { get; set; } = true;
-        private bool minimizedFlag { get; set; } = false;
+        public bool isMoving { get; set; } = false;
 
-        public ClipForm(ClipOptions options, Image displayImage,string clipName)
+        public ClipForm(ClipOptions options, Image displayImage, string clipName)
         {
             InitializeComponent();
             SuspendLayout();
@@ -42,33 +66,38 @@ namespace WinkingCat.ClipHelper
             SetStyle(ControlStyles.OptimizedDoubleBuffer, true);
 
             Options = options;
+            Options.borderThickness = 5;
             imageSize = displayImage.Size;
+            imageDefaultSize = displayImage.Size;
             ClipName = clipName;
-            windowSize = new Size(imageSize.Width + Options.borderThickness * 2, imageSize.Height + Options.borderThickness * 2);
+            image = (Bitmap)displayImage;
+            startWindowSize = new Size(imageSize.Width + Options.borderThickness * 2 + 1, imageSize.Height + Options.borderThickness * 2 + 1);
+            Console.WriteLine(startWindowSize);
 
             Location = options.location;
 
-            Size = windowSize;
+            Size = startWindowSize;
 
-            MinimumSize = windowSize;
-            MaximumSize = windowSize;
-            
+            MinimumSize = startWindowSize;
+            MaximumSize = startWindowSize;
+
             BackColor = Options.borderColor;
 
             #region picturebox
-            clipDisplayPictureBox.Location = new Point(Options.borderThickness, Options.borderThickness);
-            clipDisplayPictureBox.Size = imageSize;
-            clipDisplayPictureBox.Image = displayImage;
+            //clipDisplayPictureBox.Location = new Point(Options.borderThickness, Options.borderThickness);
+            //clipDisplayPictureBox.Size = imageSize;
+            //clipDisplayPictureBox.Image = displayImage;
 
-            clipDisplayPictureBox.MouseDown += PictureBox_MouseDown;
-            clipDisplayPictureBox.MouseUp += PictureBox_MouseUp;
-            clipDisplayPictureBox.MouseMove += PictureBox_MouseMove;
+            MouseDown += MouseDown_Event;
+            MouseUp += MouseUp_Event;
+            MouseMove += MouseMove_Event;
             #endregion
 
             #region resizePanel
             ResizePanel.Size = new Size(25, 25);
-            ResizePanel.Location = new Point(windowSize.Width - 25, windowSize.Height - 25);
-            ResizePanel.MouseDown += FakeResize;
+            ResizePanel.Location = new Point(startWindowSize.Width - 25, startWindowSize.Height - 25);
+            ResizePanel.Visible = false;
+            //ResizePanel.MouseDown += FakeResize;
             #endregion
 
             #region context menu
@@ -91,17 +120,50 @@ namespace WinkingCat.ClipHelper
             ResumeLayout();
             Show();
             #endregion
+
+            backgroundBrush = new TextureBrush(image) { WrapMode = WrapMode.Clamp };
+
+
+            //for some reason if the clip is on a display that is scaled it makes it bigger than its supposed to be
+            //so only allow it to be resized after 1000 ms
+            Timer updateMaxSizeTimer = new Timer() { Interval = 1000 };
+            updateMaxSizeTimer.Tick += UpdateMaxSizeTimerTick_Event;
+            updateMaxSizeTimer.Start();
+
+        }
+
+        private void UpdateMaxSizeTimerTick_Event(object sender, EventArgs e)
+        {
+            ((Timer)sender)?.Stop();
+            ((Timer)sender)?.Dispose();
+            MaximumSize = Options.maxClipSize;
+        }
+
+        protected override void OnPaint(PaintEventArgs e)
+        {
+            Graphics g = e.Graphics;
+
+            g.PixelOffsetMode = PixelOffsetMode.HighSpeed;
+            g.InterpolationMode = InterpolationMode.NearestNeighbor;
+            e.Graphics.SmoothingMode = SmoothingMode.HighQuality; // for some reason highspeed crashes the window
+            g.CompositingQuality = CompositingQuality.HighSpeed;
+            g.CompositingMode = CompositingMode.SourceCopy;
+
+            g.FillRectangle(backgroundBrush, new Rectangle(new Point(Options.borderThickness, Options.borderThickness), imageSize));
+            g.CompositingMode = CompositingMode.SourceOver;
+
+            base.OnPaint(e);
         }
 
         #region context menu functions
         public void CopyClipImage(object sender = null, EventArgs e = null)
         {
-            ClipboardHelpers.CopyImageDefault(clipDisplayPictureBox.Image);
+            //ClipboardHelpers.CopyImageDefault(clipDisplayPictureBox.Image);
         }
 
         public void AllowResize_Click(object sender = null, EventArgs e = null)
         {
-            if(isResizable)
+            if (isResizable)
             {
                 isResizable = false;
                 allowResizeToolStripMenuItem.Checked = false;
@@ -123,7 +185,7 @@ namespace WinkingCat.ClipHelper
 
         public void Save_Click(object sender = null, EventArgs e = null)
         {
-            Helpers.AskSaveImage((Image)clipDisplayPictureBox.Image.Clone());
+            //Helpers.AskSaveImage((Image)clipDisplayPictureBox.Image.Clone());
         }
 
         public void Destroy_Click(object sender = null, EventArgs e = null)
@@ -145,11 +207,11 @@ namespace WinkingCat.ClipHelper
             switch (e.KeyData)
             {
                 case (Keys.C | Keys.Control):
-                        CopyClipImage();
+                    CopyClipImage();
                     break;
 
                 case (Keys.T | Keys.Control):
-                    
+
                     break;
 
                 case (Keys.R | Keys.Control):
@@ -157,7 +219,7 @@ namespace WinkingCat.ClipHelper
                     break;
 
                 case (Keys.S | Keys.Control):
-                        Save_Click();
+                    Save_Click();
                     break;
             }
         }
@@ -180,39 +242,123 @@ namespace WinkingCat.ClipHelper
         private void ResizeEnded(object sender, EventArgs e)
         {
             Console.WriteLine("resize end");
-            if (Size != windowSize)
+            if (Size != startWindowSize)
             {
-                Size a = MathHelper.PictureBoxZoomSize(clipDisplayPictureBox, imageSize);
+                /*Size a = MathHelper.PictureBoxZoomSize(clipDisplayPictureBox, imageSize);
                 a.Width += Options.borderThickness * 2;
                 a.Height += Options.borderThickness * 2;
-                Size = new Size(a.Width, a.Height);
-                windowSize = Size;
+                Size = new Size(a.Width, a.Height);*/
+                //windowSize = Size;
             }
             Invalidate();
         }
         #endregion
 
-        #region picturebox events
-        private void PictureBox_MouseMove(object sender, MouseEventArgs e)
+        #region Mouse Events
+        private void MouseMove_Event(object sender, MouseEventArgs e)
         {
-            Point m = e.Location;
-            if (isLeftClicking)
+            if (isResizable)
             {
-                Point p = PointToScreen(e.Location);
-                Location = new Point(p.X - lastLocation.X, p.Y - lastLocation.Y);
+                if (isResizing)
+                {
+                    Point mousepos = ScreenHelper.GetCursorPosition();
+                    switch (drag)
+                    {
+                        case DragLoc.Top:
+                            if (mousepos.Y < Location.Y)
+                            {
+                                ResizeHeight(Location.Y - mousepos.Y);
+                                Location = new Point(Location.X, mousepos.Y);
+                            }
+                            break;
+                        case DragLoc.Left:
+                            if (mousepos.X < Location.X)
+                            {
+                                ResizeHeight(Location.X - mousepos.X);
+                                Location = new Point(mousepos.X, Location.Y);
+                            }
+                            break;
+                        case DragLoc.Right:
+                            if (mousepos.X > Location.X)
+                            {
+                                ResizeWidth(mousepos.X - Location.X);
+                                Console.WriteLine("resize from right");
+                            }
+                            break;
+                        case DragLoc.Bottom:
+                            if (mousepos.Y > Location.Y)
+                            {
+                                ResizeHeight(mousepos.Y - Location.Y);
+                                Console.WriteLine("resize from bottom");
+                            }
+                            break;
+                    }
+                }
+                else
+                {
+                    if (!isMoving)
+                    {
+                        Point m = e.Location;
+
+                        if ((m.X >= Size.Width - Options.borderThickness - 1))
+                        {
+                            Cursor = Cursors.Hand;
+                            if (isLeftClicking)
+                            {
+                                drag = DragLoc.Right;
+                                isResizing = true;
+                            }
+                        }
+                        else if ((m.Y >= Size.Height - Options.borderThickness - 1))
+                        {
+                            Cursor = Cursors.Hand;
+                            if (isLeftClicking)
+                            {
+                                drag = DragLoc.Bottom;
+                                isResizing = true;
+                            }
+                        }
+                        else if (m.X < Options.borderThickness)
+                        {
+                            Cursor = Cursors.Hand;
+                            if (isLeftClicking)
+                            {
+                                drag = DragLoc.Left;
+                                isResizing = true;
+                            }
+                        }
+                        else if (m.Y < Options.borderThickness)
+                        {
+                            Cursor = Cursors.Hand;
+                            if (isLeftClicking)
+                            {
+                                drag = DragLoc.Top;
+                                isResizing = true;
+                            }
+                        }
+                        else
+                        {
+                            Cursor = Cursors.Default;
+                        }
+                    }
+                }
+                if (isLeftClicking && !isResizing)
+                {
+                    Point p = PointToScreen(e.Location);
+                    Location = new Point(p.X - lastLocation.X, p.Y - lastLocation.Y);
+                    isMoving = true;
+                }
             }
         }
 
-        private void PictureBox_MouseDown(object sender, MouseEventArgs e)
+
+        private void MouseDown_Event(object sender, MouseEventArgs e)
         {
             switch (e.Button)
             {
                 case MouseButtons.Left:
                     isLeftClicking = true;
                     lastLocation = new Point(e.X, e.Y);
-
-                    if (MaximumSize != Options.maxClipSize) // for some reason if the clip is on a display that is scaled it makes it bigger than its supposed to be so only allow it to be resized after clicking it once
-                        MaximumSize = Options.maxClipSize;
                     break;
 
                 case MouseButtons.Right:
@@ -223,12 +369,14 @@ namespace WinkingCat.ClipHelper
             }
         }
 
-        private void PictureBox_MouseUp(object sender, MouseEventArgs e)
+        private void MouseUp_Event(object sender, MouseEventArgs e)
         {
             switch (e.Button)
             {
                 case MouseButtons.Left:
                     isLeftClicking = false;
+                    isResizing = false;
+                    isMoving = false;
                     break;
 
                 case MouseButtons.Right:
@@ -241,13 +389,18 @@ namespace WinkingCat.ClipHelper
         #endregion
 
         #region other
-        private void FakeResize(object sender = null, EventArgs e = null)
+        private void ResizeWidth(int newWidth)
         {
-            Point m = ScreenHelper.GetCursorPosition();
-            NativeMethods.ReleaseCapture();
-            NativeMethods.SendMessage(Handle, 0xA1, 17, Helpers.CreateLParam(m).ToInt32());
-            isLeftClicking = false;
+            float aspectRatio = (startWindowSize.Height / (float)startWindowSize.Width);
+            Height = (int)(newWidth * aspectRatio);
+            Width = newWidth;
+        }
 
+        private void ResizeHeight(int newHeight)
+        {
+            float aspectRatio = (startWindowSize.Width / (float)startWindowSize.Height);
+            Width = (int)(newHeight * aspectRatio);
+            Height = newHeight;
         }
 
         public void BringFront()
@@ -261,8 +414,6 @@ namespace WinkingCat.ClipHelper
 
         public void Destroy()
         {
-            clipDisplayPictureBox.Image?.Dispose();
-            clipDisplayPictureBox?.Dispose();
 
             ContextMenu?.Dispose();
 
@@ -271,52 +422,6 @@ namespace WinkingCat.ClipHelper
             base.Dispose(true);
         }
 
-        protected override void WndProc(ref Message m)
-        {
-            switch (m.Msg)
-            {
-                case 0x0084/*NCHITTEST*/ :
-                    base.WndProc(ref m);
-
-                    if ((int)m.Result == 0x01/*HTCLIENT*/)
-                    {
-                        Point screenPoint = new Point(m.LParam.ToInt32());
-                        Point clientPoint = clipDisplayPictureBox.PointToClient(screenPoint);
-                        if (isResizable)
-                        {
-                            if (clientPoint.Y <= RESIZE_HANDLE_SIZE)
-                            {
-                            if (clientPoint.X <= RESIZE_HANDLE_SIZE)
-                                m.Result = (IntPtr)13; //*HTTOPLEFT*//* ;
-                                else if (clientPoint.X < (Size.Width - RESIZE_HANDLE_SIZE))
-                                m.Result = (IntPtr)12; //*HTTOP*//* ;
-                                else
-                                m.Result = (IntPtr)14; //*HTTOPRIGHT*//* ;
-                            }
-                            else if (clientPoint.Y <= (Size.Height - RESIZE_HANDLE_SIZE))
-                            {
-                            if (clientPoint.X <= RESIZE_HANDLE_SIZE)
-                                m.Result = (IntPtr)10; //*HTLEFT*//* ;
-                                else if (clientPoint.X < (Size.Width - RESIZE_HANDLE_SIZE))
-                                m.Result = (IntPtr)2;//*HTCAPTION*//* ;
-                            else
-                                m.Result = (IntPtr)11; //*HTRIGHT*//* ;
-                            }
-                            else
-                            {
-                            if (clientPoint.X <= RESIZE_HANDLE_SIZE)
-                                m.Result = (IntPtr)16; //*HTBOTTOMLEFT*//;
-                            else if (clientPoint.X < (Size.Width - RESIZE_HANDLE_SIZE))
-                                m.Result = (IntPtr)15; //*HTBOTTOM*//* ;
-                                else
-                                m.Result = (IntPtr)17; //*HTBOTTOMRIGHT*//* ;
-                            }
-                        }
-                    }
-                    return;
-            }
-            base.WndProc(ref m);
-        }
 
         protected override CreateParams CreateParams
         {

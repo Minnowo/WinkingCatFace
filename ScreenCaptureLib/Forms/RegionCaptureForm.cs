@@ -325,7 +325,7 @@ namespace WinkingCat.ScreenCaptureLib
 
                 if (RegionCaptureOptions.drawMagnifierGrid)
                 {
-                    using (Pen pen = new Pen(Color.FromArgb(25, Color.White)))
+                    using (Pen pen = new Pen(Color.FromArgb(255, Color.Black)))
                     {
                         for (int x = 1; x < pixelCount; x++)
                         {
