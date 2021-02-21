@@ -230,30 +230,18 @@ namespace WinkingCat.ClipHelper
                     switch (drag)
                     {
                         case DragLoc.Top:
-                            if (mousepos.Y < Location.Y)
-                            {
-                                ResizeHeight(Location.Y - mousepos.Y);
-                                Location = new Point(Location.X, mousepos.Y);
-                            }
+                            ResizeHeight(Height + Location.Y - mousepos.Y);
+                            Location = new Point(Location.X, mousepos.Y);
                             break;
                         case DragLoc.Left:
-                            if (mousepos.X < Location.X)
-                            {
-                                ResizeHeight(Location.X - mousepos.X);
-                                Location = new Point(mousepos.X, Location.Y);
-                            }
+                            ResizeWidth(Width + Location.X - mousepos.X);
+                            Location = new Point(mousepos.X, Location.Y);
                             break;
                         case DragLoc.Right:
-                            if (mousepos.X > Location.X)
-                            {
-                                ResizeWidth(mousepos.X - Location.X);
-                            }
+                            ResizeWidth(mousepos.X - Location.X);
                             break;
                         case DragLoc.Bottom:
-                            if (mousepos.Y > Location.Y)
-                            {
-                                ResizeHeight(mousepos.Y - Location.Y);
-                            }
+                            ResizeHeight(mousepos.Y - Location.Y);
                             break;
                     }
                     
