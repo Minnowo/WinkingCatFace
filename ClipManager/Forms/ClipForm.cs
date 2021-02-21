@@ -256,7 +256,7 @@ namespace WinkingCat.ClipHelper
 
                         if ((m.X >= Size.Width - Options.borderThickness - 1))
                         {
-                            Cursor = Cursors.Hand;
+                            Cursor = Cursors.SizeWE;
                             if (isLeftClicking)
                             {
                                 drag = DragLoc.Right;
@@ -265,7 +265,7 @@ namespace WinkingCat.ClipHelper
                         }
                         else if ((m.Y >= Size.Height - Options.borderThickness - 1))
                         {
-                            Cursor = Cursors.Hand;
+                            Cursor = Cursors.SizeNS;
                             if (isLeftClicking)
                             {
                                 drag = DragLoc.Bottom;
@@ -274,7 +274,7 @@ namespace WinkingCat.ClipHelper
                         }
                         else if (m.X < Options.borderThickness)
                         {
-                            Cursor = Cursors.Hand;
+                            Cursor = Cursors.SizeWE;
                             if (isLeftClicking)
                             {
                                 drag = DragLoc.Left;
@@ -283,7 +283,7 @@ namespace WinkingCat.ClipHelper
                         }
                         else if (m.Y < Options.borderThickness)
                         {
-                            Cursor = Cursors.Hand;
+                            Cursor = Cursors.SizeNS;
                             if (isLeftClicking)
                             {
                                 drag = DragLoc.Top;
