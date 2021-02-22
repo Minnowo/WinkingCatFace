@@ -89,6 +89,8 @@ namespace WinkingCat
             exitToolStripMenuItem.Click += ExitApplication_Click;
             #endregion
 
+            HandleCreated += MainForm_HandleCreated;
+
             ImageHandler.CaptureEvent += AfterCaptureEvent;
             ImageHandler.ImageSaved += ImageSaved_Event;
 
@@ -96,6 +98,13 @@ namespace WinkingCat
             HotkeyManager.UpdateHotkeys(HotkeyManager.GetDefaultHotkeyList(), true);
             //contextMenuStrip1.Visible = true;
             MainFormSettings.SettingsChangedEvent += UpdateSettings;
+            
+        }
+
+        private void MainForm_HandleCreated(object sender, EventArgs e)
+        {
+            NativeMethods.UseImmersiveDarkMode(Handle, true);
+            Refresh();
         }
 
         private void UpdateSettings(object sender, EventArgs e)

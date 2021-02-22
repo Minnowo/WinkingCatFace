@@ -11,6 +11,24 @@ namespace WinkingCat.HelperLibs
 {
     public static partial class NativeMethods
     {
+        public static bool UseImmersiveDarkMode(IntPtr handle, bool enabled)
+        {
+            if (Helpers.IsWindows10OrGreater(17763))
+            {
+                DwmWindowAttribute attribute;
+                attribute = DwmWindowAttribute.DWMWA_USE_IMMERSIVE_DARK_MODE_BEFORE_20H1;
+                if (Helpers.IsWindows10OrGreater(18985))
+                {
+                    attribute = DwmWindowAttribute.DWMWA_USE_IMMERSIVE_DARK_MODE;
+                }
+
+                int useImmersiveDarkMode = enabled ? 1 : 0;
+                return DwmSetWindowAttribute(handle, (int)attribute, ref useImmersiveDarkMode, sizeof(int)) == 0;
+            }
+
+            return false;
+        }
+
         public static Process GetProcessByWindowHandle(IntPtr hwnd)
         {
             if (hwnd.ToInt32() > 0)

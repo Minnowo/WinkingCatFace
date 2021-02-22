@@ -39,6 +39,10 @@ namespace WinkingCat.HelperLibs
                 adjustedSize,
                 SizeSuffixes[mag]);
         }
+        public static bool IsWindows10OrGreater(int build = -1)
+        {
+            return Environment.OSVersion.Version.Major >= 10 && Environment.OSVersion.Version.Build >= build;
+        }
         public static Size GetImageDimensionsFile(string imagePath)
         {
             if (File.Exists(imagePath))
