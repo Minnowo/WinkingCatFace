@@ -24,18 +24,18 @@ namespace WinkingCat
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
 
-            DirectoryManager.LoadLocalSettings();
+            PathHelper.LoadLocalSettings();
 
-            Logger.Init(DirectoryManager.logPath + "\\" + DateTime.Now.ToString("yyyy MM dd") + ".txt");
-            Console.WriteLine("log path: " + DirectoryManager.logPath + "\\" + DateTime.Now.ToString("yyyy M dd") + ".txt");
+            Logger.Init(PathHelper.logPath + "\\" + DateTime.Now.ToString("yyyy MM dd") + ".txt");
+            Console.WriteLine("log path: " + PathHelper.logPath + "\\" + DateTime.Now.ToString("yyyy M dd") + ".txt");
              
             Logger.WriteLine(";3c starting...");
             Logger.WriteLine("path settings loaded");
-            Logger.WriteLine(DirectoryManager.currentDirectory);
-            Logger.WriteLine(DirectoryManager.configPath);
-            Logger.WriteLine(DirectoryManager.resourcePath);
-            Logger.WriteLine(DirectoryManager.screenshotPath);
-            Logger.WriteLine(DirectoryManager.logPath);
+            Logger.WriteLine(PathHelper.currentDirectory);
+            Logger.WriteLine(PathHelper.configPath);
+            Logger.WriteLine(PathHelper.resourcePath);
+            Logger.WriteLine(PathHelper.screenshotPath);
+            Logger.WriteLine(PathHelper.logPath);
 
             if (SettingsLoader.LoadMainFormSettings())
             {

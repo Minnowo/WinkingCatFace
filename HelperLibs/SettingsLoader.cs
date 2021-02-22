@@ -20,11 +20,11 @@ namespace WinkingCat.HelperLibs
         }
         public static bool LoadMainFormSettings()
         {
-            DirectoryManager.UpdateRelativePaths();
-            Configuration conf = ConfigLoader(DirectoryManager.currentDirectory + Settings.Default.mainFormSettings);
+            PathHelper.UpdateRelativePaths();
+            Configuration conf = ConfigLoader(PathHelper.currentDirectory + Settings.Default.mainFormSettings);
             KeyValueConfigurationCollection keys = conf.AppSettings.Settings;
 
-            if (File.Exists(DirectoryManager.currentDirectory + Settings.Default.mainFormSettings))
+            if (File.Exists(PathHelper.currentDirectory + Settings.Default.mainFormSettings))
             {
                 try
                 {
@@ -84,11 +84,11 @@ namespace WinkingCat.HelperLibs
 
         public static bool LoadRegionCaptureSettings()
         {
-            DirectoryManager.UpdateRelativePaths();
-            Configuration conf = ConfigLoader(DirectoryManager.currentDirectory + Settings.Default.regionCaptureSettings);
+            PathHelper.UpdateRelativePaths();
+            Configuration conf = ConfigLoader(PathHelper.currentDirectory + Settings.Default.regionCaptureSettings);
             KeyValueConfigurationCollection keys = conf.AppSettings.Settings;
 
-            if (File.Exists(DirectoryManager.currentDirectory + Settings.Default.regionCaptureSettings))
+            if (File.Exists(PathHelper.currentDirectory + Settings.Default.regionCaptureSettings))
             {
                 try
                 {

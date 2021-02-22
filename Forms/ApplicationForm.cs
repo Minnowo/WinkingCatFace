@@ -208,11 +208,11 @@ namespace WinkingCat
         }
         private void ClipFromClipboard_Click(object sender, EventArgs e)
         {
-
+            TaskHandler.ExecuteTask(Tasks.NewClipFromClipboard);
         }
         private void ClipFromFile_Click(object sender, EventArgs e)
         {
-
+            TaskHandler.ExecuteTask(Tasks.NewClipFromFile);
         }
         private void CreateClipAfterRegionCapture_Click(object sender, EventArgs e)
         {

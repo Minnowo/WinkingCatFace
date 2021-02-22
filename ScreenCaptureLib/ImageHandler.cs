@@ -94,7 +94,7 @@ namespace WinkingCat.ScreenCaptureLib
                 return string.Empty;
 
             if (imageName == null)
-                imageName = $"{DirectoryManager.CreateScreenshotSubFolder()}{DateTime.Now.ToString("yyyy-MM-dd h-m-ss-fffff")}.{defaultImageType.ToString().ToLower()}";
+                imageName = $"{PathHelper.CreateScreenshotSubFolder()}{DateTime.Now.ToString("yyyy-MM-dd h-m-ss-fffff")}.{defaultImageType.ToString().ToLower()}";
             
             if (format == null)
                 format = ImageFormat.Png;
@@ -120,8 +120,8 @@ namespace WinkingCat.ScreenCaptureLib
 
         public static void HandleRegionReturnImage(Image img)
         {
-            string fileName = $"{DirectoryManager.CreateScreenshotSubFolder()}{DateTime.Now.ToString("yyyy-MM-dd h-m-ss-fffff")}.{defaultImageType.ToString().ToLower()}";
-            while(File.Exists(fileName)) fileName = $"{DirectoryManager.CreateScreenshotSubFolder()}{DateTime.Now.ToString("yyyy-MM-dd h-m-ss-fffff")}.{defaultImageType.ToString().ToLower()}";
+            string fileName = $"{PathHelper.CreateScreenshotSubFolder()}{DateTime.Now.ToString("yyyy-MM-dd h-m-ss-fffff")}.{defaultImageType.ToString().ToLower()}";
+            while(File.Exists(fileName)) fileName = $"{PathHelper.CreateScreenshotSubFolder()}{DateTime.Now.ToString("yyyy-MM-dd h-m-ss-fffff")}.{defaultImageType.ToString().ToLower()}";
 
             Save(fileName, defaultImageType, img);
             images.Add(fileName);

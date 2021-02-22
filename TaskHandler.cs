@@ -16,6 +16,7 @@ namespace WinkingCat
     {
         public static event EventHandler TaskExecuted;
         public static Image img;
+        private static bool result = false;
 
         public static void OnTaskExecuted(Tasks t)
         {
@@ -54,6 +55,7 @@ namespace WinkingCat
                 case Tasks.RegionCapture:
                     RegionCaptureOptions.mode = RegionCaptureMode.Default;
                     ImageHandler.RegionCapture();
+                    result = true;
                     break;
 
                 case Tasks.RegionCaptureLite:
@@ -63,50 +65,77 @@ namespace WinkingCat
                     RegionCaptureOptions.mode = RegionCaptureMode.Default;
                     RegionCaptureOptions.createSingleClipAfterRegionCapture = true;
                     ImageHandler.RegionCapture();
+                    result = true;
                     break;
 
                 case Tasks.NewClipFromFile:
-                    return false;
+                    string path = PathHelper.AskChooseImageFile();
+                    if (!string.IsNullOrEmpty(path))
+                    {
+                        img = Bitmap.FromFile(path);
+                        Point p = ScreenHelper.GetCursorPosition();
+                        ClipOptions ops = new ClipOptions() { location = new Point(p.X - img.Width / 2, p.Y - img.Height / 2) };
+
+                        result = true;
+                        if (string.IsNullOrEmpty(ClipManager.CreateClip(img, ops)))
+                            result = false;
+                    }
+                    else
+                        result = false;
+                    break;
 
                 case Tasks.NewClipFromClipboard:
                     img = ClipboardHelpers.GetImage();
                     if (img != null)
                     {
                         Point p = ScreenHelper.GetCursorPosition();
-                        ClipOptions ops = new ClipOptions();
-                        ops.location = new Point(p.X - img.Width / 2, p.Y - img.Height / 2);
-                        ClipManager.CreateClip(img, ops);
+                        ClipOptions ops = new ClipOptions() { location = new Point(p.X - img.Width / 2, p.Y - img.Height / 2) };
+
+                        result = true;
+                        if (string.IsNullOrEmpty(ClipManager.CreateClip(img, ops)))
+                            result = false;
                     }
-                    return false;
+                    else
+                        result = false;
+                    break;
 
                 case Tasks.ScreenColorPicker:
                     RegionCaptureOptions.mode = RegionCaptureMode.ColorPicker;
                     ImageHandler.RegionCapture();
+                    result = true;
                     break;
 
                 case Tasks.CaptureLastRegion:
                     if (ImageHandler.LastInfo != null && ScreenHelper.IsValidCropArea(ImageHandler.LastInfo.Region))
                     {
                         img = ScreenShotManager.CaptureRectangle(ScreenHelper.GetRectangle0Based(ImageHandler.LastInfo.Region));
-                        ImageHandler.Save(img: img);
+                        result = true;
+                        if (string.IsNullOrEmpty(ImageHandler.Save(img: img)))
+                            result = false;
                     }
                     else
-                        return false;
+                        result = false;
                     break;
 
                 case Tasks.CaptureFullScreen:
                     img = ScreenShotManager.CaptureFullscreen();
-                    ImageHandler.Save(img: img);
+                    result = true;
+                    if (string.IsNullOrEmpty(ImageHandler.Save(img: img)))
+                        result = false;
                     break;
 
                 case Tasks.CaptureActiveMonitor:
                     img = ScreenShotManager.CaptureActiveMonitor();
-                    ImageHandler.Save(img: img);
+                    result = true;
+                    if (string.IsNullOrEmpty(ImageHandler.Save(img: img)))
+                        result = false;
                     break;
 
                 case Tasks.CaptureActiveWindow:
                     img = ScreenShotManager.CaptureRectangle(ScreenHelper.GetWindowRectangle(NativeMethods.GetForegroundWindow()));
-                    ImageHandler.Save(img: img);
+                    result = true;
+                    if (string.IsNullOrEmpty(ImageHandler.Save(img: img)))
+                        result = false;
                     break;
 
                 case Tasks.CaptureGif:
@@ -123,10 +152,11 @@ namespace WinkingCat
 
                 case Tasks.OpenMainForm:
                     Helpers.ForceActivate(Program.mainForm);
+                    result = true;
                     break;
             }
             img?.Dispose();
-            return true;
+            return result;
         }
     }
 }

@@ -55,7 +55,7 @@ namespace WinkingCat.ClipHelper
             ClipName = clipName;
             image = (Bitmap)displayImage;
             startWindowSize = new Size(imageSize.Width + Options.borderThickness, imageSize.Height + Options.borderThickness);
-            Console.WriteLine(startWindowSize);
+            Console.WriteLine($"start window size: {startWindowSize}, image size: {image.Width}, {image.Height}");
 
             MinimumSize = startWindowSize;
             MaximumSize = startWindowSize;
@@ -147,7 +147,7 @@ namespace WinkingCat.ClipHelper
 
         public void Save_Click(object sender = null, EventArgs e = null)
         {
-            //Helpers.AskSaveImage((Image)clipDisplayPictureBox.Image.Clone());
+            PathHelper.AskSaveImage((Image)image.Clone());
         }
 
         public void Destroy_Click(object sender = null, EventArgs e = null)
@@ -212,8 +212,6 @@ namespace WinkingCat.ClipHelper
                 gr.DrawImage(image, new Rectangle(0, 0, Width - Options.borderThickness, Height - Options.borderThickness),
                     new Rectangle(0, 0, image.Width, image.Height),
                     GraphicsUnit.Pixel);
-
-                //gr.PixelOffsetMode = PixelOffsetMode.None;
             }
             backgroundBrush = new TextureBrush(bmp) { WrapMode = WrapMode.Clamp };
             bmp.Dispose();

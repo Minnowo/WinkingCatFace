@@ -12,7 +12,7 @@ namespace WinkingCat.HelperLibs
         public static void Init(string fileName)
         {
             logFile = fileName;
-            DirectoryManager.CreateDirectoryFromFilePath(fileName);
+            PathHelper.CreateDirectoryFromFilePath(fileName);
         }
 
         public static void WriteLine(string message = "")
