@@ -8,6 +8,7 @@ namespace WinkingCat.HelperLibs
 {
     public static class MainFormSettings
     {
+        public static event EventHandler SettingsChangedEvent;
         public static bool hideMainFormOnCapture { get; set; } = true;
         public static bool showInTray { get; set; } = true;
         public static bool minimizeToTray { get; set; } = true;
@@ -19,6 +20,12 @@ namespace WinkingCat.HelperLibs
         public static Tasks onTrayDoubleLeftClick { get; set; } = Tasks.OpenMainForm;
         public static Tasks onTrayMiddleClick { get; set; } = Tasks.NewClipFromClipboard;
 
-
+        public static void OnSettingsChangedEvent()
+        {
+            if (SettingsChangedEvent != null)
+            {
+                SettingsChangedEvent(null, EventArgs.Empty);
+            }
+        }
     }
 }

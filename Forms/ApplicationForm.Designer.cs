@@ -31,7 +31,7 @@
             this.components = new System.ComponentModel.Container();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(ApplicationForm));
             this.DisplayPanel = new System.Windows.Forms.Panel();
-            this.lvListView = new WinkingCat.HelperLibs.NoCheckboxListView();
+            this.lvListView = new WinkingCat.NoCheckboxListView();
             this.columnHeader1 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.columnHeader5 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.columnHeader2 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
@@ -631,7 +631,7 @@
         private System.Windows.Forms.ToolStripMenuItem clipFromClipboardToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem clipFromFileToolStripMenuItem;
         private System.Windows.Forms.ToolStripButton ToolStripDropDownButton_Settings;
-        private HelperLibs.NoCheckboxListView lvListView;
+        private NoCheckboxListView lvListView;
         private System.Windows.Forms.ColumnHeader columnHeader1;
         private System.Windows.Forms.ColumnHeader columnHeader2;
         private System.Windows.Forms.ColumnHeader columnHeader3;

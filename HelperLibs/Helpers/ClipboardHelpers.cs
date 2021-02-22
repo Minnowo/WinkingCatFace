@@ -5,6 +5,8 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Drawing;
 using System.Windows.Forms;
+using System.Collections.Specialized;
+using System.IO;
 
 namespace WinkingCat.HelperLibs
 {
@@ -147,6 +149,20 @@ namespace WinkingCat.HelperLibs
             return null;
         }
 
+        public static bool CopyFile(string path)
+        {
+            if (File.Exists(path))
+            {
+                StringCollection paths = new StringCollection();
+                paths.Add(path);
+                Clipboard.SetFileDropList(paths);
+                return true;
+            }
+            else
+            {
+                return false;
+            }
+        }
         public static bool CopyStringDefault(string str)
         {
             IDataObject dataObject = new DataObject();

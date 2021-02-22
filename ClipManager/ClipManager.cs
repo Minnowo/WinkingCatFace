@@ -22,7 +22,8 @@ namespace WinkingCat.ClipHelper
         public static string CreateClip(Image clipImg, ClipOptions options)
         {
             string clipName = DateTime.Now.ToString("yyyy-MM-dd hh:mm:ss:ffff");
-            Clips[clipName] = new ClipForm(options, clipImg, clipName);
+            Clips[clipName] = new ClipForm(options, (Image)clipImg.Clone(), clipName);
+            clipImg?.Dispose();
             return clipName;
         }
 

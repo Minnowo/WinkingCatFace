@@ -257,12 +257,52 @@ namespace WinkingCat.HelperLibs
             }
         }
 
-        public static void OpenWithDefaultProgram(string path)
+        public static bool OpenWithDefaultProgram(string path)
         {
-            Process fileopener = new Process();
-            fileopener.StartInfo.FileName = "explorer";
-            fileopener.StartInfo.Arguments = "\"" + path + "\"";
-            fileopener.Start();
+            if (File.Exists(path))
+            {
+                Process fileopener = new Process();
+                fileopener.StartInfo.FileName = "explorer";
+                fileopener.StartInfo.Arguments = "\"" + path + "\"";
+                fileopener.Start();
+                return true;
+            }
+            return false;
+        }
+
+        public static bool OpenExplorerAtLocation(string path)
+        {
+            if (File.Exists(path))
+            {
+                Process fileopener = new Process();
+                fileopener.StartInfo.FileName = "explorer";
+                fileopener.StartInfo.Arguments = string.Format("/select,\"{0}\"", path);
+                fileopener.Start();
+                return true;
+            }
+            else if (Directory.Exists(path))
+            {
+                Process fileopener = new Process();
+                fileopener.StartInfo.FileName = "explorer";
+                fileopener.StartInfo.Arguments = path;
+                fileopener.Start();
+                return true;
+            }
+            return false;
+        }
+
+        public static bool DeleteFile(string path)
+        {
+            if (File.Exists(path))
+            {
+                File.Delete(path);
+                if (File.Exists(path))
+                    return false;
+                else
+                    return true;
+            }
+            else
+                return false;
         }
     }
 }

@@ -95,8 +95,14 @@ namespace WinkingCat
             ResumeLayout();
             HotkeyManager.UpdateHotkeys(HotkeyManager.GetDefaultHotkeyList(), true);
             //contextMenuStrip1.Visible = true;
+            MainFormSettings.SettingsChangedEvent += UpdateSettings;
         }
 
+        private void UpdateSettings(object sender, EventArgs e)
+        {
+            TopMost = MainFormSettings.alwaysOnTop;
+            niTrayIcon.Visible = MainFormSettings.showInTray;
+        }
 
         public void ImageSaved_Event(object sender, ImageSavedEvent e)
         {
