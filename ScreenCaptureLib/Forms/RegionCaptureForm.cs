@@ -93,6 +93,23 @@ namespace WinkingCat.ScreenCaptureLib
             }
         }
 
+        private void KeyUp_Event(object sender, KeyEventArgs e)
+        {
+            e.Handled = true;
+            switch (e.KeyData)
+            {
+                case Keys.Z:
+                    RegionCaptureOptions.tryCenterMagnifier = !RegionCaptureOptions.tryCenterMagnifier;
+                    Invalidate();
+                    break;
+
+                case Keys.Escape:
+                    result = RegionResult.Close;
+                    Close();
+                    break;
+            }
+        }
+
         private void MouseWheel_Event(object sender, MouseEventArgs e)
         {
             if(e.Delta > 0)

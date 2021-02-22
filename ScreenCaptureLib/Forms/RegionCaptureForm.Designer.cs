@@ -46,6 +46,7 @@
             MouseUp += ClickRelease_Event;
             MouseMove += MouseMove_Event;
             MouseWheel += MouseWheel_Event;
+            KeyUp += KeyUp_Event;
             this.ResumeLayout(false);
 
         }

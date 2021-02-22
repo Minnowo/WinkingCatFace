@@ -13,7 +13,6 @@ using System.IO;
 using System.Threading;
 using WinkingCat.HelperLibs;
 using WinkingCat.ScreenCaptureLib;
-using WinkingCat.HotkeyLib;
 
 namespace WinkingCat
 {
@@ -105,7 +104,11 @@ namespace WinkingCat
                 $"{e.dimensions.Width}, {e.dimensions.Height}", // dimensions
                 Helpers.SizeSuffix(e.size), // size
                 File.GetLastWriteTime(e.info.FullName).ToString() }; // date modified
-            lvListView.Items.Add(e.info.Name).SubItems.AddRange(row1);
+
+            ListViewItem item = new ListViewItem() { Text = e.info.Name, Tag = e.info.FullName};
+
+            item.SubItems.AddRange(row1);
+            lvListView.Items.Add(item);
         }
 
         public void AfterCaptureEvent(object sender, LastRegionCaptureInfo e)

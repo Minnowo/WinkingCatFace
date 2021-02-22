@@ -77,6 +77,9 @@ namespace WinkingCat.ClipHelper
             destroyToolStripMenuItem.Click += Destroy_Click;
             destroyAllClipsToolStripMenuItem.Click += DestroyAllClips_Click;
 
+            copyDefaultContextMenuItem.Click += CopyClipImage;
+            copyZoomScaledContextMenuItem.Click += CopyScaledImage;
+
             if (isResizable) allowResizeToolStripMenuItem.Checked = true;
             #endregion
 
@@ -120,9 +123,26 @@ namespace WinkingCat.ClipHelper
         }
 
         #region context menu functions
+        public void CopyScaledImage(object sender = null, EventArgs e = null)
+        {
+            Bitmap bmp = new Bitmap(Width - Options.borderThickness, Height - Options.borderThickness);
+            using (Graphics gr = Graphics.FromImage(bmp))
+            {
+                gr.InterpolationMode = InterpolationMode.NearestNeighbor;
+                gr.PixelOffsetMode = PixelOffsetMode.Half;
+
+                gr.DrawImage(image, new Rectangle(0, 0, Width - Options.borderThickness, Height - Options.borderThickness),
+                    new Rectangle(0, 0, image.Width, image.Height),
+                    GraphicsUnit.Pixel);
+            }
+            ClipboardHelpers.CopyImageDefault(bmp);
+            bmp.Dispose();
+        }
+
         public void CopyClipImage(object sender = null, EventArgs e = null)
         {
-            //ClipboardHelpers.CopyImageDefault(clipDisplayPictureBox.Image);
+            ClipboardHelpers.CopyImageDefault(image);
+            ContextMenu.Close();
         }
 
         public void AllowResize_Click(object sender = null, EventArgs e = null)

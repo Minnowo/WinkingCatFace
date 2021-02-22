@@ -6,13 +6,14 @@ using System.Threading.Tasks;
 using WinkingCat.HelperLibs;
 using System.Windows.Forms;
 
-namespace WinkingCat.HotkeyLib
+namespace WinkingCat
 {
     public static class HotkeyManager
     {
         public static HotkeyForm hotkeyForm { get; private set; }
         public static List<HotkeySettings> hotKeys { get; private set; }
         public static bool ignoreHotkeyPress { get; set; } = false;
+        public static bool tempTgnoreHotkeyPress { get; set; } = false;
 
         public static void Init()
         {
@@ -24,7 +25,7 @@ namespace WinkingCat.HotkeyLib
         {
             HotkeySettings hotkeySetting = hotKeys.Find(x => x.HotkeyInfo.ID == id);
 
-            if (hotkeySetting != null && !ignoreHotkeyPress)
+            if (hotkeySetting != null && !ignoreHotkeyPress && !tempTgnoreHotkeyPress)
             {
                 TaskHandler.ExecuteTask(hotkeySetting.Task);
             }

@@ -9,8 +9,7 @@ using System.Linq;
 using System.Windows.Forms;
 using WinkingCat.HelperLibs.Properties;
 using Microsoft.WindowsAPICodePack.Dialogs;
-
-
+using System.Diagnostics;
 
 namespace WinkingCat.HelperLibs
 {
@@ -256,6 +255,14 @@ namespace WinkingCat.HelperLibs
                     return null;
                 }
             }
+        }
+
+        public static void OpenWithDefaultProgram(string path)
+        {
+            Process fileopener = new Process();
+            fileopener.StartInfo.FileName = "explorer";
+            fileopener.StartInfo.Arguments = "\"" + path + "\"";
+            fileopener.Start();
         }
     }
 }

@@ -53,19 +53,26 @@ namespace WinkingCat
             switch (task)
             {
                 case Tasks.RegionCapture:
+                    HotkeyManager.tempTgnoreHotkeyPress = true;
                     RegionCaptureOptions.mode = RegionCaptureMode.Default;
                     ImageHandler.RegionCapture();
                     result = true;
+                    HotkeyManager.tempTgnoreHotkeyPress = false;
                     break;
 
                 case Tasks.RegionCaptureLite:
+                    HotkeyManager.tempTgnoreHotkeyPress = true;
+
+                    HotkeyManager.tempTgnoreHotkeyPress = false;
                     return false;
 
                 case Tasks.NewClipFromRegionCapture:
+                    HotkeyManager.tempTgnoreHotkeyPress = true;
                     RegionCaptureOptions.mode = RegionCaptureMode.Default;
                     RegionCaptureOptions.createSingleClipAfterRegionCapture = true;
                     ImageHandler.RegionCapture();
                     result = true;
+                    HotkeyManager.tempTgnoreHotkeyPress = false;
                     break;
 
                 case Tasks.NewClipFromFile:
@@ -100,6 +107,7 @@ namespace WinkingCat
                     break;
 
                 case Tasks.ScreenColorPicker:
+                    
                     RegionCaptureOptions.mode = RegionCaptureMode.ColorPicker;
                     ImageHandler.RegionCapture();
                     result = true;

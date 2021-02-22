@@ -117,25 +117,16 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
-  <metadata name="ContextMenu.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
+  <metadata name="cmsMain.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
     <value>17, 17</value>
   </metadata>
-  <assembly alias="System.Drawing" name="System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a" />
-  <data name="copyZoomScaledContextMenuItem.Image" type="System.Drawing.Bitmap, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
-    <value>
-        iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAYAAABzenr0AAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8
-        YQUAAAKiSURBVFhH5ZdPa9RAGMZz036C9c+n8ODJzyAWL1WwJdCDWLAWKZV60u1pxY26ogfFmwdb0Fio
-        iLgVET1pQW2wxZOwl1IKggcVXWac5828YTaZbGa6rQi+8GMyM7vzPPO+s5sk+Cdial5KZixak0mSYEzP
-        7kzkNfRwGhhcXk8ZbSZilwwIQ6N38SONdKK9JuSh84lUEZxrvZGMT3/y6jO0hT5rAGho6TSGJqTccyIR
-        e8c6cmhCCEpV67WgRaI2pY0XtPWxo7NXnjBieCauYY7H0FcaQmmQDlotncbhi53gwctOoNxROTY3NpyB
-        OFCC2HUAMTByaZlaEEYfCWjdW0qInlDuCN6VTcjk69ZWRj3+lokDFsuj5rqnZu9LBWlZA+LAJlTG6bub
-        lAGcA2ATB1iXDZSGzUDj6U/5aOVXQZjhEjgYyDJQGupDPWcAAhDvZwIlaLV/k3g/AwDi3hkA/UzsegmY
-        MhMeJRjMALCZcC2BWtfvDJjCJnkTriUAEHfOQF7YxDThUQKnDDgZAGzixsL7TLzCgPsZwI5QW5Sj3zXE
-        YeLmw9VKE1OuZwALAxysqmuIcSZMEzYDAOKVGcDdC0YgxKe77JphE7cX1+XI5Re10cbbgjjWdslAZsAU
-        cIFN3Io/yeOzS7WTc6+2b8C8hfpgmuAx9NG6Gsju57yAL2yC27C5km0I4pUZmIyebzsDDItPL/wgAyjH
-        XykBw+LT89/l0fo7rxIMbADiZ+58oZ1DXJE9I7oYoDOQP8G+DF+I94XXkv1htHrg2MziwbD5gcbH5x6T
-        RiHwz6agp+Hw+meBD8Oxdt3V/W6uXzXf0+f10RZeTGzP7PrLzEB9dV39XsCTeG7H2Hg9pp8MM0gfBvBe
-        YGgUDeiXBoa+tJPkNbT0fx9B8AfXdVg1+xeV4gAAAABJRU5ErkJggg==
-</value>
-  </data>
+  <metadata name="cmsOpen.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
+    <value>117, 17</value>
+  </metadata>
+  <metadata name="cmsCopy.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
+    <value>220, 17</value>
+  </metadata>
+  <metadata name="$this.TrayLargeIcon" type="System.Boolean, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
+    <value>False</value>
+  </metadata>
 </root>
