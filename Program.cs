@@ -50,9 +50,10 @@ namespace WinkingCat
             if (SettingsManager.LoadClipboardSettings())
             {
                 Logger.WriteLine("Clipboard settings loaded successfully");
-            }
+            }            
 
             HotkeyManager.Init();
+            HotkeyManager.UpdateHotkeys(SettingsManager.LoadHotkeySettings(), true);
             mainForm = new ApplicationForm();
             
             Application.Run(mainForm);

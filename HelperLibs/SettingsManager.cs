@@ -6,7 +6,7 @@ using System.Text;
 using System.IO;
 using System.Threading.Tasks;
 using WinkingCat.HelperLibs.Properties;
-using System.Xml.Serialization;
+using System.Windows.Forms;
 
 namespace WinkingCat.HelperLibs
 {
@@ -364,7 +364,6 @@ namespace WinkingCat.HelperLibs
         public static bool SaveHotkeySettings(List<HotkeySettings> hotkeys)
         {
             PathHelper.CreateAllPaths();
-            PathHelper.CreateAllPaths();
             Configuration conf = ConfigLoader(PathHelper.currentDirectory + Settings.Default.hotkeySettings);
             if (conf == null)
                 return false;
@@ -402,10 +401,35 @@ namespace WinkingCat.HelperLibs
             }
         }
 
-        public static bool LoadHotkeySettings()
+        public static List<HotkeySettings> LoadHotkeySettings()
         {
+            PathHelper.CreateAllPaths();
+            Configuration conf = ConfigLoader(PathHelper.currentDirectory + Settings.Default.hotkeySettings);
+            if (conf == null)
+                return null;
+            try
+            {
+                ConfigurationSectionGroup hotkeySectionGroup = new ConfigurationSectionGroup();
+                List<HotkeySettings> hotKeys = new List<HotkeySettings> { };
 
-            return true;
+                ConfigurationSectionGroup group = conf.GetSectionGroup("Hotkeys") as ConfigurationSectionGroup;
+
+                if (group == null)
+                    return null;
+
+                foreach(HotkeySectionHandler section in group.Sections)
+                {
+                    hotKeys.Add(new HotkeySettings((Tasks)int.Parse(section.task), 
+                        Helpers.ModifierAsKey((Modifiers)uint.Parse(section.Modifiers)) | ((Keys)uint.Parse(section.Keys))));
+                }
+
+                return hotKeys;
+            }
+            catch (Exception e)
+            {
+                Logger.WriteException(e, "Exception saving Clipboard settings");
+                return null;
+            }
         }
     }
 
