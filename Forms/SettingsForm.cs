@@ -7,6 +7,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using WinkingCat.HelperLibs;
 
 namespace WinkingCat
 {
@@ -25,12 +26,25 @@ namespace WinkingCat
             bHotkeys.Click += HotkeysButtonClick_Event;
             bPaths.Click += PathsButtonClick_Event;
             #endregion
-
+            this.FormClosing += new FormClosingEventHandler(OnFormClosing_Event);
             OpenChildForm(new GeneralSettingsForm());
         }
 
         #region MainForm events
+        private void OnFormClosing_Event(object sender, EventArgs e)
+        {
+            SaveSettingsToDisk();
+        }
 
+        private void SaveSettingsToDisk()
+        {
+            if (SettingsManager.SaveMainFormSettings())
+                Logger.WriteLine("MainForm Settings Saved Successfully");
+            if(SettingsManager.SaveRegionCaptureSettings())
+                Logger.WriteLine("RegionCapture Settings Saved Successfully");
+            if(SettingsManager.SaveClipboardSettings())
+                Logger.WriteLine("Clipboard Settings Saved Successfully");
+        }
         #endregion
 
         #region Button events

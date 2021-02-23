@@ -392,6 +392,12 @@ namespace WinkingCat.ScreenCaptureLib
             
             g.DrawLine(borderDotPen, leftClickStart, new Point(mousePos.X, leftClickStart.Y));
             g.DrawLine(borderDotPen, leftClickStart, new Point(leftClickStart.X, mousePos.Y));
+
+            if (!RegionCaptureOptions.drawCrossHair)
+            {
+                g.DrawLine(borderDotPen, new Point(mousePos.X, leftClickStart.Y), mousePos);
+                g.DrawLine(borderDotPen, new Point(leftClickStart.X, mousePos.Y), mousePos);
+            }
         }
 
         private void DrawInfoText(Graphics g, string text, Font font, Brush textFontBrush ,Brush backgroundBrush, Pen outerBorderPen, Point pos)

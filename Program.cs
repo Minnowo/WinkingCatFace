@@ -37,16 +37,20 @@ namespace WinkingCat
             Logger.WriteLine(PathHelper.screenshotPath);
             Logger.WriteLine(PathHelper.logPath);
 
-            if (SettingsLoader.LoadMainFormSettings())
+            if (SettingsManager.LoadMainFormSettings())
             {
                 Logger.WriteLine("MainForm settings loaded successfully");
             }
 
-            if (SettingsLoader.LoadRegionCaptureSettings())
+            if (SettingsManager.LoadRegionCaptureSettings())
             {
                 Logger.WriteLine("RegionCapture settings loaded successfully");
             }
 
+            if (SettingsManager.LoadClipboardSettings())
+            {
+                Logger.WriteLine("Clipboard settings loaded successfully");
+            }
 
             HotkeyManager.Init();
             mainForm = new ApplicationForm();

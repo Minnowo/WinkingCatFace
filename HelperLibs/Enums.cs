@@ -29,6 +29,7 @@ namespace WinkingCat.HelperLibs
     }
     public enum Tasks
     {
+        None,
         RegionCapture,
         RegionCaptureLite,
         NewClipFromRegionCapture,
@@ -45,6 +46,18 @@ namespace WinkingCat.HelperLibs
         ColorWheelPicker,
         HashCheck,
         OpenMainForm
+    }
+
+    public enum MouseClickTasks
+    {
+        DoNothing,
+        Cancel,
+        RemoveSelectionOrCancel,
+        CaptureFullScreen,
+        CaptureActiveMonitor,
+        CaptureLastRegion,
+        RemoveSelection,
+        SwapToolType
     }
 
     public enum ColorFormat

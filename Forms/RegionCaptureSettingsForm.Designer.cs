@@ -44,9 +44,9 @@
             this.cbDrawMagnifier = new System.Windows.Forms.CheckBox();
             this.cbDrawScreenWideCrosshair = new System.Windows.Forms.CheckBox();
             this.pMouseButtons = new System.Windows.Forms.Panel();
-            this.combobXbutton2ClickAction = new System.Windows.Forms.ComboBox();
+            this.combobXButton2ClickAction = new System.Windows.Forms.ComboBox();
             this.lXbutton2ClickAction = new System.Windows.Forms.Label();
-            this.combobXbutton1ClickAction = new System.Windows.Forms.ComboBox();
+            this.combobXButton1ClickAction = new System.Windows.Forms.ComboBox();
             this.lXbutton1ClickAction = new System.Windows.Forms.Label();
             this.combobMouseMiddleClickAction = new System.Windows.Forms.ComboBox();
             this.lMouseMiddleClickAction = new System.Windows.Forms.Label();
@@ -98,7 +98,7 @@
             this.nudMagnifierZoomLevel.Name = "nudMagnifierZoomLevel";
             this.nudMagnifierZoomLevel.Size = new System.Drawing.Size(248, 20);
             this.nudMagnifierZoomLevel.TabIndex = 16;
-            this.nudMagnifierZoomLevel.ValueChanged += new System.EventHandler(this.nudMagnifierZoomLevel_ValueChanged);
+            this.nudMagnifierZoomLevel.ValueChanged += new System.EventHandler(this.NudMagnifierZoomLevel_ValueChanged);
             // 
             // nudMagnifierPixelCount
             // 
@@ -121,7 +121,7 @@
             0,
             0,
             0});
-            this.nudMagnifierPixelCount.ValueChanged += new System.EventHandler(this.nudMagnifierPixelCount_ValueChanged);
+            this.nudMagnifierPixelCount.ValueChanged += new System.EventHandler(this.NudMagnifierPixelCount_ValueChanged);
             // 
             // nudMagnifierPixelSize
             // 
@@ -144,7 +144,7 @@
             0,
             0,
             0});
-            this.nudMagnifierPixelSize.ValueChanged += new System.EventHandler(this.nudMagnifierPixelSize_ValueChanged);
+            this.nudMagnifierPixelSize.ValueChanged += new System.EventHandler(this.NudMagnifierPixelSize_ValueChanged);
             // 
             // nudMagnifierZoomScale
             // 
@@ -173,7 +173,7 @@
             0,
             0,
             131072});
-            this.nudMagnifierZoomScale.ValueChanged += new System.EventHandler(this.nudMagnifierZoomScale_ValueChanged);
+            this.nudMagnifierZoomScale.ValueChanged += new System.EventHandler(this.NudMagnifierZoomScale_ValueChanged);
             // 
             // lMagnifierZoomLevel
             // 
@@ -220,7 +220,7 @@
             this.cbDrawMagnifierBorder.TabIndex = 4;
             this.cbDrawMagnifierBorder.Text = "Draw Magnifier Border";
             this.cbDrawMagnifierBorder.UseVisualStyleBackColor = true;
-            this.cbDrawMagnifierBorder.CheckedChanged += new System.EventHandler(this.cbDrawMagnifierBorder_CheckedChanged);
+            this.cbDrawMagnifierBorder.CheckedChanged += new System.EventHandler(this.CbDrawMagnifierBorder_CheckedChanged);
             // 
             // cbCenterMagnifierOnMouse
             // 
@@ -231,7 +231,7 @@
             this.cbCenterMagnifierOnMouse.TabIndex = 3;
             this.cbCenterMagnifierOnMouse.Text = "Center Magnifier On Mouse";
             this.cbCenterMagnifierOnMouse.UseVisualStyleBackColor = true;
-            this.cbCenterMagnifierOnMouse.CheckedChanged += new System.EventHandler(this.cbCenterMagnifierOnMouse_CheckedChanged);
+            this.cbCenterMagnifierOnMouse.CheckedChanged += new System.EventHandler(this.CbCenterMagnifierOnMouse_CheckedChanged);
             // 
             // cbDrawMagnifierGrid
             // 
@@ -242,7 +242,7 @@
             this.cbDrawMagnifierGrid.TabIndex = 2;
             this.cbDrawMagnifierGrid.Text = "Draw Magnifier Grid";
             this.cbDrawMagnifierGrid.UseVisualStyleBackColor = true;
-            this.cbDrawMagnifierGrid.CheckedChanged += new System.EventHandler(this.cbDrawMagnifierGrid_CheckedChanged);
+            this.cbDrawMagnifierGrid.CheckedChanged += new System.EventHandler(this.CbDrawMagnifierGrid_CheckedChanged);
             // 
             // cbDrawMagnifierCrosshair
             // 
@@ -253,7 +253,7 @@
             this.cbDrawMagnifierCrosshair.TabIndex = 1;
             this.cbDrawMagnifierCrosshair.Text = "Draw Magnifier Crosshair";
             this.cbDrawMagnifierCrosshair.UseVisualStyleBackColor = true;
-            this.cbDrawMagnifierCrosshair.CheckedChanged += new System.EventHandler(this.cbDrawMagnifierCrosshair_CheckedChanged);
+            this.cbDrawMagnifierCrosshair.CheckedChanged += new System.EventHandler(this.CbDrawMagnifierCrosshair_CheckedChanged);
             // 
             // cbDrawMagnifier
             // 
@@ -264,7 +264,7 @@
             this.cbDrawMagnifier.TabIndex = 0;
             this.cbDrawMagnifier.Text = "Draw Magnifier";
             this.cbDrawMagnifier.UseVisualStyleBackColor = true;
-            this.cbDrawMagnifier.CheckedChanged += new System.EventHandler(this.cbDrawMagnifier_CheckedChanged);
+            this.cbDrawMagnifier.CheckedChanged += new System.EventHandler(this.CbDrawMagnifier_CheckedChanged);
             // 
             // cbDrawScreenWideCrosshair
             // 
@@ -275,14 +275,14 @@
             this.cbDrawScreenWideCrosshair.TabIndex = 21;
             this.cbDrawScreenWideCrosshair.Text = "Draw Screen Wide Crosshair";
             this.cbDrawScreenWideCrosshair.UseVisualStyleBackColor = true;
-            this.cbDrawScreenWideCrosshair.CheckedChanged += new System.EventHandler(this.cbDrawScreenWideCrosshair_CheckedChanged);
+            this.cbDrawScreenWideCrosshair.CheckedChanged += new System.EventHandler(this.CbDrawScreenWideCrosshair_CheckedChanged);
             // 
             // pMouseButtons
             // 
             this.pMouseButtons.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.pMouseButtons.Controls.Add(this.combobXbutton2ClickAction);
+            this.pMouseButtons.Controls.Add(this.combobXButton2ClickAction);
             this.pMouseButtons.Controls.Add(this.lXbutton2ClickAction);
-            this.pMouseButtons.Controls.Add(this.combobXbutton1ClickAction);
+            this.pMouseButtons.Controls.Add(this.combobXButton1ClickAction);
             this.pMouseButtons.Controls.Add(this.lXbutton1ClickAction);
             this.pMouseButtons.Controls.Add(this.combobMouseMiddleClickAction);
             this.pMouseButtons.Controls.Add(this.lMouseMiddleClickAction);
@@ -294,47 +294,53 @@
             this.pMouseButtons.Size = new System.Drawing.Size(456, 128);
             this.pMouseButtons.TabIndex = 21;
             // 
-            // combobXbutton2ClickAction
+            // combobXButton2ClickAction
             // 
-            this.combobXbutton2ClickAction.FormattingEnabled = true;
-            this.combobXbutton2ClickAction.Location = new System.Drawing.Point(195, 94);
-            this.combobXbutton2ClickAction.Name = "combobXbutton2ClickAction";
-            this.combobXbutton2ClickAction.Size = new System.Drawing.Size(248, 21);
-            this.combobXbutton2ClickAction.TabIndex = 12;
+            this.combobXButton2ClickAction.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.combobXButton2ClickAction.FormattingEnabled = true;
+            this.combobXButton2ClickAction.Location = new System.Drawing.Point(195, 94);
+            this.combobXButton2ClickAction.Name = "combobXButton2ClickAction";
+            this.combobXButton2ClickAction.Size = new System.Drawing.Size(248, 21);
+            this.combobXButton2ClickAction.TabIndex = 12;
+            this.combobXButton2ClickAction.SelectedIndexChanged += new System.EventHandler(this.CombobXButton2ClickAction_SelectionChanged);
             // 
             // lXbutton2ClickAction
             // 
             this.lXbutton2ClickAction.AutoSize = true;
             this.lXbutton2ClickAction.Location = new System.Drawing.Point(10, 97);
             this.lXbutton2ClickAction.Name = "lXbutton2ClickAction";
-            this.lXbutton2ClickAction.Size = new System.Drawing.Size(112, 13);
+            this.lXbutton2ClickAction.Size = new System.Drawing.Size(113, 13);
             this.lXbutton2ClickAction.TabIndex = 11;
-            this.lXbutton2ClickAction.Text = "Xbutton2 Click Action:";
+            this.lXbutton2ClickAction.Text = "XButton2 Click Action:";
             // 
-            // combobXbutton1ClickAction
+            // combobXButton1ClickAction
             // 
-            this.combobXbutton1ClickAction.FormattingEnabled = true;
-            this.combobXbutton1ClickAction.Location = new System.Drawing.Point(195, 67);
-            this.combobXbutton1ClickAction.Name = "combobXbutton1ClickAction";
-            this.combobXbutton1ClickAction.Size = new System.Drawing.Size(248, 21);
-            this.combobXbutton1ClickAction.TabIndex = 10;
+            this.combobXButton1ClickAction.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.combobXButton1ClickAction.FormattingEnabled = true;
+            this.combobXButton1ClickAction.Location = new System.Drawing.Point(195, 67);
+            this.combobXButton1ClickAction.Name = "combobXButton1ClickAction";
+            this.combobXButton1ClickAction.Size = new System.Drawing.Size(248, 21);
+            this.combobXButton1ClickAction.TabIndex = 10;
+            this.combobXButton1ClickAction.SelectedIndexChanged += new System.EventHandler(this.CombobXButton1ClickAction_SelectionChanged);
             // 
             // lXbutton1ClickAction
             // 
             this.lXbutton1ClickAction.AutoSize = true;
             this.lXbutton1ClickAction.Location = new System.Drawing.Point(10, 70);
             this.lXbutton1ClickAction.Name = "lXbutton1ClickAction";
-            this.lXbutton1ClickAction.Size = new System.Drawing.Size(112, 13);
+            this.lXbutton1ClickAction.Size = new System.Drawing.Size(113, 13);
             this.lXbutton1ClickAction.TabIndex = 9;
-            this.lXbutton1ClickAction.Text = "Xbutton1 Click Action:";
+            this.lXbutton1ClickAction.Text = "XButton1 Click Action:";
             // 
             // combobMouseMiddleClickAction
             // 
+            this.combobMouseMiddleClickAction.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.combobMouseMiddleClickAction.FormattingEnabled = true;
             this.combobMouseMiddleClickAction.Location = new System.Drawing.Point(195, 40);
             this.combobMouseMiddleClickAction.Name = "combobMouseMiddleClickAction";
             this.combobMouseMiddleClickAction.Size = new System.Drawing.Size(248, 21);
             this.combobMouseMiddleClickAction.TabIndex = 8;
+            this.combobMouseMiddleClickAction.SelectedIndexChanged += new System.EventHandler(this.CombobMouseMiddleClickAction_SelectionChanged);
             // 
             // lMouseMiddleClickAction
             // 
@@ -347,11 +353,13 @@
             // 
             // combobMouseRightClickAction
             // 
+            this.combobMouseRightClickAction.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.combobMouseRightClickAction.FormattingEnabled = true;
             this.combobMouseRightClickAction.Location = new System.Drawing.Point(195, 13);
             this.combobMouseRightClickAction.Name = "combobMouseRightClickAction";
             this.combobMouseRightClickAction.Size = new System.Drawing.Size(248, 21);
             this.combobMouseRightClickAction.TabIndex = 6;
+            this.combobMouseRightClickAction.SelectedIndexChanged += new System.EventHandler(this.CombobMouseRightClickAction_SelectionChanged);
             // 
             // lMouseRightClickAction
             // 
@@ -371,7 +379,7 @@
             this.cbDimBackground.TabIndex = 22;
             this.cbDimBackground.Text = "Dim Background ";
             this.cbDimBackground.UseVisualStyleBackColor = true;
-            this.cbDimBackground.CheckedChanged += new System.EventHandler(this.cbDimBackground_CheckedChanged);
+            this.cbDimBackground.CheckedChanged += new System.EventHandler(this.CbDimBackground_CheckedChanged);
             // 
             // cbDrawInfoText
             // 
@@ -382,7 +390,7 @@
             this.cbDrawInfoText.TabIndex = 23;
             this.cbDrawInfoText.Text = "Draw Info Text";
             this.cbDrawInfoText.UseVisualStyleBackColor = true;
-            this.cbDrawInfoText.CheckedChanged += new System.EventHandler(this.cbDrawInfoText_CheckedChanged);
+            this.cbDrawInfoText.CheckedChanged += new System.EventHandler(this.CbDrawInfoText_CheckedChanged);
             // 
             // lMouseButtons
             // 
@@ -402,7 +410,7 @@
             this.cbUpdateOnMouseMove.TabIndex = 25;
             this.cbUpdateOnMouseMove.Text = "Update On MouseMove Event (0 cpu when idle)";
             this.cbUpdateOnMouseMove.UseVisualStyleBackColor = true;
-            this.cbUpdateOnMouseMove.CheckedChanged += new System.EventHandler(this.cbUpdateOnMouseMove_CheckedChanged);
+            this.cbUpdateOnMouseMove.CheckedChanged += new System.EventHandler(this.CbUpdateOnMouseMove_CheckedChanged);
             // 
             // cbDrawMarchingAnts
             // 
@@ -413,7 +421,7 @@
             this.cbDrawMarchingAnts.TabIndex = 26;
             this.cbDrawMarchingAnts.Text = "Draw Marching Ants";
             this.cbDrawMarchingAnts.UseVisualStyleBackColor = true;
-            this.cbDrawMarchingAnts.CheckedChanged += new System.EventHandler(this.cbDrawMarchingAnts_CheckedChanged);
+            this.cbDrawMarchingAnts.CheckedChanged += new System.EventHandler(this.CbDrawMarchingAnts_CheckedChanged);
             // 
             // RegionCaptureSettingsForm
             // 
@@ -460,9 +468,9 @@
         private System.Windows.Forms.CheckBox cbDrawMagnifierBorder;
         private System.Windows.Forms.CheckBox cbDrawScreenWideCrosshair;
         private System.Windows.Forms.Panel pMouseButtons;
-        private System.Windows.Forms.ComboBox combobXbutton2ClickAction;
+        private System.Windows.Forms.ComboBox combobXButton2ClickAction;
         private System.Windows.Forms.Label lXbutton2ClickAction;
-        private System.Windows.Forms.ComboBox combobXbutton1ClickAction;
+        private System.Windows.Forms.ComboBox combobXButton1ClickAction;
         private System.Windows.Forms.Label lXbutton1ClickAction;
         private System.Windows.Forms.ComboBox combobMouseMiddleClickAction;
         private System.Windows.Forms.Label lMouseMiddleClickAction;

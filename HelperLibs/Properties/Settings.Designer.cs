@@ -125,5 +125,16 @@ namespace WinkingCat.HelperLibs.Properties
                 return ((string)(this["regionCaptureSettings"]));
             }
         }
+
+        [global::System.Configuration.ApplicationScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("\\AppConfig\\Settings\\Clipboard.config")]
+        public string clipboardSettings
+        {
+            get
+            {
+                return ((string)(this["clipboardSettings"]));
+            }
+        }
     }
 }

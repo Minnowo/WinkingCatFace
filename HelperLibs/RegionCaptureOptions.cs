@@ -7,6 +7,10 @@ namespace WinkingCat.HelperLibs
         public static bool dimBackground { get; set; } = true;
         public static bool drawMagnifierBorder { get; set; } = false;
         public static bool updateOnMouseMove { get; set; } = true;
+        public static MouseClickTasks onMouseMiddleClick { get; set; } = MouseClickTasks.CaptureLastRegion;
+        public static MouseClickTasks onMouseRightClick { get; set; } = MouseClickTasks.RemoveSelectionOrCancel;
+        public static MouseClickTasks onXButton1Click { get; set; } = MouseClickTasks.CaptureActiveMonitor;
+        public static MouseClickTasks onXButton2Click { get; set; } = MouseClickTasks.CaptureFullScreen;
 
         public static bool drawMagnifier { get; set; } = true;
         public static bool tryCenterMagnifier { get; set; } = false;

@@ -16,6 +16,20 @@ namespace WinkingCat
         public RegionCaptureSettingsForm()
         {
             InitializeComponent();
+
+            foreach(MouseClickTasks task in Enum.GetValues(typeof(MouseClickTasks)))
+            {
+                combobMouseMiddleClickAction.Items.Add(task);
+                combobMouseRightClickAction.Items.Add(task);
+                combobXButton1ClickAction.Items.Add(task);
+                combobXButton2ClickAction.Items.Add(task);
+            }
+
+            combobMouseMiddleClickAction.SelectedItem = RegionCaptureOptions.onMouseMiddleClick;
+            combobMouseRightClickAction.SelectedItem = RegionCaptureOptions.onMouseRightClick;
+            combobXButton1ClickAction.SelectedItem = RegionCaptureOptions.onXButton1Click;
+            combobXButton2ClickAction.SelectedItem = RegionCaptureOptions.onXButton2Click;
+
             cbDrawScreenWideCrosshair.Checked = RegionCaptureOptions.drawCrossHair;
             cbDimBackground.Checked = RegionCaptureOptions.dimBackground;
             cbDrawInfoText.Checked= RegionCaptureOptions.drawInfoText;
@@ -34,24 +48,43 @@ namespace WinkingCat
             nudMagnifierZoomLevel.Increment = nudMagnifierZoomScale.Value;
         }
 
+        #region ComboBox ValueChanged
+        private void CombobMouseMiddleClickAction_SelectionChanged(object sender, EventArgs e)
+        {
+            RegionCaptureOptions.onMouseMiddleClick = (MouseClickTasks)combobMouseMiddleClickAction.SelectedItem;
+        }
+        private void CombobMouseRightClickAction_SelectionChanged(object sender, EventArgs e)
+        {
+            RegionCaptureOptions.onMouseRightClick = (MouseClickTasks)combobMouseRightClickAction.SelectedItem;
+        }
+        private void CombobXButton1ClickAction_SelectionChanged(object sender, EventArgs e)
+        {
+            RegionCaptureOptions.onXButton1Click = (MouseClickTasks)combobXButton1ClickAction.SelectedItem;
+        }
+        private void CombobXButton2ClickAction_SelectionChanged(object sender, EventArgs e)
+        {
+            RegionCaptureOptions.onXButton2Click = (MouseClickTasks)combobXButton2ClickAction.SelectedItem;
+        }
+        #endregion
+
         #region NumericUpDown ValueChanged
-        private void nudMagnifierPixelCount_ValueChanged(object sender, EventArgs e)
+        private void NudMagnifierPixelCount_ValueChanged(object sender, EventArgs e)
         {
             RegionCaptureOptions.magnifierPixelCount = (int)nudMagnifierPixelCount.Value;
         }
 
-        private void nudMagnifierPixelSize_ValueChanged(object sender, EventArgs e)
+        private void NudMagnifierPixelSize_ValueChanged(object sender, EventArgs e)
         {
             RegionCaptureOptions.magnifierPixelSize = (int)nudMagnifierPixelSize.Value;
         }
 
-        private void nudMagnifierZoomScale_ValueChanged(object sender, EventArgs e)
+        private void NudMagnifierZoomScale_ValueChanged(object sender, EventArgs e)
         {
             RegionCaptureOptions.magnifierZoomScale = (float)nudMagnifierZoomScale.Value;
             nudMagnifierZoomLevel.Increment = nudMagnifierZoomScale.Value;
         }
 
-        private void nudMagnifierZoomLevel_ValueChanged(object sender, EventArgs e)
+        private void NudMagnifierZoomLevel_ValueChanged(object sender, EventArgs e)
         {
             RegionCaptureOptions.magnifierZoomLevel = (float)nudMagnifierZoomLevel.Value;
         }
@@ -59,52 +92,52 @@ namespace WinkingCat
 
         #region Checkbox CheckChanged
 
-        private void cbDrawScreenWideCrosshair_CheckedChanged(object sender, EventArgs e)
+        private void CbDrawScreenWideCrosshair_CheckedChanged(object sender, EventArgs e)
         {
             RegionCaptureOptions.drawCrossHair = cbDrawScreenWideCrosshair.Checked;
         }
 
-        private void cbDimBackground_CheckedChanged(object sender, EventArgs e)
+        private void CbDimBackground_CheckedChanged(object sender, EventArgs e)
         {
             RegionCaptureOptions.dimBackground = cbDimBackground.Checked;
         }
 
-        private void cbDrawInfoText_CheckedChanged(object sender, EventArgs e)
+        private void CbDrawInfoText_CheckedChanged(object sender, EventArgs e)
         {
             RegionCaptureOptions.drawInfoText = cbDrawInfoText.Checked;
         }
 
-        private void cbUpdateOnMouseMove_CheckedChanged(object sender, EventArgs e)
+        private void CbUpdateOnMouseMove_CheckedChanged(object sender, EventArgs e)
         {
             RegionCaptureOptions.updateOnMouseMove = cbUpdateOnMouseMove.Checked;
         }
 
-        private void cbDrawMarchingAnts_CheckedChanged(object sender, EventArgs e)
+        private void CbDrawMarchingAnts_CheckedChanged(object sender, EventArgs e)
         {
             RegionCaptureOptions.marchingAnts = cbDrawMarchingAnts.Checked;
         }
 
-        private void cbDrawMagnifier_CheckedChanged(object sender, EventArgs e)
+        private void CbDrawMagnifier_CheckedChanged(object sender, EventArgs e)
         {
             RegionCaptureOptions.drawMagnifier = cbDrawMagnifier.Checked;
         }
 
-        private void cbDrawMagnifierCrosshair_CheckedChanged(object sender, EventArgs e)
+        private void CbDrawMagnifierCrosshair_CheckedChanged(object sender, EventArgs e)
         {
             RegionCaptureOptions.drawMagnifierCrosshair = cbDrawMagnifierCrosshair.Checked;
         }
 
-        private void cbDrawMagnifierGrid_CheckedChanged(object sender, EventArgs e)
+        private void CbDrawMagnifierGrid_CheckedChanged(object sender, EventArgs e)
         {
             RegionCaptureOptions.drawMagnifierGrid = cbDrawMagnifierGrid.Checked;
         }
 
-        private void cbDrawMagnifierBorder_CheckedChanged(object sender, EventArgs e)
+        private void CbDrawMagnifierBorder_CheckedChanged(object sender, EventArgs e)
         {
             RegionCaptureOptions.drawMagnifierBorder = cbDrawMagnifierBorder.Checked;
         }
 
-        private void cbCenterMagnifierOnMouse_CheckedChanged(object sender, EventArgs e)
+        private void CbCenterMagnifierOnMouse_CheckedChanged(object sender, EventArgs e)
         {
             RegionCaptureOptions.tryCenterMagnifier = cbCenterMagnifierOnMouse.Checked;
         }

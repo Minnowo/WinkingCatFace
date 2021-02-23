@@ -29,7 +29,7 @@ namespace WinkingCat.HelperLibs
 
         public static void LoadLocalSettings()
         {
-            UpdateRelativePaths();
+            CreateAllPaths();
 
             ExeConfigurationFileMap fileMap = new ExeConfigurationFileMap();
             fileMap.ExeConfigFilename = currentDirectory + ResourcePath.Default.pathSettingsFile;

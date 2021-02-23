@@ -96,6 +96,13 @@ namespace WinkingCat
 
             ResumeLayout();
             HotkeyManager.UpdateHotkeys(HotkeyManager.GetDefaultHotkeyList(), true);
+
+            SettingsManager.SaveHotkeySettings(HotkeyManager.GetDefaultHotkeyList());
+
+            foreach(var a in HotkeyManager.GetDefaultHotkeyList())
+            {
+                Console.WriteLine(a);
+            }
             //contextMenuStrip1.Visible = true;
             MainFormSettings.SettingsChangedEvent += UpdateSettings;
             
