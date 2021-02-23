@@ -44,7 +44,8 @@ namespace WinkingCat
                 Logger.WriteLine("RegionCapture Settings Saved Successfully");
             if(SettingsManager.SaveClipboardSettings())
                 Logger.WriteLine("Clipboard Settings Saved Successfully");
-            SettingsManager.SaveHotkeySettings(HotkeyManager.hotKeys);
+            if(SettingsManager.SaveHotkeySettings(HotkeyManager.hotKeys))
+                Logger.WriteLine("Hotkeys Saved Successfully");
         }
         #endregion
 

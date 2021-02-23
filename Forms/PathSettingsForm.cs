@@ -7,6 +7,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using WinkingCat.HelperLibs;
 
 namespace WinkingCat
 {
@@ -15,6 +16,21 @@ namespace WinkingCat
         public PathSettingsForm()
         {
             InitializeComponent();
+            tbScreenshotFolder.Text = PathHelper.screenshotPath;
+        }
+
+        private void OpenButton_Click(object sender, EventArgs e)
+        {
+            
+        }
+
+        private void PathBrowseButton_Click(object sender, EventArgs e)
+        {
+            string dir = PathHelper.AskChooseDirectory();
+            if (!string.IsNullOrEmpty(dir))
+            {
+                tbScreenshotFolder.Text = dir;
+            }
         }
     }
 }

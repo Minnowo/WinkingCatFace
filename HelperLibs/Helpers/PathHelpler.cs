@@ -19,6 +19,7 @@ namespace WinkingCat.HelperLibs
     }
     public static class PathHelper
     {
+        public static bool useCustomScreenshotPath { get; set; } = false;
         public static string currentDirectory { get; set; } = Directory.GetCurrentDirectory();
         public static string configPath { get; set; } = Settings.Default.configFolderPath;
         public static string resourcePath { get; set; } = Settings.Default.resourceFolderPath;
@@ -41,7 +42,7 @@ namespace WinkingCat.HelperLibs
 
                 conf.AppSettings.Settings["currentDirectory"].Value = currentDirectory;
 
-                if (string.IsNullOrEmpty(screenshotPath) || !Directory.Exists(screenshotPath))
+                if (string.IsNullOrEmpty(screenshotPath) || !Directory.Exists(screenshotPath) || useCustomScreenshotPath == false)
                 {
                     screenshotPath = currentDirectory + Settings.Default.screenshotFolderPathDefault;
                     conf.AppSettings.Settings["screenshotFolderPathCustom"].Value = screenshotPath;
@@ -116,6 +117,7 @@ namespace WinkingCat.HelperLibs
                 }
             }
         }
+
 
         public static string CreateScreenshotSubFolder()
         {

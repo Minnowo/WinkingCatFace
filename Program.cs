@@ -53,7 +53,12 @@ namespace WinkingCat
             }            
 
             HotkeyManager.Init();
-            HotkeyManager.UpdateHotkeys(SettingsManager.LoadHotkeySettings(), true);
+
+            if (SettingsManager.LoadHotkeySettings() != null)
+            {
+                HotkeyManager.UpdateHotkeys(SettingsManager.LoadHotkeySettings(), true);
+                Logger.WriteLine("Hotkeys loaded successfully");
+            }
             mainForm = new ApplicationForm();
             
             Application.Run(mainForm);

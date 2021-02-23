@@ -28,7 +28,7 @@
         /// </summary>
         private void InitializeComponent()
         {
-            this.textBox1 = new System.Windows.Forms.TextBox();
+            this.tbScreenshotFolder = new System.Windows.Forms.TextBox();
             this.checkBox1 = new System.Windows.Forms.CheckBox();
             this.PathBrowseButton = new System.Windows.Forms.Button();
             this.SubFolderPatternLabel = new System.Windows.Forms.Label();
@@ -37,12 +37,14 @@
             this.SubFolderPathLabel = new System.Windows.Forms.Label();
             this.SuspendLayout();
             // 
-            // textBox1
+            // tbScreenshotFolder
             // 
-            this.textBox1.Location = new System.Drawing.Point(13, 41);
-            this.textBox1.Name = "textBox1";
-            this.textBox1.Size = new System.Drawing.Size(358, 20);
-            this.textBox1.TabIndex = 0;
+            this.tbScreenshotFolder.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.tbScreenshotFolder.Location = new System.Drawing.Point(13, 41);
+            this.tbScreenshotFolder.Name = "tbScreenshotFolder";
+            this.tbScreenshotFolder.Size = new System.Drawing.Size(358, 20);
+            this.tbScreenshotFolder.TabIndex = 0;
             // 
             // checkBox1
             // 
@@ -56,12 +58,14 @@
             // 
             // PathBrowseButton
             // 
+            this.PathBrowseButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.PathBrowseButton.Location = new System.Drawing.Point(377, 41);
             this.PathBrowseButton.Name = "PathBrowseButton";
             this.PathBrowseButton.Size = new System.Drawing.Size(91, 20);
             this.PathBrowseButton.TabIndex = 2;
             this.PathBrowseButton.Text = "Browse...";
             this.PathBrowseButton.UseVisualStyleBackColor = true;
+            this.PathBrowseButton.Click += new System.EventHandler(this.PathBrowseButton_Click);
             // 
             // SubFolderPatternLabel
             // 
@@ -87,6 +91,7 @@
             this.OpenButton.TabIndex = 5;
             this.OpenButton.Text = "Open...";
             this.OpenButton.UseVisualStyleBackColor = true;
+            this.OpenButton.Click += new System.EventHandler(this.OpenButton_Click);
             // 
             // SubFolderPathLabel
             // 
@@ -108,7 +113,7 @@
             this.Controls.Add(this.SubFolderPatternLabel);
             this.Controls.Add(this.PathBrowseButton);
             this.Controls.Add(this.checkBox1);
-            this.Controls.Add(this.textBox1);
+            this.Controls.Add(this.tbScreenshotFolder);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.None;
             this.Name = "PathSettingsForm";
             this.Padding = new System.Windows.Forms.Padding(10, 15, 10, 10);
@@ -120,7 +125,7 @@
 
         #endregion
 
-        private System.Windows.Forms.TextBox textBox1;
+        private System.Windows.Forms.TextBox tbScreenshotFolder;
         private System.Windows.Forms.CheckBox checkBox1;
         private System.Windows.Forms.Button PathBrowseButton;
         private System.Windows.Forms.Label SubFolderPatternLabel;

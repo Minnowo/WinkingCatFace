@@ -396,7 +396,7 @@ namespace WinkingCat.HelperLibs
             }
             catch (Exception e)
             {
-                Logger.WriteException(e, "Exception saving Clipboard settings");
+                Logger.WriteException(e, "Exception saving Hotkeys");
                 return false;
             }
         }
@@ -427,7 +427,7 @@ namespace WinkingCat.HelperLibs
             }
             catch (Exception e)
             {
-                Logger.WriteException(e, "Exception saving Clipboard settings");
+                Logger.WriteException(e, "Exception saving Hotkeys");
                 return null;
             }
         }
