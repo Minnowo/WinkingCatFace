@@ -18,11 +18,12 @@ namespace WinkingCat
             InitializeComponent();
 
             #region Buttons
-            SideButton1.Click += SideButton1_Click;
-            SideButton2.Click += SideButton2_Click;
-            SideButton3.Click += SideButton3_Click;
-            SideButton4.Click += SideButton4_Click;
-            SideButton5.Click += SideButton5_Click;
+            bGeneral.Click += GeneralButtonClick_Event;
+            bRegionCapture.Click += RegionCaptureButtonClick_Event;
+            bUpload.Click += UploadButtonClick_Event;
+            bClipboard.Click += ClipboardButtonClick_Event;
+            bHotkeys.Click += HotkeysButtonClick_Event;
+            bPaths.Click += PathsButtonClick_Event;
             #endregion
 
             OpenChildForm(new GeneralSettingsForm());
@@ -33,29 +34,34 @@ namespace WinkingCat
         #endregion
 
         #region Button events
-        private void SideButton1_Click(object sender, EventArgs e)
+        private void GeneralButtonClick_Event(object sender, EventArgs e)
         {
             OpenChildForm(new GeneralSettingsForm());
         }
 
-        private void SideButton2_Click(object sender, EventArgs e)
+        private void RegionCaptureButtonClick_Event(object sender, EventArgs e)
         {
-            OpenChildForm(new PathSettingsForm());
+            OpenChildForm(new RegionCaptureSettingsForm());
         }
 
-        private void SideButton3_Click(object sender, EventArgs e)
+        private void UploadButtonClick_Event(object sender, EventArgs e)
         {
             OpenChildForm(new UploadSettingsForm());
         }
 
-        private void SideButton4_Click(object sender, EventArgs e)
+        private void ClipboardButtonClick_Event(object sender, EventArgs e)
         {
             OpenChildForm(new ClipboardSettingsForm());
         }
 
-        private void SideButton5_Click(object sender, EventArgs e)
+        private void HotkeysButtonClick_Event(object sender, EventArgs e)
         {
             OpenChildForm(new HotkeySettingsForm());
+        }
+
+        private void PathsButtonClick_Event(object sender, EventArgs e)
+        {
+            OpenChildForm(new PathSettingsForm());
         }
         #endregion
 

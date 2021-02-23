@@ -29,77 +29,80 @@
         private void InitializeComponent()
         {
             this.panel1 = new System.Windows.Forms.Panel();
-            this.SideButton5 = new System.Windows.Forms.Button();
-            this.SideButton4 = new System.Windows.Forms.Button();
-            this.SideButton3 = new System.Windows.Forms.Button();
-            this.SideButton2 = new System.Windows.Forms.Button();
-            this.SideButton1 = new System.Windows.Forms.Button();
+            this.bHotkeys = new System.Windows.Forms.Button();
+            this.bClipboard = new System.Windows.Forms.Button();
+            this.bUpload = new System.Windows.Forms.Button();
+            this.bRegionCapture = new System.Windows.Forms.Button();
+            this.bGeneral = new System.Windows.Forms.Button();
             this.FormDockPanel = new System.Windows.Forms.Panel();
+            this.bPaths = new System.Windows.Forms.Button();
             this.panel1.SuspendLayout();
             this.SuspendLayout();
             // 
             // panel1
             // 
-            this.panel1.Controls.Add(this.SideButton5);
-            this.panel1.Controls.Add(this.SideButton4);
-            this.panel1.Controls.Add(this.SideButton3);
-            this.panel1.Controls.Add(this.SideButton2);
-            this.panel1.Controls.Add(this.SideButton1);
+            this.panel1.AutoScroll = true;
+            this.panel1.Controls.Add(this.bPaths);
+            this.panel1.Controls.Add(this.bHotkeys);
+            this.panel1.Controls.Add(this.bClipboard);
+            this.panel1.Controls.Add(this.bUpload);
+            this.panel1.Controls.Add(this.bRegionCapture);
+            this.panel1.Controls.Add(this.bGeneral);
             this.panel1.Dock = System.Windows.Forms.DockStyle.Left;
             this.panel1.Location = new System.Drawing.Point(0, 0);
             this.panel1.Name = "panel1";
             this.panel1.Size = new System.Drawing.Size(200, 396);
             this.panel1.TabIndex = 0;
             // 
-            // SideButton5
+            // bHotkeys
             // 
-            this.SideButton5.Dock = System.Windows.Forms.DockStyle.Top;
-            this.SideButton5.Location = new System.Drawing.Point(0, 160);
-            this.SideButton5.Name = "SideButton5";
-            this.SideButton5.Size = new System.Drawing.Size(200, 40);
-            this.SideButton5.TabIndex = 4;
-            this.SideButton5.Text = "Hotkeys";
-            this.SideButton5.UseVisualStyleBackColor = true;
+            this.bHotkeys.Dock = System.Windows.Forms.DockStyle.Top;
+            this.bHotkeys.Location = new System.Drawing.Point(0, 160);
+            this.bHotkeys.Name = "bHotkeys";
+            this.bHotkeys.Size = new System.Drawing.Size(200, 40);
+            this.bHotkeys.TabIndex = 4;
+            this.bHotkeys.Text = "Hotkeys";
+            this.bHotkeys.UseVisualStyleBackColor = true;
             // 
-            // SideButton4
+            // bClipboard
             // 
-            this.SideButton4.Dock = System.Windows.Forms.DockStyle.Top;
-            this.SideButton4.Location = new System.Drawing.Point(0, 120);
-            this.SideButton4.Name = "SideButton4";
-            this.SideButton4.Size = new System.Drawing.Size(200, 40);
-            this.SideButton4.TabIndex = 3;
-            this.SideButton4.Text = "Clipboard";
-            this.SideButton4.UseVisualStyleBackColor = true;
+            this.bClipboard.Dock = System.Windows.Forms.DockStyle.Top;
+            this.bClipboard.Location = new System.Drawing.Point(0, 120);
+            this.bClipboard.Name = "bClipboard";
+            this.bClipboard.Size = new System.Drawing.Size(200, 40);
+            this.bClipboard.TabIndex = 3;
+            this.bClipboard.Text = "Clipboard";
+            this.bClipboard.UseVisualStyleBackColor = true;
             // 
-            // SideButton3
+            // bUpload
             // 
-            this.SideButton3.Dock = System.Windows.Forms.DockStyle.Top;
-            this.SideButton3.Location = new System.Drawing.Point(0, 80);
-            this.SideButton3.Name = "SideButton3";
-            this.SideButton3.Size = new System.Drawing.Size(200, 40);
-            this.SideButton3.TabIndex = 2;
-            this.SideButton3.Text = "Upload";
-            this.SideButton3.UseVisualStyleBackColor = true;
+            this.bUpload.Dock = System.Windows.Forms.DockStyle.Top;
+            this.bUpload.Location = new System.Drawing.Point(0, 80);
+            this.bUpload.Name = "bUpload";
+            this.bUpload.Size = new System.Drawing.Size(200, 40);
+            this.bUpload.TabIndex = 2;
+            this.bUpload.Text = "Upload";
+            this.bUpload.UseVisualStyleBackColor = true;
             // 
-            // SideButton2
+            // bRegionCapture
             // 
-            this.SideButton2.Dock = System.Windows.Forms.DockStyle.Top;
-            this.SideButton2.Location = new System.Drawing.Point(0, 40);
-            this.SideButton2.Name = "SideButton2";
-            this.SideButton2.Size = new System.Drawing.Size(200, 40);
-            this.SideButton2.TabIndex = 1;
-            this.SideButton2.Text = "Paths";
-            this.SideButton2.UseVisualStyleBackColor = true;
+            this.bRegionCapture.Dock = System.Windows.Forms.DockStyle.Top;
+            this.bRegionCapture.Location = new System.Drawing.Point(0, 40);
+            this.bRegionCapture.Name = "bRegionCapture";
+            this.bRegionCapture.Size = new System.Drawing.Size(200, 40);
+            this.bRegionCapture.TabIndex = 1;
+            this.bRegionCapture.Text = "RegionCapture";
+            this.bRegionCapture.UseVisualStyleBackColor = true;
             // 
-            // SideButton1
+            // bGeneral
             // 
-            this.SideButton1.Dock = System.Windows.Forms.DockStyle.Top;
-            this.SideButton1.Location = new System.Drawing.Point(0, 0);
-            this.SideButton1.Name = "SideButton1";
-            this.SideButton1.Size = new System.Drawing.Size(200, 40);
-            this.SideButton1.TabIndex = 0;
-            this.SideButton1.Text = "General";
-            this.SideButton1.UseVisualStyleBackColor = true;
+            this.bGeneral.Dock = System.Windows.Forms.DockStyle.Top;
+            this.bGeneral.Location = new System.Drawing.Point(0, 0);
+            this.bGeneral.Name = "bGeneral";
+            this.bGeneral.Size = new System.Drawing.Size(200, 40);
+            this.bGeneral.TabIndex = 0;
+            this.bGeneral.Text = "General";
+            this.bGeneral.UseVisualStyleBackColor = true;
             // 
             // FormDockPanel
             // 
@@ -108,6 +111,16 @@
             this.FormDockPanel.Name = "FormDockPanel";
             this.FormDockPanel.Size = new System.Drawing.Size(524, 396);
             this.FormDockPanel.TabIndex = 1;
+            // 
+            // bPaths
+            // 
+            this.bPaths.Dock = System.Windows.Forms.DockStyle.Top;
+            this.bPaths.Location = new System.Drawing.Point(0, 200);
+            this.bPaths.Name = "bPaths";
+            this.bPaths.Size = new System.Drawing.Size(200, 40);
+            this.bPaths.TabIndex = 5;
+            this.bPaths.Text = "Paths";
+            this.bPaths.UseVisualStyleBackColor = true;
             // 
             // SettingsForm
             // 
@@ -127,11 +140,12 @@
         #endregion
 
         private System.Windows.Forms.Panel panel1;
-        private System.Windows.Forms.Button SideButton5;
-        private System.Windows.Forms.Button SideButton4;
-        private System.Windows.Forms.Button SideButton3;
-        private System.Windows.Forms.Button SideButton2;
-        private System.Windows.Forms.Button SideButton1;
+        private System.Windows.Forms.Button bHotkeys;
+        private System.Windows.Forms.Button bClipboard;
+        private System.Windows.Forms.Button bUpload;
+        private System.Windows.Forms.Button bRegionCapture;
+        private System.Windows.Forms.Button bGeneral;
         private System.Windows.Forms.Panel FormDockPanel;
+        private System.Windows.Forms.Button bPaths;
     }
 }

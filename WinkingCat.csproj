@@ -139,6 +139,12 @@
       <DependentUpon>UploadSettingsForm.cs</DependentUpon>
     </Compile>
     <Compile Include="Events\TaskExecutedEvent.cs" />
+    <Compile Include="Forms\RegionCaptureSettingsForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\RegionCaptureSettingsForm.Designer.cs">
+      <DependentUpon>RegionCaptureSettingsForm.cs</DependentUpon>
+    </Compile>
     <Compile Include="TaskHandler.cs" />
     <EmbeddedResource Include="Controls\CustomListView.resx">
       <DependentUpon>CustomListView.cs</DependentUpon>
@@ -160,6 +166,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\PathSettingsForm.resx">
       <DependentUpon>PathSettingsForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\RegionCaptureSettingsForm.resx">
+      <DependentUpon>RegionCaptureSettingsForm.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\SettingsForm.resx">
       <DependentUpon>SettingsForm.cs</DependentUpon>

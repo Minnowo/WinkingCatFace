@@ -12,6 +12,7 @@ namespace WinkingCat.HelperLibs
 {
     public class Helpers
     {
+        public static readonly Version OSVersion = Environment.OSVersion.Version;
         public static readonly string[] SizeSuffixes =
                    { "bytes", "KB", "MB", "GB", "TB", "PB", "EB", "ZB", "YB" };
         public static string SizeSuffix(Int64 value, int decimalPlaces = 1)
@@ -41,7 +42,7 @@ namespace WinkingCat.HelperLibs
         }
         public static bool IsWindows10OrGreater(int build = -1)
         {
-            return Environment.OSVersion.Version.Major >= 10 && Environment.OSVersion.Version.Build >= build;
+            return OSVersion.Major >= 10 && OSVersion.Build >= build;
         }
         public static Size GetImageDimensionsFile(string imagePath)
         {
@@ -92,7 +93,7 @@ namespace WinkingCat.HelperLibs
 
         public static bool IsWindowsVistaOrGreater()
         {
-            return Environment.OSVersion.Version.Major >= 6;
+            return OSVersion.Major >= 6;
         }
         public static IntPtr CreateLParam(int x, int y)
         {

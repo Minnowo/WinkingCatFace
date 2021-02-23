@@ -3,7 +3,10 @@ namespace WinkingCat.HelperLibs
 {
     public static class RegionCaptureOptions
     {
-       
+
+        public static bool dimBackground { get; set; } = true;
+        public static bool drawMagnifierBorder { get; set; } = false;
+        public static bool updateOnMouseMove { get; set; } = true;
 
         public static bool drawMagnifier { get; set; } = true;
         public static bool tryCenterMagnifier { get; set; } = false;
