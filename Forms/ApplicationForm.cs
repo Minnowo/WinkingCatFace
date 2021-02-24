@@ -127,7 +127,15 @@ namespace WinkingCat
             ListViewItem item = new ListViewItem() { Text = e.info.Name, Tag = e.info.FullName};
 
             item.SubItems.AddRange(row1);
-            lvListView.Items.Add(item);
+
+            if (lvListView.Items.Count <= 0)
+            {
+                lvListView.AddItem(item);
+            }
+            else
+            {
+                lvListView.InsertItem(0, item);
+            }
         }
 
         public void AfterCaptureEvent(object sender, LastRegionCaptureInfo e)

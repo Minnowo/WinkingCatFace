@@ -132,8 +132,9 @@ namespace WinkingCat
         {
             return new List<HotkeySettings>
             {
-                new HotkeySettings(Tasks.RegionCapture, Keys.Control | Keys.PrintScreen),
-                new HotkeySettings(Tasks.CaptureActiveMonitor, Keys.PrintScreen),
+                new HotkeySettings(Tasks.CaptureActiveMonitor, Keys.Control | Keys.PrintScreen),
+                new HotkeySettings(Tasks.CaptureActiveWindow, Keys.Alt | Keys.PrintScreen),
+                new HotkeySettings(Tasks.CaptureFullScreen, Keys.PrintScreen),
             };
         }
     }

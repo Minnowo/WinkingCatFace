@@ -6,6 +6,11 @@ using System.Windows.Forms;
 using System.IO;
 using WinkingCat.HelperLibs;
 using WinkingCat.ClipHelper;
+using System.Text;
+using System.Threading;
+using System.Threading.Tasks;
+using System.Collections.Generic;
+using System.Linq;
 
 namespace WinkingCat
 {
@@ -32,6 +37,8 @@ namespace WinkingCat
         private ToolStripMenuItem toolStripMenuItemPath;
         private ToolStripMenuItem toolStripMenuItemDirectory;
         private ToolStripMenuItem toolStripMenuItemAlwaysOnTop;
+        private ToolStripMenuItem toolStripMenuItemRemoveFromList;
+        private ToolStripSeparator toolStripSeparator3;
 
         [Browsable(false), DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
         public int SelectedIndex
@@ -65,6 +72,56 @@ namespace WinkingCat
             SetStyle(ControlStyles.OptimizedDoubleBuffer | ControlStyles.AllPaintingInWmPaint | ControlStyles.EnableNotifyMessage, true);
             InitializeComponent();
 
+            if (File.Exists(PathHelper.loadedItemsPath))
+            {
+                const Int32 BufferSize = 128;
+                using (var fileStream = File.OpenRead(PathHelper.loadedItemsPath))
+                using (var streamReader = new StreamReader(fileStream, Encoding.UTF8, true, BufferSize))
+                {
+                    String line;
+                    FileInfo info;
+                    string[] row;
+                    Size dimensions;
+                    while ((line = streamReader.ReadLine()) != null)
+                    {
+                        if (File.Exists(line))
+                        {
+                            info = new FileInfo(line);
+                            dimensions = Helpers.GetImageDimensionsFile(info.FullName);
+
+                            if (dimensions == Size.Empty)
+                                row = new string[4]{ info.Extension, 
+                                    "", 
+                                    Helpers.SizeSuffix(info.Length), 
+                                    File.GetLastWriteTime(info.FullName).ToString()};
+                            else
+                                row = new string[4] { info.Extension, 
+                                    $"{dimensions.Width}, " +
+                                    $"{dimensions.Height}", 
+                                    Helpers.SizeSuffix(info.Length), File.GetLastWriteTime(info.FullName).ToString() };
+
+                            ListViewItem item = new ListViewItem() { Text = info.Name, Tag = info.FullName };
+                            item.SubItems.AddRange(row);
+
+                            if(this.Items.Count <= 0)
+                            {
+                                this.Items.Add(item);
+                            }
+                            else
+                            {
+                                this.Items.Insert(0, item);
+                            }
+                        }
+                    }
+                }
+            }
+            else
+            {
+                StreamWriter w = File.AppendText(PathHelper.loadedItemsPath);
+                w.Close();
+                w.Dispose();
+            }
+
             #region cmsMain Events
             toolStripMenuItemAlwaysOnTop.Checked = MainFormSettings.alwaysOnTop;
 
@@ -72,6 +129,7 @@ namespace WinkingCat
             toolStripMenuItemOCR.Click += ToolStripMenuItemOCR_Click;
             toolStripMenuItemDelete.Click += ToolStripMenuItemDelete_Click;
             toolStripMenuItemAlwaysOnTop.Click += ToolStripMenuItemAlwaysOnTop_Click;
+            toolStripMenuItemRemoveFromList.Click += ToolStripMenuItemRemoveFromList_Click;
 
             #region cmsOpen Events
             toolStripMenuItemOpenFile.Click += ToolStripMenuItemOpenFile_Click;
@@ -92,7 +150,23 @@ namespace WinkingCat
 
             MouseDoubleClick += MouseDoubleClick_Event;
 
+            buttonOnlyItems = new ToolStripMenuItem[] {
+            toolStripMenuItemDelete,
+            toolStripMenuItemOCR,
+            toolStripMenuItemUpload,
+            toolStripMenuItemOpenFile,
+            toolStripMenuItemOpenFolder,
+            toolStripMenuItemOpenAsClip,
+            toolStripMenuItemCopyImage,
+            toolStripMenuItemCopyDimensions,
+            toolStripMenuItemFile,
+            toolStripMenuItemFileName,
+            toolStripMenuItemDirectory,
+            toolStripMenuItemPath,
+            toolStripMenuItemRemoveFromList};
         }
+
+        
         #region cmsMain
 
         #region cmsOpen
@@ -316,7 +390,56 @@ namespace WinkingCat
             }
         }
 
+        private async void ToolStripMenuItemRemoveFromList_Click(object sender, EventArgs e)
+        {
+            if(SelectedItems.Count > 0)
+            {
+                foreach(ListViewItem item in SelectedItems)
+                {
+                    this.Items.Remove(item);
+                }
+                
+                await ListViewDumpAsync((ListViewItem[])this.Items.OfType<ListViewItem>().ToArray().Clone());
+            }
+        }
         #endregion
+
+        public async Task ListViewDumpAsync(ListViewItem[] items)
+        {
+            if (File.Exists(PathHelper.loadedItemsPath))
+            {
+                await Task.Run(() =>
+                {
+                    System.IO.File.WriteAllText(PathHelper.loadedItemsPath, "");
+                    using (StreamWriter w = File.AppendText(PathHelper.loadedItemsPath))
+                    {
+                        foreach (ListViewItem item in items.Reverse())
+                        {
+                            w.WriteLine(item.Tag.ToString());
+                        }
+                    }
+                });
+            }
+        }
+
+        public void AddItem(ListViewItem item)
+        {
+            using(StreamWriter w = File.AppendText(PathHelper.loadedItemsPath))
+            {
+                w.WriteLine(item.Tag.ToString());
+            }
+            this.Items.Add(item);
+        }
+
+        public void InsertItem(int index, ListViewItem item)
+        {
+            using (StreamWriter w = File.AppendText(PathHelper.loadedItemsPath))
+            {
+                w.WriteLine(item.Tag.ToString());
+            }
+            this.Items.Insert(index, item);
+        }
+
         private void MouseDoubleClick_Event(object sender, MouseEventArgs e)
         {
             if (SelectedIndex != -1)
@@ -383,6 +506,8 @@ namespace WinkingCat
             this.toolStripSeparator1 = new System.Windows.Forms.ToolStripSeparator();
             this.toolStripMenuItemDelete = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripMenuItemAlwaysOnTop = new System.Windows.Forms.ToolStripMenuItem();
+            this.toolStripMenuItemRemoveFromList = new System.Windows.Forms.ToolStripMenuItem();
+            this.toolStripSeparator3 = new System.Windows.Forms.ToolStripSeparator();
             this.cmsMain.SuspendLayout();
             this.cmsOpen.SuspendLayout();
             this.cmsCopy.SuspendLayout();
@@ -396,16 +521,18 @@ namespace WinkingCat
             this.toolStripMenuItemUpload,
             this.toolStripMenuItemOCR,
             this.toolStripSeparator1,
+            this.toolStripMenuItemRemoveFromList,
+            this.toolStripSeparator3,
             this.toolStripMenuItemDelete,
             this.toolStripMenuItemAlwaysOnTop});
             this.cmsMain.Name = "cmsMain";
-            this.cmsMain.Size = new System.Drawing.Size(153, 142);
+            this.cmsMain.Size = new System.Drawing.Size(197, 170);
             // 
             // toolStripMenuItemOpen
             // 
             this.toolStripMenuItemOpen.DropDown = this.cmsOpen;
             this.toolStripMenuItemOpen.Name = "toolStripMenuItemOpen";
-            this.toolStripMenuItemOpen.Size = new System.Drawing.Size(152, 22);
+            this.toolStripMenuItemOpen.Size = new System.Drawing.Size(196, 22);
             this.toolStripMenuItemOpen.Text = "Open";
             // 
             // cmsOpen
@@ -440,7 +567,7 @@ namespace WinkingCat
             // 
             this.toolStripMenuItemCopy.DropDown = this.cmsCopy;
             this.toolStripMenuItemCopy.Name = "toolStripMenuItemCopy";
-            this.toolStripMenuItemCopy.Size = new System.Drawing.Size(152, 22);
+            this.toolStripMenuItemCopy.Size = new System.Drawing.Size(196, 22);
             this.toolStripMenuItemCopy.Text = "Copy";
             // 
             // cmsCopy
@@ -502,48 +629,46 @@ namespace WinkingCat
             // toolStripMenuItemUpload
             // 
             this.toolStripMenuItemUpload.Name = "toolStripMenuItemUpload";
-            this.toolStripMenuItemUpload.Size = new System.Drawing.Size(152, 22);
+            this.toolStripMenuItemUpload.Size = new System.Drawing.Size(196, 22);
             this.toolStripMenuItemUpload.Text = "Upload";
             // 
             // toolStripMenuItemOCR
             // 
             this.toolStripMenuItemOCR.Name = "toolStripMenuItemOCR";
-            this.toolStripMenuItemOCR.Size = new System.Drawing.Size(152, 22);
+            this.toolStripMenuItemOCR.Size = new System.Drawing.Size(196, 22);
             this.toolStripMenuItemOCR.Text = "OCR";
             // 
             // toolStripSeparator1
             // 
             this.toolStripSeparator1.Name = "toolStripSeparator1";
-            this.toolStripSeparator1.Size = new System.Drawing.Size(149, 6);
+            this.toolStripSeparator1.Size = new System.Drawing.Size(193, 6);
             // 
             // toolStripMenuItemDelete
             // 
             this.toolStripMenuItemDelete.Name = "toolStripMenuItemDelete";
-            this.toolStripMenuItemDelete.Size = new System.Drawing.Size(152, 22);
+            this.toolStripMenuItemDelete.Size = new System.Drawing.Size(196, 22);
             this.toolStripMenuItemDelete.Text = "Delete File Locally";
             // 
             // toolStripMenuItemAlwaysOnTop
             // 
             this.toolStripMenuItemAlwaysOnTop.CheckOnClick = true;
             this.toolStripMenuItemAlwaysOnTop.Name = "toolStripMenuItemAlwaysOnTop";
-            this.toolStripMenuItemAlwaysOnTop.Size = new System.Drawing.Size(152, 22);
+            this.toolStripMenuItemAlwaysOnTop.Size = new System.Drawing.Size(196, 22);
             this.toolStripMenuItemAlwaysOnTop.Text = "Always On Top";
+            // 
+            // toolStripMenuItemRemoveFromList
+            // 
+            this.toolStripMenuItemRemoveFromList.Name = "toolStripMenuItemRemoveFromList";
+            this.toolStripMenuItemRemoveFromList.Size = new System.Drawing.Size(196, 22);
+            this.toolStripMenuItemRemoveFromList.Text = "Remove Selected Items";
+            // 
+            // toolStripSeparator3
+            // 
+            this.toolStripSeparator3.Name = "toolStripSeparator3";
+            this.toolStripSeparator3.Size = new System.Drawing.Size(193, 6);
             // 
             // NoCheckboxListView
             // 
-            buttonOnlyItems = new ToolStripMenuItem[] { 
-            toolStripMenuItemDelete,
-            toolStripMenuItemOCR,
-            toolStripMenuItemUpload,
-            toolStripMenuItemOpenFile,
-            toolStripMenuItemOpenFolder,
-            toolStripMenuItemOpenAsClip,
-            toolStripMenuItemCopyImage,
-            toolStripMenuItemCopyDimensions,
-            toolStripMenuItemFile,
-            toolStripMenuItemFileName,
-            toolStripMenuItemDirectory,
-            toolStripMenuItemPath};
             this.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.ContextMenuStrip = this.cmsMain;
             this.FullRowSelect = true;

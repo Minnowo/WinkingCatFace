@@ -54,7 +54,7 @@ namespace WinkingCat.ScreenCaptureLib
 
             BackColor = Color.Black;
 
-            //TopMost = true;
+            TopMost = true;
             var buffer = Properties.Resources.ResourceManager.GetObject(ResourceManager.regionCaptureCursor) as byte[];
             using (MemoryStream m = new MemoryStream(buffer))
             {
@@ -134,7 +134,56 @@ namespace WinkingCat.ScreenCaptureLib
 
         private void MouseMove_Event(object sender, MouseEventArgs e)
         {
-            Invalidate();
+            if(RegionCaptureOptions.updateOnMouseMove)
+                Invalidate();
+        }
+
+        private void MouseButtonClickedHandler(MouseClickTasks task)
+        {
+            switch (task)
+            {
+                case MouseClickTasks.DoNothing:
+                    break;
+                case MouseClickTasks.Cancel:
+                    result = RegionResult.Close;
+                    Close();
+                    break;
+                case MouseClickTasks.RemoveSelectionOrCancel:
+                    if (isLeftClicking)
+                        isLeftClicking = false;
+                    else
+                    {
+                        result = RegionResult.Close;
+                        Close();
+                    }
+                    break;
+                case MouseClickTasks.CaptureFullScreen:
+                    result = RegionResult.Fullscreen;
+                    Close();
+                    break;
+                case MouseClickTasks.CaptureActiveMonitor:
+                    result = RegionResult.ActiveMonitor;
+                    Close();
+                    break;
+                case MouseClickTasks.CaptureLastRegion:
+                    result = RegionResult.LastRegion;
+                    Close();
+                    break;
+                case MouseClickTasks.RemoveSelection:
+                    if (isLeftClicking)
+                        isLeftClicking = false;
+                    break;
+                case MouseClickTasks.SwapToolType:
+                    if (mode == RegionCaptureMode.ColorPicker)
+                    {
+                        mode = RegionCaptureMode.Default;
+                    }
+                    else if(mode == RegionCaptureMode.Default)
+                    {
+                        mode = RegionCaptureMode.ColorPicker;
+                    }
+                    break;
+            }
         }
 
         private void ClickRelease_Event(object sender, EventArgs e)
@@ -161,28 +210,19 @@ namespace WinkingCat.ScreenCaptureLib
                     break;
 
                 case MouseButtons.Right:
-                    if (isLeftClicking)
-                        isLeftClicking = false;
-                    else
-                    {
-                        result = RegionResult.Close;
-                        Close();
-                    }
+                    MouseButtonClickedHandler(RegionCaptureOptions.onMouseRightClick);
                     break;
 
                 case MouseButtons.Middle:
-                    result = RegionResult.LastRegion;
-                    Close();
+                    MouseButtonClickedHandler(RegionCaptureOptions.onMouseMiddleClick);
                     break;
 
                 case MouseButtons.XButton1:
-                    result = RegionResult.ActiveMonitor;
-                    Close();
+                    MouseButtonClickedHandler(RegionCaptureOptions.onXButton1Click);
                     break;
 
                 case MouseButtons.XButton2:
-                    result = RegionResult.Fullscreen;
-                    Close();
+                    MouseButtonClickedHandler(RegionCaptureOptions.onXButton2Click);
                     break;
             }
         }
@@ -235,7 +275,11 @@ namespace WinkingCat.ScreenCaptureLib
             g.CompositingMode = CompositingMode.SourceOver;
 
             DrawMouseGraphics(g);
-            //Invalidate()
+
+            // if you want to update as often as possible for the smoothest graphics 
+            // otherwise if you want to use less cpu disable this 
+            if (!RegionCaptureOptions.updateOnMouseMove)
+                Invalidate();
         }
 
 
@@ -286,6 +330,10 @@ namespace WinkingCat.ScreenCaptureLib
                     if (RegionCaptureOptions.drawInfoText)
                     {
                         totalWidth += infoFont.Height / 2 * $"X: {mousePos.X} Y: {mousePos.Y}".Length;
+
+                        // to cancel the increase to totalHeight below otherwise the info text will apear 
+                        // farther down than its supposed to
+                        totalHeight -= RegionCaptureOptions.cursorInfoOffset;
                     }
                 }
 

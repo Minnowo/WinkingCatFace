@@ -25,6 +25,7 @@ namespace WinkingCat.HelperLibs
         public static string resourcePath { get; set; } = Settings.Default.resourceFolderPath;
         public static string screenshotPath { get; set; }
         public static string logPath { get; set; } = Settings.Default.logFolderPath;
+        public static string loadedItemsPath { get; set; } = Settings.Default.LoadedItems;
 
         public static string settingsPath { get; set; } = Settings.Default.settingsFolderPath;
 
@@ -77,6 +78,8 @@ namespace WinkingCat.HelperLibs
             logPath = currentDirectory + Settings.Default.logFolderPath;
 
             settingsPath = currentDirectory + Settings.Default.settingsFolderPath;
+
+            loadedItemsPath = currentDirectory + Settings.Default.LoadedItems;
         }
 
         public static void CreateAllPaths()

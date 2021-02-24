@@ -136,5 +136,16 @@ namespace WinkingCat.HelperLibs.Properties
                 return ((string)(this["clipboardSettings"]));
             }
         }
+
+        [global::System.Configuration.ApplicationScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("\\AppConfig\\Settings\\LoadedItems")]
+        public string LoadedItems
+        {
+            get
+            {
+                return ((string)(this["LoadedItems"]));
+            }
+        }
     }
 }
