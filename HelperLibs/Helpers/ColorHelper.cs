@@ -10,9 +10,9 @@ namespace WinkingCat.HelperLibs
 
     public struct AdobeRGB
     {
-        public float r { get; set; }
-        public float g { get; set; }
-        public float b { get; set; }
+        public double r { get; set; }
+        public double g { get; set; }
+        public double b { get; set; }
         public ushort alpha { get; set; }
 
         public AdobeRGB(ushort r, ushort g, ushort b, ushort a = 255) : this(Color.FromArgb(a, r, g, b))
@@ -27,21 +27,21 @@ namespace WinkingCat.HelperLibs
 
         public AdobeRGB(XYZ xyz)
         {
-            float newX = xyz.X / 100;
-            float newY = xyz.Y / 100;
-            float newZ = xyz.Z / 100;
+            double newX = xyz.X / 100;
+            double newY = xyz.Y / 100;
+            double newZ = xyz.Z / 100;
 
-            r = newX * 2.04137f + newY * -0.56495f + newZ * -0.34469f;
-            g = newX * -0.96927f + newY * 1.87601f + newZ * 0.04156f;
-            b = newX * 0.01345f + newY * -0.11839f + newZ * 1.01541f;
+            r = newX * 2.04137 + newY * -0.56495 + newZ * -0.34469;
+            g = newX * -0.96927 + newY * 1.87601 + newZ * 0.04156;
+            b = newX * 0.01345 + newY * -0.11839 + newZ * 1.01541;
 
-            r = (float)Math.Pow(r, (1 / 2.19921875));
-            g = (float)Math.Pow(g, (1 / 2.19921875));
-            b = (float)Math.Pow(b, (1 / 2.19921875));
+            r = Math.Pow(r, (1 / 2.19921875));
+            g = Math.Pow(g, (1 / 2.19921875));
+            b = Math.Pow(b, (1 / 2.19921875));
 
-            r = (float)Math.Round(r * 255, ColorHelper.decimalPlaces);
-            g = (float)Math.Round(g * 255, ColorHelper.decimalPlaces);
-            b = (float)Math.Round(b * 255, ColorHelper.decimalPlaces);
+            r = r * 255;
+            g = g * 255;
+            b = b * 255;
 
             alpha = xyz.Alpha;
         }
@@ -66,19 +66,7 @@ namespace WinkingCat.HelperLibs
             }
             set
             {
-                yy = (float)ColorHelper.ValidColor(value);
-            }
-        }
-
-        public float YY100
-        {
-            get
-            {
-                return yy * 100f;
-            }
-            set
-            {
-                yy = (float)ColorHelper.ValidColor(value / 100f);
+                yy = (float)ColorHelper.ValidY(value);
             }
         }
 
@@ -94,18 +82,6 @@ namespace WinkingCat.HelperLibs
             }
         }
 
-        public float X100
-        {
-            get
-            {
-                return x * 100f;
-            }
-            set
-            {
-                x = (float)ColorHelper.ValidColor(value / 100f);
-            }
-        }
-
         public float Y
         {
             get
@@ -115,18 +91,6 @@ namespace WinkingCat.HelperLibs
             set
             {
                 y = (float)ColorHelper.ValidColor(value);
-            }
-        }
-
-        public float Y100
-        {
-            get
-            {
-                return y * 100f;
-            }
-            set
-            {
-                y = (float)ColorHelper.ValidColor(value / 100f);
             }
         }
 
@@ -144,28 +108,117 @@ namespace WinkingCat.HelperLibs
 
         public Yxy(ushort r, ushort g, ushort b, ushort a = 255) : this(Color.FromArgb(a, r, g, b))
         {
-
         }
 
         public Yxy(Color color) : this(new XYZ(color))
         {
-
         }
 
         public Yxy(XYZ xyz)
         {
-            yy = (float)Math.Round(xyz.Y, ColorHelper.decimalPlaces);
-            x = (float)Math.Round(xyz.X / (xyz.X + xyz.Y + xyz.Z), ColorHelper.decimalPlaces);
-            y = (float)Math.Round(xyz.Y / (xyz.X + xyz.Y + xyz.Z), ColorHelper.decimalPlaces);
             alpha = xyz.Alpha;
+            yy = (float)Math.Round(xyz.Y, ColorHelper.decimalPlaces);
+
+            if ((xyz.X + xyz.Y + xyz.Z) != 0)
+            {
+                x = (float)Math.Round(xyz.X / (xyz.X + xyz.Y + xyz.Z), ColorHelper.decimalPlaces);
+                y = (float)Math.Round(xyz.Y / (xyz.X + xyz.Y + xyz.Z), ColorHelper.decimalPlaces);
+            }
+            else
+            {
+                x = 0;
+                y = 0;
+            }
         }
 
         public override string ToString()
         {
             return string.Format("{0}, {1}, {2}",
-                (float)Math.Round(YY100, ColorHelper.decimalPlaces),
-                (float)Math.Round(X100, ColorHelper.decimalPlaces),
-                (float)Math.Round(Y100, ColorHelper.decimalPlaces));
+                (float)Math.Round(YY, ColorHelper.decimalPlaces),
+                (float)Math.Round(X, ColorHelper.decimalPlaces),
+                (float)Math.Round(Y, ColorHelper.decimalPlaces));
+        }
+        public static implicit operator Yxy(Color color)
+        {
+            return new Yxy(color);
+        }
+
+        public static implicit operator Color(Yxy color)
+        {
+            return color.ToColor();
+        }
+        public static implicit operator HSB(Yxy color)
+        {
+            return color.ToHSB();
+        }
+
+        public static implicit operator HSL(Yxy color)
+        {
+            return color.ToHSL();
+        }
+
+        public static implicit operator CMYK(Yxy color)
+        {
+            return color.ToCMYK();
+        }
+
+
+        public static implicit operator XYZ(Yxy color)
+        {
+            return color.ToXYZ();
+        }
+
+        public static bool operator ==(Yxy left, Yxy right)
+        {
+            return (left.YY == right.YY) && (left.X == right.X) && (left.Y == right.Y) && (left.Alpha == right.Alpha);
+        }
+
+        public static bool operator !=(Yxy left, Yxy right)
+        {
+            return !(left == right);
+        }
+        public Color ToColor() // fix this
+        {
+            return ToXYZ().ToColor();
+        }
+        public HSB ToHSB()
+        {
+            return new HSB(this.ToColor());
+        }
+        public HSL ToHSL()
+        {
+            return new HSL(this.ToColor());
+        }
+        public CMYK ToCMYK()
+        {
+            return new CMYK(this.ToColor());
+        }
+        public XYZ ToXYZ()
+        {
+            double _x, _y, _z;
+
+            if (Y != 0)
+            {
+                _x = X * (YY / Y);
+                _z = (1 - _x - Y) * (YY / Y);
+            }
+            else
+            {
+                _x = 0;
+                _z = 0;
+            }
+
+            _y = YY;
+
+            return new XYZ((float)_x, (float)_y, (float)_z, alpha);
+        }
+        public override int GetHashCode()
+        {
+            return base.GetHashCode();
+        }
+        public override bool Equals(object obj)
+        {
+            return base.Equals(obj);
         }
     }
     public struct XYZ
@@ -183,19 +236,7 @@ namespace WinkingCat.HelperLibs
             }
             set
             {
-                x = (float)ColorHelper.ValidColor(value);
-            }
-        }
-
-        public float X100
-        {
-            get
-            {
-                return x * 100f;
-            }
-            set
-            {
-                x = (float)ColorHelper.ValidColor(value / 100f);
+                x = (float)ColorHelper.ValidXZ(value);
             }
         }
 
@@ -207,19 +248,7 @@ namespace WinkingCat.HelperLibs
             }
             set
             {
-                Y = (float)ColorHelper.ValidColor(value);
-            }
-        }
-
-        public float Y100
-        {
-            get
-            {
-                return y * 100f;
-            }
-            set
-            {
-                Y = (float)ColorHelper.ValidColor(value / 100f);
+                y = (float)ColorHelper.ValidY(value);
             }
         }
 
@@ -231,19 +260,7 @@ namespace WinkingCat.HelperLibs
             }
             set
             {
-                z = (float)ColorHelper.ValidColor(value);
-            }
-        }
-
-        public float Z100
-        {
-            get
-            {
-                return z * 100f;
-            }
-            set
-            {
-                z = (float)ColorHelper.ValidColor(value / 100f);
+                z = (float)ColorHelper.ValidXZ(value);
             }
         }
 
@@ -259,11 +276,11 @@ namespace WinkingCat.HelperLibs
             }
         }
 
-        public XYZ(int x, int y, int z, int a) :this()
+        public XYZ(float x, float y, float z, int a) :this()
         {
-            X100 = x;
-            Y100 = y;
-            Z100 = z;
+            X = x;
+            Y = y;
+            Z = z;
             Alpha = (ushort)a;
         }
 
@@ -296,18 +313,18 @@ namespace WinkingCat.HelperLibs
             newG = newG * 100f;
             newB = newB * 100f;
 
-            x = (float)Math.Round((newR * 0.4124f + newG * 0.3576f + newB * 0.1805f) / 100, ColorHelper.decimalPlaces);
-            y = (float)Math.Round((newR * 0.2126f + newG * 0.7152f + newB * 0.0722f) / 100, ColorHelper.decimalPlaces);
-            z = (float)Math.Round((newR * 0.0193f + newG * 0.1192f + newB * 0.9505f) / 100, ColorHelper.decimalPlaces);
+            x = (float)(newR * 0.4124f + newG * 0.3576f + newB * 0.1805f);
+            y = (float)(newR * 0.2126f + newG * 0.7152f + newB * 0.0722f);
+            z = (float)(newR * 0.0193f + newG * 0.1192f + newB * 0.9505f);
             alpha = a;
         }
 
         public override string ToString()
         {
             return string.Format("{0}, {1}, {2}",
-                (float)Math.Round(X100, ColorHelper.decimalPlaces),
-                (float)Math.Round(Y100, ColorHelper.decimalPlaces),
-                (float)Math.Round(Z100, ColorHelper.decimalPlaces));
+                (float)Math.Round(X, ColorHelper.decimalPlaces),
+                (float)Math.Round(Y, ColorHelper.decimalPlaces),
+                (float)Math.Round(Z, ColorHelper.decimalPlaces));
         }
 
         public static implicit operator XYZ(Color color)
@@ -1359,6 +1376,16 @@ namespace WinkingCat.HelperLibs
                 case ColorFormat.ARGB:
                     return color.A << 24 | color.R << 16 | color.G << 8 | color.B;
             }
+        }
+
+        public static double ValidXZ(double number)
+        {
+            return number.Clamp(0, 150);
+        }
+
+        public static double ValidY(double number)
+        {
+            return number.Clamp(0, 100);
         }
 
         public static double ValidColor(double number)

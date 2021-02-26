@@ -31,6 +31,7 @@
             this.components = new System.ComponentModel.Container();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(ApplicationForm));
             this.DisplayPanel = new System.Windows.Forms.Panel();
+            this.lvListView = new WinkingCat.NoCheckboxListView();
             this.toolStrip1 = new System.Windows.Forms.ToolStrip();
             this.ToolStripDropDownButton_Capture = new System.Windows.Forms.ToolStripDropDownButton();
             this.ToolStripMenuItem_region = new System.Windows.Forms.ToolStripMenuItem();
@@ -89,12 +90,32 @@
             // DisplayPanel
             // 
             this.DisplayPanel.BackColor = System.Drawing.Color.White;
+            this.DisplayPanel.Controls.Add(this.lvListView);
             this.DisplayPanel.Controls.Add(this.toolStrip1);
             this.DisplayPanel.Dock = System.Windows.Forms.DockStyle.Fill;
             this.DisplayPanel.Location = new System.Drawing.Point(0, 0);
             this.DisplayPanel.Name = "DisplayPanel";
             this.DisplayPanel.Size = new System.Drawing.Size(871, 211);
             this.DisplayPanel.TabIndex = 1;
+            // 
+            // lvListView
+            // 
+            this.lvListView.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.lvListView.Columns.AddRange(new System.Windows.Forms.ColumnHeader[] {
+            this.columnHeader1,
+            this.columnHeader5,
+            this.columnHeader2,
+            this.columnHeader3,
+            this.columnHeader4});
+            this.lvListView.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.lvListView.FullRowSelect = true;
+            this.lvListView.HideSelection = false;
+            this.lvListView.Location = new System.Drawing.Point(184, 0);
+            this.lvListView.Name = "lvListView";
+            this.lvListView.Size = new System.Drawing.Size(687, 211);
+            this.lvListView.TabIndex = 2;
+            this.lvListView.UseCompatibleStateImageBehavior = false;
+            this.lvListView.View = System.Windows.Forms.View.Details;
             // 
             // toolStrip1
             // 

@@ -54,7 +54,7 @@ namespace WinkingCat.ScreenCaptureLib
 
             BackColor = Color.Black;
 
-            TopMost = true;
+            //TopMost = true;
             var buffer = Properties.Resources.ResourceManager.GetObject(ResourceManager.regionCaptureCursor) as byte[];
             using (MemoryStream m = new MemoryStream(buffer))
             {
