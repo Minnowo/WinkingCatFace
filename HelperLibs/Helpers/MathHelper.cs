@@ -12,6 +12,12 @@ namespace WinkingCat.HelperLibs
 {
     public static class MathHelper
     {
+        public static T Clamp<T>(T num, T min, T max) where T : IComparable<T>
+        {
+            if (num.CompareTo(min) <= 0) return min;
+            if (num.CompareTo(max) >= 0) return max;
+            return num;
+        }
         public static bool IsNumericType(this object o)
         {
             switch (Type.GetTypeCode(o.GetType()))

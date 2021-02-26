@@ -16,11 +16,9 @@ namespace WinkingCat.HelperLibs
             else
                 return "false";
         }
-        public static int Clamp(this int input, int min, int max)
+        public static T Clamp<T>(this T input, T min, T max) where T : IComparable<T>
         {
-            if (input.CompareTo(min) <= 0) return min;
-            if (input.CompareTo(max) >= 0) return max;
-            return input;
+            return MathHelper.Clamp(input, min, max);
         }
         public static IList<T> Swap<T>(this IList<T> list, int indexA, int indexB)
         {

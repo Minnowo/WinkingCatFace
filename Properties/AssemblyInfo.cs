@@ -11,7 +11,7 @@ using System.Runtime.InteropServices;
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany(";3c")]
 [assembly: AssemblyProduct(";3")]
-[assembly: AssemblyCopyright("Copyright ©  2021")]
+[assembly: AssemblyCopyright("Neko")]
 [assembly: AssemblyTrademark("Meow")]
 [assembly: AssemblyCulture("")]
 

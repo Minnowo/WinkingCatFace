@@ -57,6 +57,7 @@ namespace WinkingCat.HelperLibs
         public static bool FormatCopyColor(ColorFormat format, _Color color)
         {
             string formatedColor = "";
+            color.ToXYZ().ToColor();
             switch (format)
             {
                 case ColorFormat.ARGB:
