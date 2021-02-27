@@ -39,12 +39,13 @@ namespace WinkingCat.ScreenCaptureLib
 
         public ClippingWindowForm(Rectangle region)
         {
-            clientArea = region;
+            clientArea = new Rectangle(new Point(0, 0), new Size(region.Width, region.Height));
+            //Console.WriteLine(region);
             image = ScreenShotManager.CaptureRectangle(region);
             mode = RegionCaptureOptions.mode;
 
             borderPen = new Pen(Color.Black);            
-            borderDotPen = new Pen(Color.White) { DashPattern = new float[] { 5, 5 } };
+            borderDotPen = new Pen(Color.FromArgb(249, 0, 187)) { DashPattern = new float[] { 5, 5 } };
             infoFont = new Font("Verdana", 12); // 10
 
             textBackgroundBrush = new SolidBrush(System.Drawing.Color.FromArgb(39, 43, 50));
@@ -53,8 +54,9 @@ namespace WinkingCat.ScreenCaptureLib
             SuspendLayout();
 
             BackColor = Color.Black;
-
-            //TopMost = true;
+#if !DEBUG
+            TopMost = true;
+#endif
             var buffer = Properties.Resources.ResourceManager.GetObject(ResourceManager.regionCaptureCursor) as byte[];
             using (MemoryStream m = new MemoryStream(buffer))
             {
@@ -254,7 +256,7 @@ namespace WinkingCat.ScreenCaptureLib
         {
 
             mousePos = ScreenHelper.ScreenToClient(ScreenHelper.GetCursorPosition());
-            activeMonitor = ScreenHelper.GetActiveScreenBounds();
+            activeMonitor = ScreenHelper.GetActiveScreenBounds0Based();
 
             Graphics g = e.Graphics;
 

@@ -32,11 +32,13 @@ namespace WinkingCat
         {
             InitializeComponent();
             SuspendLayout();
+#if !DEBUG
             TopMost = MainFormSettings.alwaysOnTop;
+#endif
             niTrayIcon.Visible = MainFormSettings.showInTray;
 
 
-            #region Capture dropdown buttons
+#region Capture dropdown buttons
             ToolStripDropDownButton_Capture.DropDown.Closing += toolStripDropDown_Closing;
             ToolStripDropDownButton_Capture.DropDownOpening += tsmiCapture_DropDownOpening;
 
@@ -44,29 +46,29 @@ namespace WinkingCat
             ToolStripMenuItem_fullscreen.Click += FullscreenCapture_Click;
             ToolStripMenuItem_lastRegion.Click += LastRegionCapture_Click;
             ToolStripMenuItem_captureCursor.Click += CursorCapture_Click;
-            #endregion
+#endregion
 
-            #region Clips dropdown buttons
+#region Clips dropdown buttons
             ToolStripDropDownButton_Clips.DropDown.Closing += toolStripDropDown_Closing;
 
             ToolStripMenuItem_newClip.Click += NewClip_Click;
             ToolStripMenuItem_clipFromClipboard.Click += ClipFromClipboard_Click;
             ToolStripMenuItem_clipFromFile.Click += ClipFromFile_Click;
             ToolStripMenuItem_createClipAfterRegionCapture.Click += CreateClipAfterRegionCapture_Click;
-            #endregion
+#endregion
 
-            #region Tools dropdown buttons
+#region Tools dropdown buttons
             ToolStripDropDownButton_Tools.DropDown.Closing += toolStripDropDown_Closing;
 
             ToolStripDropDownButton_screenColorPicker.Click += ScreenColorPicker_Click;
-            #endregion
+#endregion
 
-            #region Style button
+#region Style button
             ToolStripDropDownButton_Style.DropDown.Closing += toolStripDropDown_Closing;
 
-            #endregion
+#endregion
 
-            #region Tray icon
+#region Tray icon
             trayClickTimer = new System.Windows.Forms.Timer();
             trayClickTimer.Tick += TrayClickTimer_Interval;
             niTrayIcon.MouseUp += NiTrayIcon_MouseClick1Up;
@@ -87,7 +89,7 @@ namespace WinkingCat
             settingsToolStripMenuItem.Click += ToolStripDropDownButton_Settings_Click;
             openMainWindowToolStripMenuItem.Click += OpenMainWindow_Click;
             exitToolStripMenuItem.Click += ExitApplication_Click;
-            #endregion
+#endregion
 
             HandleCreated += MainForm_HandleCreated;
 
@@ -143,7 +145,7 @@ namespace WinkingCat
 
         }
 
-        #region Capture dropdown buttons
+#region Capture dropdown buttons
         private async void tsmiCapture_DropDownOpening(object sender, EventArgs e)
         {
             if(sender.GetType().Name == "ToolStripDropDownButton") 
@@ -229,9 +231,9 @@ namespace WinkingCat
 
             }
         }
-        #endregion
+#endregion
 
-        #region Clips dropdown buttons
+#region Clips dropdown buttons
         private void NewClip_Click(object sender, EventArgs e)
         {
             TaskHandler.ExecuteTask(Tasks.NewClipFromRegionCapture);
@@ -248,16 +250,16 @@ namespace WinkingCat
         {
 
         }
-        #endregion
+#endregion
 
-        #region Tools dropdown buttons
+#region Tools dropdown buttons
         private void ScreenColorPicker_Click(object sender, EventArgs e)
         {
             TaskHandler.ExecuteTask(Tasks.ScreenColorPicker);
         }
-        #endregion
+#endregion
 
-        #region tray icon
+#region tray icon
         private void TrayClickTimer_Interval(object sender, EventArgs e)
         {
             if (trayClickCount == 1)
@@ -305,9 +307,9 @@ namespace WinkingCat
             forceClose = true;
             Close();
         }
-        #endregion
+#endregion
 
-        #region MainForm events
+#region MainForm events
 
         private void mainForm_LostFocus(object sender, EventArgs e)
         {
@@ -330,7 +332,7 @@ namespace WinkingCat
                 Hide();
             }
         }
-        #endregion
+#endregion
 
         private void toolStripDropDown_Closing(object sender, ToolStripDropDownClosingEventArgs e)
         {

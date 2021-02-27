@@ -5,7 +5,7 @@
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
     <ProjectGuid>{D3039595-1B90-451D-B853-3B6FD48C19E5}</ProjectGuid>
-    <OutputType>Exe</OutputType>
+    <OutputType>WinExe</OutputType>
     <RootNamespace>WinkingCat</RootNamespace>
     <AssemblyName>TWCF</AssemblyName>
     <TargetFrameworkVersion>v4.7.2</TargetFrameworkVersion>
@@ -53,8 +53,7 @@
     <ManifestKeyFile>WinkingCat_TemporaryKey.pfx</ManifestKeyFile>
   </PropertyGroup>
   <PropertyGroup>
-    <ApplicationIcon>
-    </ApplicationIcon>
+    <ApplicationIcon>%3b3white.ico</ApplicationIcon>
   </PropertyGroup>
   <PropertyGroup>
     <ApplicationManifest>app.manifest</ApplicationManifest>
@@ -286,6 +285,8 @@
     <None Include="Resources\color-wheel-icon.png" />
     <None Include="Resources\hashcheck.png" />
     <None Include="Resources\qrCode.png" />
+    <Content Include="%3b3black.ico" />
+    <Content Include="%3b3white.ico" />
     <Content Include="Resources\TEST_DATA.ico" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
