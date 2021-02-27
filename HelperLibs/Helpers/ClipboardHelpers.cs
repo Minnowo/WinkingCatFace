@@ -61,22 +61,22 @@ namespace WinkingCat.HelperLibs
             switch (format)
             {
                 case ColorFormat.ARGB:
-                    formatedColor += string.Format("{0}, {1}, {2}, {3}", color.alpha, color.r, color.g, color.b);
+                    formatedColor += color.argb.ToString(ColorFormat.ARGB);
                     Logger.WriteLine("ARGB Format Color Copied: " + formatedColor);
                     break;
 
                 case ColorFormat.RGB:
-                    formatedColor += string.Format("{0}, {1}, {2}", color.r, color.g, color.b);
+                    formatedColor += color.argb.ToString();
                     Logger.WriteLine("RGB Format Color Copied: " + formatedColor);
                     break;
 
                 case ColorFormat.Hex:
-                    formatedColor += color.hex;
+                    formatedColor += color.ToHex();
                     Logger.WriteLine("Hex Format Color Copied: " + formatedColor);
                     break;
 
                 case ColorFormat.Decminal:
-                    formatedColor += color.Decimal.ToString();
+                    formatedColor += color.ToDecimal().ToString();
                     Logger.WriteLine("Decminal Format Color Copied: " + formatedColor);
                     break;
 
@@ -115,17 +115,6 @@ namespace WinkingCat.HelperLibs
                     Logger.WriteLine("AdobeRGB Format Color Copied: " + formatedColor);
                     break;
 
-                case ColorFormat.All:
-                    formatedColor += string.Format("{0}, {1}, {2}", color.r, color.g, color.b) + "\n"; // rgb
-                    formatedColor += string.Format("{0}, {1}, {2}, {3}", color.alpha, color.r, color.g, color.b) + "\n"; // argb
-                    formatedColor += color.hex + "\n"; // hex
-                    formatedColor += color.Decimal.ToString() + "\n"; // decimal
-                    formatedColor += color.cmyk.ToString() + "\n"; // cmyk
-                    formatedColor += color.hsb.ToString() + "\n"; // hsb
-                    formatedColor += color.hsb.ToString() + "\n"; // hsv
-                    formatedColor += color.hsl.ToString(); // hsl
-                    Logger.WriteLine("All Formats Color Copied: " + formatedColor);
-                    break;
             }
             return CopyStringDefault(formatedColor);
         }

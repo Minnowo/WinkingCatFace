@@ -72,7 +72,6 @@ namespace WinkingCat.HelperLibs
         HSL,
         XYZ,
         Yxy,
-        AdobeRGB,
-        All
+        AdobeRGB
     }
 }

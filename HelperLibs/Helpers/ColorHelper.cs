@@ -7,7 +7,6 @@ using System.Drawing;
 
 namespace WinkingCat.HelperLibs
 {
-
     public struct AdobeRGB
     {
         public double r { get; set; }
@@ -15,7 +14,52 @@ namespace WinkingCat.HelperLibs
         public double b { get; set; }
         public ushort alpha { get; set; }
 
-        public AdobeRGB(ushort r, ushort g, ushort b, ushort a = 255) : this(Color.FromArgb(a, r, g, b))
+        public double R
+        {
+            get
+            {
+                return r;
+            }
+            set
+            {
+                r = ColorHelper.ValidColor(value);
+            }
+        }
+        public double G
+        {
+            get
+            {
+                return g;
+            }
+            set
+            {
+                g = ColorHelper.ValidColor(value);
+            }
+        }
+        public double B
+        {
+            get
+            {
+                return b;
+            }
+            set
+            {
+                b = ColorHelper.ValidColor(value);
+            }
+        }
+        public ushort Alpha
+        {
+            get
+            {
+                return alpha;
+            }
+            set
+            {
+                alpha = (ushort)ColorHelper.ValidColor(value);
+            }
+        }
+
+        public AdobeRGB(ushort r, ushort g, ushort b, ushort a = 255) : this(new XYZ(r, g, b, a))
         {
 
         }
@@ -48,7 +92,95 @@ namespace WinkingCat.HelperLibs
 
         public override string ToString()
         {
-            return string.Format("{0}, {1}, {2}", r, g, b);
+            return string.Format("{0}, {1}, {2}", 
+                Math.Round(r, ColorHelper.decimalPlaces),
+                Math.Round(g, ColorHelper.decimalPlaces),
+                Math.Round(b, ColorHelper.decimalPlaces));
+        }
+        public static implicit operator AdobeRGB(Color color)
+        {
+            return new AdobeRGB(color);
+        }
+
+        public static implicit operator Color(AdobeRGB color)
+        {
+            return color.ToColor();
+        }
+
+        public static implicit operator HSL(AdobeRGB color)
+        {
+            return color.ToHSL();
+        }
+
+        public static implicit operator CMYK(AdobeRGB color)
+        {
+            return color.ToCMYK();
+        }
+
+        public static implicit operator XYZ(AdobeRGB color)
+        {
+            return color.ToXYZ();
+        }
+
+        public static implicit operator Yxy(AdobeRGB color)
+        {
+            return color.ToYxy();
+        }
+
+        public static bool operator ==(AdobeRGB left, AdobeRGB right)
+        {
+            return (left.r == right.r) && (left.g == right.g) && (left.b == right.b) && (left.Alpha == right.Alpha);
+        }
+
+        public static bool operator !=(AdobeRGB left, AdobeRGB right)
+        {
+            return !(left == right);
+        }
+        public Color ToColor()
+        {
+            return this.ToXYZ().ToColor();
+        }
+        public HSL ToHSL()
+        {
+            return new HSL(this.ToColor());
+        }
+        public CMYK ToCMYK()
+        {
+            return new CMYK(this.ToColor());
+        }
+        public XYZ ToXYZ()
+        {
+            double r, g, b;
+            r = R / 255;
+            g = G / 255;
+            b = B / 255;
+
+            r = Math.Pow(r, 2.19921875);
+            g = Math.Pow(g, 2.19921875);
+            b = Math.Pow(b, 2.19921875);
+
+            r = r * 100;
+            g = g * 100;
+            b = b * 100;
+
+            return new XYZ(
+                (float)(r * 0.57667 + g * 0.18555 + b * 0.18819), // X
+                (float)(r * 0.29738 + g * 0.62735 + b * 0.07527), // Y
+                (float)(r * 0.02703 + g * 0.07069 + b * 0.99110), // Z
+                Alpha);
+        }
+        public Yxy ToYxy()
+        {
+            return new Yxy(this.ToXYZ());
+        }
+        public override int GetHashCode()
+        {
+            return base.GetHashCode();
+        }
+
+        public override bool Equals(object obj)
+        {
+            return base.Equals(obj);
         }
     }
     public struct Yxy
@@ -106,7 +238,7 @@ namespace WinkingCat.HelperLibs
             }
         }
 
-        public Yxy(ushort r, ushort g, ushort b, ushort a = 255) : this(Color.FromArgb(a, r, g, b))
+        public Yxy(ushort r, ushort g, ushort b, ushort a = 255) : this(new XYZ(r, g, b, a))
         {
         }
 
@@ -134,9 +266,9 @@ namespace WinkingCat.HelperLibs
         public override string ToString()
         {
             return string.Format("{0}, {1}, {2}",
-                (float)Math.Round(YY, ColorHelper.decimalPlaces),
-                (float)Math.Round(X, ColorHelper.decimalPlaces),
-                (float)Math.Round(Y, ColorHelper.decimalPlaces));
+                Math.Round(YY, ColorHelper.decimalPlaces),
+                Math.Round(X, ColorHelper.decimalPlaces),
+                Math.Round(Y, ColorHelper.decimalPlaces));
         }
         public static implicit operator Yxy(Color color)
         {
@@ -322,9 +454,9 @@ namespace WinkingCat.HelperLibs
         public override string ToString()
         {
             return string.Format("{0}, {1}, {2}",
-                (float)Math.Round(X, ColorHelper.decimalPlaces),
-                (float)Math.Round(Y, ColorHelper.decimalPlaces),
-                (float)Math.Round(Z, ColorHelper.decimalPlaces));
+                Math.Round(X, ColorHelper.decimalPlaces),
+                Math.Round(Y, ColorHelper.decimalPlaces),
+                Math.Round(Z, ColorHelper.decimalPlaces));
         }
 
         public static implicit operator XYZ(Color color)
@@ -535,9 +667,14 @@ namespace WinkingCat.HelperLibs
             }
         }
 
-        public CMYK(Color color)
+        public CMYK(Color color) : this(color.R, color.G, color.B, color.A)
         {
-            if (color.R == 0 && color.G == 0 && color.B == 0)
+            
+        }
+
+        public CMYK(ushort r, ushort g, ushort b, ushort a = 255)
+        {
+            if (r == 0 && g == 0 && b == 0)
             {
                 c = 0;
                 m = 0;
@@ -548,20 +685,16 @@ namespace WinkingCat.HelperLibs
             {
                 float modifiedR, modifiedG, modifiedB;
 
-                modifiedR = color.R / 255f;
-                modifiedG = color.G / 255f;
-                modifiedB = color.B / 255f;
+                modifiedR = r / 255f;
+                modifiedG = g / 255f;
+                modifiedB = b / 255f;
 
                 k = 1 - new List<float>() { modifiedR, modifiedG, modifiedB }.Max();
                 c = (1 - modifiedR - k) / (1 - k);
                 m = (1 - modifiedG - k) / (1 - k);
                 y = (1 - modifiedB - k) / (1 - k);
             }
-            alpha = color.A;
-        }
-
-        public CMYK(ushort r, ushort g, ushort b, ushort a = 255) : this(Color.FromArgb(a, r, g, b))
-        {
+            alpha = a;
         }
 
         public CMYK(int c, int m, int y, int k, int a) : this()
@@ -576,10 +709,10 @@ namespace WinkingCat.HelperLibs
         public override string ToString()
         {
             return string.Format("{0}, {1}, {2}, {3}",
-                (float)Math.Round(C100, ColorHelper.decimalPlaces),
-                (float)Math.Round(M100, ColorHelper.decimalPlaces),
-                (float)Math.Round(Y100, ColorHelper.decimalPlaces),
-                (float)Math.Round(K100, ColorHelper.decimalPlaces));
+                Math.Round(C100, ColorHelper.decimalPlaces),
+                Math.Round(M100, ColorHelper.decimalPlaces),
+                Math.Round(Y100, ColorHelper.decimalPlaces),
+                Math.Round(K100, ColorHelper.decimalPlaces));
         }
 
         public static implicit operator CMYK(Color color)
@@ -759,9 +892,9 @@ namespace WinkingCat.HelperLibs
         public override string ToString()
         {
             return string.Format("{0}, {1}, {2}",
-                (float)Math.Round(Hue360, ColorHelper.decimalPlaces),
-                (float)Math.Round(Saturation100, ColorHelper.decimalPlaces),
-                (float)Math.Round(Lightness100, ColorHelper.decimalPlaces));
+                Math.Round(Hue360, ColorHelper.decimalPlaces),
+                Math.Round(Saturation100, ColorHelper.decimalPlaces),
+                Math.Round(Lightness100, ColorHelper.decimalPlaces));
         }
 
         public static implicit operator HSL(Color color)
@@ -987,8 +1120,9 @@ namespace WinkingCat.HelperLibs
             {
                 if ((newR - min) != 0) // cannot divide by 0 
                 {
-                    hue = (((newG - newB) / (newR - min)) % 6) / 6;
-                    if (hue < 0)
+                    // divide by 6 because if you don't hue * 60 = 0-360, but we want hue * 360 = 0-360
+                    hue = (((newG - newB) / (newR - min)) % 6) / 6; 
+                    if (hue < 0) // if its negative add 360. 360/360 = 1
                         hue += 1;
                 }
                 else
@@ -1002,6 +1136,7 @@ namespace WinkingCat.HelperLibs
             }
             else if (newB > newG) // newB > both
             {
+                // don't have to worry about dividing by 0 because if max == min the if statement above is true
                 hue = (4.0f + (newR - newG) / (newB - min)) / 6;
                 if (newB == 0)
                     saturation = 0f;
@@ -1024,9 +1159,9 @@ namespace WinkingCat.HelperLibs
         public override string ToString()
         {
             return string.Format("{0}, {1}, {2}",
-                (float)Math.Round(Hue360, ColorHelper.decimalPlaces),
-                (float)Math.Round(Saturation100, ColorHelper.decimalPlaces),
-                (float)Math.Round(Brightness100, ColorHelper.decimalPlaces));
+                Math.Round(Hue360, ColorHelper.decimalPlaces),
+                Math.Round(Saturation100, ColorHelper.decimalPlaces),
+                Math.Round(Brightness100, ColorHelper.decimalPlaces));
         }
 
         public static implicit operator HSB(Color color)
@@ -1253,6 +1388,18 @@ namespace WinkingCat.HelperLibs
         {
             return !(left == right);
         }
+
+        public string ToString(ColorFormat format = ColorFormat.RGB)
+        {
+            switch (format)
+            {
+                case ColorFormat.RGB:
+                    return string.Format("{0}, {1}, {2}", R, G, B);
+                case ColorFormat.ARGB:
+                    return string.Format("{0}, {1}, {2}, {3}", A, R, G, B);
+            }
+            return string.Format("{0}, {1}, {2}", R, G, B);
+        }
         public Color ToColor()
         {
             return Color.FromArgb(A, R, G, B);
@@ -1287,40 +1434,42 @@ namespace WinkingCat.HelperLibs
             return base.Equals(obj);
         }
     }
-
     public struct _Color
     {
+        private ushort alpha { get; set; }
         public ARGB argb { get; set; }
         public HSB hsb { get; set; }
         public HSL hsl { get; set; }
         public CMYK cmyk { get; set; }
-        public ushort r { get; set; }
-        public ushort g { get; set; }
-        public ushort b { get; set; }
-        public string hex { get; set; }
-        public string alphaHex { get; set; }
-        public int Decimal { get; set; }
-        public int alphaDecimal { get; set; }
-        public ushort alpha { get; set; }
+        public bool isTransparent
+        {
+            get
+            {
+                return Alpha < 255;
+            }
+        }
+        public ushort Alpha
+        {
+            get
+            {
+                return alpha;
+            }
+            set
+            {
+                alpha = (ushort)ColorHelper.ValidColor(value);
+            }
+        }
         public _Color(Color color)
         {
             argb = color;
-            hsb = new HSB(color);
-            hsl = new HSL(color);
-            cmyk = new CMYK(color);
-            r = color.R;
-            g = color.G;
-            b = color.B;
+            hsb = color;
+            hsl = color;
+            cmyk = color;
             alpha = color.A;
-            hex = ColorHelper.ColorToHex(color);
-            alphaHex = ColorHelper.ColorToHex(color, ColorFormat.ARGB);
-            Decimal = ColorHelper.ColorToDecimal(color);
-            alphaDecimal = ColorHelper.ColorToDecimal(color, ColorFormat.ARGB);
         }
 
         public _Color(int r, int g, int b, int a = 255) : this(Color.FromArgb(a, r, g, b))
         {
-
         }
 
         public static implicit operator _Color(Color color)
@@ -1330,25 +1479,37 @@ namespace WinkingCat.HelperLibs
 
         public static implicit operator Color(_Color color)
         {
-            return Color.FromArgb(color.alpha, color.r, color.g, color.b);
+            return Color.FromArgb(color.alpha, color.argb.R, color.argb.G, color.argb.B);
+        }
+        
+        public string ToHex(ColorFormat format = ColorFormat.RGB)
+        {
+
+            return ColorHelper.ColorToHex(argb.R, argb.G, argb.B, argb.A, format);
+        }
+
+        public int ToDecimal(ColorFormat format = ColorFormat.RGB)
+        {
+            return ColorHelper.ColorToDecimal(argb.R, argb.G, argb.B, argb.A, format);
         }
 
         public XYZ ToXYZ()
         {
-            return new XYZ(r, g, b, alpha);
+            // important to cast to prevent converting r - x, g - y, b - z
+            return new XYZ((ushort)argb.R, (ushort)argb.G, (ushort)argb.B, alpha);
         }
 
         public Yxy ToYxy()
         {
-            return new Yxy(r, g, b, alpha);
+            // important to cast to prevent converting r - Y, g - x, b - y
+            return new Yxy((ushort)argb.R, (ushort)argb.G, (ushort)argb.B, alpha);
         }
 
         public AdobeRGB ToAdobeRGB()
         {
-            return new AdobeRGB(r, g, b, alpha);
+            return new AdobeRGB((ushort)argb.R, (ushort)argb.G, (ushort)argb.B, alpha);
         }
     }
-
     public static class ColorHelper
     {
         public static int decimalPlaces { get; set; } = 2;
@@ -1356,25 +1517,35 @@ namespace WinkingCat.HelperLibs
 
         public static string ColorToHex(Color color, ColorFormat format = ColorFormat.RGB)
         {
-            switch (format)
-            {
-                default:
-                case ColorFormat.RGB:
-                    return string.Format("{0:X2}{1:X2}{2:X2}", color.R, color.G, color.B);
-                case ColorFormat.ARGB:
-                    return string.Format("{0:X2}{1:X2}{2:X2}{3:X2}", color.A, color.R, color.G, color.B);
-            }
+            return ColorToHex(color.R, color.G, color.B, color.A, format);
         }
 
-        public static int ColorToDecimal(Color color, ColorFormat format = ColorFormat.RGB)
+        public static string ColorToHex(int r, int g, int b, int a = 255, ColorFormat format = ColorFormat.RGB)
         {
             switch (format)
             {
                 default:
                 case ColorFormat.RGB:
-                    return color.R << 16 | color.G << 8 | color.B;
+                    return string.Format("{0:X2}{1:X2}{2:X2}", r, g, b);
                 case ColorFormat.ARGB:
-                    return color.A << 24 | color.R << 16 | color.G << 8 | color.B;
+                    return string.Format("{0:X2}{1:X2}{2:X2}{3:X2}", a, r, g, b);
+            }
+        }
+
+        public static int ColorToDecimal(Color color, ColorFormat format = ColorFormat.RGB)
+        {
+            return ColorToDecimal(color.R, color.G, color.B, color.A, format);
+        }
+
+        public static int ColorToDecimal(int r, int g, int b, int a = 255, ColorFormat format = ColorFormat.RGB)
+        {
+            switch (format)
+            {
+                default:
+                case ColorFormat.RGB:
+                    return r << 16 | g << 8 | b;
+                case ColorFormat.ARGB:
+                    return a << 24 | r << 16 | g << 8 | b;
             }
         }
 
@@ -1408,6 +1579,4 @@ namespace WinkingCat.HelperLibs
             return number.Clamp<byte>(0, 255);
         }
     }
-
-
 }
