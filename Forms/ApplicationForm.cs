@@ -16,7 +16,7 @@ using WinkingCat.ScreenCaptureLib;
 
 namespace WinkingCat
 {
-    
+
     public partial class ApplicationForm : Form
     {
         private Image image { get; set; } = null;
@@ -27,7 +27,8 @@ namespace WinkingCat
         public int trayClickCount { get; private set; } = 0;
         public bool forceClose { get; set; } = false;
         public bool allowShowDisplay { get; set; } = !MainFormSettings.startInTray;
-        private bool forceDropDownClose = false;
+        private bool isInTrayOrMinimized { get; set; } = MainFormSettings.startInTray;
+        private bool forceDropDownClose { get; set; } = false;
         public ApplicationForm()
         {
             InitializeComponent();
@@ -92,19 +93,16 @@ namespace WinkingCat
 #endregion
 
             HandleCreated += MainForm_HandleCreated;
+            LostFocus += mainForm_LostFocus;
+            GotFocus += mainForm_GotFocus;
+            Resize += MainForm_Resize;
 
             ImageHandler.CaptureEvent += AfterCaptureEvent;
             ImageHandler.ImageSaved += ImageSaved_Event;
 
             ResumeLayout();
-            
 
-            //SettingsManager.SaveHotkeySettings(HotkeyManager.GetDefaultHotkeyList());
-
-
-            //contextMenuStrip1.Visible = true;
             MainFormSettings.SettingsChangedEvent += UpdateSettings;
-            
         }
 
         private void MainForm_HandleCreated(object sender, EventArgs e)
@@ -168,7 +166,7 @@ namespace WinkingCat
                 if(win.IsMinimized)
                     win.Restore();
 
-                if (MainFormSettings.hideMainFormOnCapture)
+                if (MainFormSettings.hideMainFormOnCapture && !isInTrayOrMinimized)
                 {
                     Hide();
                 }
@@ -188,7 +186,7 @@ namespace WinkingCat
 
             ToolStripItem tsi = (ToolStripItem)sender;
 
-            if (MainFormSettings.hideMainFormOnCapture)
+            if (MainFormSettings.hideMainFormOnCapture && !isInTrayOrMinimized)
             {
                 Hide();
             }
@@ -201,19 +199,63 @@ namespace WinkingCat
 
         private void RegionCapture_Click(object sender, EventArgs e)
         {
+            if (MainFormSettings.hideMainFormOnCapture && !isInTrayOrMinimized)
+            {
+                Hide();
+                Thread.Sleep(MainFormSettings.waitHideTime);
+            }
             TaskHandler.ExecuteTask(Tasks.RegionCapture);
+
+            if (MainFormSettings.hideMainFormOnCapture && !isInTrayOrMinimized)
+            {
+                Thread.Sleep(MainFormSettings.waitHideTime);
+                Show();
+            }
         }
         private void MonitorCapture_Click(object sender, EventArgs e)
         {
+            if (MainFormSettings.hideMainFormOnCapture && !isInTrayOrMinimized)
+            {
+                Hide();
+                Thread.Sleep(MainFormSettings.waitHideTime);
+            }
             TaskHandler.ExecuteTask(Tasks.CaptureActiveMonitor);
+
+            if (MainFormSettings.hideMainFormOnCapture && !isInTrayOrMinimized)
+            {
+                Thread.Sleep(MainFormSettings.waitHideTime);
+                Show();
+            }
         }
         private void FullscreenCapture_Click(object sender, EventArgs e)
         {
+            if (MainFormSettings.hideMainFormOnCapture && !isInTrayOrMinimized)
+            {
+                Hide();
+                Thread.Sleep(MainFormSettings.waitHideTime);
+            }
             TaskHandler.ExecuteTask(Tasks.CaptureFullScreen);
+
+            if (MainFormSettings.hideMainFormOnCapture && !isInTrayOrMinimized)
+            {
+                Thread.Sleep(MainFormSettings.waitHideTime);
+                Show();
+            }
         }
         private void LastRegionCapture_Click(object sender, EventArgs e)
         {
+            if (MainFormSettings.hideMainFormOnCapture)
+            {
+                Hide();
+                Thread.Sleep(MainFormSettings.waitHideTime);
+            }
             TaskHandler.ExecuteTask(Tasks.CaptureLastRegion);
+
+            if (MainFormSettings.hideMainFormOnCapture)
+            {
+                Thread.Sleep(MainFormSettings.waitHideTime);
+                Show();
+            }
         }
         private void CursorCapture_Click(object sender, EventArgs e)
         {
@@ -236,7 +278,18 @@ namespace WinkingCat
 #region Clips dropdown buttons
         private void NewClip_Click(object sender, EventArgs e)
         {
+            if (MainFormSettings.hideMainFormOnCapture && !isInTrayOrMinimized)
+            {
+                Hide();
+                Thread.Sleep(MainFormSettings.waitHideTime);
+            }
             TaskHandler.ExecuteTask(Tasks.NewClipFromRegionCapture);
+
+            if (MainFormSettings.hideMainFormOnCapture && !isInTrayOrMinimized)
+            {
+                Thread.Sleep(MainFormSettings.waitHideTime);
+                Show();
+            }
         }
         private void ClipFromClipboard_Click(object sender, EventArgs e)
         {
@@ -255,7 +308,18 @@ namespace WinkingCat
 #region Tools dropdown buttons
         private void ScreenColorPicker_Click(object sender, EventArgs e)
         {
+            if (MainFormSettings.hideMainFormOnCapture && !isInTrayOrMinimized)
+            {
+                Hide();
+                Thread.Sleep(MainFormSettings.waitHideTime);
+            }
             TaskHandler.ExecuteTask(Tasks.ScreenColorPicker);
+
+            if (MainFormSettings.hideMainFormOnCapture && !isInTrayOrMinimized)
+            {
+                Thread.Sleep(MainFormSettings.waitHideTime);
+                Show();
+            }
         }
 #endregion
 
@@ -299,6 +363,7 @@ namespace WinkingCat
 
         private void OpenMainWindow_Click(object sender, EventArgs e)
         {
+            isInTrayOrMinimized = false;
             Helpers.ForceActivate(this);
         }
 
@@ -311,8 +376,23 @@ namespace WinkingCat
 
 #region MainForm events
 
+        private void MainForm_Resize(object sender, EventArgs e)
+        {
+            switch (this.WindowState)
+            {
+                case FormWindowState.Minimized:
+                    isInTrayOrMinimized = true;
+                    break;
+                case FormWindowState.Maximized:
+                case FormWindowState.Normal:
+                    isInTrayOrMinimized = false;
+                    break;
+            }
+        }
+
         private void mainForm_LostFocus(object sender, EventArgs e)
         {
+            MainForm_Resize(null, EventArgs.Empty); // just to check the window state
             forceDropDownClose = true;
             ToolStripDropDownButton_Capture.DropDown.Close();
             ToolStripDropDownButton_Clips.DropDown.Close();
@@ -322,12 +402,19 @@ namespace WinkingCat
 
         private void mainForm_GotFocus(object sender, EventArgs e)
         {
+            MainForm_Resize(null, EventArgs.Empty); // just to check the window state
+            forceDropDownClose = true;
+            ToolStripDropDownButton_Capture.DropDown.Close();
+            ToolStripDropDownButton_Clips.DropDown.Close();
+            ToolStripDropDownButton_Tools.DropDown.Close();
+            ToolStripDropDownButton_Style.DropDown.Close();
         }
 
         private void MainForm_FormClosing(object sender, FormClosingEventArgs e)
         {
             if (e.CloseReason == CloseReason.UserClosing && MainFormSettings.minimizeToTray && !forceClose)
             {
+                isInTrayOrMinimized = true;
                 e.Cancel = true;
                 Hide();
             }

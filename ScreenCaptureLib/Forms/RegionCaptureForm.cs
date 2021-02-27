@@ -11,6 +11,7 @@ using System.Drawing.Drawing2D;
 using WinkingCat.HelperLibs;
 using System.Diagnostics;
 using System.IO;
+using System.Drawing.Imaging;
 
 namespace WinkingCat.ScreenCaptureLib
 {
@@ -39,9 +40,16 @@ namespace WinkingCat.ScreenCaptureLib
 
         public ClippingWindowForm(Rectangle region)
         {
+            // force the client area to be at 0, 0 so that when you draw using graphics it draws in the correct location
             clientArea = new Rectangle(new Point(0, 0), new Size(region.Width, region.Height));
             //Console.WriteLine(region);
-            image = ScreenShotManager.CaptureRectangle(region);
+
+            image = new Bitmap(region.Width, region.Height, PixelFormat.Format32bppArgb);
+            using (Graphics g = Graphics.FromImage(image))
+            using(Bitmap tmp = ScreenShotManager.CaptureRectangle(region))
+            {
+                g.DrawImage(tmp, new Point(0, 0));
+            }
             mode = RegionCaptureOptions.mode;
 
             borderPen = new Pen(Color.Black);            
@@ -73,9 +81,10 @@ namespace WinkingCat.ScreenCaptureLib
             Bitmap DimmedCanvas = (Bitmap)image.Clone();
 
             using (Graphics g = Graphics.FromImage(DimmedCanvas))
-            using (Brush brush = new SolidBrush(Color.FromArgb(50, Color.Black)))
+            using (Brush brush = new SolidBrush(Color.FromArgb(36, Color.Black)))
             {
-                g.FillRectangle(brush, 0, 0, DimmedCanvas.Width, DimmedCanvas.Height);
+                if(RegionCaptureOptions.dimBackground)
+                    g.FillRectangle(brush, 0, 0, DimmedCanvas.Width, DimmedCanvas.Height);
 
                 backgroundBrush = new TextureBrush(DimmedCanvas) { WrapMode = WrapMode.Clamp };
             }
@@ -374,7 +383,8 @@ namespace WinkingCat.ScreenCaptureLib
 
                 if (RegionCaptureOptions.drawInfoText)
                 {
-                    DrawInfoText(g, $"X: {mousePos.X} Y: {mousePos.Y}", infoFont, textFontBrush, textBackgroundBrush, borderPen, new Point(magX, magY + Math.Abs(totalHeight)));
+                    Point actualMousePos = ScreenHelper.GetCursorPosition();
+                    DrawInfoText(g, $"X: {actualMousePos.X} Y: {actualMousePos.Y}", infoFont, textFontBrush, textBackgroundBrush, borderPen, new Point(magX, magY + Math.Abs(totalHeight)));
                 }
 
                 if (RegionCaptureOptions.drawMagnifier)
