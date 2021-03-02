@@ -48,7 +48,7 @@ namespace WinkingCat.HelperLibs
         OpenMainForm
     }
 
-    public enum MouseClickTasks
+    public enum InRegionTasks
     {
         DoNothing,
         Cancel,
@@ -57,7 +57,8 @@ namespace WinkingCat.HelperLibs
         CaptureActiveMonitor,
         CaptureLastRegion,
         RemoveSelection,
-        SwapToolType
+        SwapToolType,
+        SwapCenterMagnifier
     }
 
     public enum ColorFormat

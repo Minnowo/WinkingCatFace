@@ -242,16 +242,16 @@ namespace WinkingCat.HelperLibs
                                 RegionCaptureOptions.mode = (RegionCaptureMode)int.Parse(keys["mode"].Value);
                                 break;
                             case "onMouseMiddleClick":
-                                RegionCaptureOptions.onMouseMiddleClick = (MouseClickTasks)int.Parse(keys["onMouseMiddleClick"].Value);
+                                RegionCaptureOptions.onMouseMiddleClick = (InRegionTasks)int.Parse(keys["onMouseMiddleClick"].Value);
                                 break;
                             case "onMouseRightClick":
-                                RegionCaptureOptions.onMouseRightClick = (MouseClickTasks)int.Parse(keys["onMouseRightClick"].Value);
+                                RegionCaptureOptions.onMouseRightClick = (InRegionTasks)int.Parse(keys["onMouseRightClick"].Value);
                                 break;
                             case "onXButton1Click":
-                                RegionCaptureOptions.onXButton1Click = (MouseClickTasks)int.Parse(keys["onXButton1Click"].Value);
+                                RegionCaptureOptions.onXButton1Click = (InRegionTasks)int.Parse(keys["onXButton1Click"].Value);
                                 break;
                             case "onXButton2Click":
-                                RegionCaptureOptions.onXButton2Click = (MouseClickTasks)int.Parse(keys["onXButton2Click"].Value);
+                                RegionCaptureOptions.onXButton2Click = (InRegionTasks)int.Parse(keys["onXButton2Click"].Value);
                                 break;
                             default:
                                 throw new Exception("Keys have been modified RegionCapture.config will be reset with default values");

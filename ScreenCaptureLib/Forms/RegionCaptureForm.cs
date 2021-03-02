@@ -18,20 +18,16 @@ namespace WinkingCat.ScreenCaptureLib
     public partial class ClippingWindowForm : Form
     {
         public Rectangle clientArea { get; private set; }
-
-        //private Timer timer;
-
-
-        public bool isLeftClicking { get; private set; } = false;
-
+        public RegionCaptureMode mode { get; set; }
         public Bitmap image { get; private set; }
-        public Point leftClickStart { get; private set; } = new Point();
-        public Point leftClickStop { get; private set; } = new Point();
 
-        public Rectangle activeMonitor;
-        public Point mousePos;
-        public RegionResult result;
-        public RegionCaptureMode mode;
+
+        private Point leftClickStart = new Point();
+        private Point leftClickStop = new Point();
+        private Point mousePos;
+        private Rectangle activeMonitor;
+        private RegionResult result;
+        private bool isLeftClicking = false;
 
         private TextureBrush backgroundBrush;
         private Pen borderDotPen, borderPen;
@@ -42,7 +38,6 @@ namespace WinkingCat.ScreenCaptureLib
         {
             // force the client area to be at 0, 0 so that when you draw using graphics it draws in the correct location
             clientArea = new Rectangle(new Point(0, 0), new Size(region.Width, region.Height));
-            //Console.WriteLine(region);
 
             image = new Bitmap(region.Width, region.Height, PixelFormat.Format32bppArgb);
             using (Graphics g = Graphics.FromImage(image))
@@ -104,19 +99,17 @@ namespace WinkingCat.ScreenCaptureLib
             }
         }
 
-        private void KeyUp_Event(object sender, KeyEventArgs e)
+        private void KeyDown_Event(object sender, KeyEventArgs e)
         {
             e.Handled = true;
             switch (e.KeyData)
             {
                 case Keys.Z:
-                    RegionCaptureOptions.tryCenterMagnifier = !RegionCaptureOptions.tryCenterMagnifier;
-                    Invalidate();
+                    InRegionTaskHandler(RegionCaptureOptions.onZPress);
                     break;
 
                 case Keys.Escape:
-                    result = RegionResult.Close;
-                    Close();
+                    InRegionTaskHandler(RegionCaptureOptions.onEscapePress);
                     break;
             }
         }
@@ -149,17 +142,17 @@ namespace WinkingCat.ScreenCaptureLib
                 Invalidate();
         }
 
-        private void MouseButtonClickedHandler(MouseClickTasks task)
+        private void InRegionTaskHandler(InRegionTasks task)
         {
             switch (task)
             {
-                case MouseClickTasks.DoNothing:
+                case InRegionTasks.DoNothing:
                     break;
-                case MouseClickTasks.Cancel:
+                case InRegionTasks.Cancel:
                     result = RegionResult.Close;
                     Close();
                     break;
-                case MouseClickTasks.RemoveSelectionOrCancel:
+                case InRegionTasks.RemoveSelectionOrCancel:
                     if (isLeftClicking)
                         isLeftClicking = false;
                     else
@@ -168,23 +161,23 @@ namespace WinkingCat.ScreenCaptureLib
                         Close();
                     }
                     break;
-                case MouseClickTasks.CaptureFullScreen:
+                case InRegionTasks.CaptureFullScreen:
                     result = RegionResult.Fullscreen;
                     Close();
                     break;
-                case MouseClickTasks.CaptureActiveMonitor:
+                case InRegionTasks.CaptureActiveMonitor:
                     result = RegionResult.ActiveMonitor;
                     Close();
                     break;
-                case MouseClickTasks.CaptureLastRegion:
+                case InRegionTasks.CaptureLastRegion:
                     result = RegionResult.LastRegion;
                     Close();
                     break;
-                case MouseClickTasks.RemoveSelection:
+                case InRegionTasks.RemoveSelection:
                     if (isLeftClicking)
                         isLeftClicking = false;
                     break;
-                case MouseClickTasks.SwapToolType:
+                case InRegionTasks.SwapToolType:
                     if (mode == RegionCaptureMode.ColorPicker)
                     {
                         mode = RegionCaptureMode.Default;
@@ -193,6 +186,10 @@ namespace WinkingCat.ScreenCaptureLib
                     {
                         mode = RegionCaptureMode.ColorPicker;
                     }
+                    break;
+                case InRegionTasks.SwapCenterMagnifier:
+                    RegionCaptureOptions.tryCenterMagnifier = !RegionCaptureOptions.tryCenterMagnifier;
+                    Invalidate();
                     break;
             }
         }
@@ -221,19 +218,19 @@ namespace WinkingCat.ScreenCaptureLib
                     break;
 
                 case MouseButtons.Right:
-                    MouseButtonClickedHandler(RegionCaptureOptions.onMouseRightClick);
+                    InRegionTaskHandler(RegionCaptureOptions.onMouseRightClick);
                     break;
 
                 case MouseButtons.Middle:
-                    MouseButtonClickedHandler(RegionCaptureOptions.onMouseMiddleClick);
+                    InRegionTaskHandler(RegionCaptureOptions.onMouseMiddleClick);
                     break;
 
                 case MouseButtons.XButton1:
-                    MouseButtonClickedHandler(RegionCaptureOptions.onXButton1Click);
+                    InRegionTaskHandler(RegionCaptureOptions.onXButton1Click);
                     break;
 
                 case MouseButtons.XButton2:
-                    MouseButtonClickedHandler(RegionCaptureOptions.onXButton2Click);
+                    InRegionTaskHandler(RegionCaptureOptions.onXButton2Click);
                     break;
             }
         }

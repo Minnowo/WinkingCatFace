@@ -17,7 +17,7 @@ namespace WinkingCat
         {
             InitializeComponent();
 
-            foreach(MouseClickTasks task in Enum.GetValues(typeof(MouseClickTasks)))
+            foreach(InRegionTasks task in Enum.GetValues(typeof(InRegionTasks)))
             {
                 combobMouseMiddleClickAction.Items.Add(task);
                 combobMouseRightClickAction.Items.Add(task);
@@ -51,19 +51,19 @@ namespace WinkingCat
         #region ComboBox ValueChanged
         private void CombobMouseMiddleClickAction_SelectionChanged(object sender, EventArgs e)
         {
-            RegionCaptureOptions.onMouseMiddleClick = (MouseClickTasks)combobMouseMiddleClickAction.SelectedItem;
+            RegionCaptureOptions.onMouseMiddleClick = (InRegionTasks)combobMouseMiddleClickAction.SelectedItem;
         }
         private void CombobMouseRightClickAction_SelectionChanged(object sender, EventArgs e)
         {
-            RegionCaptureOptions.onMouseRightClick = (MouseClickTasks)combobMouseRightClickAction.SelectedItem;
+            RegionCaptureOptions.onMouseRightClick = (InRegionTasks)combobMouseRightClickAction.SelectedItem;
         }
         private void CombobXButton1ClickAction_SelectionChanged(object sender, EventArgs e)
         {
-            RegionCaptureOptions.onXButton1Click = (MouseClickTasks)combobXButton1ClickAction.SelectedItem;
+            RegionCaptureOptions.onXButton1Click = (InRegionTasks)combobXButton1ClickAction.SelectedItem;
         }
         private void CombobXButton2ClickAction_SelectionChanged(object sender, EventArgs e)
         {
-            RegionCaptureOptions.onXButton2Click = (MouseClickTasks)combobXButton2ClickAction.SelectedItem;
+            RegionCaptureOptions.onXButton2Click = (InRegionTasks)combobXButton2ClickAction.SelectedItem;
         }
         #endregion
 
