@@ -32,7 +32,7 @@
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(ApplicationForm));
             this.DisplayPanel = new System.Windows.Forms.Panel();
             this.lvListView = new WinkingCat.NoCheckboxListView();
-            this.toolStrip1 = new System.Windows.Forms.ToolStrip();
+            this.tsMain = new System.Windows.Forms.ToolStrip();
             this.ToolStripDropDownButton_Capture = new System.Windows.Forms.ToolStripDropDownButton();
             this.ToolStripMenuItem_region = new System.Windows.Forms.ToolStripMenuItem();
             this.ToolStripMenuItem_monitor = new System.Windows.Forms.ToolStripMenuItem();
@@ -51,11 +51,6 @@
             this.ToolStripDropDownButton_HashCheck = new System.Windows.Forms.ToolStripMenuItem();
             this.ToolStripDropDownButton_QrCode = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripSeparator1 = new System.Windows.Forms.ToolStripSeparator();
-            this.ToolStripDropDownButton_Style = new System.Windows.Forms.ToolStripDropDownButton();
-            this.toolStripMenuItem10 = new System.Windows.Forms.ToolStripMenuItem();
-            this.toolStripMenuItem11 = new System.Windows.Forms.ToolStripMenuItem();
-            this.toolStripMenuItem12 = new System.Windows.Forms.ToolStripMenuItem();
-            this.toolStripMenuItem13 = new System.Windows.Forms.ToolStripMenuItem();
             this.ToolStripDropDownButton_Settings = new System.Windows.Forms.ToolStripButton();
             this.columnHeader1 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.columnHeader5 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
@@ -82,8 +77,9 @@
             this.toolStripSeparator3 = new System.Windows.Forms.ToolStripSeparator();
             this.openMainWindowToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.exitToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.ToolStripButton_Style = new System.Windows.Forms.ToolStripButton();
             this.DisplayPanel.SuspendLayout();
-            this.toolStrip1.SuspendLayout();
+            this.tsMain.SuspendLayout();
             this.cmTray.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -91,7 +87,7 @@
             // 
             this.DisplayPanel.BackColor = System.Drawing.Color.White;
             this.DisplayPanel.Controls.Add(this.lvListView);
-            this.DisplayPanel.Controls.Add(this.toolStrip1);
+            this.DisplayPanel.Controls.Add(this.tsMain);
             this.DisplayPanel.Dock = System.Windows.Forms.DockStyle.Fill;
             this.DisplayPanel.Location = new System.Drawing.Point(0, 0);
             this.DisplayPanel.Name = "DisplayPanel";
@@ -119,24 +115,24 @@
             // 
             // toolStrip1
             // 
-            this.toolStrip1.AutoSize = false;
-            this.toolStrip1.Dock = System.Windows.Forms.DockStyle.Left;
-            this.toolStrip1.GripStyle = System.Windows.Forms.ToolStripGripStyle.Hidden;
-            this.toolStrip1.ImageScalingSize = new System.Drawing.Size(24, 24);
-            this.toolStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.tsMain.AutoSize = false;
+            this.tsMain.Dock = System.Windows.Forms.DockStyle.Left;
+            this.tsMain.GripStyle = System.Windows.Forms.ToolStripGripStyle.Hidden;
+            this.tsMain.ImageScalingSize = new System.Drawing.Size(24, 24);
+            this.tsMain.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.ToolStripDropDownButton_Capture,
             this.ToolStripDropDownButton_Clips,
             this.ToolStripDropDownButton_Tools,
             this.toolStripSeparator1,
-            this.ToolStripDropDownButton_Style,
+            this.ToolStripButton_Style,
             this.ToolStripDropDownButton_Settings});
-            this.toolStrip1.LayoutStyle = System.Windows.Forms.ToolStripLayoutStyle.VerticalStackWithOverflow;
-            this.toolStrip1.Location = new System.Drawing.Point(0, 0);
-            this.toolStrip1.Name = "toolStrip1";
-            this.toolStrip1.ShowItemToolTips = false;
-            this.toolStrip1.Size = new System.Drawing.Size(184, 211);
-            this.toolStrip1.TabIndex = 1;
-            this.toolStrip1.Text = "toolStrip1";
+            this.tsMain.LayoutStyle = System.Windows.Forms.ToolStripLayoutStyle.VerticalStackWithOverflow;
+            this.tsMain.Location = new System.Drawing.Point(0, 0);
+            this.tsMain.Name = "toolStrip1";
+            this.tsMain.ShowItemToolTips = false;
+            this.tsMain.Size = new System.Drawing.Size(184, 211);
+            this.tsMain.TabIndex = 1;
+            this.tsMain.Text = "toolStrip1";
             // 
             // ToolStripDropDownButton_Capture
             // 
@@ -308,53 +304,6 @@
             this.toolStripSeparator1.Name = "toolStripSeparator1";
             this.toolStripSeparator1.Size = new System.Drawing.Size(167, 10);
             // 
-            // ToolStripDropDownButton_Style
-            // 
-            this.ToolStripDropDownButton_Style.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.toolStripMenuItem10,
-            this.toolStripMenuItem11,
-            this.toolStripMenuItem12,
-            this.toolStripMenuItem13});
-            this.ToolStripDropDownButton_Style.Font = new System.Drawing.Font("Consolas", 11.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.ToolStripDropDownButton_Style.Image = global::WinkingCat.Properties.Resources.style_icon;
-            this.ToolStripDropDownButton_Style.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            this.ToolStripDropDownButton_Style.ImageScaling = System.Windows.Forms.ToolStripItemImageScaling.None;
-            this.ToolStripDropDownButton_Style.ImageTransparentColor = System.Drawing.Color.Magenta;
-            this.ToolStripDropDownButton_Style.Name = "ToolStripDropDownButton_Style";
-            this.ToolStripDropDownButton_Style.Size = new System.Drawing.Size(182, 36);
-            this.ToolStripDropDownButton_Style.Text = "Styles";
-            // 
-            // toolStripMenuItem10
-            // 
-            this.toolStripMenuItem10.Image = global::WinkingCat.Properties.Resources.new_document_icon;
-            this.toolStripMenuItem10.ImageScaling = System.Windows.Forms.ToolStripItemImageScaling.None;
-            this.toolStripMenuItem10.Name = "toolStripMenuItem10";
-            this.toolStripMenuItem10.Size = new System.Drawing.Size(316, 38);
-            this.toolStripMenuItem10.Text = "NewClip";
-            // 
-            // toolStripMenuItem11
-            // 
-            this.toolStripMenuItem11.Image = global::WinkingCat.Properties.Resources.Clipboard_2_icon;
-            this.toolStripMenuItem11.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            this.toolStripMenuItem11.ImageScaling = System.Windows.Forms.ToolStripItemImageScaling.None;
-            this.toolStripMenuItem11.Name = "toolStripMenuItem11";
-            this.toolStripMenuItem11.Size = new System.Drawing.Size(316, 38);
-            this.toolStripMenuItem11.Text = "ClipFromClipboard";
-            // 
-            // toolStripMenuItem12
-            // 
-            this.toolStripMenuItem12.Image = global::WinkingCat.Properties.Resources.new_doc_icon;
-            this.toolStripMenuItem12.ImageScaling = System.Windows.Forms.ToolStripItemImageScaling.None;
-            this.toolStripMenuItem12.Name = "toolStripMenuItem12";
-            this.toolStripMenuItem12.Size = new System.Drawing.Size(316, 38);
-            this.toolStripMenuItem12.Text = "ClipFromFile";
-            // 
-            // toolStripMenuItem13
-            // 
-            this.toolStripMenuItem13.Name = "toolStripMenuItem13";
-            this.toolStripMenuItem13.Size = new System.Drawing.Size(316, 38);
-            this.toolStripMenuItem13.Text = "CreateClipAfterRegionCapture";
-            // 
             // ToolStripDropDownButton_Settings
             // 
             this.ToolStripDropDownButton_Settings.Font = new System.Drawing.Font("Consolas", 11.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
@@ -363,7 +312,7 @@
             this.ToolStripDropDownButton_Settings.ImageScaling = System.Windows.Forms.ToolStripItemImageScaling.None;
             this.ToolStripDropDownButton_Settings.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.ToolStripDropDownButton_Settings.Name = "ToolStripDropDownButton_Settings";
-            this.ToolStripDropDownButton_Settings.Size = new System.Drawing.Size(182, 36);
+            this.ToolStripDropDownButton_Settings.Size = new System.Drawing.Size(108, 36);
             this.ToolStripDropDownButton_Settings.Text = "Settings";
             this.ToolStripDropDownButton_Settings.Click += new System.EventHandler(this.ToolStripDropDownButton_Settings_Click);
             // 
@@ -566,6 +515,19 @@
             this.exitToolStripMenuItem.Size = new System.Drawing.Size(196, 38);
             this.exitToolStripMenuItem.Text = "Exit";
             // 
+            // ToolStripButton_Style
+            // 
+            this.ToolStripButton_Style.Font = new System.Drawing.Font("Consolas", 11.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.ToolStripButton_Style.Image = global::WinkingCat.Properties.Resources.style_icon;
+            this.ToolStripButton_Style.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            this.ToolStripButton_Style.ImageScaling = System.Windows.Forms.ToolStripItemImageScaling.None;
+            this.ToolStripButton_Style.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.ToolStripButton_Style.Name = "ToolStripButton_Style";
+            this.ToolStripButton_Style.Size = new System.Drawing.Size(182, 36);
+            this.ToolStripButton_Style.Text = "Styles";
+            this.ToolStripButton_Style.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            this.ToolStripButton_Style.Click += new System.EventHandler(this.ToolStripDropDownButton_Styles_Click);
+            // 
             // ApplicationForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -578,8 +540,8 @@
             this.Text = "Form1";
             this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.MainForm_FormClosing);
             this.DisplayPanel.ResumeLayout(false);
-            this.toolStrip1.ResumeLayout(false);
-            this.toolStrip1.PerformLayout();
+            this.tsMain.ResumeLayout(false);
+            this.tsMain.PerformLayout();
             this.cmTray.ResumeLayout(false);
             this.ResumeLayout(false);
 
@@ -587,7 +549,7 @@
 
         #endregion
         private System.Windows.Forms.Panel DisplayPanel;
-        private System.Windows.Forms.ToolStrip toolStrip1;
+        private System.Windows.Forms.ToolStrip tsMain;
         private System.Windows.Forms.ToolStripDropDownButton ToolStripDropDownButton_Capture;
         private System.Windows.Forms.ToolStripMenuItem ToolStripMenuItem_region;
         private System.Windows.Forms.ToolStripMenuItem ToolStripMenuItem_monitor;
@@ -606,11 +568,6 @@
         private System.Windows.Forms.ToolStripMenuItem ToolStripDropDownButton_HashCheck;
         private System.Windows.Forms.ToolStripMenuItem ToolStripDropDownButton_QrCode;
         private System.Windows.Forms.ToolStripSeparator toolStripSeparator1;
-        private System.Windows.Forms.ToolStripDropDownButton ToolStripDropDownButton_Style;
-        private System.Windows.Forms.ToolStripMenuItem toolStripMenuItem10;
-        private System.Windows.Forms.ToolStripMenuItem toolStripMenuItem11;
-        private System.Windows.Forms.ToolStripMenuItem toolStripMenuItem12;
-        private System.Windows.Forms.ToolStripMenuItem toolStripMenuItem13;
         internal System.Windows.Forms.NotifyIcon niTrayIcon;
         private System.Windows.Forms.ContextMenuStrip cmTray;
         private System.Windows.Forms.ToolStripMenuItem captureToolStripMenuItem;
@@ -638,6 +595,7 @@
         private System.Windows.Forms.ColumnHeader columnHeader3;
         private System.Windows.Forms.ColumnHeader columnHeader4;
         private System.Windows.Forms.ColumnHeader columnHeader5;
+        private System.Windows.Forms.ToolStripButton ToolStripButton_Style;
     }
 }
 

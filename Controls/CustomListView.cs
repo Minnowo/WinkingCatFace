@@ -66,11 +66,16 @@ namespace WinkingCat
         }
 
         ToolStripMenuItem[] buttonOnlyItems;
-
+        public bool autoFillColumn { get; set; } = true;
         public NoCheckboxListView()
         {
             SetStyle(ControlStyles.OptimizedDoubleBuffer | ControlStyles.AllPaintingInWmPaint | ControlStyles.EnableNotifyMessage, true);
             InitializeComponent();
+
+            FullRowSelect = true;
+            
+            //this.AutoResizeColumns(ColumnHeaderAutoResizeStyle.ColumnContent);
+            //this.AutoResizeColumns(ColumnHeaderAutoResizeStyle.HeaderSize);
 
             if (File.Exists(PathHelper.loadedItemsPath))
             {
@@ -164,8 +169,25 @@ namespace WinkingCat
             toolStripMenuItemDirectory,
             toolStripMenuItemPath,
             toolStripMenuItemRemoveFromList};
+
+            UpdateTheme();
         }
 
+        public void UpdateTheme()
+        {
+            this.SupportCustomTheme();
+            this.BackColor = ApplicationStyles.backgroundColor;
+            this.ForeColor = ApplicationStyles.textColor;
+
+            cmsMain.Renderer = new ToolStripCustomRenderer();
+            cmsMain.Opacity = ApplicationStyles.contextMenuOpacity;
+
+            cmsOpen.Renderer = new ToolStripCustomRenderer();
+            cmsOpen.Opacity = ApplicationStyles.contextMenuOpacity;
+
+            cmsCopy.Renderer = new ToolStripCustomRenderer();
+            cmsCopy.Opacity = ApplicationStyles.contextMenuOpacity;
+        }
         
         #region cmsMain
 
@@ -429,6 +451,8 @@ namespace WinkingCat
                 w.WriteLine(item.Tag.ToString());
             }
             this.Items.Add(item);
+            this.AutoResizeColumns(ColumnHeaderAutoResizeStyle.ColumnContent);
+            this.AutoResizeColumns(ColumnHeaderAutoResizeStyle.HeaderSize);
         }
 
         public void InsertItem(int index, ListViewItem item)
@@ -438,6 +462,8 @@ namespace WinkingCat
                 w.WriteLine(item.Tag.ToString());
             }
             this.Items.Insert(index, item);
+            this.AutoResizeColumns(ColumnHeaderAutoResizeStyle.ColumnContent);
+            this.AutoResizeColumns(ColumnHeaderAutoResizeStyle.HeaderSize);
         }
 
         private void MouseDoubleClick_Event(object sender, MouseEventArgs e)
@@ -475,6 +501,18 @@ namespace WinkingCat
             }
         }
 
+        protected override void WndProc(ref Message m)
+        {
+            if (autoFillColumn && m.Msg == (int)WindowsMessages.PAINT && !DesignMode)
+            {
+                if (Columns.Count != 0) // sizes the columns to fill the rest of the list box
+                { 
+                    this.Columns[this.Columns.Count - 1].Width = -2;
+                }
+            }
+            base.WndProc(ref m);
+        }
+
         public void UnselectAll()
         {
             if (MultiSelect)
@@ -504,10 +542,10 @@ namespace WinkingCat
             this.toolStripMenuItemUpload = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripMenuItemOCR = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripSeparator1 = new System.Windows.Forms.ToolStripSeparator();
-            this.toolStripMenuItemDelete = new System.Windows.Forms.ToolStripMenuItem();
-            this.toolStripMenuItemAlwaysOnTop = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripMenuItemRemoveFromList = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripSeparator3 = new System.Windows.Forms.ToolStripSeparator();
+            this.toolStripMenuItemDelete = new System.Windows.Forms.ToolStripMenuItem();
+            this.toolStripMenuItemAlwaysOnTop = new System.Windows.Forms.ToolStripMenuItem();
             this.cmsMain.SuspendLayout();
             this.cmsOpen.SuspendLayout();
             this.cmsCopy.SuspendLayout();
@@ -643,6 +681,17 @@ namespace WinkingCat
             this.toolStripSeparator1.Name = "toolStripSeparator1";
             this.toolStripSeparator1.Size = new System.Drawing.Size(193, 6);
             // 
+            // toolStripMenuItemRemoveFromList
+            // 
+            this.toolStripMenuItemRemoveFromList.Name = "toolStripMenuItemRemoveFromList";
+            this.toolStripMenuItemRemoveFromList.Size = new System.Drawing.Size(196, 22);
+            this.toolStripMenuItemRemoveFromList.Text = "Remove Selected Items";
+            // 
+            // toolStripSeparator3
+            // 
+            this.toolStripSeparator3.Name = "toolStripSeparator3";
+            this.toolStripSeparator3.Size = new System.Drawing.Size(193, 6);
+            // 
             // toolStripMenuItemDelete
             // 
             this.toolStripMenuItemDelete.Name = "toolStripMenuItemDelete";
@@ -655,17 +704,6 @@ namespace WinkingCat
             this.toolStripMenuItemAlwaysOnTop.Name = "toolStripMenuItemAlwaysOnTop";
             this.toolStripMenuItemAlwaysOnTop.Size = new System.Drawing.Size(196, 22);
             this.toolStripMenuItemAlwaysOnTop.Text = "Always On Top";
-            // 
-            // toolStripMenuItemRemoveFromList
-            // 
-            this.toolStripMenuItemRemoveFromList.Name = "toolStripMenuItemRemoveFromList";
-            this.toolStripMenuItemRemoveFromList.Size = new System.Drawing.Size(196, 22);
-            this.toolStripMenuItemRemoveFromList.Text = "Remove Selected Items";
-            // 
-            // toolStripSeparator3
-            // 
-            this.toolStripSeparator3.Name = "toolStripSeparator3";
-            this.toolStripSeparator3.Size = new System.Drawing.Size(193, 6);
             // 
             // NoCheckboxListView
             // 

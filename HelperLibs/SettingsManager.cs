@@ -157,6 +157,8 @@ namespace WinkingCat.HelperLibs
                 keys.Add("onMouseRightClick", RegionCaptureOptions.onMouseRightClick.ToString("D"));
                 keys.Add("onXButton1Click", RegionCaptureOptions.onXButton1Click.ToString("D"));
                 keys.Add("onXButton2Click", RegionCaptureOptions.onXButton2Click.ToString("D"));
+                keys.Add("onEscapePress", RegionCaptureOptions.onEscapePress.ToString("D"));
+                keys.Add("onZPress", RegionCaptureOptions.onZPress.ToString("D"));
                 conf.Save();
                 return true;
             }
@@ -179,7 +181,7 @@ namespace WinkingCat.HelperLibs
             {
                 try
                 {
-                    if (keys.AllKeys.Length != 23)
+                    if (keys.AllKeys.Length != 25)
                         throw new Exception("Keys have been modified RegionCapture.config will be reset with default values");
                     foreach (string key in keys.AllKeys)
                         switch (key)
@@ -253,6 +255,12 @@ namespace WinkingCat.HelperLibs
                             case "onXButton2Click":
                                 RegionCaptureOptions.onXButton2Click = (InRegionTasks)int.Parse(keys["onXButton2Click"].Value);
                                 break;
+                            case "onEscapePress":
+                                RegionCaptureOptions.onEscapePress = (InRegionTasks)int.Parse(keys["onEscapePress"].Value);
+                                break;
+                            case "onZPress":
+                                RegionCaptureOptions.onZPress = (InRegionTasks)int.Parse(keys["onZPress"].Value);
+                                break;
                             default:
                                 throw new Exception("Keys have been modified RegionCapture.config will be reset with default values");
                         }
@@ -292,6 +300,8 @@ namespace WinkingCat.HelperLibs
             keys.Add("onMouseRightClick", RegionCaptureOptions.onMouseRightClick.ToString("D"));
             keys.Add("onXButton1Click", RegionCaptureOptions.onXButton1Click.ToString("D"));
             keys.Add("onXButton2Click", RegionCaptureOptions.onXButton2Click.ToString("D"));
+            keys.Add("onEscapePress", RegionCaptureOptions.onEscapePress.ToString("D"));
+            keys.Add("onZPress", RegionCaptureOptions.onZPress.ToString("D"));
             conf.Save();
             return false;
         }

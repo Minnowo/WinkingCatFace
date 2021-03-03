@@ -14,7 +14,7 @@ namespace WinkingCat.HelperLibs
         public static bool minimizeToTray { get; set; } = true;
         public static bool startInTray { get; set; } = false;
         public static bool alwaysOnTop { get; set; } = true;
-        public static int waitHideTime { get; set; } = 500;
+        public static int waitHideTime { get; set; } = 300;
 
         public static Tasks onTrayLeftClick { get; set; } = Tasks.RegionCapture;
         public static Tasks onTrayDoubleLeftClick { get; set; } = Tasks.OpenMainForm;

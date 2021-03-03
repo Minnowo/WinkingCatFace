@@ -76,7 +76,7 @@
     <Compile Include="HotkeySettings.cs" />
     <Compile Include="Logger.cs" />
     <Compile Include="MainFormSettings.cs" />
-    <Compile Include="MainFormStyles.cs" />
+    <Compile Include="ApplicationStyles.cs" />
     <Compile Include="Native\NativeEnums.cs" />
     <Compile Include="Native\NativeConstants.cs" />
     <Compile Include="Native\NativeMethods.cs" />

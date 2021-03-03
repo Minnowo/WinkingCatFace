@@ -5,7 +5,7 @@
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
     <ProjectGuid>{D3039595-1B90-451D-B853-3B6FD48C19E5}</ProjectGuid>
-    <OutputType>WinExe</OutputType>
+    <OutputType>Exe</OutputType>
     <RootNamespace>WinkingCat</RootNamespace>
     <AssemblyName>TWCF</AssemblyName>
     <TargetFrameworkVersion>v4.7.2</TargetFrameworkVersion>
@@ -125,12 +125,6 @@
     <Compile Include="Forms\SettingsForm.Designer.cs">
       <DependentUpon>SettingsForm.cs</DependentUpon>
     </Compile>
-    <Compile Include="Forms\StylesForm.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="Forms\StylesForm.Designer.cs">
-      <DependentUpon>StylesForm.cs</DependentUpon>
-    </Compile>
     <Compile Include="Forms\UploadSettingsForm.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -143,6 +137,12 @@
     </Compile>
     <Compile Include="Forms\RegionCaptureSettingsForm.Designer.cs">
       <DependentUpon>RegionCaptureSettingsForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Forms\StylesForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\StylesForm.Designer.cs">
+      <DependentUpon>StylesForm.cs</DependentUpon>
     </Compile>
     <Compile Include="TaskHandler.cs" />
     <EmbeddedResource Include="Controls\CustomListView.resx">
@@ -171,6 +171,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\SettingsForm.resx">
       <DependentUpon>SettingsForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\StylesForm.resx">
+      <DependentUpon>StylesForm.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\UploadSettingsForm.resx">
       <DependentUpon>UploadSettingsForm.cs</DependentUpon>

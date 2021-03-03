@@ -35,7 +35,7 @@ namespace WinkingCat.ScreenCaptureLib
         }
         public static void OnImageSaved(ImageSavedEvent info)
         {
-            if (CaptureEvent != null)
+            if (ImageSaved != null)
             {
                 ImageSaved(null, info);
             }

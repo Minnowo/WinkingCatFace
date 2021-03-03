@@ -30,7 +30,7 @@ namespace WinkingCat.ScreenCaptureLib
         private bool isLeftClicking = false;
 
         private TextureBrush backgroundBrush;
-        private Pen borderDotPen, borderPen;
+        private Pen borderDotPen, borderPen, magnifierBorderPen;
         private Brush textBackgroundBrush, textFontBrush, backgroundHighlightBrush;
         private Font infoFont;
 
@@ -46,13 +46,14 @@ namespace WinkingCat.ScreenCaptureLib
                 g.DrawImage(tmp, new Point(0, 0));
             }
             mode = RegionCaptureOptions.mode;
-
-            borderPen = new Pen(Color.Black);            
-            borderDotPen = new Pen(Color.FromArgb(249, 0, 187)) { DashPattern = new float[] { 5, 5 } };
+                        
+            borderDotPen = new Pen(Color.FromArgb(ApplicationStyles.ScreenWideCrosshairOpacity, ApplicationStyles.screenWideCrosshairColor)) { DashPattern = new float[] { 5, 5 } };
             infoFont = new Font("Verdana", 12); // 10
 
-            textBackgroundBrush = new SolidBrush(System.Drawing.Color.FromArgb(39, 43, 50));
-            textFontBrush = new SolidBrush(System.Drawing.Color.FromArgb(255, 255, 255));
+            magnifierBorderPen = new Pen(Color.FromArgb(ApplicationStyles.MangifierBorderOpacity, ApplicationStyles.MagnifierBorderColor));
+            borderPen = new Pen(ApplicationStyles.infoTextBorderColor);
+            textBackgroundBrush = new SolidBrush(ApplicationStyles.infoTextBackgroundColor);
+            textFontBrush = new SolidBrush(ApplicationStyles.infoTextTextColor);
 
             SuspendLayout();
 
@@ -76,7 +77,7 @@ namespace WinkingCat.ScreenCaptureLib
             Bitmap DimmedCanvas = (Bitmap)image.Clone();
 
             using (Graphics g = Graphics.FromImage(DimmedCanvas))
-            using (Brush brush = new SolidBrush(Color.FromArgb(36, Color.Black)))
+            using (Brush brush = new SolidBrush(Color.FromArgb(ApplicationStyles.BackgroundOverlayOpacity, ApplicationStyles.BackgroundOverlayColor)))
             {
                 if(RegionCaptureOptions.dimBackground)
                     g.FillRectangle(brush, 0, 0, DimmedCanvas.Width, DimmedCanvas.Height);
@@ -309,10 +310,13 @@ namespace WinkingCat.ScreenCaptureLib
         private void DrawMouseInfo(Graphics g)
         {
             Bitmap magnifier = null;
+            Point pointToScreen = PointToScreen(mousePos);
             int magX = mousePos.X;
             int magY = mousePos.Y;
             int totalWidth = RegionCaptureOptions.cursorInfoOffset;
             int totalHeight = RegionCaptureOptions.cursorInfoOffset;
+            string infoText = $"X: {pointToScreen.X} Y: {pointToScreen.Y}\nnyahh";
+            Size infoTextSize = g.MeasureString(infoText, infoFont).ToSize();
 
             if (RegionCaptureOptions.tryCenterMagnifier && RegionCaptureOptions.drawMagnifier)
             {
@@ -337,7 +341,7 @@ namespace WinkingCat.ScreenCaptureLib
                 {
                     if (RegionCaptureOptions.drawInfoText)
                     {
-                        totalWidth += infoFont.Height / 2 * $"X: {mousePos.X} Y: {mousePos.Y}".Length;
+                        totalWidth += infoTextSize.Width;//infoFont.Height / 2 * $"X: {mousePos.X} Y: {mousePos.Y}".Length;
 
                         // to cancel the increase to totalHeight below otherwise the info text will apear 
                         // farther down than its supposed to
@@ -347,14 +351,14 @@ namespace WinkingCat.ScreenCaptureLib
 
                 if (RegionCaptureOptions.drawInfoText)
                 {
-                    totalHeight += infoFont.Height + 2;
+                    totalHeight += infoTextSize.Height;
                     totalHeight += RegionCaptureOptions.cursorInfoOffset;
 
                     // if the width of the info text is greater than the magnifier width use that for totalWidth
-                    if (RegionCaptureOptions.drawMagnifier && magnifier.Width < (infoFont.Height / 2 * $"X: {mousePos.X} Y: {mousePos.Y}".Length))
+                    if (RegionCaptureOptions.drawMagnifier && magnifier.Width < infoTextSize.Width)
                     {
                         totalWidth -= magnifier.Width;
-                        totalWidth += infoFont.Height / 2 * $"X: {mousePos.X} Y: {mousePos.Y}".Length;
+                        totalWidth += infoTextSize.Width;// infoFont.Height / 2 * $"X: {mousePos.X} Y: {mousePos.Y}".Length;
                     }
                 }
 
@@ -380,13 +384,13 @@ namespace WinkingCat.ScreenCaptureLib
 
                 if (RegionCaptureOptions.drawInfoText)
                 {
-                    Point actualMousePos = ScreenHelper.GetCursorPosition();
-                    DrawInfoText(g, $"X: {actualMousePos.X} Y: {actualMousePos.Y}", infoFont, textFontBrush, textBackgroundBrush, borderPen, new Point(magX, magY + Math.Abs(totalHeight)));
+                    DrawInfoText(g, infoText, infoFont, textFontBrush, textBackgroundBrush, borderPen, new Point(magX, magY + Math.Abs(totalHeight)));
                 }
 
                 if (RegionCaptureOptions.drawMagnifier)
                 {
-                    g.DrawImage(magnifier, new Point(magX, magY));
+                    g.DrawRectangle(magnifierBorderPen, magX - 1, magY - 1, magnifier.Width + 1, magnifier.Height + 1);
+                    g.DrawImage(magnifier, new Point(magX, magY));  
                     magnifier.Dispose();
                 }
             }
@@ -416,7 +420,7 @@ namespace WinkingCat.ScreenCaptureLib
 
                 if (RegionCaptureOptions.drawMagnifierGrid)
                 {
-                    using (Pen pen = new Pen(Color.FromArgb(255, Color.Black)))
+                    using (Pen pen = new Pen(Color.FromArgb(ApplicationStyles.MagnifierGridOpacity, ApplicationStyles.MagnifierGridColor)))
                     {
                         for (int x = 1; x < pixelCount; x++)
                         {
@@ -432,7 +436,7 @@ namespace WinkingCat.ScreenCaptureLib
 
                 if (RegionCaptureOptions.drawMagnifierCrosshair)
                 {
-                    using (SolidBrush crosshairBrush = new SolidBrush(Color.FromArgb(125, Color.LightBlue)))
+                    using (SolidBrush crosshairBrush = new SolidBrush(Color.FromArgb(ApplicationStyles.MagnifierCrosshairOpacity, ApplicationStyles.magnifierCrosshairColor)))
                     {
                         gr.FillRectangle(crosshairBrush, new Rectangle(0, (height - pixelSize) / 2, (width - pixelSize) / 2, pixelSize)); // Left
                         gr.FillRectangle(crosshairBrush, new Rectangle((width + pixelSize) / 2, (height - pixelSize) / 2, (width - pixelSize) / 2, pixelSize)); // Right
@@ -459,10 +463,11 @@ namespace WinkingCat.ScreenCaptureLib
 
         private void DrawInfoText(Graphics g, string text, Font font, Brush textFontBrush ,Brush backgroundBrush, Pen outerBorderPen, Point pos)
         {
-            int width = font.Height / 2 * text.Length;
-            int height = font.Height + 2;
+            Size textSize = g.MeasureString(text, font).ToSize();
+            int width = textSize.Width;//font.Height / 2 * text.Length;
+            int height = textSize.Height;//font.Height + 2;
             int mX = pos.X;
-            int mY = pos.Y - height - RegionCaptureOptions.cursorInfoOffset;
+            int mY = pos.Y - RegionCaptureOptions.cursorInfoOffset - height;
 
             Rectangle rect = new Rectangle(
                 new Point(mX, mY), 

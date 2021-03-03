@@ -22,13 +22,16 @@ namespace WinkingCat
         private Image image { get; set; } = null;
         private System.Windows.Forms.Timer trayClickTimer { get; set; }
         public SettingsForm settingsForm { get; private set; }
+        public StylesForm stylesForm { get; private set; }
 
 
-        public int trayClickCount { get; private set; } = 0;
-        public bool forceClose { get; set; } = false;
-        public bool allowShowDisplay { get; set; } = !MainFormSettings.startInTray;
-        private bool isInTrayOrMinimized { get; set; } = MainFormSettings.startInTray;
-        private bool forceDropDownClose { get; set; } = false;
+        private int trayClickCount = 0;
+        private bool forceClose = false;
+        private bool allowShowDisplay = !MainFormSettings.startInTray;
+        private bool isInTrayOrMinimized = MainFormSettings.startInTray;
+        private bool forceDropDownClose = false;
+        private bool isHandleCreated = false;
+
         public ApplicationForm()
         {
             InitializeComponent();
@@ -37,7 +40,6 @@ namespace WinkingCat
             TopMost = MainFormSettings.alwaysOnTop;
 #endif
             niTrayIcon.Visible = MainFormSettings.showInTray;
-
 
 #region Capture dropdown buttons
             ToolStripDropDownButton_Capture.DropDown.Closing += toolStripDropDown_Closing;
@@ -62,11 +64,6 @@ namespace WinkingCat
             ToolStripDropDownButton_Tools.DropDown.Closing += toolStripDropDown_Closing;
 
             ToolStripDropDownButton_screenColorPicker.Click += ScreenColorPicker_Click;
-#endregion
-
-#region Style button
-            ToolStripDropDownButton_Style.DropDown.Closing += toolStripDropDown_Closing;
-
 #endregion
 
 #region Tray icon
@@ -97,8 +94,11 @@ namespace WinkingCat
             GotFocus += mainForm_GotFocus;
             Resize += MainForm_Resize;
 
-            ImageHandler.CaptureEvent += AfterCaptureEvent;
+            //ImageHandler.CaptureEvent += AfterCaptureEvent;
             ImageHandler.ImageSaved += ImageSaved_Event;
+
+            lvListView.AutoResizeColumns(ColumnHeaderAutoResizeStyle.ColumnContent);
+            lvListView.AutoResizeColumns(ColumnHeaderAutoResizeStyle.HeaderSize);
 
             ResumeLayout();
 
@@ -107,8 +107,8 @@ namespace WinkingCat
 
         private void MainForm_HandleCreated(object sender, EventArgs e)
         {
-            NativeMethods.UseImmersiveDarkMode(Handle, true);
-            Refresh();
+            isHandleCreated = true;
+            UpdateTheme();
         }
 
         private void UpdateSettings(object sender, EventArgs e)
@@ -117,8 +117,25 @@ namespace WinkingCat
             niTrayIcon.Visible = MainFormSettings.showInTray;
         }
 
+        public void UpdateTheme()
+        {
+            if(ApplicationStyles.useImersiveDarkMode && isHandleCreated)
+            {
+                NativeMethods.UseImmersiveDarkMode(Handle, true);
+            }
+
+            this.Text = ApplicationStyles.mainFormName;
+            this.BackColor = ApplicationStyles.backgroundColor;
+            this.DisplayPanel.BackColor = ApplicationStyles.backgroundColor;
+            tsMain.Renderer = new ToolStripCustomRenderer();
+
+            cmTray.Renderer = new ToolStripCustomRenderer();
+            cmTray.Opacity = ApplicationStyles.contextMenuOpacity;
+        }
+
         public void ImageSaved_Event(object sender, ImageSavedEvent e)
         {
+            Console.WriteLine("nyah");
             string[] row1 = { e.info.Extension,  // name
                 $"{e.dimensions.Width}, {e.dimensions.Height}", // dimensions
                 Helpers.SizeSuffix(e.size), // size
@@ -138,10 +155,10 @@ namespace WinkingCat
             }
         }
 
-        public void AfterCaptureEvent(object sender, LastRegionCaptureInfo e)
+       /* public void AfterCaptureEvent(object sender, LastRegionCaptureInfo e)
         {
 
-        }
+        }*/
 
 #region Capture dropdown buttons
         private async void tsmiCapture_DropDownOpening(object sender, EventArgs e)
@@ -174,7 +191,7 @@ namespace WinkingCat
 
             Thread.Sleep(MainFormSettings.waitHideTime);
             TaskHandler.CaptureWindow(win);
-            Thread.Sleep(MainFormSettings.waitHideTime);
+            //Thread.Sleep(MainFormSettings.waitHideTime);
 
             Show();
         }
@@ -192,7 +209,7 @@ namespace WinkingCat
             }
             Thread.Sleep(MainFormSettings.waitHideTime);
             ImageHandler.Save(img: ScreenShotManager.CaptureRectangle((Rectangle)tsi.Tag));
-            Thread.Sleep(MainFormSettings.waitHideTime);
+            //Thread.Sleep(MainFormSettings.waitHideTime);
 
             Show();
         }
@@ -208,7 +225,7 @@ namespace WinkingCat
 
             if (MainFormSettings.hideMainFormOnCapture && !isInTrayOrMinimized)
             {
-                Thread.Sleep(MainFormSettings.waitHideTime);
+                //Thread.Sleep(MainFormSettings.waitHideTime);
                 Show();
             }
         }
@@ -223,7 +240,7 @@ namespace WinkingCat
 
             if (MainFormSettings.hideMainFormOnCapture && !isInTrayOrMinimized)
             {
-                Thread.Sleep(MainFormSettings.waitHideTime);
+                //Thread.Sleep(MainFormSettings.waitHideTime);
                 Show();
             }
         }
@@ -238,7 +255,7 @@ namespace WinkingCat
 
             if (MainFormSettings.hideMainFormOnCapture && !isInTrayOrMinimized)
             {
-                Thread.Sleep(MainFormSettings.waitHideTime);
+                //Thread.Sleep(MainFormSettings.waitHideTime);
                 Show();
             }
         }
@@ -253,7 +270,7 @@ namespace WinkingCat
 
             if (MainFormSettings.hideMainFormOnCapture)
             {
-                Thread.Sleep(MainFormSettings.waitHideTime);
+                //Thread.Sleep(MainFormSettings.waitHideTime);
                 Show();
             }
         }
@@ -397,7 +414,6 @@ namespace WinkingCat
             ToolStripDropDownButton_Capture.DropDown.Close();
             ToolStripDropDownButton_Clips.DropDown.Close();
             ToolStripDropDownButton_Tools.DropDown.Close();
-            ToolStripDropDownButton_Style.DropDown.Close();
         }
 
         private void mainForm_GotFocus(object sender, EventArgs e)
@@ -407,7 +423,6 @@ namespace WinkingCat
             ToolStripDropDownButton_Capture.DropDown.Close();
             ToolStripDropDownButton_Clips.DropDown.Close();
             ToolStripDropDownButton_Tools.DropDown.Close();
-            ToolStripDropDownButton_Style.DropDown.Close();
         }
 
         private void MainForm_FormClosing(object sender, FormClosingEventArgs e)
@@ -514,10 +529,22 @@ namespace WinkingCat
             settingsForm.Show();
         }
 
+        private void ToolStripDropDownButton_Styles_Click(object sender, EventArgs e)
+        {
+            stylesForm?.Close();
+            stylesForm?.Dispose();
+            stylesForm = new StylesForm();
+            stylesForm.Owner = this;
+            stylesForm.TopMost = MainFormSettings.alwaysOnTop;
+            stylesForm.Show();
+        }
+
         protected override void SetVisibleCore(bool value)
         {
             base.SetVisibleCore(allowShowDisplay ? value : allowShowDisplay);
             allowShowDisplay = true;
         }
+
+
     }
 }
