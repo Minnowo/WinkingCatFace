@@ -315,7 +315,7 @@ namespace WinkingCat.ScreenCaptureLib
             int magY = mousePos.Y;
             int totalWidth = RegionCaptureOptions.cursorInfoOffset;
             int totalHeight = RegionCaptureOptions.cursorInfoOffset;
-            string infoText = $"X: {pointToScreen.X} Y: {pointToScreen.Y}\nnyahh";
+            string infoText = $"X: {pointToScreen.X} Y: {pointToScreen.Y}";
             Size infoTextSize = g.MeasureString(infoText, infoFont).ToSize();
 
             if (RegionCaptureOptions.tryCenterMagnifier && RegionCaptureOptions.drawMagnifier)
@@ -341,7 +341,7 @@ namespace WinkingCat.ScreenCaptureLib
                 {
                     if (RegionCaptureOptions.drawInfoText)
                     {
-                        totalWidth += infoTextSize.Width;//infoFont.Height / 2 * $"X: {mousePos.X} Y: {mousePos.Y}".Length;
+                        totalWidth += infoTextSize.Width;
 
                         // to cancel the increase to totalHeight below otherwise the info text will apear 
                         // farther down than its supposed to
@@ -358,7 +358,7 @@ namespace WinkingCat.ScreenCaptureLib
                     if (RegionCaptureOptions.drawMagnifier && magnifier.Width < infoTextSize.Width)
                     {
                         totalWidth -= magnifier.Width;
-                        totalWidth += infoTextSize.Width;// infoFont.Height / 2 * $"X: {mousePos.X} Y: {mousePos.Y}".Length;
+                        totalWidth += infoTextSize.Width;
                     }
                 }
 
@@ -384,7 +384,9 @@ namespace WinkingCat.ScreenCaptureLib
 
                 if (RegionCaptureOptions.drawInfoText)
                 {
-                    DrawInfoText(g, infoText, infoFont, textFontBrush, textBackgroundBrush, borderPen, new Point(magX, magY + Math.Abs(totalHeight)));
+                    DrawInfoText(g, infoText, 
+                        new Rectangle(new Point(magX, magY + Math.Abs(totalHeight)), infoTextSize), 
+                        infoFont, textFontBrush, textBackgroundBrush, borderPen);
                 }
 
                 if (RegionCaptureOptions.drawMagnifier)
@@ -461,17 +463,14 @@ namespace WinkingCat.ScreenCaptureLib
             }
         }
 
-        private void DrawInfoText(Graphics g, string text, Font font, Brush textFontBrush ,Brush backgroundBrush, Pen outerBorderPen, Point pos)
+        private void DrawInfoText(Graphics g, string text, Rectangle rec, Font font, Brush textFontBrush ,Brush backgroundBrush, Pen outerBorderPen)
         {
-            Size textSize = g.MeasureString(text, font).ToSize();
-            int width = textSize.Width;//font.Height / 2 * text.Length;
-            int height = textSize.Height;//font.Height + 2;
-            int mX = pos.X;
-            int mY = pos.Y - RegionCaptureOptions.cursorInfoOffset - height;
+            int mX = rec.X;
+            int mY = rec.Y - RegionCaptureOptions.cursorInfoOffset - rec.Height;
 
             Rectangle rect = new Rectangle(
                 new Point(mX, mY), 
-                new Size(width, height));
+                new Size(rec.Width, rec.Height));
 
             g.DrawRectangle(outerBorderPen, rect);         
             g.FillRectangle(backgroundBrush, rect);
