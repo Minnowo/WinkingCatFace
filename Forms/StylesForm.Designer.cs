@@ -64,6 +64,7 @@
             this.btnMainForm.TabIndex = 0;
             this.btnMainForm.Text = "Main Window / Children";
             this.btnMainForm.UseVisualStyleBackColor = true;
+            this.btnMainForm.Click += new System.EventHandler(this.btnMainForm_Click);
             // 
             // btnRegionCapture
             // 
@@ -74,6 +75,7 @@
             this.btnRegionCapture.TabIndex = 1;
             this.btnRegionCapture.Text = "Region Capture";
             this.btnRegionCapture.UseVisualStyleBackColor = true;
+            this.btnRegionCapture.Click += new System.EventHandler(this.btnRegionCapture_Click);
             // 
             // btnClips
             // 
@@ -84,6 +86,7 @@
             this.btnClips.TabIndex = 2;
             this.btnClips.Text = "Clips";
             this.btnClips.UseVisualStyleBackColor = true;
+            this.btnClips.Click += new System.EventHandler(this.btnClips_Click);
             // 
             // StylesForm
             // 

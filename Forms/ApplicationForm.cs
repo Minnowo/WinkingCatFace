@@ -122,6 +122,11 @@ namespace WinkingCat
             if(ApplicationStyles.useImersiveDarkMode && isHandleCreated)
             {
                 NativeMethods.UseImmersiveDarkMode(Handle, true);
+                this.Icon = Properties.Resources._3white;
+            }
+            else
+            {
+                this.Icon = Properties.Resources._3black;
             }
 
             this.Text = ApplicationStyles.mainFormName;
@@ -131,6 +136,7 @@ namespace WinkingCat
 
             cmTray.Renderer = new ToolStripCustomRenderer();
             cmTray.Opacity = ApplicationStyles.contextMenuOpacity;
+            Refresh();
         }
 
         public void ImageSaved_Event(object sender, ImageSavedEvent e)

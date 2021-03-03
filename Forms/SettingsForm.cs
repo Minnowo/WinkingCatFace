@@ -17,7 +17,8 @@ namespace WinkingCat
         public SettingsForm()
         {
             InitializeComponent();
-
+            this.HandleCreated += UpdateTheme;
+            this.Text = "Settings";
             #region Buttons
             bGeneral.Click += GeneralButtonClick_Event;
             bRegionCapture.Click += RegionCaptureButtonClick_Event;
@@ -28,6 +29,22 @@ namespace WinkingCat
             #endregion
             this.FormClosing += new FormClosingEventHandler(OnFormClosing_Event);
             OpenChildForm(new GeneralSettingsForm());
+        }
+
+        public void UpdateTheme(object sender, EventArgs e)
+        {
+            if (ApplicationStyles.useImersiveDarkMode)
+            {
+                NativeMethods.UseImmersiveDarkMode(Handle, true);
+                this.Icon = Properties.Resources._3white;
+            }
+            else
+            {
+                this.Icon = Properties.Resources._3black;
+            }
+            this.BackColor = ApplicationStyles.backgroundColor;
+            
+            Refresh();
         }
 
         #region MainForm events
