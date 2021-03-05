@@ -7,6 +7,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using WinkingCat.HelperLibs;
 
 namespace WinkingCat
 {
@@ -15,6 +16,15 @@ namespace WinkingCat
         public MainWindowStylesForm()
         {
             InitializeComponent();
+            propertyGrid1.PropertySort = PropertySort.NoSort;
+            propertyGrid1.SelectedObject = ApplicationStyles.currentStyle.mainFormStyle;
+            propertyGrid1.PropertyValueChanged += PropertyGrid1_PropertyValueChanged;
+        }
+
+        private void PropertyGrid1_PropertyValueChanged(object s, PropertyValueChangedEventArgs e)
+        {
+            ApplicationStyles.UpdateAll();
+            Invalidate();
         }
     }
 }

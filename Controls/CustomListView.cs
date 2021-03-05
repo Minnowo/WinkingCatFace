@@ -169,24 +169,30 @@ namespace WinkingCat
             toolStripMenuItemDirectory,
             toolStripMenuItemPath,
             toolStripMenuItemRemoveFromList};
+            ApplicationStyles.UpdateSylesEvent += ApplicationStyles_UpdateSylesEvent;
+            UpdateTheme();
+        }
 
+        private void ApplicationStyles_UpdateSylesEvent(object sender, EventArgs e)
+        {
             UpdateTheme();
         }
 
         public void UpdateTheme()
         {
             this.SupportCustomTheme();
-            this.BackColor = ApplicationStyles.backgroundColor;
-            this.ForeColor = ApplicationStyles.textColor;
+            this.BackColor = ApplicationStyles.currentStyle.mainFormStyle.backgroundColor;
+            this.ForeColor = ApplicationStyles.currentStyle.mainFormStyle.textColor;
 
             cmsMain.Renderer = new ToolStripCustomRenderer();
-            cmsMain.Opacity = ApplicationStyles.contextMenuOpacity;
+            cmsMain.Opacity = ApplicationStyles.currentStyle.mainFormStyle.contextMenuOpacity;
 
             cmsOpen.Renderer = new ToolStripCustomRenderer();
-            cmsOpen.Opacity = ApplicationStyles.contextMenuOpacity;
+            cmsOpen.Opacity = ApplicationStyles.currentStyle.mainFormStyle.contextMenuOpacity;
 
             cmsCopy.Renderer = new ToolStripCustomRenderer();
-            cmsCopy.Opacity = ApplicationStyles.contextMenuOpacity;
+            cmsCopy.Opacity = ApplicationStyles.currentStyle.mainFormStyle.contextMenuOpacity;
+            Refresh();
         }
         
         #region cmsMain

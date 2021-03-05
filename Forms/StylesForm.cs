@@ -35,17 +35,17 @@ namespace WinkingCat
 
         private void btnMainForm_Click(object sender, EventArgs e)
         {
-            OpenChildForm(new RegionCaptureStylesForm());
+            OpenChildForm(new MainWindowStylesForm());
         }
 
         private void btnRegionCapture_Click(object sender, EventArgs e)
         {
-
+            OpenChildForm(new RegionCaptureStylesForm());
         }
 
         private void btnClips_Click(object sender, EventArgs e)
         {
-
+            OpenChildForm(new ClipStylesForm());
         }
     }
 }

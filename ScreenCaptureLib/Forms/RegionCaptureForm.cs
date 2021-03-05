@@ -36,60 +36,77 @@ namespace WinkingCat.ScreenCaptureLib
 
         public ClippingWindowForm(Rectangle region)
         {
+            SetStyle(ControlStyles.OptimizedDoubleBuffer | ControlStyles.UserPaint | ControlStyles.AllPaintingInWmPaint, true);
             // force the client area to be at 0, 0 so that when you draw using graphics it draws in the correct location
             clientArea = new Rectangle(new Point(0, 0), new Size(region.Width, region.Height));
-
-            image = new Bitmap(region.Width, region.Height, PixelFormat.Format32bppArgb);
-            using (Graphics g = Graphics.FromImage(image))
-            using(Bitmap tmp = ScreenShotManager.CaptureRectangle(region))
-            {
-                g.DrawImage(tmp, new Point(0, 0));
-            }
             mode = RegionCaptureOptions.mode;
-                        
-            borderDotPen = new Pen(Color.FromArgb(ApplicationStyles.ScreenWideCrosshairOpacity, ApplicationStyles.screenWideCrosshairColor)) { DashPattern = new float[] { 5, 5 } };
+
+            // borderDotPen draws the dashed lines for the screenwide corsshair and selection box
+            // magnifierBorderPen draws the border around the magnifier
+            // borderPen draws the border on the info text
+            borderDotPen = new Pen(ApplicationStyles.currentStyle.regionCaptureStyle.ScreenWideCrosshairColor) { DashPattern = new float[] { 5, 5 } };
+            magnifierBorderPen = new Pen(ApplicationStyles.currentStyle.regionCaptureStyle.MagnifierBorderColor);
+            borderPen = new Pen(ApplicationStyles.currentStyle.regionCaptureStyle.infoTextBorderColor);                
+            
+            // textBackgroundBrush is used to fill the color behind the info text
+            // textFontBrush is used to specify the color of the info text
+            textBackgroundBrush = new SolidBrush(ApplicationStyles.currentStyle.regionCaptureStyle.infoTextBackgroundColor);
+            textFontBrush = new SolidBrush(ApplicationStyles.currentStyle.regionCaptureStyle.infoTextTextColor);
+
+            // infoFont is used to specify the font / size of the info text
             infoFont = new Font("Verdana", 12); // 10
 
-            magnifierBorderPen = new Pen(Color.FromArgb(ApplicationStyles.MangifierBorderOpacity, ApplicationStyles.MagnifierBorderColor));
-            borderPen = new Pen(ApplicationStyles.infoTextBorderColor);
-            textBackgroundBrush = new SolidBrush(ApplicationStyles.infoTextBackgroundColor);
-            textFontBrush = new SolidBrush(ApplicationStyles.infoTextTextColor);
 
+            InitializeComponent();
+
+            // this has to be done after InitializeComponent 
+            // otherwise the taskbar will be in front of the window 
             SuspendLayout();
 
             BackColor = Color.Black;
+            MinimumSize = new Size(clientArea.Width, clientArea.Height);
+            MaximumSize = new Size(clientArea.Width, clientArea.Height);
+            Bounds = region;
 #if !DEBUG
             TopMost = true;
 #endif
+
+            ResumeLayout();
+            
+
+            // set the cursor 
             var buffer = Properties.Resources.ResourceManager.GetObject(ResourceManager.regionCaptureCursor) as byte[];
             using (MemoryStream m = new MemoryStream(buffer))
             {
                 Cursor = new Cursor(m);
             }
 
-            ResumeLayout();
-            InitializeComponent();
+            // set the image wanted to play around with PixelFormat of the image
+            image = new Bitmap(region.Width, region.Height, PixelFormat.Format24bppRgb);
+            using (Graphics g = Graphics.FromImage(image))
+            using (Bitmap tmp = ScreenShotManager.CaptureRectangle(region))
+            {
+                g.DrawImage(tmp, new Point(0, 0));
+            }
 
-            MinimumSize = new Size(clientArea.Width, clientArea.Height);
-            MaximumSize = new Size(clientArea.Width, clientArea.Height);
-            Bounds = region;
-
-            Bitmap DimmedCanvas = (Bitmap)image.Clone();
-
+            // create the texture brush that will draw the background image to the canvas
+            // if the user wants an overlay it will be added to the texture brush
+            using(Bitmap DimmedCanvas = (Bitmap)image.Clone())
             using (Graphics g = Graphics.FromImage(DimmedCanvas))
-            using (Brush brush = new SolidBrush(Color.FromArgb(ApplicationStyles.BackgroundOverlayOpacity, ApplicationStyles.BackgroundOverlayColor)))
+            using (Brush brush = new SolidBrush(Color.FromArgb(ApplicationStyles.currentStyle.regionCaptureStyle.BackgroundOverlayOpacity, ApplicationStyles.currentStyle.regionCaptureStyle.BackgroundOverlayColor)))
             {
                 if(RegionCaptureOptions.dimBackground)
                     g.FillRectangle(brush, 0, 0, DimmedCanvas.Width, DimmedCanvas.Height);
 
                 backgroundBrush = new TextureBrush(DimmedCanvas) { WrapMode = WrapMode.Clamp };
             }
-            DimmedCanvas.Dispose();
+
             // used to make the selection box fill with the same color as background
             backgroundHighlightBrush = new TextureBrush(image) { WrapMode = WrapMode.Clamp }; 
         }
 
-
+        // pretty sure this makes it look like everything is drawn at once?
+        // i forget but i think it is smoother with this 
         protected override CreateParams CreateParams
         {
             get
@@ -149,10 +166,12 @@ namespace WinkingCat.ScreenCaptureLib
             {
                 case InRegionTasks.DoNothing:
                     break;
+
                 case InRegionTasks.Cancel:
                     result = RegionResult.Close;
                     Close();
                     break;
+
                 case InRegionTasks.RemoveSelectionOrCancel:
                     if (isLeftClicking)
                         isLeftClicking = false;
@@ -162,22 +181,27 @@ namespace WinkingCat.ScreenCaptureLib
                         Close();
                     }
                     break;
+
                 case InRegionTasks.CaptureFullScreen:
                     result = RegionResult.Fullscreen;
                     Close();
                     break;
+
                 case InRegionTasks.CaptureActiveMonitor:
                     result = RegionResult.ActiveMonitor;
                     Close();
                     break;
+
                 case InRegionTasks.CaptureLastRegion:
                     result = RegionResult.LastRegion;
                     Close();
                     break;
+
                 case InRegionTasks.RemoveSelection:
                     if (isLeftClicking)
                         isLeftClicking = false;
                     break;
+
                 case InRegionTasks.SwapToolType:
                     if (mode == RegionCaptureMode.ColorPicker)
                     {
@@ -188,6 +212,7 @@ namespace WinkingCat.ScreenCaptureLib
                         mode = RegionCaptureMode.ColorPicker;
                     }
                     break;
+
                 case InRegionTasks.SwapCenterMagnifier:
                     RegionCaptureOptions.tryCenterMagnifier = !RegionCaptureOptions.tryCenterMagnifier;
                     Invalidate();
@@ -337,17 +362,7 @@ namespace WinkingCat.ScreenCaptureLib
                     totalWidth += magnifier.Width;
                     totalHeight += magnifier.Height;
                 }
-                else
-                {
-                    if (RegionCaptureOptions.drawInfoText)
-                    {
-                        totalWidth += infoTextSize.Width;
 
-                        // to cancel the increase to totalHeight below otherwise the info text will apear 
-                        // farther down than its supposed to
-                        totalHeight -= RegionCaptureOptions.cursorInfoOffset;
-                    }
-                }
 
                 if (RegionCaptureOptions.drawInfoText)
                 {
@@ -355,10 +370,21 @@ namespace WinkingCat.ScreenCaptureLib
                     totalHeight += RegionCaptureOptions.cursorInfoOffset;
 
                     // if the width of the info text is greater than the magnifier width use that for totalWidth
-                    if (RegionCaptureOptions.drawMagnifier && magnifier.Width < infoTextSize.Width)
+                    if (RegionCaptureOptions.drawMagnifier)
                     {
-                        totalWidth -= magnifier.Width;
+                        if (magnifier.Width < infoTextSize.Width)
+                        {
+                            totalWidth -= magnifier.Width;
+                            totalWidth += infoTextSize.Width;
+                        }
+                    }
+                    else
+                    {
                         totalWidth += infoTextSize.Width;
+
+                        // to cancel the increase to totalHeight below otherwise the info text will apear 
+                        // farther down than its supposed to
+                        totalHeight -= RegionCaptureOptions.cursorInfoOffset;
                     }
                 }
 
@@ -391,7 +417,9 @@ namespace WinkingCat.ScreenCaptureLib
 
                 if (RegionCaptureOptions.drawMagnifier)
                 {
-                    g.DrawRectangle(magnifierBorderPen, magX - 1, magY - 1, magnifier.Width + 1, magnifier.Height + 1);
+                    if (RegionCaptureOptions.drawMagnifierBorder)
+                        g.DrawRectangle(magnifierBorderPen, magX - 1, magY - 1, magnifier.Width + 1, magnifier.Height + 1);
+
                     g.DrawImage(magnifier, new Point(magX, magY));  
                     magnifier.Dispose();
                 }
@@ -422,7 +450,7 @@ namespace WinkingCat.ScreenCaptureLib
 
                 if (RegionCaptureOptions.drawMagnifierGrid)
                 {
-                    using (Pen pen = new Pen(Color.FromArgb(ApplicationStyles.MagnifierGridOpacity, ApplicationStyles.MagnifierGridColor)))
+                    using (Pen pen = new Pen(ApplicationStyles.currentStyle.regionCaptureStyle.MagnifierGridColor))
                     {
                         for (int x = 1; x < pixelCount; x++)
                         {
@@ -438,7 +466,7 @@ namespace WinkingCat.ScreenCaptureLib
 
                 if (RegionCaptureOptions.drawMagnifierCrosshair)
                 {
-                    using (SolidBrush crosshairBrush = new SolidBrush(Color.FromArgb(ApplicationStyles.MagnifierCrosshairOpacity, ApplicationStyles.magnifierCrosshairColor)))
+                    using (SolidBrush crosshairBrush = new SolidBrush(ApplicationStyles.currentStyle.regionCaptureStyle.MagnifierCrosshairColor))
                     {
                         gr.FillRectangle(crosshairBrush, new Rectangle(0, (height - pixelSize) / 2, (width - pixelSize) / 2, pixelSize)); // Left
                         gr.FillRectangle(crosshairBrush, new Rectangle((width + pixelSize) / 2, (height - pixelSize) / 2, (width - pixelSize) / 2, pixelSize)); // Right

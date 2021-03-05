@@ -103,12 +103,13 @@ namespace WinkingCat.ScreenCaptureLib
             {
                 img.Save(imageName, format);
                 Logger.WriteLine(imageName);
-            }catch (Exception e)
+                OnImageSaved(imageName);
+            }
+            catch (Exception e)
             {
                 Logger.WriteException(e);
                 return string.Empty;
             }
-            OnImageSaved(imageName);
             return imageName;
         }
 

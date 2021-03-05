@@ -17,7 +17,15 @@ namespace WinkingCat
         {
             InitializeComponent();
 
-            propertyGrid1.SelectedObject = new AppstyleTEST();
+            propertyGrid1.PropertySort = PropertySort.NoSort;
+            propertyGrid1.SelectedObject = ApplicationStyles.currentStyle.regionCaptureStyle;
+            propertyGrid1.PropertyValueChanged += PropertyGrid1_PropertyValueChanged;
+        }
+
+        private void PropertyGrid1_PropertyValueChanged(object s, PropertyValueChangedEventArgs e)
+        {
+            ApplicationStyles.UpdateAll();
+            Invalidate();
         }
     }
 }

@@ -54,7 +54,7 @@ namespace WinkingCat.ClipHelper
             imageDefaultSize = displayImage.Size;
             ClipName = clipName;
             image = (Bitmap)displayImage;
-            startWindowSize = new Size(imageSize.Width + Options.borderThickness, imageSize.Height + Options.borderThickness);
+            startWindowSize = new Size(imageSize.Width + Options.borderThickness+1, imageSize.Height + Options.borderThickness + 1);
             Console.WriteLine($"start window size: {startWindowSize}, image size: {image.Width}, {image.Height}");
 
             MinimumSize = startWindowSize;

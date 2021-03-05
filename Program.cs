@@ -28,7 +28,7 @@ namespace WinkingCat
 
             Logger.Init(PathHelper.logPath + "\\" + DateTime.Now.ToString("yyyy MM dd") + ".txt");
             Console.WriteLine("log path: " + PathHelper.logPath + "\\" + DateTime.Now.ToString("yyyy M dd") + ".txt");
-             
+
             Logger.WriteLine(";3c starting...");
             Logger.WriteLine("path settings loaded");
             Logger.WriteLine(PathHelper.currentDirectory);
@@ -64,7 +64,6 @@ namespace WinkingCat
                 Logger.WriteLine("Hotkeys not loaded using default");
                 HotkeyManager.UpdateHotkeys(HotkeyManager.GetDefaultHotkeyList(), true);
             }
-
 
             mainForm = new ApplicationForm();
             

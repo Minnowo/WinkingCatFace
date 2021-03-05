@@ -96,6 +96,7 @@ namespace WinkingCat
 
             //ImageHandler.CaptureEvent += AfterCaptureEvent;
             ImageHandler.ImageSaved += ImageSaved_Event;
+            ApplicationStyles.UpdateSylesEvent += ApplicationStyles_UpdateSylesEvent;
 
             lvListView.AutoResizeColumns(ColumnHeaderAutoResizeStyle.ColumnContent);
             lvListView.AutoResizeColumns(ColumnHeaderAutoResizeStyle.HeaderSize);
@@ -103,6 +104,11 @@ namespace WinkingCat
             ResumeLayout();
 
             MainFormSettings.SettingsChangedEvent += UpdateSettings;
+        }
+
+        private void ApplicationStyles_UpdateSylesEvent(object sender, EventArgs e)
+        {
+            UpdateTheme();
         }
 
         private void MainForm_HandleCreated(object sender, EventArgs e)
@@ -119,7 +125,7 @@ namespace WinkingCat
 
         public void UpdateTheme()
         {
-            if(ApplicationStyles.useImersiveDarkMode && isHandleCreated)
+            if(ApplicationStyles.currentStyle.mainFormStyle.useImersiveDarkMode && isHandleCreated)
             {
                 NativeMethods.UseImmersiveDarkMode(Handle, true);
                 this.Icon = Properties.Resources._3white;
@@ -129,19 +135,18 @@ namespace WinkingCat
                 this.Icon = Properties.Resources._3black;
             }
 
-            this.Text = ApplicationStyles.mainFormName;
-            this.BackColor = ApplicationStyles.backgroundColor;
-            this.DisplayPanel.BackColor = ApplicationStyles.backgroundColor;
+            this.Text = "";// ApplicationStyles.mainFormName;
+            this.BackColor = ApplicationStyles.currentStyle.mainFormStyle.backgroundColor;
+            this.DisplayPanel.BackColor = ApplicationStyles.currentStyle.mainFormStyle.backgroundColor;
             tsMain.Renderer = new ToolStripCustomRenderer();
 
             cmTray.Renderer = new ToolStripCustomRenderer();
-            cmTray.Opacity = ApplicationStyles.contextMenuOpacity;
+            cmTray.Opacity = ApplicationStyles.currentStyle.mainFormStyle.contextMenuOpacity;
             Refresh();
         }
 
         public void ImageSaved_Event(object sender, ImageSavedEvent e)
         {
-            Console.WriteLine("nyah");
             string[] row1 = { e.info.Extension,  // name
                 $"{e.dimensions.Width}, {e.dimensions.Height}", // dimensions
                 Helpers.SizeSuffix(e.size), // size
@@ -310,7 +315,6 @@ namespace WinkingCat
 
             if (MainFormSettings.hideMainFormOnCapture && !isInTrayOrMinimized)
             {
-                Thread.Sleep(MainFormSettings.waitHideTime);
                 Show();
             }
         }

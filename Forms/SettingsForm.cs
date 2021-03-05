@@ -33,7 +33,7 @@ namespace WinkingCat
 
         public void UpdateTheme(object sender, EventArgs e)
         {
-            if (ApplicationStyles.useImersiveDarkMode)
+            if (ApplicationStyles.currentStyle.mainFormStyle.useImersiveDarkMode)
             {
                 NativeMethods.UseImmersiveDarkMode(Handle, true);
                 this.Icon = Properties.Resources._3white;
@@ -42,7 +42,7 @@ namespace WinkingCat
             {
                 this.Icon = Properties.Resources._3black;
             }
-            this.BackColor = ApplicationStyles.backgroundColor;
+            this.BackColor = ApplicationStyles.currentStyle.mainFormStyle.backgroundColor;
             
             Refresh();
         }

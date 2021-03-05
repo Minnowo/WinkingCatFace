@@ -5,7 +5,7 @@ namespace WinkingCat.HelperLibs
     {
 
         public static bool dimBackground { get; set; } = true;
-        public static bool drawMagnifierBorder { get; set; } = false;
+        public static bool drawMagnifierBorder { get; set; } = true;
         public static bool updateOnMouseMove { get; set; } = true;
         public static InRegionTasks onMouseMiddleClick { get; set; } = InRegionTasks.CaptureLastRegion;
         public static InRegionTasks onMouseRightClick { get; set; } = InRegionTasks.RemoveSelectionOrCancel;

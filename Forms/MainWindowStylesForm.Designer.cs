@@ -28,14 +28,28 @@
         /// </summary>
         private void InitializeComponent()
         {
+            this.propertyGrid1 = new System.Windows.Forms.PropertyGrid();
             this.SuspendLayout();
+            // 
+            // propertyGrid1
+            // 
+            this.propertyGrid1.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.propertyGrid1.HelpVisible = false;
+            this.propertyGrid1.Location = new System.Drawing.Point(13, 13);
+            this.propertyGrid1.Name = "propertyGrid1";
+            this.propertyGrid1.Size = new System.Drawing.Size(455, 424);
+            this.propertyGrid1.TabIndex = 0;
+            this.propertyGrid1.ToolbarVisible = false;
             // 
             // MainWindowStylesForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.AutoScroll = true;
-            this.ClientSize = new System.Drawing.Size(467, 359);
+            this.ClientSize = new System.Drawing.Size(481, 450);
+            this.Controls.Add(this.propertyGrid1);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.None;
             this.Name = "MainWindowStylesForm";
             this.Padding = new System.Windows.Forms.Padding(10);
@@ -45,5 +59,7 @@
         }
 
         #endregion
+
+        private System.Windows.Forms.PropertyGrid propertyGrid1;
     }
 }
