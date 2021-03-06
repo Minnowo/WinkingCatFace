@@ -123,6 +123,16 @@ namespace WinkingCat.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
+        internal static System.Drawing.Bitmap color_picker_icon {
+            get {
+                object obj = ResourceManager.GetObject("color-picker-icon", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
         internal static System.Drawing.Bitmap color_wheel_icon {
             get {
                 object obj = ResourceManager.GetObject("color_wheel_icon", resourceCulture);

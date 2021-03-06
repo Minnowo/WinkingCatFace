@@ -2,7 +2,19 @@
 
 namespace WinkingCat.HelperLibs
 {
-    
+    public enum DrawStyles
+    {
+        Red,
+        Green,
+        Blue,
+        HSBHue,
+        HSBSaturation,
+        HSBBrightness,
+        HSLHue,
+        HSLSaturation,
+        HSLLightness,
+        xyz
+    }
     public enum RegionCaptureMode
     {
         Default,

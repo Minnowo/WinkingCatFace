@@ -392,15 +392,19 @@ namespace WinkingCat
 
         }
 
-        private void ToolStripMenuItemDelete_Click(object sender, EventArgs e)
+        private async void ToolStripMenuItemDelete_Click(object sender, EventArgs e)
         {
             if (SelectedIndex != -1)
             {
-                if (PathHelper.DeleteFile(Items[SelectedIndex].Tag.ToString()))
+                foreach (ListViewItem item in SelectedItems)
                 {
-                    Items.Remove(Items[SelectedIndex]);
-                    SelectedIndex = -1;
+                    if (PathHelper.DeleteFile(item.Tag.ToString()))
+                    {
+                        Items.Remove(item);
+                        SelectedIndex = -1;
+                    }
                 }
+                await ListViewDumpAsync((ListViewItem[])this.Items.OfType<ListViewItem>().ToArray().Clone());
             }
         }
 
@@ -426,7 +430,6 @@ namespace WinkingCat
                 {
                     this.Items.Remove(item);
                 }
-                
                 await ListViewDumpAsync((ListViewItem[])this.Items.OfType<ListViewItem>().ToArray().Clone());
             }
         }
