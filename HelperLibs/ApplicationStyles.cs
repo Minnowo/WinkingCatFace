@@ -31,18 +31,18 @@ namespace WinkingCat.HelperLibs
         {
             contextMenuOpacity = 0.9f;
             useImersiveDarkMode = true;
-            backgroundColor = Color.FromArgb(42, 47, 56);
-            lightBackgroundColor = Color.FromArgb(52, 57, 65);
-            darkBackgroundColor = Color.FromArgb(28, 32, 38);
-            textColor = Color.FromArgb(235, 235, 235);
-            borderColor = Color.FromArgb(28, 32, 38);
-            menuHighlightColor = Color.FromArgb(30, 34, 40);
-            menuHighlightBorderColor = Color.FromArgb(116, 129, 152);
-            menuBorderColor = Color.FromArgb(22, 26, 31);
-            menuCheckBackgroundColor = Color.FromArgb(26, 64, 75);
-            separatorDarkColor = Color.FromArgb(22, 26, 31);
-            separatorLightColor = Color.FromArgb(56, 64, 75);
-            contextMenuFontColor = Color.White;
+            backgroundColor = Color.FromArgb(40, 42, 54);
+            lightBackgroundColor = Color.FromArgb(68, 71, 90);
+            darkBackgroundColor = Color.FromArgb(36, 38, 48);
+            textColor = Color.FromArgb(248, 248, 242);
+            borderColor = Color.FromArgb(33, 35, 43);
+            menuHighlightColor = Color.FromArgb(36, 38, 48);
+            menuHighlightBorderColor = Color.FromArgb(255, 121, 198);
+            menuBorderColor = Color.FromArgb(33, 35, 43);
+            menuCheckBackgroundColor = Color.FromArgb(45, 47, 61);
+            separatorDarkColor = Color.FromArgb(45, 47, 61);
+            separatorLightColor = Color.FromArgb(33, 35, 43);
+            contextMenuFontColor = Color.FromArgb(248, 248, 242);
         }
     }
     
@@ -57,8 +57,7 @@ namespace WinkingCat.HelperLibs
             }
             set
             {
-                backgroundOverlayOpacity = value.A;
-                backgroundOverlayColor = value;
+                backgroundOverlayColor = Color.FromArgb(backgroundOverlayOpacity, value);
             }
         }
         private Color backgroundOverlayColor = Color.Black;
@@ -74,14 +73,11 @@ namespace WinkingCat.HelperLibs
                 {
                     ushort newVal = (ushort)ColorHelper.ValidColor(value);
                     backgroundOverlayOpacity = newVal;
-                    backgroundOverlayColor = Color.FromArgb(newVal,
-                        backgroundOverlayColor.R,
-                        backgroundOverlayColor.G,
-                        backgroundOverlayColor.B);
+                    backgroundOverlayColor = Color.FromArgb(newVal, BackgroundOverlayColor);
                 }
             }
         }
-        private ushort backgroundOverlayOpacity = 36;
+        private ushort backgroundOverlayOpacity;
 
         public Color ScreenWideCrosshairColor
         {
@@ -91,7 +87,7 @@ namespace WinkingCat.HelperLibs
             }
             set
             {
-                screenWideCrosshairColor = value;
+                screenWideCrosshairColor = Color.FromArgb(screenWideCrosshairOpacity, value);
             }
         }
         private Color screenWideCrosshairColor = Color.FromArgb(249, 0, 187);
@@ -107,14 +103,11 @@ namespace WinkingCat.HelperLibs
                 {
                     ushort newVal = (ushort)ColorHelper.ValidColor(value);
                     screenWideCrosshairOpacity = newVal;
-                    screenWideCrosshairColor = Color.FromArgb(newVal,
-                        screenWideCrosshairColor.R,
-                        screenWideCrosshairColor.G,
-                        screenWideCrosshairColor.B);
+                    screenWideCrosshairColor = Color.FromArgb(newVal, ScreenWideCrosshairColor);
                 }
             }
         }
-        private ushort screenWideCrosshairOpacity = 255;
+        private ushort screenWideCrosshairOpacity;
 
         public Color MagnifierCrosshairColor
         {
@@ -124,8 +117,7 @@ namespace WinkingCat.HelperLibs
             }
             set
             {
-                magnifierCrosshairOpacity = value.A;
-                magnifierCrosshairColor = value;
+                magnifierCrosshairColor = Color.FromArgb(magnifierCrosshairOpacity, value);
             }
         }
         private Color magnifierCrosshairColor = Color.LightBlue;
@@ -141,14 +133,11 @@ namespace WinkingCat.HelperLibs
                 {
                     ushort newVal = (ushort)ColorHelper.ValidColor(value);
                     magnifierCrosshairOpacity = newVal;
-                    magnifierCrosshairColor = Color.FromArgb(newVal,
-                        magnifierCrosshairColor.R,
-                        magnifierCrosshairColor.G,
-                        magnifierCrosshairColor.B);
+                    magnifierCrosshairColor = Color.FromArgb(newVal, MagnifierCrosshairColor);
                 }
             }
         }
-        private ushort magnifierCrosshairOpacity = 125;
+        private ushort magnifierCrosshairOpacity;
 
         public Color MagnifierGridColor
         {
@@ -158,8 +147,7 @@ namespace WinkingCat.HelperLibs
             }
             set
             {
-                magnifierGridOpacity = value.A;
-                magnifierGridColor = value;
+                magnifierGridColor = Color.FromArgb(magnifierGridOpacity, value);
             }
         }
         private Color magnifierGridColor = Color.Black;
@@ -175,14 +163,11 @@ namespace WinkingCat.HelperLibs
                 {
                     ushort newVal = (ushort)ColorHelper.ValidColor(value);
                     magnifierGridOpacity = newVal;
-                    magnifierGridColor = Color.FromArgb(newVal,
-                        magnifierGridColor.R,
-                        magnifierGridColor.G,
-                        magnifierGridColor.B);
+                    magnifierGridColor = Color.FromArgb(newVal, MagnifierGridColor);
                 }
             }
         }
-        private ushort magnifierGridOpacity = 255;
+        private ushort magnifierGridOpacity;
 
         public Color MagnifierBorderColor
         {
@@ -192,8 +177,7 @@ namespace WinkingCat.HelperLibs
             }
             set
             {
-                magnifierBorderOpacity = value.A;
-                magnifierBorderColor = value;
+                magnifierBorderColor = Color.FromArgb(magnifierBorderOpacity, value);
             }
         }
         private Color magnifierBorderColor = Color.White;
@@ -209,14 +193,11 @@ namespace WinkingCat.HelperLibs
                 {
                     ushort newVal = (ushort)ColorHelper.ValidColor(value);
                     magnifierBorderOpacity = newVal;
-                    magnifierBorderColor = Color.FromArgb(newVal,
-                        magnifierBorderColor.R,
-                        magnifierBorderColor.G,
-                        magnifierBorderColor.B);
+                    magnifierBorderColor = Color.FromArgb(newVal, MagnifierBorderColor);
                 }
             }
         }
-        private ushort magnifierBorderOpacity = 255;
+        private ushort magnifierBorderOpacity;
 
         public Color infoTextBackgroundColor { get; set; } = Color.FromArgb(39, 43, 50);
         public Color infoTextBorderColor { get; set; } = Color.Black;
@@ -224,15 +205,15 @@ namespace WinkingCat.HelperLibs
         #endregion
         public RegionCaptureStyle()
         {
-            backgroundOverlayColor = Color.Black;
-            backgroundOverlayOpacity = 36;
-            screenWideCrosshairColor = Color.FromArgb(249, 0, 187);
-            screenWideCrosshairOpacity = 255;
+            BackgroundOverlayColor = Color.Black;
+            BackgroundOverlayOpacity = 36;
+            ScreenWideCrosshairColor = Color.FromArgb(249, 0, 187);
+            ScreenWideCrosshairOpacity = 255;
             MagnifierCrosshairColor = Color.LightBlue;
-            magnifierCrosshairOpacity = 125;
-            magnifierGridColor = Color.Black;
-            magnifierGridOpacity = 255;
-            magnifierBorderColor = Color.White;
+            MagnifierCrosshairOpacity = 125;
+            MagnifierGridColor = Color.Black;
+            MagnifierGridOpacity = 255;
+            MagnifierBorderColor = Color.White;
             magnifierBorderOpacity = 255;
             infoTextBackgroundColor = Color.FromArgb(39, 43, 50);
             infoTextBorderColor = Color.Black;
@@ -252,7 +233,7 @@ namespace WinkingCat.HelperLibs
 
     public class ApplicationStyles
     {
-        public static event EventHandler UpdateSylesEvent;
+        public static event EventHandler UpdateStylesEvent;
         public static ApplicationStyles currentStyle { get; set; } = new ApplicationStyles();
         public MainFormStyle mainFormStyle { get; set; }
         public RegionCaptureStyle regionCaptureStyle { get; set; }
@@ -265,6 +246,83 @@ namespace WinkingCat.HelperLibs
             clipStyle = new ClipStyle();
         }
 
+        public static void ApplyCustomThemeToControl(Control control)
+        {
+            switch (control)
+            {
+                case Button btn:
+                    btn.FlatStyle = FlatStyle.Flat;
+                    btn.FlatAppearance.BorderColor = currentStyle.mainFormStyle.borderColor;
+                    btn.ForeColor = currentStyle.mainFormStyle.textColor;
+                    btn.BackColor = currentStyle.mainFormStyle.lightBackgroundColor;
+                    return;
+                case CheckBox cb when cb.Appearance == Appearance.Button:
+                    cb.FlatStyle = FlatStyle.Flat;
+                    cb.FlatAppearance.BorderColor = currentStyle.mainFormStyle.borderColor;
+                    cb.ForeColor = currentStyle.mainFormStyle.textColor;
+                    cb.BackColor = currentStyle.mainFormStyle.lightBackgroundColor;
+                    return;
+                case TextBox tb:
+                    tb.ForeColor = currentStyle.mainFormStyle.textColor;
+                    tb.BackColor = currentStyle.mainFormStyle.lightBackgroundColor;
+                    tb.BorderStyle = BorderStyle.FixedSingle;
+                    return;
+                case ComboBox cb:
+                    cb.FlatStyle = FlatStyle.Flat;
+                    cb.ForeColor = currentStyle.mainFormStyle.textColor;
+                    cb.BackColor = currentStyle.mainFormStyle.lightBackgroundColor;
+                    return;
+                case ListBox lb:
+                    lb.ForeColor = currentStyle.mainFormStyle.textColor;
+                    lb.BackColor = currentStyle.mainFormStyle.lightBackgroundColor;
+                    return;
+                case ListView lv:
+                    lv.ForeColor = currentStyle.mainFormStyle.textColor;
+                    lv.BackColor = currentStyle.mainFormStyle.lightBackgroundColor;
+                    lv.SupportCustomTheme();
+                    return;
+                case SplitContainer sc:
+                    sc.Panel1.BackColor = currentStyle.mainFormStyle.backgroundColor;
+                    sc.Panel2.BackColor = currentStyle.mainFormStyle.backgroundColor;
+                    break;
+                case PropertyGrid pg:
+                    pg.CategoryForeColor = currentStyle.mainFormStyle.textColor;
+                    pg.CategorySplitterColor = currentStyle.mainFormStyle.backgroundColor;
+                    pg.LineColor = currentStyle.mainFormStyle.backgroundColor;
+                    pg.SelectedItemWithFocusForeColor = currentStyle.mainFormStyle.backgroundColor;
+                    pg.SelectedItemWithFocusBackColor = currentStyle.mainFormStyle.textColor;
+                    pg.ViewForeColor = currentStyle.mainFormStyle.textColor;
+                    pg.ViewBackColor = currentStyle.mainFormStyle.lightBackgroundColor;
+                    pg.ViewBorderColor = currentStyle.mainFormStyle.borderColor;
+                    pg.HelpForeColor = currentStyle.mainFormStyle.textColor;
+                    pg.HelpBackColor = currentStyle.mainFormStyle.backgroundColor;
+                    pg.HelpBorderColor = currentStyle.mainFormStyle.borderColor;
+                    return;
+                case DataGridView dgv:
+                    dgv.BackgroundColor = currentStyle.mainFormStyle.lightBackgroundColor;
+                    dgv.GridColor = currentStyle.mainFormStyle.borderColor;
+                    dgv.DefaultCellStyle.BackColor = currentStyle.mainFormStyle.lightBackgroundColor;
+                    dgv.DefaultCellStyle.SelectionBackColor = currentStyle.mainFormStyle.lightBackgroundColor;
+                    dgv.DefaultCellStyle.ForeColor = currentStyle.mainFormStyle.textColor;
+                    dgv.DefaultCellStyle.SelectionForeColor = currentStyle.mainFormStyle.textColor;
+                    dgv.ColumnHeadersDefaultCellStyle.BackColor = currentStyle.mainFormStyle.backgroundColor;
+                    dgv.ColumnHeadersDefaultCellStyle.SelectionBackColor = currentStyle.mainFormStyle.backgroundColor;
+                    dgv.ColumnHeadersDefaultCellStyle.ForeColor = currentStyle.mainFormStyle.textColor;
+                    dgv.ColumnHeadersDefaultCellStyle.SelectionForeColor = currentStyle.mainFormStyle.textColor;
+                    dgv.EnableHeadersVisualStyles = false;
+                    break;
+            }
+
+            control.ForeColor = currentStyle.mainFormStyle.textColor;
+            control.BackColor = currentStyle.mainFormStyle.backgroundColor;
+
+            
+            foreach (Control child in control.Controls)
+            {
+                ApplyCustomThemeToControl(child);
+            }
+        }
+
         public static void UpdateAll()
         {
             OnUpdateEvent();
@@ -272,9 +330,9 @@ namespace WinkingCat.HelperLibs
 
         private static void OnUpdateEvent()
         {
-            if (UpdateSylesEvent != null)
+            if (UpdateStylesEvent != null)
             {
-                UpdateSylesEvent(null, EventArgs.Empty);
+                UpdateStylesEvent(null, EventArgs.Empty);
             }
         }
     }

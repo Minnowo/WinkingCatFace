@@ -14,10 +14,12 @@ namespace WinkingCat
     public partial class SettingsForm : Form
     {
         public Form activeForm { get; private set; }
+        private bool isHandleCreated = false;
         public SettingsForm()
         {
             InitializeComponent();
-            this.HandleCreated += UpdateTheme;
+            this.HandleCreated += HandleCreated_Event;
+            ApplicationStyles.UpdateStylesEvent += ApplicationStyles_UpdateStylesEvent;
             this.Text = "Settings";
             #region Buttons
             bGeneral.Click += GeneralButtonClick_Event;
@@ -31,20 +33,32 @@ namespace WinkingCat
             OpenChildForm(new GeneralSettingsForm());
         }
 
-        public void UpdateTheme(object sender, EventArgs e)
+        private void ApplicationStyles_UpdateStylesEvent(object sender, EventArgs e)
         {
-            if (ApplicationStyles.currentStyle.mainFormStyle.useImersiveDarkMode)
+            UpdateTheme();
+        }
+
+        public void UpdateTheme()
+        {
+            if (ApplicationStyles.currentStyle.mainFormStyle.useImersiveDarkMode && isHandleCreated)
             {
                 NativeMethods.UseImmersiveDarkMode(Handle, true);
                 this.Icon = Properties.Resources._3white;
             }
             else
             {
+                NativeMethods.UseImmersiveDarkMode(Handle, false);
                 this.Icon = Properties.Resources._3black;
             }
-            this.BackColor = ApplicationStyles.currentStyle.mainFormStyle.backgroundColor;
-            
+            //this.BackColor = ApplicationStyles.currentStyle.mainFormStyle.backgroundColor;
+            ApplicationStyles.ApplyCustomThemeToControl(this);
             Refresh();
+        }
+
+        public void HandleCreated_Event(object sender, EventArgs e)
+        {
+            isHandleCreated = true;
+            UpdateTheme();
         }
 
         #region MainForm events

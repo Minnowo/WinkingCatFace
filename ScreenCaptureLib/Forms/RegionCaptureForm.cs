@@ -30,7 +30,8 @@ namespace WinkingCat.ScreenCaptureLib
         private bool isLeftClicking = false;
 
         private TextureBrush backgroundBrush;
-        private Pen borderDotPen, borderPen, magnifierBorderPen;
+        private Pen borderDotPen, borderPen, magnifierBorderPen, magnifierGridPen;
+        private SolidBrush magnifierCrosshairBrush;
         private Brush textBackgroundBrush, textFontBrush, backgroundHighlightBrush;
         private Font infoFont;
 
@@ -43,11 +44,15 @@ namespace WinkingCat.ScreenCaptureLib
 
             // borderDotPen draws the dashed lines for the screenwide corsshair and selection box
             // magnifierBorderPen draws the border around the magnifier
+            // magnifierGridPen draws the grid on the magnifier
             // borderPen draws the border on the info text
+            // magnifierCrosshairBrush draws the magnifier crosshair
             borderDotPen = new Pen(ApplicationStyles.currentStyle.regionCaptureStyle.ScreenWideCrosshairColor) { DashPattern = new float[] { 5, 5 } };
             magnifierBorderPen = new Pen(ApplicationStyles.currentStyle.regionCaptureStyle.MagnifierBorderColor);
-            borderPen = new Pen(ApplicationStyles.currentStyle.regionCaptureStyle.infoTextBorderColor);                
-            
+            magnifierGridPen = new Pen(ApplicationStyles.currentStyle.regionCaptureStyle.MagnifierGridColor);
+            borderPen = new Pen(ApplicationStyles.currentStyle.regionCaptureStyle.infoTextBorderColor);
+            magnifierCrosshairBrush = new SolidBrush(ApplicationStyles.currentStyle.regionCaptureStyle.MagnifierCrosshairColor);
+
             // textBackgroundBrush is used to fill the color behind the info text
             // textFontBrush is used to specify the color of the info text
             textBackgroundBrush = new SolidBrush(ApplicationStyles.currentStyle.regionCaptureStyle.infoTextBackgroundColor);
@@ -261,13 +266,13 @@ namespace WinkingCat.ScreenCaptureLib
             }
         }
 
-        private void Click_Event(object sender, EventArgs e)
+        private void Click_Event(object sender, MouseEventArgs e)
         {
-            switch (((MouseEventArgs)e).Button)
+            switch (e.Button)
             {
                 case MouseButtons.Left:
                     isLeftClicking = true;
-                    leftClickStart = ((MouseEventArgs)e).Location;
+                    leftClickStart = e.Location;
                     break;
 
                 case MouseButtons.Right:
@@ -319,17 +324,24 @@ namespace WinkingCat.ScreenCaptureLib
 
         private void DrawMouseGraphics(Graphics g)
         {
-            if (isLeftClicking)
+            if(mode == RegionCaptureMode.ColorPicker)
             {
-                DrawSelectionBox(g, mousePos);
+                DrawMouseInfo(g);
             }
-
-            DrawMouseInfo(g);
-
-            if (RegionCaptureOptions.drawCrossHair)
+            else
             {
-                DrawCrosshair(g, mousePos);               
-            }            
+                if (isLeftClicking)
+                {
+                    DrawSelectionBox(g, mousePos);
+                }
+
+                DrawMouseInfo(g);
+
+                if (RegionCaptureOptions.drawCrossHair)
+                {
+                    DrawCrosshair(g, mousePos);
+                }
+            }       
         }
 
         private void DrawMouseInfo(Graphics g)
@@ -450,29 +462,23 @@ namespace WinkingCat.ScreenCaptureLib
 
                 if (RegionCaptureOptions.drawMagnifierGrid)
                 {
-                    using (Pen pen = new Pen(ApplicationStyles.currentStyle.regionCaptureStyle.MagnifierGridColor))
+                    for (int x = 1; x < pixelCount; x++)
                     {
-                        for (int x = 1; x < pixelCount; x++)
-                        {
-                            gr.DrawLine(pen, new Point((x * pixelSize) - 1, 0), new Point((x * pixelSize) - 1, height - 1));
-                        }
+                        gr.DrawLine(magnifierGridPen, new Point((x * pixelSize) - 1, 0), new Point((x * pixelSize) - 1, height - 1));
+                    }
 
-                        for (int y = 1; y < pixelCount; y++)
-                        {
-                            gr.DrawLine(pen, new Point(0, (y * pixelSize) - 1), new Point(width - 1, (y * pixelSize) - 1));
-                        }
+                    for (int y = 1; y < pixelCount; y++)
+                    {
+                        gr.DrawLine(magnifierGridPen, new Point(0, (y * pixelSize) - 1), new Point(width - 1, (y * pixelSize) - 1));
                     }
                 }
 
                 if (RegionCaptureOptions.drawMagnifierCrosshair)
                 {
-                    using (SolidBrush crosshairBrush = new SolidBrush(ApplicationStyles.currentStyle.regionCaptureStyle.MagnifierCrosshairColor))
-                    {
-                        gr.FillRectangle(crosshairBrush, new Rectangle(0, (height - pixelSize) / 2, (width - pixelSize) / 2, pixelSize)); // Left
-                        gr.FillRectangle(crosshairBrush, new Rectangle((width + pixelSize) / 2, (height - pixelSize) / 2, (width - pixelSize) / 2, pixelSize)); // Right
-                        gr.FillRectangle(crosshairBrush, new Rectangle((width - pixelSize) / 2, 0, pixelSize, (height - pixelSize) / 2)); // Top
-                        gr.FillRectangle(crosshairBrush, new Rectangle((width - pixelSize) / 2, (height + pixelSize) / 2, pixelSize, (height - pixelSize) / 2)); // Bottom
-                    }
+                    gr.FillRectangle(magnifierCrosshairBrush, new Rectangle(0, (height - pixelSize) / 2, (width - pixelSize) / 2, pixelSize)); // Left
+                    gr.FillRectangle(magnifierCrosshairBrush, new Rectangle((width + pixelSize) / 2, (height - pixelSize) / 2, (width - pixelSize) / 2, pixelSize)); // Right
+                    gr.FillRectangle(magnifierCrosshairBrush, new Rectangle((width - pixelSize) / 2, 0, pixelSize, (height - pixelSize) / 2)); // Top
+                    gr.FillRectangle(magnifierCrosshairBrush, new Rectangle((width - pixelSize) / 2, (height + pixelSize) / 2, pixelSize, (height - pixelSize) / 2)); // Bottom
                 }
             }
             return bmp;
@@ -561,7 +567,11 @@ namespace WinkingCat.ScreenCaptureLib
             borderDotPen?.Dispose();
             borderPen?.Dispose();
             infoFont?.Dispose();
-
+            magnifierBorderPen?.Dispose();
+            magnifierBorderPen?.Dispose();
+            magnifierCrosshairBrush?.Dispose();
+            textBackgroundBrush?.Dispose();
+            textFontBrush?.Dispose();
 
             image?.Dispose();
             backgroundBrush?.Dispose();

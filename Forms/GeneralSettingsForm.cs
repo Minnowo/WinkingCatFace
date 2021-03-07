@@ -32,8 +32,12 @@ namespace WinkingCat
                 MinimizeToTrayOnCloseCheckBox.Enabled = false;
             ResumeLayout();
             UpdateComboBox();
+            UpdateTheme();
         }
-
+        public void UpdateTheme()
+        {
+            ApplicationStyles.ApplyCustomThemeToControl(this);
+        }
         private void ComboBox_SelectedIndexChanged(object sender, EventArgs e)
         {
             if (comboBox1.SelectedItem != null && comboBox2.SelectedItem != null && comboBox3.SelectedItem != null)

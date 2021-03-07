@@ -96,7 +96,7 @@ namespace WinkingCat
 
             //ImageHandler.CaptureEvent += AfterCaptureEvent;
             ImageHandler.ImageSaved += ImageSaved_Event;
-            ApplicationStyles.UpdateSylesEvent += ApplicationStyles_UpdateSylesEvent;
+            ApplicationStyles.UpdateStylesEvent += ApplicationStyles_UpdateSylesEvent;
 
             lvListView.AutoResizeColumns(ColumnHeaderAutoResizeStyle.ColumnContent);
             lvListView.AutoResizeColumns(ColumnHeaderAutoResizeStyle.HeaderSize);
@@ -132,6 +132,7 @@ namespace WinkingCat
             }
             else
             {
+                NativeMethods.UseImmersiveDarkMode(Handle, false);
                 this.Icon = Properties.Resources._3black;
             }
 

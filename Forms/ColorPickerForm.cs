@@ -16,6 +16,11 @@ namespace WinkingCat
         public ColorPickerForm()
         {
             InitializeComponent();
+            UpdateTheme();
+        }
+        public void UpdateTheme()
+        {
+            ApplicationStyles.ApplyCustomThemeToControl(this);
         }
     }
 }

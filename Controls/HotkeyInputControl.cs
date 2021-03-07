@@ -34,9 +34,14 @@ namespace WinkingCat
 
             UpdateDescription();
             UpdateHotkeyText();
+            UpdateTheme();
             UpdateHotkeyStatus();
         }
 
+        public void UpdateTheme()
+        {
+            ApplicationStyles.ApplyCustomThemeToControl(this);
+        }
         public void Deselect(bool supressEvent = false)
         {
             supressCheckboxEvent = supressEvent;

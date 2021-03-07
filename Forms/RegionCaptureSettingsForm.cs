@@ -46,8 +46,12 @@ namespace WinkingCat
             nudMagnifierZoomScale.Value = (decimal)RegionCaptureOptions.magnifierZoomScale;
             nudMagnifierZoomLevel.Value = (decimal)RegionCaptureOptions.magnifierZoomLevel;
             nudMagnifierZoomLevel.Increment = nudMagnifierZoomScale.Value;
+            UpdateTheme();
         }
-
+        public void UpdateTheme()
+        {
+            ApplicationStyles.ApplyCustomThemeToControl(this);
+        }
         #region ComboBox ValueChanged
         private void CombobMouseMiddleClickAction_SelectionChanged(object sender, EventArgs e)
         {

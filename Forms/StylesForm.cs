@@ -7,16 +7,49 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using WinkingCat.HelperLibs;
 
 namespace WinkingCat
 {
     public partial class StylesForm : Form
     {
         public Form activeForm;
+        private bool isHandleCreated = false;
         public StylesForm()
         {
             InitializeComponent();
+            this.HandleCreated += StylesForm_HandleCreated;
+            ApplicationStyles.UpdateStylesEvent += ApplicationStyles_UpdateStylesEvent;
         }
+
+        private void StylesForm_HandleCreated(object sender, EventArgs e)
+        {
+            isHandleCreated = true;
+            UpdateTheme();
+        }
+
+        private void ApplicationStyles_UpdateStylesEvent(object sender, EventArgs e)
+        {
+            UpdateTheme();
+        }
+
+        public void UpdateTheme()
+        {
+            if (ApplicationStyles.currentStyle.mainFormStyle.useImersiveDarkMode && isHandleCreated)
+            {
+                NativeMethods.UseImmersiveDarkMode(Handle, true);
+                this.Icon = Properties.Resources._3white;
+            }
+            else
+            {
+                NativeMethods.UseImmersiveDarkMode(Handle, false);
+                this.Icon = Properties.Resources._3black;
+            }
+            //this.BackColor = ApplicationStyles.currentStyle.mainFormStyle.backgroundColor;
+            ApplicationStyles.ApplyCustomThemeToControl(this);
+            Refresh();
+        }
+
         private void OpenChildForm(Form childForm)
         {
             SuspendLayout();

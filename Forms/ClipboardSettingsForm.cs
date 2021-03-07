@@ -21,6 +21,12 @@ namespace WinkingCat
                 comboBox3.Items.Add(colorformat);
 
             UpdateComboBox();
+            UpdateTheme();
+        }
+
+        public void UpdateTheme()
+        {
+            ApplicationStyles.ApplyCustomThemeToControl(this);
         }
 
         public void UpdateComboBox()

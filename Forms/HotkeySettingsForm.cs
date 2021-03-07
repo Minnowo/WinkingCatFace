@@ -17,9 +17,13 @@ namespace WinkingCat
         public HotkeySettingsForm()
         {
             InitializeComponent();
+            UpdateTheme();
             UpdateHotkeyControls();
         }
-
+        public void UpdateTheme()
+        {
+            ApplicationStyles.ApplyCustomThemeToControl(this);
+        }
         public void UpdateHotkeyControls()
         {
             if (HotkeyManager.hotKeys != null)

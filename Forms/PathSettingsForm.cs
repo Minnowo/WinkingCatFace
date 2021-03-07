@@ -17,8 +17,12 @@ namespace WinkingCat
         {
             InitializeComponent();
             tbScreenshotFolder.Text = PathHelper.screenshotPath;
+            UpdateTheme();
         }
-
+        public void UpdateTheme()
+        {
+            ApplicationStyles.ApplyCustomThemeToControl(this);
+        }
         private void OpenButton_Click(object sender, EventArgs e)
         {
             

@@ -73,6 +73,12 @@
     <Reference Include="WindowsBase" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Controls\ColorLabel.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Controls\ColorLabel.Designer.cs">
+      <DependentUpon>ColorLabel.cs</DependentUpon>
+    </Compile>
     <Compile Include="Forms\ClipStylesForm.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -326,6 +332,7 @@
     <None Include="Resources\qrCode.png" />
     <None Include="Resources\%3b3black.ico" />
     <None Include="Resources\%3b3white.ico" />
+    <None Include="Resources\color-picker-icon.png" />
     <Content Include="Resources\TEST_DATA.ico" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

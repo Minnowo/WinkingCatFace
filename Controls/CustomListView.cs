@@ -169,7 +169,7 @@ namespace WinkingCat
             toolStripMenuItemDirectory,
             toolStripMenuItemPath,
             toolStripMenuItemRemoveFromList};
-            ApplicationStyles.UpdateSylesEvent += ApplicationStyles_UpdateSylesEvent;
+            ApplicationStyles.UpdateStylesEvent += ApplicationStyles_UpdateSylesEvent;
             UpdateTheme();
         }
 
