@@ -22,7 +22,7 @@ namespace WinkingCat.HelperLibs
             }
             set
             {
-                r = ColorHelper.ValidColor(value);
+                r = ColorHelper.ValidRGBColor(value);
             }
         }
         public double G
@@ -33,7 +33,7 @@ namespace WinkingCat.HelperLibs
             }
             set
             {
-                g = ColorHelper.ValidColor(value);
+                g = ColorHelper.ValidRGBColor(value);
             }
         }
         public double B
@@ -44,7 +44,7 @@ namespace WinkingCat.HelperLibs
             }
             set
             {
-                b = ColorHelper.ValidColor(value);
+                b = ColorHelper.ValidRGBColor(value);
             }
         }
         public ushort Alpha
@@ -71,21 +71,44 @@ namespace WinkingCat.HelperLibs
 
         public AdobeRGB(XYZ xyz)
         {
-            double newX = xyz.X / 100;
-            double newY = xyz.Y / 100;
-            double newZ = xyz.Z / 100;
+            double newX = xyz.X / 100d;
+            double newY = xyz.Y / 100d;
+            double newZ = xyz.Z / 100d;
 
-            r = newX * 2.04137 + newY * -0.56495 + newZ * -0.34469;
-            g = newX * -0.96927 + newY * 1.87601 + newZ * 0.04156;
-            b = newX * 0.01345 + newY * -0.11839 + newZ * 1.01541;
+            r = (newX * 2.04137) + (newY * -0.56495) + (newZ * -0.34469);
+            g = (newX * -0.96927) + (newY * 1.87601) + (newZ * 0.04156);
+            b = (newX * 0.01345) + (newY * -0.11839) + (newZ * 1.01541);
 
-            r = Math.Pow(r, (1 / 2.19921875));
-            g = Math.Pow(g, (1 / 2.19921875));
-            b = Math.Pow(b, (1 / 2.19921875));
+            if(r <= 0.0)
+            {
+                r = 0.0;
+            }
+            else
+            {
+                r = MathHelper.checkSquareRoot(r, 0.45470692717);
+            }
 
-            r = r * 255;
-            g = g * 255;
-            b = b * 255;
+            if (g <= 0.0)
+            {
+                g = 0.0;
+            }
+            else
+            {
+                g = MathHelper.checkSquareRoot(g, 0.45470692717);
+            }
+
+            if (b <= 0.0)
+            {
+                b = 0.0;
+            }
+            else
+            {
+                b = MathHelper.checkSquareRoot(b, 0.45470692717);
+            }
+            
+            r = (r * 255d).Clamp(0, 255);
+            g = (g * 255d).Clamp(0, 255);
+            b = (b * 255d).Clamp(0, 255);
 
             alpha = xyz.Alpha;
         }
@@ -241,7 +264,12 @@ namespace WinkingCat.HelperLibs
         public Yxy(ushort r, ushort g, ushort b, ushort a = 255) : this(new XYZ(r, g, b, a))
         {
         }
-
+        public Yxy(float yy, float x, float y, ushort a = 255) : this()
+        {
+            YY = yy;
+            X = x;
+            Y = y;
+        }
         public Yxy(Color color) : this(new XYZ(color))
         {
         }
@@ -249,12 +277,12 @@ namespace WinkingCat.HelperLibs
         public Yxy(XYZ xyz)
         {
             alpha = xyz.Alpha;
-            yy = (float)Math.Round(xyz.Y, ColorHelper.decimalPlaces);
+            yy = xyz.Y;
 
             if ((xyz.X + xyz.Y + xyz.Z) != 0)
             {
-                x = (float)Math.Round(xyz.X / (xyz.X + xyz.Y + xyz.Z), ColorHelper.decimalPlaces);
-                y = (float)Math.Round(xyz.Y / (xyz.X + xyz.Y + xyz.Z), ColorHelper.decimalPlaces);
+                x = xyz.X / (xyz.X + xyz.Y + xyz.Z);
+                y = xyz.Y / (xyz.X + xyz.Y + xyz.Z);
             }
             else
             {
@@ -416,7 +444,7 @@ namespace WinkingCat.HelperLibs
             }
         }
 
-        public XYZ(float x, float y, float z, int a) : this()
+        public XYZ(float x, float y, float z, int a = 255) : this()
         {
             X = x;
             Y = y;
@@ -430,9 +458,9 @@ namespace WinkingCat.HelperLibs
 
         public XYZ(ushort r, ushort g, ushort b, ushort a = 255)
         {
-            double newR = r / 255f;
-            double newG = g / 255f;
-            double newB = b / 255f;
+            double newR = r / 255d;
+            double newG = g / 255d;
+            double newB = b / 255d;
 
             if (newR > 0.04045)
                 newR = Math.Pow((newR + 0.055) / 1.055, 2.4);
@@ -716,7 +744,7 @@ namespace WinkingCat.HelperLibs
             alpha = a;
         }
 
-        public CMYK(int c, int m, int y, int k, int a) : this()
+        public CMYK(int c, int m, int y, int k, int a = 255) : this()
         {
             C100 = c;
             M100 = m;
@@ -915,7 +943,7 @@ namespace WinkingCat.HelperLibs
         {
         }
 
-        public HSL(int h, int s, int l, int a) : this()
+        public HSL(int h, int s, int l, int a = 255) : this()
         {
             Hue360 = h;
             Saturation100 = s;
@@ -1141,7 +1169,7 @@ namespace WinkingCat.HelperLibs
             }
         }
 
-        public HSB(int h, int s, int b, int a) : this()
+        public HSB(int h, int s, int b, int a = 255) : this()
         {
             Hue360 = h;
             Saturation100 = s;
@@ -1673,6 +1701,11 @@ namespace WinkingCat.HelperLibs
         public static double ValidY(double number)
         {
             return number.Clamp(0, 100);
+        }
+
+        public static double ValidRGBColor(double number)
+        {
+            return number.Clamp(0, 255);
         }
 
         public static double ValidColor(double number)

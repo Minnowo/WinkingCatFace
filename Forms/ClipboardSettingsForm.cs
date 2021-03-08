@@ -20,6 +20,9 @@ namespace WinkingCat
             foreach (ColorFormat colorformat in Enum.GetValues(typeof(ColorFormat)))
                 comboBox3.Items.Add(colorformat);
 
+            checkBox1.Checked = RegionCaptureOptions.autoCopyImage;
+            checkBox2.Checked = RegionCaptureOptions.autoCopyColor;
+
             UpdateComboBox();
             UpdateTheme();
         }

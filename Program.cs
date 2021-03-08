@@ -6,7 +6,7 @@ using System.Windows.Forms;
 using System.Runtime.InteropServices;
 using WinkingCat.HelperLibs;
 using System.IO;
-
+using System.Threading;
 
 namespace WinkingCat
 {
@@ -16,10 +16,24 @@ namespace WinkingCat
         /// The main entry point for the application.
         /// </summary>
         public static ApplicationForm mainForm;
+        static Mutex mutex = new Mutex(true, "{8F6F0AC4-B9A1-45fd-A8CF-72F04E6BDE8F}"); // this sets a single instance probably use different uuid each app
 
         [STAThread]
         static void Main()
         {
+
+            // this checks for an instance, if it finds it return
+            if (!mutex.WaitOne(TimeSpan.Zero, true))
+            {
+                NativeMethods.PostMessage(
+                   (IntPtr)NativeMethods.HWND_BROADCAST,
+                   NativeMethods.WM_SHOWME,
+                   IntPtr.Zero,
+                   IntPtr.Zero);
+                return;
+            }
+
+
             NativeMethods.SetProcessDpiAwarenessContext(-3);
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
@@ -68,6 +82,7 @@ namespace WinkingCat
             mainForm = new ApplicationForm();
             
             Application.Run(mainForm);
+            mutex.ReleaseMutex();
         }
     }
 }

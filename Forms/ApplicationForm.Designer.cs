@@ -191,7 +191,7 @@
             this.ToolStripMenuItem_lastRegion.ImageScaling = System.Windows.Forms.ToolStripItemImageScaling.None;
             this.ToolStripMenuItem_lastRegion.Name = "ToolStripMenuItem_lastRegion";
             this.ToolStripMenuItem_lastRegion.Size = new System.Drawing.Size(196, 38);
-            this.ToolStripMenuItem_lastRegion.Text = "LastRegion";
+            this.ToolStripMenuItem_lastRegion.Text = "Last Region";
             // 
             // ToolStripMenuItem_captureCursor
             // 
@@ -200,7 +200,7 @@
             this.ToolStripMenuItem_captureCursor.ImageScaling = System.Windows.Forms.ToolStripItemImageScaling.None;
             this.ToolStripMenuItem_captureCursor.Name = "ToolStripMenuItem_captureCursor";
             this.ToolStripMenuItem_captureCursor.Size = new System.Drawing.Size(196, 38);
-            this.ToolStripMenuItem_captureCursor.Text = "CaptureCursor";
+            this.ToolStripMenuItem_captureCursor.Text = "Capture Cursor";
             // 
             // ToolStripDropDownButton_Clips
             // 
@@ -224,7 +224,7 @@
             this.ToolStripMenuItem_newClip.ImageScaling = System.Windows.Forms.ToolStripItemImageScaling.None;
             this.ToolStripMenuItem_newClip.Name = "ToolStripMenuItem_newClip";
             this.ToolStripMenuItem_newClip.Size = new System.Drawing.Size(316, 38);
-            this.ToolStripMenuItem_newClip.Text = "NewClip";
+            this.ToolStripMenuItem_newClip.Text = "New Clip";
             // 
             // ToolStripMenuItem_clipFromClipboard
             // 
@@ -233,7 +233,7 @@
             this.ToolStripMenuItem_clipFromClipboard.ImageScaling = System.Windows.Forms.ToolStripItemImageScaling.None;
             this.ToolStripMenuItem_clipFromClipboard.Name = "ToolStripMenuItem_clipFromClipboard";
             this.ToolStripMenuItem_clipFromClipboard.Size = new System.Drawing.Size(316, 38);
-            this.ToolStripMenuItem_clipFromClipboard.Text = "ClipFromClipboard";
+            this.ToolStripMenuItem_clipFromClipboard.Text = "Clip From Clipboard";
             // 
             // ToolStripMenuItem_clipFromFile
             // 
@@ -241,13 +241,13 @@
             this.ToolStripMenuItem_clipFromFile.ImageScaling = System.Windows.Forms.ToolStripItemImageScaling.None;
             this.ToolStripMenuItem_clipFromFile.Name = "ToolStripMenuItem_clipFromFile";
             this.ToolStripMenuItem_clipFromFile.Size = new System.Drawing.Size(316, 38);
-            this.ToolStripMenuItem_clipFromFile.Text = "ClipFromFile";
+            this.ToolStripMenuItem_clipFromFile.Text = "Clip From File";
             // 
             // ToolStripMenuItem_createClipAfterRegionCapture
             // 
             this.ToolStripMenuItem_createClipAfterRegionCapture.Name = "ToolStripMenuItem_createClipAfterRegionCapture";
             this.ToolStripMenuItem_createClipAfterRegionCapture.Size = new System.Drawing.Size(316, 38);
-            this.ToolStripMenuItem_createClipAfterRegionCapture.Text = "CreateClipAfterRegionCapture";
+            this.ToolStripMenuItem_createClipAfterRegionCapture.Text = "Create Clip Afte rRegion Capture";
             // 
             // ToolStripDropDownButton_Tools
             // 
@@ -271,7 +271,7 @@
             this.ToolStripDropDownButton_screenColorPicker.ImageScaling = System.Windows.Forms.ToolStripItemImageScaling.None;
             this.ToolStripDropDownButton_screenColorPicker.Name = "ToolStripDropDownButton_screenColorPicker";
             this.ToolStripDropDownButton_screenColorPicker.Size = new System.Drawing.Size(316, 38);
-            this.ToolStripDropDownButton_screenColorPicker.Text = "ScreenColorPicker";
+            this.ToolStripDropDownButton_screenColorPicker.Text = "Screen Color Picker";
             // 
             // ToolStripDropDownButton_ColorPicker
             // 
@@ -280,7 +280,7 @@
             this.ToolStripDropDownButton_ColorPicker.ImageScaling = System.Windows.Forms.ToolStripItemImageScaling.None;
             this.ToolStripDropDownButton_ColorPicker.Name = "ToolStripDropDownButton_ColorPicker";
             this.ToolStripDropDownButton_ColorPicker.Size = new System.Drawing.Size(316, 38);
-            this.ToolStripDropDownButton_ColorPicker.Text = "ClipFromClipboard";
+            this.ToolStripDropDownButton_ColorPicker.Text = "Color Picker";
             // 
             // ToolStripDropDownButton_HashCheck
             // 
@@ -288,7 +288,7 @@
             this.ToolStripDropDownButton_HashCheck.ImageScaling = System.Windows.Forms.ToolStripItemImageScaling.None;
             this.ToolStripDropDownButton_HashCheck.Name = "ToolStripDropDownButton_HashCheck";
             this.ToolStripDropDownButton_HashCheck.Size = new System.Drawing.Size(316, 38);
-            this.ToolStripDropDownButton_HashCheck.Text = "ClipFromFile";
+            this.ToolStripDropDownButton_HashCheck.Text = "Hash Check";
             // 
             // ToolStripDropDownButton_QrCode
             // 
@@ -296,7 +296,7 @@
             this.ToolStripDropDownButton_QrCode.ImageScaling = System.Windows.Forms.ToolStripItemImageScaling.None;
             this.ToolStripDropDownButton_QrCode.Name = "ToolStripDropDownButton_QrCode";
             this.ToolStripDropDownButton_QrCode.Size = new System.Drawing.Size(316, 38);
-            this.ToolStripDropDownButton_QrCode.Text = "CreateClipAfterRegionCapture";
+            this.ToolStripDropDownButton_QrCode.Text = "QrCode Scan";
             // 
             // toolStripSeparator1
             // 

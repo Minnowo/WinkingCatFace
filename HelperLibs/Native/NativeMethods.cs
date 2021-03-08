@@ -8,15 +8,9 @@ namespace WinkingCat.HelperLibs
     public delegate bool EnumWindowsProc(IntPtr hWnd, IntPtr lParam);
     public static partial class NativeMethods
     {
+        public static readonly int WM_SHOWME = RegisterWindowMessage("WM_SHOWME");
+        public const int HWND_BROADCAST = 0xffff;
         #region user32.dll
-        /*        [DllImport("user32.dll", SetLastError = true)]
-                public static extern UInt32 GetWindowLong(IntPtr hWnd, int nIndex);
-
-                [DllImport("user32.dll", SetLastError = true)]
-                public static extern bool BringWindowToTop(IntPtr hWnd);
-
-                [DllImport("user32.dll", SetLastError = true)]
-                public static extern bool BringWindowToTop(HandleRef hWnd);*/
 
         /// <summary>Determines whether the specified window is minimized (iconic).</summary>
         [DllImport("user32.dll")]
@@ -123,6 +117,11 @@ namespace WinkingCat.HelperLibs
         [DllImport("user32.dll")]
         [return: MarshalAs(UnmanagedType.Bool)]
         public static extern bool UnregisterHotKey(IntPtr hWnd, int id);
+
+        [DllImport("user32")]
+        public static extern bool PostMessage(IntPtr hwnd, int msg, IntPtr wparam, IntPtr lparam);
+        [DllImport("user32")]
+        public static extern int RegisterWindowMessage(string message);
         #endregion
 
 
@@ -171,6 +170,6 @@ namespace WinkingCat.HelperLibs
 
         [DllImport("DwmApi")]
         public static extern int DwmSetWindowAttribute(IntPtr hwnd, int attr, int[] attrValue, int attrSize);
-        #endregion
+        #endregion        
     }
 }

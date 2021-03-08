@@ -21,7 +21,7 @@ namespace WinkingCat.HelperLibs
             {
                 return selectedColor;
             }
-            private set
+            set
             {
                 if (selectedColor != value)
                 {
@@ -59,6 +59,7 @@ namespace WinkingCat.HelperLibs
             }
             set
             {
+                drawStyle = value;
                 colorBox.DrawStyle = value;
                 colorSlider.DrawStyle = value;
                 Invalidate();

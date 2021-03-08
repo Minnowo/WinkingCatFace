@@ -12,6 +12,7 @@ namespace WinkingCat.HelperLibs
 {
     public partial class ColorComboBox : UserControl
     {
+        public event ColorEventHandler ColorChanged;
         public decimal[] Values
         {
             get
@@ -93,6 +94,7 @@ namespace WinkingCat.HelperLibs
         private byte decimalPlaces = 1;
 
         private Timer buttonHeldTimer;
+        private bool preventOverflow = false;
 
         [DefaultValue(true)]
         private ColorFormat colorFormat = ColorFormat.RGB;
@@ -105,11 +107,56 @@ namespace WinkingCat.HelperLibs
             UpdateMax();
             UpdateValues();
         }
+        public void OnColorChanged()
+        {
+            _Color mycolor = Color.White;
+            switch (this.colorFormat)
+            {
+                case ColorFormat.AdobeRGB:
+                    mycolor = (new AdobeRGB((ushort)Math.Round(values[0]), (ushort)Math.Round(values[1]), (ushort)Math.Round(values[2]))).ToColor();
+                    break;
+                case ColorFormat.RGB:
+                    mycolor = new _Color((short)values[0], (short)values[1], (short)values[2]);
+                    break;
+                case ColorFormat.ARGB:
+                    mycolor = new _Color((short)values[1], (short)values[2], (short)values[3], (short)values[0]);
+                    break;
+                case ColorFormat.CMYK:
+                    mycolor = (new CMYK((int)Math.Round(values[0]), (int)Math.Round(values[1]), (int)Math.Round(values[2]), (int)Math.Round(values[3]))).ToColor();
+                    break;
+                case ColorFormat.HSB:
+                case ColorFormat.HSV:
+                    mycolor = (new HSB((int)Math.Round(values[0]), (int)Math.Round(values[1]), (int)Math.Round(values[2]))).ToColor();
+                    break;
+                case ColorFormat.HSL:
+                    mycolor = (new HSL((int)Math.Round(values[0]), (int)Math.Round(values[1]), (int)Math.Round(values[2]))).ToColor();
+                    break;
+                case ColorFormat.XYZ:
+                    mycolor = (new XYZ((float)values[0], (float)values[1], (float)values[2])).ToColor();
+                    break;
+                case ColorFormat.Yxy:
+                    mycolor = (new Yxy((float)values[0], (float)values[1], (float)values[2])).ToColor();
+                    break;
+            }
+            OnColorChanged(mycolor);
+        }
+        public void OnColorChanged(_Color color)
+        {
+            if(ColorChanged != null)
+            {
+                ColorChanged(this, new ColorEventArgs(color, this.colorFormat));
+            }
+        }
 
         public void UpdateColor(_Color newColor)
         {
             switch (ColorFormat)
             {
+                case ColorFormat.AdobeRGB:
+                    values[0] = (decimal)newColor.ToAdobeRGB().R;
+                    values[1] = (decimal)newColor.ToAdobeRGB().G;
+                    values[2] = (decimal)newColor.ToAdobeRGB().B;
+                    break;
                 case ColorFormat.RGB:
                     values[0] = newColor.argb.R;
                     values[1] = newColor.argb.G;
@@ -144,7 +191,7 @@ namespace WinkingCat.HelperLibs
                     values[2] = (decimal)newColor.xyz.Z;
                     break;
                 case ColorFormat.Yxy:
-                    values[0] = (decimal)newColor.ToYxy().Y;
+                    values[0] = (decimal)newColor.ToYxy().YY;
                     values[1] = (decimal)newColor.ToYxy().X;
                     values[2] = (decimal)newColor.ToYxy().Y;
                     break;
@@ -287,6 +334,18 @@ namespace WinkingCat.HelperLibs
             Array.Resize(ref maxValues, newSize);
         }
 
+        private void NumericUpDown_ValueChanged(object sender, EventArgs e)
+        {
+            values[((NumericUpDown)sender).TabIndex] = ((NumericUpDown)sender).Value;
+            /*if (preventOverflow)
+                return;
+            preventOverflow = true;
+            NumericUpDown n = (NumericUpDown)sender;
+            values[n.TabIndex] = n.Value;
+            OnColorChanged();
+            preventOverflow = false;*/
+        }
+
         private void CreateNumericUpDown()
         {
             this.Controls.Clear();
@@ -307,6 +366,7 @@ namespace WinkingCat.HelperLibs
                 n.Maximum = maxValues[i];
                 n.Value = values[i];
                 n.KeyUp += NumericUpDownKeyUp_Event;
+                n.ValueChanged += NumericUpDown_ValueChanged;
                 //n.MouseUp += Button_MouseUp;
                 this.Controls.Add(n);
             }

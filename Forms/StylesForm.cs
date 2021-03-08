@@ -18,6 +18,7 @@ namespace WinkingCat
         public StylesForm()
         {
             InitializeComponent();
+            this.Text = "Styles";
             this.HandleCreated += StylesForm_HandleCreated;
             ApplicationStyles.UpdateStylesEvent += ApplicationStyles_UpdateStylesEvent;
         }

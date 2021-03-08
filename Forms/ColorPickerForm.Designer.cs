@@ -28,164 +28,98 @@
         /// </summary>
         private void InitializeComponent()
         {
-            this.panel1 = new System.Windows.Forms.Panel();
-            this.colorComboBox1 = new WinkingCat.HelperLibs.ColorComboBox();
-            this.radioButton3 = new System.Windows.Forms.RadioButton();
-            this.radioButton2 = new System.Windows.Forms.RadioButton();
-            this.radioButton1 = new System.Windows.Forms.RadioButton();
-            this.colorPicker1 = new WinkingCat.HelperLibs.ColorPicker();
+            this.pnlRGBColor = new System.Windows.Forms.Panel();
+            this.rbBlue = new System.Windows.Forms.RadioButton();
+            this.rbGreen = new System.Windows.Forms.RadioButton();
+            this.rbRed = new System.Windows.Forms.RadioButton();
             this.label1 = new System.Windows.Forms.Label();
-            this.panel2 = new System.Windows.Forms.Panel();
-            this.radioButton6 = new System.Windows.Forms.RadioButton();
-            this.radioButton5 = new System.Windows.Forms.RadioButton();
-            this.radioButton4 = new System.Windows.Forms.RadioButton();
-            this.colorComboBox2 = new WinkingCat.HelperLibs.ColorComboBox();
+            this.pnlHSBColor = new System.Windows.Forms.Panel();
+            this.rbHSBBrightness = new System.Windows.Forms.RadioButton();
+            this.rbHSBSaturation = new System.Windows.Forms.RadioButton();
+            this.rbHSBHue = new System.Windows.Forms.RadioButton();
             this.label2 = new System.Windows.Forms.Label();
             this.label3 = new System.Windows.Forms.Label();
-            this.panel3 = new System.Windows.Forms.Panel();
-            this.radioButton9 = new System.Windows.Forms.RadioButton();
-            this.radioButton8 = new System.Windows.Forms.RadioButton();
-            this.radioButton7 = new System.Windows.Forms.RadioButton();
-            this.colorComboBox3 = new WinkingCat.HelperLibs.ColorComboBox();
+            this.pnlHSLColor = new System.Windows.Forms.Panel();
+            this.rbHSLLightness = new System.Windows.Forms.RadioButton();
+            this.rbHSLSaturation = new System.Windows.Forms.RadioButton();
+            this.rbHSLHue = new System.Windows.Forms.RadioButton();
             this.label4 = new System.Windows.Forms.Label();
-            this.panel4 = new System.Windows.Forms.Panel();
-            this.radioButton12 = new System.Windows.Forms.RadioButton();
-            this.radioButton11 = new System.Windows.Forms.RadioButton();
-            this.radioButton10 = new System.Windows.Forms.RadioButton();
-            this.colorComboBox4 = new WinkingCat.HelperLibs.ColorComboBox();
-            this.panel5 = new System.Windows.Forms.Panel();
-            this.radioButton13 = new System.Windows.Forms.RadioButton();
-            this.colorComboBox5 = new WinkingCat.HelperLibs.ColorComboBox();
+            this.pnlAdobeRGBColor = new System.Windows.Forms.Panel();
+            this.rbAdobeRGBBlue = new System.Windows.Forms.RadioButton();
+            this.rbAdobeRGBGreen = new System.Windows.Forms.RadioButton();
+            this.rbAdobeRGBRed = new System.Windows.Forms.RadioButton();
+            this.pnlXYZColor = new System.Windows.Forms.Panel();
+            this.rbX = new System.Windows.Forms.RadioButton();
             this.label5 = new System.Windows.Forms.Label();
             this.label6 = new System.Windows.Forms.Label();
             this.label7 = new System.Windows.Forms.Label();
             this.button1 = new System.Windows.Forms.Button();
             this.button2 = new System.Windows.Forms.Button();
             this.button3 = new System.Windows.Forms.Button();
-            this.colorComboBox6 = new WinkingCat.HelperLibs.ColorComboBox();
-            this.colorComboBox8 = new WinkingCat.HelperLibs.ColorComboBox();
             this.textBox1 = new System.Windows.Forms.TextBox();
             this.textBox2 = new System.Windows.Forms.TextBox();
             this.label8 = new System.Windows.Forms.Label();
             this.label9 = new System.Windows.Forms.Label();
-            this.label10 = new System.Windows.Forms.Label();
-            this.panel1.SuspendLayout();
-            this.panel2.SuspendLayout();
-            this.panel3.SuspendLayout();
-            this.panel4.SuspendLayout();
-            this.panel5.SuspendLayout();
+            this.displayColorLabel = new System.Windows.Forms.Label();
+            this.ccbCMYKColor = new WinkingCat.HelperLibs.ColorComboBox();
+            this.ccbYXYColor = new WinkingCat.HelperLibs.ColorComboBox();
+            this.ccbXYZColor = new WinkingCat.HelperLibs.ColorComboBox();
+            this.ccbAdobeRGBColor = new WinkingCat.HelperLibs.ColorComboBox();
+            this.ccbHSLColor = new WinkingCat.HelperLibs.ColorComboBox();
+            this.ccbHSBColor = new WinkingCat.HelperLibs.ColorComboBox();
+            this.ccbRGBColor = new WinkingCat.HelperLibs.ColorComboBox();
+            this.colorPicker = new WinkingCat.HelperLibs.ColorPicker();
+            this.pnlRGBColor.SuspendLayout();
+            this.pnlHSBColor.SuspendLayout();
+            this.pnlHSLColor.SuspendLayout();
+            this.pnlAdobeRGBColor.SuspendLayout();
+            this.pnlXYZColor.SuspendLayout();
             this.SuspendLayout();
             // 
-            // panel1
+            // pnlRGBColor
             // 
-            this.panel1.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.panel1.Controls.Add(this.colorComboBox1);
-            this.panel1.Controls.Add(this.radioButton3);
-            this.panel1.Controls.Add(this.radioButton2);
-            this.panel1.Controls.Add(this.radioButton1);
-            this.panel1.Location = new System.Drawing.Point(308, 28);
-            this.panel1.Name = "panel1";
-            this.panel1.Size = new System.Drawing.Size(242, 55);
-            this.panel1.TabIndex = 1;
+            this.pnlRGBColor.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.pnlRGBColor.Controls.Add(this.ccbRGBColor);
+            this.pnlRGBColor.Controls.Add(this.rbBlue);
+            this.pnlRGBColor.Controls.Add(this.rbGreen);
+            this.pnlRGBColor.Controls.Add(this.rbRed);
+            this.pnlRGBColor.Location = new System.Drawing.Point(308, 28);
+            this.pnlRGBColor.Name = "pnlRGBColor";
+            this.pnlRGBColor.Size = new System.Drawing.Size(242, 55);
+            this.pnlRGBColor.TabIndex = 1;
             // 
-            // colorComboBox1
+            // rbBlue
             // 
-            this.colorComboBox1.ColorFormat = WinkingCat.HelperLibs.ColorFormat.RGB;
-            this.colorComboBox1.DecimalPlaces = ((byte)(1));
-            this.colorComboBox1.Location = new System.Drawing.Point(3, 3);
-            this.colorComboBox1.MaxValues = new decimal[] {
-        new decimal(new int[] {
-                    255,
-                    0,
-                    0,
-                    0}),
-        new decimal(new int[] {
-                    255,
-                    0,
-                    0,
-                    0}),
-        new decimal(new int[] {
-                    255,
-                    0,
-                    0,
-                    0})};
-            this.colorComboBox1.MinValues = new decimal[] {
-        new decimal(new int[] {
-                    0,
-                    0,
-                    0,
-                    0}),
-        new decimal(new int[] {
-                    0,
-                    0,
-                    0,
-                    0}),
-        new decimal(new int[] {
-                    0,
-                    0,
-                    0,
-                    0})};
-            this.colorComboBox1.Name = "colorComboBox1";
-            this.colorComboBox1.Size = new System.Drawing.Size(234, 20);
-            this.colorComboBox1.TabIndex = 3;
-            this.colorComboBox1.Values = new decimal[] {
-        new decimal(new int[] {
-                    1,
-                    0,
-                    0,
-                    0}),
-        new decimal(new int[] {
-                    1,
-                    0,
-                    0,
-                    0}),
-        new decimal(new int[] {
-                    1,
-                    0,
-                    0,
-                    0})};
+            this.rbBlue.AutoSize = true;
+            this.rbBlue.Location = new System.Drawing.Point(151, 29);
+            this.rbBlue.Name = "rbBlue";
+            this.rbBlue.Size = new System.Drawing.Size(46, 17);
+            this.rbBlue.TabIndex = 2;
+            this.rbBlue.TabStop = true;
+            this.rbBlue.Text = "Blue";
+            this.rbBlue.UseVisualStyleBackColor = true;
             // 
-            // radioButton3
+            // rbGreen
             // 
-            this.radioButton3.AutoSize = true;
-            this.radioButton3.Location = new System.Drawing.Point(151, 29);
-            this.radioButton3.Name = "radioButton3";
-            this.radioButton3.Size = new System.Drawing.Size(46, 17);
-            this.radioButton3.TabIndex = 2;
-            this.radioButton3.TabStop = true;
-            this.radioButton3.Text = "Blue";
-            this.radioButton3.UseVisualStyleBackColor = true;
+            this.rbGreen.AutoSize = true;
+            this.rbGreen.Location = new System.Drawing.Point(78, 29);
+            this.rbGreen.Name = "rbGreen";
+            this.rbGreen.Size = new System.Drawing.Size(54, 17);
+            this.rbGreen.TabIndex = 1;
+            this.rbGreen.TabStop = true;
+            this.rbGreen.Text = "Green";
+            this.rbGreen.UseVisualStyleBackColor = true;
             // 
-            // radioButton2
+            // rbRed
             // 
-            this.radioButton2.AutoSize = true;
-            this.radioButton2.Location = new System.Drawing.Point(78, 29);
-            this.radioButton2.Name = "radioButton2";
-            this.radioButton2.Size = new System.Drawing.Size(54, 17);
-            this.radioButton2.TabIndex = 1;
-            this.radioButton2.TabStop = true;
-            this.radioButton2.Text = "Green";
-            this.radioButton2.UseVisualStyleBackColor = true;
-            // 
-            // radioButton1
-            // 
-            this.radioButton1.AutoSize = true;
-            this.radioButton1.Location = new System.Drawing.Point(3, 29);
-            this.radioButton1.Name = "radioButton1";
-            this.radioButton1.Size = new System.Drawing.Size(45, 17);
-            this.radioButton1.TabIndex = 0;
-            this.radioButton1.TabStop = true;
-            this.radioButton1.Text = "Red";
-            this.radioButton1.UseVisualStyleBackColor = true;
-            // 
-            // colorPicker1
-            // 
-            this.colorPicker1.AutoSize = true;
-            this.colorPicker1.DrawStyle = WinkingCat.HelperLibs.DrawStyles.HSBHue;
-            this.colorPicker1.Location = new System.Drawing.Point(12, 12);
-            this.colorPicker1.Name = "colorPicker1";
-            this.colorPicker1.Size = new System.Drawing.Size(290, 261);
-            this.colorPicker1.TabIndex = 0;
+            this.rbRed.AutoSize = true;
+            this.rbRed.Location = new System.Drawing.Point(3, 29);
+            this.rbRed.Name = "rbRed";
+            this.rbRed.Size = new System.Drawing.Size(45, 17);
+            this.rbRed.TabIndex = 0;
+            this.rbRed.TabStop = true;
+            this.rbRed.Text = "Red";
+            this.rbRed.UseVisualStyleBackColor = true;
             // 
             // label1
             // 
@@ -196,107 +130,50 @@
             this.label1.TabIndex = 2;
             this.label1.Text = "RGB Color";
             // 
-            // panel2
+            // pnlHSBColor
             // 
-            this.panel2.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.panel2.Controls.Add(this.radioButton6);
-            this.panel2.Controls.Add(this.radioButton5);
-            this.panel2.Controls.Add(this.radioButton4);
-            this.panel2.Controls.Add(this.colorComboBox2);
-            this.panel2.Location = new System.Drawing.Point(308, 122);
-            this.panel2.Name = "panel2";
-            this.panel2.Size = new System.Drawing.Size(242, 55);
-            this.panel2.TabIndex = 3;
+            this.pnlHSBColor.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.pnlHSBColor.Controls.Add(this.rbHSBBrightness);
+            this.pnlHSBColor.Controls.Add(this.rbHSBSaturation);
+            this.pnlHSBColor.Controls.Add(this.rbHSBHue);
+            this.pnlHSBColor.Controls.Add(this.ccbHSBColor);
+            this.pnlHSBColor.Location = new System.Drawing.Point(308, 122);
+            this.pnlHSBColor.Name = "pnlHSBColor";
+            this.pnlHSBColor.Size = new System.Drawing.Size(242, 55);
+            this.pnlHSBColor.TabIndex = 3;
             // 
-            // radioButton6
+            // rbHSBBrightness
             // 
-            this.radioButton6.AutoSize = true;
-            this.radioButton6.Location = new System.Drawing.Point(158, 32);
-            this.radioButton6.Name = "radioButton6";
-            this.radioButton6.Size = new System.Drawing.Size(74, 17);
-            this.radioButton6.TabIndex = 3;
-            this.radioButton6.TabStop = true;
-            this.radioButton6.Text = "Brightness";
-            this.radioButton6.UseVisualStyleBackColor = true;
+            this.rbHSBBrightness.AutoSize = true;
+            this.rbHSBBrightness.Location = new System.Drawing.Point(158, 32);
+            this.rbHSBBrightness.Name = "rbHSBBrightness";
+            this.rbHSBBrightness.Size = new System.Drawing.Size(74, 17);
+            this.rbHSBBrightness.TabIndex = 3;
+            this.rbHSBBrightness.TabStop = true;
+            this.rbHSBBrightness.Text = "Brightness";
+            this.rbHSBBrightness.UseVisualStyleBackColor = true;
             // 
-            // radioButton5
+            // rbHSBSaturation
             // 
-            this.radioButton5.AutoSize = true;
-            this.radioButton5.Location = new System.Drawing.Point(79, 32);
-            this.radioButton5.Name = "radioButton5";
-            this.radioButton5.Size = new System.Drawing.Size(73, 17);
-            this.radioButton5.TabIndex = 2;
-            this.radioButton5.TabStop = true;
-            this.radioButton5.Text = "Saturation";
-            this.radioButton5.UseVisualStyleBackColor = true;
+            this.rbHSBSaturation.AutoSize = true;
+            this.rbHSBSaturation.Location = new System.Drawing.Point(79, 32);
+            this.rbHSBSaturation.Name = "rbHSBSaturation";
+            this.rbHSBSaturation.Size = new System.Drawing.Size(73, 17);
+            this.rbHSBSaturation.TabIndex = 2;
+            this.rbHSBSaturation.TabStop = true;
+            this.rbHSBSaturation.Text = "Saturation";
+            this.rbHSBSaturation.UseVisualStyleBackColor = true;
             // 
-            // radioButton4
+            // rbHSBHue
             // 
-            this.radioButton4.AutoSize = true;
-            this.radioButton4.Location = new System.Drawing.Point(4, 32);
-            this.radioButton4.Name = "radioButton4";
-            this.radioButton4.Size = new System.Drawing.Size(45, 17);
-            this.radioButton4.TabIndex = 1;
-            this.radioButton4.TabStop = true;
-            this.radioButton4.Text = "Hue";
-            this.radioButton4.UseVisualStyleBackColor = true;
-            // 
-            // colorComboBox2
-            // 
-            this.colorComboBox2.ColorFormat = WinkingCat.HelperLibs.ColorFormat.RGB;
-            this.colorComboBox2.DecimalPlaces = ((byte)(1));
-            this.colorComboBox2.Location = new System.Drawing.Point(4, 3);
-            this.colorComboBox2.MaxValues = new decimal[] {
-        new decimal(new int[] {
-                    255,
-                    0,
-                    0,
-                    0}),
-        new decimal(new int[] {
-                    255,
-                    0,
-                    0,
-                    0}),
-        new decimal(new int[] {
-                    255,
-                    0,
-                    0,
-                    0})};
-            this.colorComboBox2.MinValues = new decimal[] {
-        new decimal(new int[] {
-                    0,
-                    0,
-                    0,
-                    0}),
-        new decimal(new int[] {
-                    0,
-                    0,
-                    0,
-                    0}),
-        new decimal(new int[] {
-                    0,
-                    0,
-                    0,
-                    0})};
-            this.colorComboBox2.Name = "colorComboBox2";
-            this.colorComboBox2.Size = new System.Drawing.Size(235, 23);
-            this.colorComboBox2.TabIndex = 0;
-            this.colorComboBox2.Values = new decimal[] {
-        new decimal(new int[] {
-                    1,
-                    0,
-                    0,
-                    0}),
-        new decimal(new int[] {
-                    1,
-                    0,
-                    0,
-                    0}),
-        new decimal(new int[] {
-                    1,
-                    0,
-                    0,
-                    0})};
+            this.rbHSBHue.AutoSize = true;
+            this.rbHSBHue.Location = new System.Drawing.Point(4, 32);
+            this.rbHSBHue.Name = "rbHSBHue";
+            this.rbHSBHue.Size = new System.Drawing.Size(45, 17);
+            this.rbHSBHue.TabIndex = 1;
+            this.rbHSBHue.TabStop = true;
+            this.rbHSBHue.Text = "Hue";
+            this.rbHSBHue.UseVisualStyleBackColor = true;
             // 
             // label2
             // 
@@ -316,107 +193,50 @@
             this.label3.TabIndex = 5;
             this.label3.Text = "HSL Color";
             // 
-            // panel3
+            // pnlHSLColor
             // 
-            this.panel3.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.panel3.Controls.Add(this.radioButton9);
-            this.panel3.Controls.Add(this.radioButton8);
-            this.panel3.Controls.Add(this.radioButton7);
-            this.panel3.Controls.Add(this.colorComboBox3);
-            this.panel3.Location = new System.Drawing.Point(308, 216);
-            this.panel3.Name = "panel3";
-            this.panel3.Size = new System.Drawing.Size(242, 54);
-            this.panel3.TabIndex = 6;
+            this.pnlHSLColor.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.pnlHSLColor.Controls.Add(this.rbHSLLightness);
+            this.pnlHSLColor.Controls.Add(this.rbHSLSaturation);
+            this.pnlHSLColor.Controls.Add(this.rbHSLHue);
+            this.pnlHSLColor.Controls.Add(this.ccbHSLColor);
+            this.pnlHSLColor.Location = new System.Drawing.Point(308, 216);
+            this.pnlHSLColor.Name = "pnlHSLColor";
+            this.pnlHSLColor.Size = new System.Drawing.Size(242, 54);
+            this.pnlHSLColor.TabIndex = 6;
             // 
-            // radioButton9
+            // rbHSLLightness
             // 
-            this.radioButton9.AutoSize = true;
-            this.radioButton9.Location = new System.Drawing.Point(158, 32);
-            this.radioButton9.Name = "radioButton9";
-            this.radioButton9.Size = new System.Drawing.Size(70, 17);
-            this.radioButton9.TabIndex = 3;
-            this.radioButton9.TabStop = true;
-            this.radioButton9.Text = "Lightness";
-            this.radioButton9.UseVisualStyleBackColor = true;
+            this.rbHSLLightness.AutoSize = true;
+            this.rbHSLLightness.Location = new System.Drawing.Point(158, 32);
+            this.rbHSLLightness.Name = "rbHSLLightness";
+            this.rbHSLLightness.Size = new System.Drawing.Size(70, 17);
+            this.rbHSLLightness.TabIndex = 3;
+            this.rbHSLLightness.TabStop = true;
+            this.rbHSLLightness.Text = "Lightness";
+            this.rbHSLLightness.UseVisualStyleBackColor = true;
             // 
-            // radioButton8
+            // rbHSLSaturation
             // 
-            this.radioButton8.AutoSize = true;
-            this.radioButton8.Location = new System.Drawing.Point(79, 32);
-            this.radioButton8.Name = "radioButton8";
-            this.radioButton8.Size = new System.Drawing.Size(73, 17);
-            this.radioButton8.TabIndex = 2;
-            this.radioButton8.TabStop = true;
-            this.radioButton8.Text = "Saturation";
-            this.radioButton8.UseVisualStyleBackColor = true;
+            this.rbHSLSaturation.AutoSize = true;
+            this.rbHSLSaturation.Location = new System.Drawing.Point(79, 32);
+            this.rbHSLSaturation.Name = "rbHSLSaturation";
+            this.rbHSLSaturation.Size = new System.Drawing.Size(73, 17);
+            this.rbHSLSaturation.TabIndex = 2;
+            this.rbHSLSaturation.TabStop = true;
+            this.rbHSLSaturation.Text = "Saturation";
+            this.rbHSLSaturation.UseVisualStyleBackColor = true;
             // 
-            // radioButton7
+            // rbHSLHue
             // 
-            this.radioButton7.AutoSize = true;
-            this.radioButton7.Location = new System.Drawing.Point(4, 32);
-            this.radioButton7.Name = "radioButton7";
-            this.radioButton7.Size = new System.Drawing.Size(45, 17);
-            this.radioButton7.TabIndex = 1;
-            this.radioButton7.TabStop = true;
-            this.radioButton7.Text = "Hue";
-            this.radioButton7.UseVisualStyleBackColor = true;
-            // 
-            // colorComboBox3
-            // 
-            this.colorComboBox3.ColorFormat = WinkingCat.HelperLibs.ColorFormat.RGB;
-            this.colorComboBox3.DecimalPlaces = ((byte)(1));
-            this.colorComboBox3.Location = new System.Drawing.Point(4, 3);
-            this.colorComboBox3.MaxValues = new decimal[] {
-        new decimal(new int[] {
-                    255,
-                    0,
-                    0,
-                    0}),
-        new decimal(new int[] {
-                    255,
-                    0,
-                    0,
-                    0}),
-        new decimal(new int[] {
-                    255,
-                    0,
-                    0,
-                    0})};
-            this.colorComboBox3.MinValues = new decimal[] {
-        new decimal(new int[] {
-                    0,
-                    0,
-                    0,
-                    0}),
-        new decimal(new int[] {
-                    0,
-                    0,
-                    0,
-                    0}),
-        new decimal(new int[] {
-                    0,
-                    0,
-                    0,
-                    0})};
-            this.colorComboBox3.Name = "colorComboBox3";
-            this.colorComboBox3.Size = new System.Drawing.Size(233, 23);
-            this.colorComboBox3.TabIndex = 0;
-            this.colorComboBox3.Values = new decimal[] {
-        new decimal(new int[] {
-                    1,
-                    0,
-                    0,
-                    0}),
-        new decimal(new int[] {
-                    1,
-                    0,
-                    0,
-                    0}),
-        new decimal(new int[] {
-                    1,
-                    0,
-                    0,
-                    0})};
+            this.rbHSLHue.AutoSize = true;
+            this.rbHSLHue.Location = new System.Drawing.Point(4, 32);
+            this.rbHSLHue.Name = "rbHSLHue";
+            this.rbHSLHue.Size = new System.Drawing.Size(45, 17);
+            this.rbHSLHue.TabIndex = 1;
+            this.rbHSLHue.TabStop = true;
+            this.rbHSLHue.Text = "Hue";
+            this.rbHSLHue.UseVisualStyleBackColor = true;
             // 
             // label4
             // 
@@ -427,185 +247,71 @@
             this.label4.TabIndex = 7;
             this.label4.Text = "Adobe RGB";
             // 
-            // panel4
+            // pnlAdobeRGBColor
             // 
-            this.panel4.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.panel4.Controls.Add(this.radioButton12);
-            this.panel4.Controls.Add(this.radioButton11);
-            this.panel4.Controls.Add(this.radioButton10);
-            this.panel4.Controls.Add(this.colorComboBox4);
-            this.panel4.Location = new System.Drawing.Point(576, 28);
-            this.panel4.Name = "panel4";
-            this.panel4.Size = new System.Drawing.Size(242, 55);
-            this.panel4.TabIndex = 8;
+            this.pnlAdobeRGBColor.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.pnlAdobeRGBColor.Controls.Add(this.rbAdobeRGBBlue);
+            this.pnlAdobeRGBColor.Controls.Add(this.rbAdobeRGBGreen);
+            this.pnlAdobeRGBColor.Controls.Add(this.rbAdobeRGBRed);
+            this.pnlAdobeRGBColor.Controls.Add(this.ccbAdobeRGBColor);
+            this.pnlAdobeRGBColor.Location = new System.Drawing.Point(576, 28);
+            this.pnlAdobeRGBColor.Name = "pnlAdobeRGBColor";
+            this.pnlAdobeRGBColor.Size = new System.Drawing.Size(242, 55);
+            this.pnlAdobeRGBColor.TabIndex = 8;
             // 
-            // radioButton12
+            // rbAdobeRGBBlue
             // 
-            this.radioButton12.AutoSize = true;
-            this.radioButton12.Location = new System.Drawing.Point(151, 29);
-            this.radioButton12.Name = "radioButton12";
-            this.radioButton12.Size = new System.Drawing.Size(46, 17);
-            this.radioButton12.TabIndex = 3;
-            this.radioButton12.TabStop = true;
-            this.radioButton12.Text = "Blue";
-            this.radioButton12.UseVisualStyleBackColor = true;
+            this.rbAdobeRGBBlue.AutoSize = true;
+            this.rbAdobeRGBBlue.Location = new System.Drawing.Point(151, 29);
+            this.rbAdobeRGBBlue.Name = "rbAdobeRGBBlue";
+            this.rbAdobeRGBBlue.Size = new System.Drawing.Size(46, 17);
+            this.rbAdobeRGBBlue.TabIndex = 3;
+            this.rbAdobeRGBBlue.TabStop = true;
+            this.rbAdobeRGBBlue.Text = "Blue";
+            this.rbAdobeRGBBlue.UseVisualStyleBackColor = true;
             // 
-            // radioButton11
+            // rbAdobeRGBGreen
             // 
-            this.radioButton11.AutoSize = true;
-            this.radioButton11.Location = new System.Drawing.Point(78, 29);
-            this.radioButton11.Name = "radioButton11";
-            this.radioButton11.Size = new System.Drawing.Size(54, 17);
-            this.radioButton11.TabIndex = 2;
-            this.radioButton11.TabStop = true;
-            this.radioButton11.Text = "Green";
-            this.radioButton11.UseVisualStyleBackColor = true;
+            this.rbAdobeRGBGreen.AutoSize = true;
+            this.rbAdobeRGBGreen.Location = new System.Drawing.Point(78, 29);
+            this.rbAdobeRGBGreen.Name = "rbAdobeRGBGreen";
+            this.rbAdobeRGBGreen.Size = new System.Drawing.Size(54, 17);
+            this.rbAdobeRGBGreen.TabIndex = 2;
+            this.rbAdobeRGBGreen.TabStop = true;
+            this.rbAdobeRGBGreen.Text = "Green";
+            this.rbAdobeRGBGreen.UseVisualStyleBackColor = true;
             // 
-            // radioButton10
+            // rbAdobeRGBRed
             // 
-            this.radioButton10.AutoSize = true;
-            this.radioButton10.Location = new System.Drawing.Point(3, 29);
-            this.radioButton10.Name = "radioButton10";
-            this.radioButton10.Size = new System.Drawing.Size(45, 17);
-            this.radioButton10.TabIndex = 1;
-            this.radioButton10.TabStop = true;
-            this.radioButton10.Text = "Red";
-            this.radioButton10.UseVisualStyleBackColor = true;
+            this.rbAdobeRGBRed.AutoSize = true;
+            this.rbAdobeRGBRed.Location = new System.Drawing.Point(3, 29);
+            this.rbAdobeRGBRed.Name = "rbAdobeRGBRed";
+            this.rbAdobeRGBRed.Size = new System.Drawing.Size(45, 17);
+            this.rbAdobeRGBRed.TabIndex = 1;
+            this.rbAdobeRGBRed.TabStop = true;
+            this.rbAdobeRGBRed.Text = "Red";
+            this.rbAdobeRGBRed.UseVisualStyleBackColor = true;
             // 
-            // colorComboBox4
+            // pnlXYZColor
             // 
-            this.colorComboBox4.ColorFormat = WinkingCat.HelperLibs.ColorFormat.RGB;
-            this.colorComboBox4.DecimalPlaces = ((byte)(1));
-            this.colorComboBox4.Location = new System.Drawing.Point(3, 4);
-            this.colorComboBox4.MaxValues = new decimal[] {
-        new decimal(new int[] {
-                    255,
-                    0,
-                    0,
-                    0}),
-        new decimal(new int[] {
-                    255,
-                    0,
-                    0,
-                    0}),
-        new decimal(new int[] {
-                    255,
-                    0,
-                    0,
-                    0})};
-            this.colorComboBox4.MinValues = new decimal[] {
-        new decimal(new int[] {
-                    0,
-                    0,
-                    0,
-                    0}),
-        new decimal(new int[] {
-                    0,
-                    0,
-                    0,
-                    0}),
-        new decimal(new int[] {
-                    0,
-                    0,
-                    0,
-                    0})};
-            this.colorComboBox4.Name = "colorComboBox4";
-            this.colorComboBox4.Size = new System.Drawing.Size(236, 23);
-            this.colorComboBox4.TabIndex = 0;
-            this.colorComboBox4.Values = new decimal[] {
-        new decimal(new int[] {
-                    1,
-                    0,
-                    0,
-                    0}),
-        new decimal(new int[] {
-                    1,
-                    0,
-                    0,
-                    0}),
-        new decimal(new int[] {
-                    1,
-                    0,
-                    0,
-                    0})};
+            this.pnlXYZColor.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.pnlXYZColor.Controls.Add(this.rbX);
+            this.pnlXYZColor.Controls.Add(this.ccbXYZColor);
+            this.pnlXYZColor.Location = new System.Drawing.Point(576, 122);
+            this.pnlXYZColor.Name = "pnlXYZColor";
+            this.pnlXYZColor.Size = new System.Drawing.Size(242, 55);
+            this.pnlXYZColor.TabIndex = 10;
             // 
-            // panel5
+            // rbX
             // 
-            this.panel5.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.panel5.Controls.Add(this.radioButton13);
-            this.panel5.Controls.Add(this.colorComboBox5);
-            this.panel5.Location = new System.Drawing.Point(576, 122);
-            this.panel5.Name = "panel5";
-            this.panel5.Size = new System.Drawing.Size(242, 55);
-            this.panel5.TabIndex = 10;
-            // 
-            // radioButton13
-            // 
-            this.radioButton13.AutoSize = true;
-            this.radioButton13.Location = new System.Drawing.Point(3, 32);
-            this.radioButton13.Name = "radioButton13";
-            this.radioButton13.Size = new System.Drawing.Size(32, 17);
-            this.radioButton13.TabIndex = 1;
-            this.radioButton13.TabStop = true;
-            this.radioButton13.Text = "X";
-            this.radioButton13.UseVisualStyleBackColor = true;
-            // 
-            // colorComboBox5
-            // 
-            this.colorComboBox5.ColorFormat = WinkingCat.HelperLibs.ColorFormat.RGB;
-            this.colorComboBox5.DecimalPlaces = ((byte)(1));
-            this.colorComboBox5.Location = new System.Drawing.Point(3, 4);
-            this.colorComboBox5.MaxValues = new decimal[] {
-        new decimal(new int[] {
-                    255,
-                    0,
-                    0,
-                    0}),
-        new decimal(new int[] {
-                    255,
-                    0,
-                    0,
-                    0}),
-        new decimal(new int[] {
-                    255,
-                    0,
-                    0,
-                    0})};
-            this.colorComboBox5.MinValues = new decimal[] {
-        new decimal(new int[] {
-                    0,
-                    0,
-                    0,
-                    0}),
-        new decimal(new int[] {
-                    0,
-                    0,
-                    0,
-                    0}),
-        new decimal(new int[] {
-                    0,
-                    0,
-                    0,
-                    0})};
-            this.colorComboBox5.Name = "colorComboBox5";
-            this.colorComboBox5.Size = new System.Drawing.Size(236, 23);
-            this.colorComboBox5.TabIndex = 0;
-            this.colorComboBox5.Values = new decimal[] {
-        new decimal(new int[] {
-                    1,
-                    0,
-                    0,
-                    0}),
-        new decimal(new int[] {
-                    1,
-                    0,
-                    0,
-                    0}),
-        new decimal(new int[] {
-                    1,
-                    0,
-                    0,
-                    0})};
+            this.rbX.AutoSize = true;
+            this.rbX.Location = new System.Drawing.Point(3, 32);
+            this.rbX.Name = "rbX";
+            this.rbX.Size = new System.Drawing.Size(32, 17);
+            this.rbX.TabIndex = 1;
+            this.rbX.TabStop = true;
+            this.rbX.Text = "X";
+            this.rbX.UseVisualStyleBackColor = true;
             // 
             // label5
             // 
@@ -637,7 +343,7 @@
             // button1
             // 
             this.button1.Image = global::WinkingCat.Properties.Resources.color_picker_icon;
-            this.button1.Location = new System.Drawing.Point(580, 355);
+            this.button1.Location = new System.Drawing.Point(403, 296);
             this.button1.Name = "button1";
             this.button1.Size = new System.Drawing.Size(40, 40);
             this.button1.TabIndex = 13;
@@ -646,7 +352,7 @@
             // button2
             // 
             this.button2.Image = global::WinkingCat.Properties.Resources.Clipboard_2_icon;
-            this.button2.Location = new System.Drawing.Point(626, 355);
+            this.button2.Location = new System.Drawing.Point(449, 296);
             this.button2.Name = "button2";
             this.button2.Size = new System.Drawing.Size(40, 40);
             this.button2.TabIndex = 14;
@@ -654,141 +360,12 @@
             // 
             // button3
             // 
-            this.button3.Location = new System.Drawing.Point(672, 355);
+            this.button3.Location = new System.Drawing.Point(495, 296);
             this.button3.Name = "button3";
             this.button3.Size = new System.Drawing.Size(146, 40);
             this.button3.TabIndex = 15;
-            this.button3.Text = "button3";
+            this.button3.Text = "Copy";
             this.button3.UseVisualStyleBackColor = true;
-            // 
-            // colorComboBox6
-            // 
-            this.colorComboBox6.ColorFormat = WinkingCat.HelperLibs.ColorFormat.RGB;
-            this.colorComboBox6.DecimalPlaces = ((byte)(1));
-            this.colorComboBox6.Location = new System.Drawing.Point(579, 205);
-            this.colorComboBox6.MaxValues = new decimal[] {
-        new decimal(new int[] {
-                    255,
-                    0,
-                    0,
-                    0}),
-        new decimal(new int[] {
-                    255,
-                    0,
-                    0,
-                    0}),
-        new decimal(new int[] {
-                    255,
-                    0,
-                    0,
-                    0})};
-            this.colorComboBox6.MinValues = new decimal[] {
-        new decimal(new int[] {
-                    0,
-                    0,
-                    0,
-                    0}),
-        new decimal(new int[] {
-                    0,
-                    0,
-                    0,
-                    0}),
-        new decimal(new int[] {
-                    0,
-                    0,
-                    0,
-                    0})};
-            this.colorComboBox6.Name = "colorComboBox6";
-            this.colorComboBox6.Size = new System.Drawing.Size(237, 23);
-            this.colorComboBox6.TabIndex = 16;
-            this.colorComboBox6.Values = new decimal[] {
-        new decimal(new int[] {
-                    1,
-                    0,
-                    0,
-                    0}),
-        new decimal(new int[] {
-                    1,
-                    0,
-                    0,
-                    0}),
-        new decimal(new int[] {
-                    1,
-                    0,
-                    0,
-                    0})};
-            // 
-            // colorComboBox8
-            // 
-            this.colorComboBox8.ColorFormat = WinkingCat.HelperLibs.ColorFormat.CMYK;
-            this.colorComboBox8.DecimalPlaces = ((byte)(1));
-            this.colorComboBox8.Location = new System.Drawing.Point(579, 250);
-            this.colorComboBox8.MaxValues = new decimal[] {
-        new decimal(new int[] {
-                    100,
-                    0,
-                    0,
-                    0}),
-        new decimal(new int[] {
-                    100,
-                    0,
-                    0,
-                    0}),
-        new decimal(new int[] {
-                    100,
-                    0,
-                    0,
-                    0}),
-        new decimal(new int[] {
-                    100,
-                    0,
-                    0,
-                    0})};
-            this.colorComboBox8.MinValues = new decimal[] {
-        new decimal(new int[] {
-                    0,
-                    0,
-                    0,
-                    0}),
-        new decimal(new int[] {
-                    0,
-                    0,
-                    0,
-                    0}),
-        new decimal(new int[] {
-                    0,
-                    0,
-                    0,
-                    0}),
-        new decimal(new int[] {
-                    0,
-                    0,
-                    0,
-                    0})};
-            this.colorComboBox8.Name = "colorComboBox8";
-            this.colorComboBox8.Size = new System.Drawing.Size(237, 23);
-            this.colorComboBox8.TabIndex = 17;
-            this.colorComboBox8.Values = new decimal[] {
-        new decimal(new int[] {
-                    1,
-                    0,
-                    0,
-                    0}),
-        new decimal(new int[] {
-                    1,
-                    0,
-                    0,
-                    0}),
-        new decimal(new int[] {
-                    1,
-                    0,
-                    0,
-                    0}),
-        new decimal(new int[] {
-                    1,
-                    0,
-                    0,
-                    0})};
             // 
             // textBox1
             // 
@@ -822,55 +399,479 @@
             this.label9.TabIndex = 21;
             this.label9.Text = "Decimal:";
             // 
-            // label10
+            // displayColorLabel
             // 
-            this.label10.BackColor = System.Drawing.Color.Red;
-            this.label10.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.label10.Location = new System.Drawing.Point(308, 290);
-            this.label10.Name = "label10";
-            this.label10.Size = new System.Drawing.Size(64, 64);
-            this.label10.TabIndex = 22;
+            this.displayColorLabel.BackColor = System.Drawing.Color.Red;
+            this.displayColorLabel.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.displayColorLabel.Location = new System.Drawing.Point(308, 290);
+            this.displayColorLabel.Name = "displayColorLabel";
+            this.displayColorLabel.Size = new System.Drawing.Size(46, 46);
+            this.displayColorLabel.TabIndex = 22;
+            // 
+            // ccbCMYKColor
+            // 
+            this.ccbCMYKColor.ColorFormat = WinkingCat.HelperLibs.ColorFormat.CMYK;
+            this.ccbCMYKColor.DecimalPlaces = ((byte)(1));
+            this.ccbCMYKColor.Location = new System.Drawing.Point(579, 250);
+            this.ccbCMYKColor.MaxValues = new decimal[] {
+        new decimal(new int[] {
+                    100,
+                    0,
+                    0,
+                    0}),
+        new decimal(new int[] {
+                    100,
+                    0,
+                    0,
+                    0}),
+        new decimal(new int[] {
+                    100,
+                    0,
+                    0,
+                    0}),
+        new decimal(new int[] {
+                    100,
+                    0,
+                    0,
+                    0})};
+            this.ccbCMYKColor.MinValues = new decimal[] {
+        new decimal(new int[] {
+                    0,
+                    0,
+                    0,
+                    0}),
+        new decimal(new int[] {
+                    0,
+                    0,
+                    0,
+                    0}),
+        new decimal(new int[] {
+                    0,
+                    0,
+                    0,
+                    0}),
+        new decimal(new int[] {
+                    0,
+                    0,
+                    0,
+                    0})};
+            this.ccbCMYKColor.Name = "ccbCMYKColor";
+            this.ccbCMYKColor.Size = new System.Drawing.Size(237, 23);
+            this.ccbCMYKColor.TabIndex = 17;
+            this.ccbCMYKColor.Values = new decimal[] {
+        new decimal(new int[] {
+                    1,
+                    0,
+                    0,
+                    0}),
+        new decimal(new int[] {
+                    1,
+                    0,
+                    0,
+                    0}),
+        new decimal(new int[] {
+                    1,
+                    0,
+                    0,
+                    0}),
+        new decimal(new int[] {
+                    1,
+                    0,
+                    0,
+                    0})};
+            // 
+            // ccbYXYColor
+            // 
+            this.ccbYXYColor.ColorFormat = WinkingCat.HelperLibs.ColorFormat.RGB;
+            this.ccbYXYColor.DecimalPlaces = ((byte)(1));
+            this.ccbYXYColor.Location = new System.Drawing.Point(579, 205);
+            this.ccbYXYColor.MaxValues = new decimal[] {
+        new decimal(new int[] {
+                    255,
+                    0,
+                    0,
+                    0}),
+        new decimal(new int[] {
+                    255,
+                    0,
+                    0,
+                    0}),
+        new decimal(new int[] {
+                    255,
+                    0,
+                    0,
+                    0})};
+            this.ccbYXYColor.MinValues = new decimal[] {
+        new decimal(new int[] {
+                    0,
+                    0,
+                    0,
+                    0}),
+        new decimal(new int[] {
+                    0,
+                    0,
+                    0,
+                    0}),
+        new decimal(new int[] {
+                    0,
+                    0,
+                    0,
+                    0})};
+            this.ccbYXYColor.Name = "ccbYXYColor";
+            this.ccbYXYColor.Size = new System.Drawing.Size(237, 23);
+            this.ccbYXYColor.TabIndex = 16;
+            this.ccbYXYColor.Values = new decimal[] {
+        new decimal(new int[] {
+                    1,
+                    0,
+                    0,
+                    0}),
+        new decimal(new int[] {
+                    1,
+                    0,
+                    0,
+                    0}),
+        new decimal(new int[] {
+                    1,
+                    0,
+                    0,
+                    0})};
+            // 
+            // ccbXYZColor
+            // 
+            this.ccbXYZColor.ColorFormat = WinkingCat.HelperLibs.ColorFormat.RGB;
+            this.ccbXYZColor.DecimalPlaces = ((byte)(1));
+            this.ccbXYZColor.Location = new System.Drawing.Point(3, 4);
+            this.ccbXYZColor.MaxValues = new decimal[] {
+        new decimal(new int[] {
+                    255,
+                    0,
+                    0,
+                    0}),
+        new decimal(new int[] {
+                    255,
+                    0,
+                    0,
+                    0}),
+        new decimal(new int[] {
+                    255,
+                    0,
+                    0,
+                    0})};
+            this.ccbXYZColor.MinValues = new decimal[] {
+        new decimal(new int[] {
+                    0,
+                    0,
+                    0,
+                    0}),
+        new decimal(new int[] {
+                    0,
+                    0,
+                    0,
+                    0}),
+        new decimal(new int[] {
+                    0,
+                    0,
+                    0,
+                    0})};
+            this.ccbXYZColor.Name = "ccbXYZColor";
+            this.ccbXYZColor.Size = new System.Drawing.Size(236, 23);
+            this.ccbXYZColor.TabIndex = 0;
+            this.ccbXYZColor.Values = new decimal[] {
+        new decimal(new int[] {
+                    1,
+                    0,
+                    0,
+                    0}),
+        new decimal(new int[] {
+                    1,
+                    0,
+                    0,
+                    0}),
+        new decimal(new int[] {
+                    1,
+                    0,
+                    0,
+                    0})};
+            // 
+            // ccbAdobeRGBColor
+            // 
+            this.ccbAdobeRGBColor.ColorFormat = WinkingCat.HelperLibs.ColorFormat.RGB;
+            this.ccbAdobeRGBColor.DecimalPlaces = ((byte)(1));
+            this.ccbAdobeRGBColor.Location = new System.Drawing.Point(3, 4);
+            this.ccbAdobeRGBColor.MaxValues = new decimal[] {
+        new decimal(new int[] {
+                    255,
+                    0,
+                    0,
+                    0}),
+        new decimal(new int[] {
+                    255,
+                    0,
+                    0,
+                    0}),
+        new decimal(new int[] {
+                    255,
+                    0,
+                    0,
+                    0})};
+            this.ccbAdobeRGBColor.MinValues = new decimal[] {
+        new decimal(new int[] {
+                    0,
+                    0,
+                    0,
+                    0}),
+        new decimal(new int[] {
+                    0,
+                    0,
+                    0,
+                    0}),
+        new decimal(new int[] {
+                    0,
+                    0,
+                    0,
+                    0})};
+            this.ccbAdobeRGBColor.Name = "ccbAdobeRGBColor";
+            this.ccbAdobeRGBColor.Size = new System.Drawing.Size(236, 23);
+            this.ccbAdobeRGBColor.TabIndex = 0;
+            this.ccbAdobeRGBColor.Values = new decimal[] {
+        new decimal(new int[] {
+                    1,
+                    0,
+                    0,
+                    0}),
+        new decimal(new int[] {
+                    1,
+                    0,
+                    0,
+                    0}),
+        new decimal(new int[] {
+                    1,
+                    0,
+                    0,
+                    0})};
+            // 
+            // ccbHSLColor
+            // 
+            this.ccbHSLColor.ColorFormat = WinkingCat.HelperLibs.ColorFormat.RGB;
+            this.ccbHSLColor.DecimalPlaces = ((byte)(1));
+            this.ccbHSLColor.Location = new System.Drawing.Point(4, 3);
+            this.ccbHSLColor.MaxValues = new decimal[] {
+        new decimal(new int[] {
+                    255,
+                    0,
+                    0,
+                    0}),
+        new decimal(new int[] {
+                    255,
+                    0,
+                    0,
+                    0}),
+        new decimal(new int[] {
+                    255,
+                    0,
+                    0,
+                    0})};
+            this.ccbHSLColor.MinValues = new decimal[] {
+        new decimal(new int[] {
+                    0,
+                    0,
+                    0,
+                    0}),
+        new decimal(new int[] {
+                    0,
+                    0,
+                    0,
+                    0}),
+        new decimal(new int[] {
+                    0,
+                    0,
+                    0,
+                    0})};
+            this.ccbHSLColor.Name = "ccbHSLColor";
+            this.ccbHSLColor.Size = new System.Drawing.Size(233, 23);
+            this.ccbHSLColor.TabIndex = 0;
+            this.ccbHSLColor.Values = new decimal[] {
+        new decimal(new int[] {
+                    1,
+                    0,
+                    0,
+                    0}),
+        new decimal(new int[] {
+                    1,
+                    0,
+                    0,
+                    0}),
+        new decimal(new int[] {
+                    1,
+                    0,
+                    0,
+                    0})};
+            // 
+            // ccbHSBColor
+            // 
+            this.ccbHSBColor.ColorFormat = WinkingCat.HelperLibs.ColorFormat.RGB;
+            this.ccbHSBColor.DecimalPlaces = ((byte)(1));
+            this.ccbHSBColor.Location = new System.Drawing.Point(4, 3);
+            this.ccbHSBColor.MaxValues = new decimal[] {
+        new decimal(new int[] {
+                    255,
+                    0,
+                    0,
+                    0}),
+        new decimal(new int[] {
+                    255,
+                    0,
+                    0,
+                    0}),
+        new decimal(new int[] {
+                    255,
+                    0,
+                    0,
+                    0})};
+            this.ccbHSBColor.MinValues = new decimal[] {
+        new decimal(new int[] {
+                    0,
+                    0,
+                    0,
+                    0}),
+        new decimal(new int[] {
+                    0,
+                    0,
+                    0,
+                    0}),
+        new decimal(new int[] {
+                    0,
+                    0,
+                    0,
+                    0})};
+            this.ccbHSBColor.Name = "ccbHSBColor";
+            this.ccbHSBColor.Size = new System.Drawing.Size(235, 23);
+            this.ccbHSBColor.TabIndex = 0;
+            this.ccbHSBColor.Values = new decimal[] {
+        new decimal(new int[] {
+                    1,
+                    0,
+                    0,
+                    0}),
+        new decimal(new int[] {
+                    1,
+                    0,
+                    0,
+                    0}),
+        new decimal(new int[] {
+                    1,
+                    0,
+                    0,
+                    0})};
+            // 
+            // ccbRGBColor
+            // 
+            this.ccbRGBColor.ColorFormat = WinkingCat.HelperLibs.ColorFormat.RGB;
+            this.ccbRGBColor.DecimalPlaces = ((byte)(1));
+            this.ccbRGBColor.Location = new System.Drawing.Point(3, 3);
+            this.ccbRGBColor.MaxValues = new decimal[] {
+        new decimal(new int[] {
+                    255,
+                    0,
+                    0,
+                    0}),
+        new decimal(new int[] {
+                    255,
+                    0,
+                    0,
+                    0}),
+        new decimal(new int[] {
+                    255,
+                    0,
+                    0,
+                    0})};
+            this.ccbRGBColor.MinValues = new decimal[] {
+        new decimal(new int[] {
+                    0,
+                    0,
+                    0,
+                    0}),
+        new decimal(new int[] {
+                    0,
+                    0,
+                    0,
+                    0}),
+        new decimal(new int[] {
+                    0,
+                    0,
+                    0,
+                    0})};
+            this.ccbRGBColor.Name = "ccbRGBColor";
+            this.ccbRGBColor.Size = new System.Drawing.Size(234, 20);
+            this.ccbRGBColor.TabIndex = 3;
+            this.ccbRGBColor.Values = new decimal[] {
+        new decimal(new int[] {
+                    1,
+                    0,
+                    0,
+                    0}),
+        new decimal(new int[] {
+                    1,
+                    0,
+                    0,
+                    0}),
+        new decimal(new int[] {
+                    1,
+                    0,
+                    0,
+                    0})};
+            // 
+            // colorPicker
+            // 
+            this.colorPicker.AutoSize = true;
+            this.colorPicker.DrawStyle = WinkingCat.HelperLibs.DrawStyles.HSBHue;
+            this.colorPicker.Location = new System.Drawing.Point(12, 12);
+            this.colorPicker.Name = "colorPicker";
+            this.colorPicker.Size = new System.Drawing.Size(290, 261);
+            this.colorPicker.TabIndex = 0;
             // 
             // ColorPickerForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(836, 400);
-            this.Controls.Add(this.label10);
+            this.ClientSize = new System.Drawing.Size(836, 355);
+            this.Controls.Add(this.displayColorLabel);
             this.Controls.Add(this.label9);
             this.Controls.Add(this.label8);
             this.Controls.Add(this.textBox2);
             this.Controls.Add(this.textBox1);
-            this.Controls.Add(this.colorComboBox8);
-            this.Controls.Add(this.colorComboBox6);
+            this.Controls.Add(this.ccbCMYKColor);
+            this.Controls.Add(this.ccbYXYColor);
             this.Controls.Add(this.button3);
             this.Controls.Add(this.button2);
             this.Controls.Add(this.button1);
             this.Controls.Add(this.label7);
             this.Controls.Add(this.label6);
-            this.Controls.Add(this.panel5);
+            this.Controls.Add(this.pnlXYZColor);
             this.Controls.Add(this.label5);
-            this.Controls.Add(this.panel4);
+            this.Controls.Add(this.pnlAdobeRGBColor);
             this.Controls.Add(this.label4);
-            this.Controls.Add(this.panel3);
+            this.Controls.Add(this.pnlHSLColor);
             this.Controls.Add(this.label3);
             this.Controls.Add(this.label2);
-            this.Controls.Add(this.panel2);
+            this.Controls.Add(this.pnlHSBColor);
             this.Controls.Add(this.label1);
-            this.Controls.Add(this.panel1);
-            this.Controls.Add(this.colorPicker1);
+            this.Controls.Add(this.pnlRGBColor);
+            this.Controls.Add(this.colorPicker);
+            this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
             this.Name = "ColorPickerForm";
             this.Text = "ColorPickerForm";
-            this.panel1.ResumeLayout(false);
-            this.panel1.PerformLayout();
-            this.panel2.ResumeLayout(false);
-            this.panel2.PerformLayout();
-            this.panel3.ResumeLayout(false);
-            this.panel3.PerformLayout();
-            this.panel4.ResumeLayout(false);
-            this.panel4.PerformLayout();
-            this.panel5.ResumeLayout(false);
-            this.panel5.PerformLayout();
+            this.pnlRGBColor.ResumeLayout(false);
+            this.pnlRGBColor.PerformLayout();
+            this.pnlHSBColor.ResumeLayout(false);
+            this.pnlHSBColor.PerformLayout();
+            this.pnlHSLColor.ResumeLayout(false);
+            this.pnlHSLColor.PerformLayout();
+            this.pnlAdobeRGBColor.ResumeLayout(false);
+            this.pnlAdobeRGBColor.PerformLayout();
+            this.pnlXYZColor.ResumeLayout(false);
+            this.pnlXYZColor.PerformLayout();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -878,46 +879,46 @@
 
         #endregion
 
-        private HelperLibs.ColorPicker colorPicker1;
-        private System.Windows.Forms.Panel panel1;
-        private System.Windows.Forms.RadioButton radioButton3;
-        private System.Windows.Forms.RadioButton radioButton2;
-        private System.Windows.Forms.RadioButton radioButton1;
-        private HelperLibs.ColorComboBox colorComboBox1;
+        private HelperLibs.ColorPicker colorPicker;
+        private System.Windows.Forms.Panel pnlRGBColor;
+        private System.Windows.Forms.RadioButton rbBlue;
+        private System.Windows.Forms.RadioButton rbGreen;
+        private System.Windows.Forms.RadioButton rbRed;
+        private HelperLibs.ColorComboBox ccbRGBColor;
         private System.Windows.Forms.Label label1;
-        private System.Windows.Forms.Panel panel2;
-        private System.Windows.Forms.RadioButton radioButton6;
-        private System.Windows.Forms.RadioButton radioButton5;
-        private System.Windows.Forms.RadioButton radioButton4;
-        private HelperLibs.ColorComboBox colorComboBox2;
+        private System.Windows.Forms.Panel pnlHSBColor;
+        private System.Windows.Forms.RadioButton rbHSBBrightness;
+        private System.Windows.Forms.RadioButton rbHSBSaturation;
+        private System.Windows.Forms.RadioButton rbHSBHue;
+        private HelperLibs.ColorComboBox ccbHSBColor;
         private System.Windows.Forms.Label label2;
         private System.Windows.Forms.Label label3;
-        private System.Windows.Forms.Panel panel3;
-        private System.Windows.Forms.RadioButton radioButton9;
-        private System.Windows.Forms.RadioButton radioButton8;
-        private System.Windows.Forms.RadioButton radioButton7;
-        private HelperLibs.ColorComboBox colorComboBox3;
+        private System.Windows.Forms.Panel pnlHSLColor;
+        private System.Windows.Forms.RadioButton rbHSLLightness;
+        private System.Windows.Forms.RadioButton rbHSLSaturation;
+        private System.Windows.Forms.RadioButton rbHSLHue;
+        private HelperLibs.ColorComboBox ccbHSLColor;
         private System.Windows.Forms.Label label4;
-        private System.Windows.Forms.Panel panel4;
-        private System.Windows.Forms.Panel panel5;
+        private System.Windows.Forms.Panel pnlAdobeRGBColor;
+        private System.Windows.Forms.Panel pnlXYZColor;
         private System.Windows.Forms.Label label5;
         private System.Windows.Forms.Label label6;
-        private HelperLibs.ColorComboBox colorComboBox4;
-        private HelperLibs.ColorComboBox colorComboBox5;
-        private System.Windows.Forms.RadioButton radioButton12;
-        private System.Windows.Forms.RadioButton radioButton11;
-        private System.Windows.Forms.RadioButton radioButton10;
-        private System.Windows.Forms.RadioButton radioButton13;
+        private HelperLibs.ColorComboBox ccbAdobeRGBColor;
+        private HelperLibs.ColorComboBox ccbXYZColor;
+        private System.Windows.Forms.RadioButton rbAdobeRGBBlue;
+        private System.Windows.Forms.RadioButton rbAdobeRGBGreen;
+        private System.Windows.Forms.RadioButton rbAdobeRGBRed;
+        private System.Windows.Forms.RadioButton rbX;
         private System.Windows.Forms.Label label7;
         private System.Windows.Forms.Button button1;
         private System.Windows.Forms.Button button2;
         private System.Windows.Forms.Button button3;
-        private HelperLibs.ColorComboBox colorComboBox6;
-        private HelperLibs.ColorComboBox colorComboBox8;
+        private HelperLibs.ColorComboBox ccbYXYColor;
+        private HelperLibs.ColorComboBox ccbCMYKColor;
         private System.Windows.Forms.TextBox textBox1;
         private System.Windows.Forms.TextBox textBox2;
         private System.Windows.Forms.Label label8;
         private System.Windows.Forms.Label label9;
-        private System.Windows.Forms.Label label10;
+        private System.Windows.Forms.Label displayColorLabel;
     }
 }
