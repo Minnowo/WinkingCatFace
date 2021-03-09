@@ -15,6 +15,7 @@ namespace WinkingCat
     {
         private RadioButton checkedButton = null;
         private bool preventBroadCast = false;
+        private bool preventUpdate = false;
         private bool isHandleCreated = false;
         public ColorPickerForm()
         {
@@ -24,14 +25,21 @@ namespace WinkingCat
 
             ccbRGBColor.ColorFormat = ColorFormat.RGB;
             ccbRGBColor.DecimalPlaces = 0;
+
             ccbHSBColor.ColorFormat = ColorFormat.HSB;
+
             ccbHSLColor.ColorFormat = ColorFormat.HSL;
+
             ccbAdobeRGBColor.ColorFormat = ColorFormat.AdobeRGB;
+
             ccbYXYColor.ColorFormat = ColorFormat.Yxy;
             ccbYXYColor.DecimalPlaces = 3;
+
             ccbXYZColor.ColorFormat = ColorFormat.XYZ;
             ccbXYZColor.DecimalPlaces = 2;
+
             ccbCMYKColor.ColorFormat = ColorFormat.CMYK;
+
             rbHSBHue.Checked = true;
             checkedButton = rbHSBHue;
 
@@ -70,7 +78,26 @@ namespace WinkingCat
 
         private void ComboBoxColorChanged(object sender, ColorEventArgs e)
         {
+            preventUpdate = true;
             colorPicker.SelectedColor = e.Color;
+            ccbRGBColor.UpdateColor(e.Color);
+            ccbHSBColor.UpdateColor(e.Color);
+            ccbHSLColor.UpdateColor(e.Color);
+            ccbAdobeRGBColor.UpdateColor(e.Color);
+
+            // it hecks with the values cause idk and this helps only really need for cmyk but the xyz stuff is kinda nice
+            if (((ColorComboBox)sender).Name != ccbYXYColor.Name)
+                ccbYXYColor.UpdateColor(e.Color);
+
+            if (((ColorComboBox)sender).Name != ccbXYZColor.Name)
+                ccbXYZColor.UpdateColor(e.Color);
+
+            if(((ColorComboBox)sender).Name != ccbCMYKColor.Name)
+                ccbCMYKColor.UpdateColor(e.Color);
+
+            displayColorLabel.BackColor = e.Color;
+            preventUpdate = false;
+            //Console.WriteLine(e.Color.argb);
         }
 
         private void ChangeDrawStyle(string checkboxName)
@@ -134,6 +161,8 @@ namespace WinkingCat
 
         private void ColorPicker_ColorChanged(object sender, ColorEventArgs e)
         {
+            if (preventUpdate)
+                return;
             if (colorPicker.DrawStyle != DrawStyles.xyz)
             {
                 ccbRGBColor.UpdateColor(colorPicker.SelectedColor);

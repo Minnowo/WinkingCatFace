@@ -111,7 +111,7 @@ namespace WinkingCat.HelperLibs
             | System.Windows.Forms.AnchorStyles.Left)
             | System.Windows.Forms.AnchorStyles.Right)));
             this.colorBox.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.colorBox.CrosshairVisible = false;
+            this.colorBox.CrosshairVisible = true;
             this.colorBox.DrawStyle = DrawStyles.HSBHue;
             this.colorBox.Location = new System.Drawing.Point(0, 0);
             this.colorBox.Name = "colorBox";
@@ -123,7 +123,7 @@ namespace WinkingCat.HelperLibs
             this.colorSlider.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
             | System.Windows.Forms.AnchorStyles.Right)));
             this.colorSlider.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.colorSlider.CrosshairVisible = false;
+            this.colorSlider.CrosshairVisible = true;
             this.colorSlider.DrawStyle = DrawStyles.HSBHue;
             this.colorSlider.Location = new System.Drawing.Point(257, 0);
             this.colorSlider.Name = "colorSlider";

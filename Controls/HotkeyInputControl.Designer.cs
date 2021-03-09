@@ -51,7 +51,7 @@
             // labelHotkeySuccess
             // 
             this.labelHotkeySuccess.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.labelHotkeySuccess.BackColor = System.Drawing.Color.Red;
+            this.labelHotkeySuccess.StaticBackColor = System.Drawing.Color.Red;
             this.labelHotkeySuccess.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.labelHotkeySuccess.Location = new System.Drawing.Point(420, 1);
             this.labelHotkeySuccess.Name = "labelHotkeySuccess";

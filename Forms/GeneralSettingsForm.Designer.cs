@@ -59,6 +59,7 @@
             this.comboBox1.Name = "comboBox1";
             this.comboBox1.Size = new System.Drawing.Size(261, 21);
             this.comboBox1.TabIndex = 1;
+            this.comboBox1.SelectedIndexChanged += new System.EventHandler(this.ComboBox_SelectedIndexChanged);
             // 
             // comboBox2
             // 
@@ -68,6 +69,7 @@
             this.comboBox2.Name = "comboBox2";
             this.comboBox2.Size = new System.Drawing.Size(261, 21);
             this.comboBox2.TabIndex = 2;
+            this.comboBox2.SelectedIndexChanged += new System.EventHandler(this.ComboBox_SelectedIndexChanged);
             // 
             // comboBox3
             // 
@@ -77,6 +79,7 @@
             this.comboBox3.Name = "comboBox3";
             this.comboBox3.Size = new System.Drawing.Size(261, 21);
             this.comboBox3.TabIndex = 3;
+            this.comboBox3.SelectedIndexChanged += new System.EventHandler(this.ComboBox_SelectedIndexChanged);
             // 
             // AlwaysOnTopCheckbox
             // 

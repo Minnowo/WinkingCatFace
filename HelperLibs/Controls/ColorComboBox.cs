@@ -92,8 +92,6 @@ namespace WinkingCat.HelperLibs
         private decimal[] values;
 
         private byte decimalPlaces = 1;
-
-        private Timer buttonHeldTimer;
         private bool preventOverflow = false;
 
         [DefaultValue(true)]
@@ -122,6 +120,7 @@ namespace WinkingCat.HelperLibs
                     mycolor = new _Color((short)values[1], (short)values[2], (short)values[3], (short)values[0]);
                     break;
                 case ColorFormat.CMYK:
+                    Console.WriteLine($"{values[0]}, {values[1]}, {values[2]}, {values[3]}");
                     mycolor = (new CMYK((int)Math.Round(values[0]), (int)Math.Round(values[1]), (int)Math.Round(values[2]), (int)Math.Round(values[3]))).ToColor();
                     break;
                 case ColorFormat.HSB:
@@ -150,12 +149,14 @@ namespace WinkingCat.HelperLibs
 
         public void UpdateColor(_Color newColor)
         {
+            preventOverflow = true;
             switch (ColorFormat)
             {
                 case ColorFormat.AdobeRGB:
-                    values[0] = (decimal)newColor.ToAdobeRGB().R;
-                    values[1] = (decimal)newColor.ToAdobeRGB().G;
-                    values[2] = (decimal)newColor.ToAdobeRGB().B;
+                    AdobeRGB a = newColor.ToAdobeRGB();
+                    values[0] = (decimal)a.R;
+                    values[1] = (decimal)a.G;
+                    values[2] = (decimal)a.B;
                     break;
                 case ColorFormat.RGB:
                     values[0] = newColor.argb.R;
@@ -191,12 +192,14 @@ namespace WinkingCat.HelperLibs
                     values[2] = (decimal)newColor.xyz.Z;
                     break;
                 case ColorFormat.Yxy:
-                    values[0] = (decimal)newColor.ToYxy().YY;
-                    values[1] = (decimal)newColor.ToYxy().X;
-                    values[2] = (decimal)newColor.ToYxy().Y;
+                    Yxy tmp = newColor.ToYxy();
+                    values[0] = (decimal)tmp.YY;
+                    values[1] = (decimal)tmp.X;
+                    values[2] = (decimal)tmp.Y;
                     break;
             }
             UpdateValues();
+            preventOverflow = false;
         }
 
         public void UpdateMin()
@@ -298,9 +301,25 @@ namespace WinkingCat.HelperLibs
                     ResizeValues(3);
                     values = new decimal[] { 1M, 1M, 1M };
                     minValues = new decimal[] { 0, 0, 0 };
-                    maxValues = new decimal[] { 100M, 150M, 100M };
+                    maxValues = new decimal[] { 100M, 1M, 1M };
                     break;
             }
+            UpdateMin();
+            UpdateMax();
+            UpdateValues();
+            /*            Console.WriteLine(colorFormat);
+                        if (values.Length > 3)
+                        {
+                            Console.WriteLine($"{values[0]},{values[1]},{values[2]},{values[3]}");
+                            Console.WriteLine($"{minValues[0]},{minValues[1]},{minValues[2]},{minValues[3]}");
+                            Console.WriteLine($"{maxValues[0]},{maxValues[1]},{maxValues[2]},{maxValues[3]}");
+                        }
+                        else
+                        {
+                            Console.WriteLine($"{values[0]},{values[1]},{values[2]}");
+                            Console.WriteLine($"{minValues[0]},{minValues[1]},{minValues[2]}");
+                            Console.WriteLine($"{maxValues[0]},{maxValues[1]},{maxValues[2]}");
+                        }*/
         }
 
         private void NumericUpDownKeyUp_Event(object sender, KeyEventArgs e)
@@ -336,14 +355,24 @@ namespace WinkingCat.HelperLibs
 
         private void NumericUpDown_ValueChanged(object sender, EventArgs e)
         {
-            values[((NumericUpDown)sender).TabIndex] = ((NumericUpDown)sender).Value;
-            /*if (preventOverflow)
+            if (preventOverflow)
                 return;
             preventOverflow = true;
-            NumericUpDown n = (NumericUpDown)sender;
-            values[n.TabIndex] = n.Value;
+            values[((NumericUpDown)sender).TabIndex] = ((NumericUpDown)sender).Value;
             OnColorChanged();
-            preventOverflow = false;*/
+            preventOverflow = false;
+            /*if (values.Length > 3)
+            {
+                Console.WriteLine($"{values[0]},{values[1]},{values[2]},{values[3]}");
+                Console.WriteLine($"{minValues[0]},{minValues[1]},{minValues[2]},{minValues[3]}");
+                Console.WriteLine($"{maxValues[0]},{maxValues[1]},{maxValues[2]},{maxValues[3]}");
+            }
+            else
+            {
+                Console.WriteLine($"{values[0]},{values[1]},{values[2]}");
+                Console.WriteLine($"{minValues[0]},{minValues[1]},{minValues[2]}");
+                Console.WriteLine($"{maxValues[0]},{maxValues[1]},{maxValues[2]}");
+            }*/
         }
 
         private void CreateNumericUpDown()

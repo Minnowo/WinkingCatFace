@@ -59,9 +59,12 @@ namespace WinkingCat.HelperLibs
             }
         }
 
-        public AdobeRGB(ushort r, ushort g, ushort b, ushort a = 255) : this(new XYZ(r, g, b, a))
+        public AdobeRGB(ushort r, ushort g, ushort b, ushort a = 255) : this()
         {
-
+            this.R = r;
+            this.G = g;
+            this.B = b;
+            this.alpha = a;
         }
 
         public AdobeRGB(Color color) : this(new XYZ(color))
@@ -387,7 +390,7 @@ namespace WinkingCat.HelperLibs
             return base.Equals(obj);
         }
     }
-    public struct XYZ
+    public struct XYZ // D65/2
     {
         private float x { get; set; }
         private float y { get; set; }
@@ -736,10 +739,10 @@ namespace WinkingCat.HelperLibs
                 modifiedG = g / 255f;
                 modifiedB = b / 255f;
 
-                k = 1 - new List<float>() { modifiedR, modifiedG, modifiedB }.Max();
-                c = (1 - modifiedR - k) / (1 - k);
-                m = (1 - modifiedG - k) / (1 - k);
-                y = (1 - modifiedB - k) / (1 - k);
+                k = 1f - new List<float>() { modifiedR, modifiedG, modifiedB }.Max();
+                c = (1f - modifiedR - k) / (1f - k);
+                m = (1f - modifiedG - k) / (1f - k);
+                y = (1f - modifiedB - k) / (1f - k);
             }
             alpha = a;
         }
@@ -1601,7 +1604,7 @@ namespace WinkingCat.HelperLibs
 
         public AdobeRGB ToAdobeRGB()
         {
-            return new AdobeRGB((ushort)argb.R, (ushort)argb.G, (ushort)argb.B, alpha);
+            return new AdobeRGB(new XYZ((ushort)argb.R, (ushort)argb.G, (ushort)argb.B, alpha));
         }
 
         public void UpdateHSB()
@@ -1690,6 +1693,35 @@ namespace WinkingCat.HelperLibs
                     return r << 16 | g << 8 | b;
                 case ColorFormat.ARGB:
                     return a << 24 | r << 16 | g << 8 | b;
+            }
+        }
+
+        public static Color Subract(Color a, Color b)
+        {
+            return Color.FromArgb(Math.Abs(a.R - b.R), Math.Abs(a.G - b.G), Math.Abs(a.B - b.B));
+        }
+
+        public static Color Invert(Color a)
+        {
+            if(a.A < 255)
+            {
+                return Color.FromArgb(Math.Abs(a.A - a.R), Math.Abs(a.A - a.G), Math.Abs(a.A - a.B));
+            }
+            else
+            {
+                return Color.FromArgb(255 - a.R, 255 - a.G, 255 - a.B);
+            }
+        }
+
+        public static Color BackgroundColorBasedOffTextColor(Color text)
+        {
+            if ((text.R * 0.299 + text.G * 0.587 + text.B * 0.114) > 150 )
+            {
+                return Color.Black;
+            }
+            else
+            {
+                return Color.White;
             }
         }
 

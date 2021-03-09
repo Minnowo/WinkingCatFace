@@ -45,6 +45,7 @@ namespace WinkingCat
                 MainFormSettings.onTrayLeftClick = (Tasks)comboBox1.SelectedItem;
                 MainFormSettings.onTrayDoubleLeftClick = (Tasks)comboBox2.SelectedItem;
                 MainFormSettings.onTrayMiddleClick = (Tasks)comboBox3.SelectedItem;
+                
             }
         }
 

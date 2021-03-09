@@ -105,13 +105,13 @@ namespace WinkingCat
             {
                 default:
                 case HotkeyStatus.NotSet:
-                    labelHotkeySuccess.BackColor = Color.LightGoldenrodYellow;
+                    labelHotkeySuccess.StaticBackColor = Color.LightGoldenrodYellow;
                     break;
                 case HotkeyStatus.Failed:
-                    labelHotkeySuccess.BackColor = Color.Red;
+                    labelHotkeySuccess.StaticBackColor = Color.Red;
                     break;
                 case HotkeyStatus.Registered:
-                    labelHotkeySuccess.BackColor = Color.Green;
+                    labelHotkeySuccess.StaticBackColor = Color.Green;
                     break;
             }
         }
@@ -122,7 +122,7 @@ namespace WinkingCat
 
             HotkeyManager.ignoreHotkeyPress = true;
 
-            buttonHotkey.BackColor = Color.FromArgb(225, 255, 225);
+            buttonHotkey.BackColor = ColorHelper.BackgroundColorBasedOffTextColor(ApplicationStyles.currentStyle.mainFormStyle.textColor);//Color.FromArgb(225, 255, 225);
             buttonHotkey.Text = "Select a hotkey";
 
             setting.HotkeyInfo.Hotkey = Keys.None;
@@ -142,7 +142,7 @@ namespace WinkingCat
                 setting.HotkeyInfo.Hotkey = Keys.None;
             }
 
-            buttonHotkey.BackColor = SystemColors.Control;
+            buttonHotkey.BackColor = ApplicationStyles.currentStyle.mainFormStyle.lightBackgroundColor;
             buttonHotkey.UseVisualStyleBackColor = true;
 
             OnHotkeyChanged();
