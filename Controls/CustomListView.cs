@@ -73,10 +73,7 @@ namespace WinkingCat
             InitializeComponent();
 
             FullRowSelect = true;
-            
-            //this.AutoResizeColumns(ColumnHeaderAutoResizeStyle.ColumnContent);
-            //this.AutoResizeColumns(ColumnHeaderAutoResizeStyle.HeaderSize);
-
+            PathHelper.UpdateRelativePaths();
             if (File.Exists(PathHelper.loadedItemsPath))
             {
                 const Int32 BufferSize = 128;

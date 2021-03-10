@@ -89,6 +89,9 @@
     <Compile Include="Controls\ColorPickerSlider.Designer.cs">
       <DependentUpon>ColorPickerSlider.cs</DependentUpon>
     </Compile>
+    <Compile Include="Controls\_PictureBox.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
     <Compile Include="Events\ColorChangedEvent.cs" />
     <Compile Include="Helpers\ColorHelper.cs" />
     <Compile Include="Enums.cs" />

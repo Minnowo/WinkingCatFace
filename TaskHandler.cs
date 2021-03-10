@@ -32,6 +32,10 @@ namespace WinkingCat
             if (ScreenHelper.IsValidCropArea(window.Rectangle))
             {
                 img = ScreenShotManager.CaptureRectangle(window.Rectangle);
+                if (RegionCaptureOptions.autoCopyImage)
+                {
+                    ClipboardHelpers.CopyImageDefault(img);
+                }
                 if (string.IsNullOrEmpty(ImageHandler.Save(img: img)))
                 {
                     img.Dispose();
@@ -120,6 +124,10 @@ namespace WinkingCat
                         result = true;
                         if (string.IsNullOrEmpty(ImageHandler.Save(img: img)))
                             result = false;
+                        if(RegionCaptureOptions.autoCopyImage)
+                        {
+                            ClipboardHelpers.CopyImageDefault(img);
+                        }
                     }
                     else
                         result = false;
@@ -130,6 +138,10 @@ namespace WinkingCat
                     result = true;
                     if (string.IsNullOrEmpty(ImageHandler.Save(img: img)))
                         result = false;
+                    if (RegionCaptureOptions.autoCopyImage)
+                    {
+                        ClipboardHelpers.CopyImageDefault(img);
+                    }
                     break;
 
                 case Tasks.CaptureActiveMonitor:
@@ -137,6 +149,10 @@ namespace WinkingCat
                     result = true;
                     if (string.IsNullOrEmpty(ImageHandler.Save(img: img)))
                         result = false;
+                    if (RegionCaptureOptions.autoCopyImage)
+                    {
+                        ClipboardHelpers.CopyImageDefault(img);
+                    }
                     break;
 
                 case Tasks.CaptureActiveWindow:
@@ -144,6 +160,10 @@ namespace WinkingCat
                     result = true;
                     if (string.IsNullOrEmpty(ImageHandler.Save(img: img)))
                         result = false;
+                    if (RegionCaptureOptions.autoCopyImage)
+                    {
+                        ClipboardHelpers.CopyImageDefault(img);
+                    }
                     break;
 
                 case Tasks.CaptureGif:

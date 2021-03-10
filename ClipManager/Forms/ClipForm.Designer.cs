@@ -30,125 +30,125 @@
         {
             this.components = new System.ComponentModel.Container();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(ClipForm));
-            this.ContextMenu = new System.Windows.Forms.ContextMenuStrip(this.components);
-            this.copyToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.copyDefaultContextMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.copyZoomScaledContextMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.allowResizeToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.oCRToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.saveToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.toolStripSeparator2 = new System.Windows.Forms.ToolStripSeparator();
-            this.destroyToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.toolStripSeparator1 = new System.Windows.Forms.ToolStripSeparator();
-            this.destroyAllClipsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.ContextMenu.SuspendLayout();
+            this.cmMain = new System.Windows.Forms.ContextMenuStrip(this.components);
+            this.tsmiCopyToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.tsmiCopyDefaultContextMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.tsmiCopyZoomScaledContextMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.tsmiAllowResizeToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.tsmiOCRToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.tsmiSaveToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.tssToolStripSeparator2 = new System.Windows.Forms.ToolStripSeparator();
+            this.tsmiDestroyToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.tssToolStripSeparator1 = new System.Windows.Forms.ToolStripSeparator();
+            this.tsmiDestroyAllClipsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.cmMain.SuspendLayout();
             this.SuspendLayout();
             // 
             // ContextMenu
             // 
-            this.ContextMenu.ImageScalingSize = new System.Drawing.Size(24, 24);
-            this.ContextMenu.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.copyToolStripMenuItem,
-            this.allowResizeToolStripMenuItem,
-            this.oCRToolStripMenuItem,
-            this.saveToolStripMenuItem,
-            this.toolStripSeparator2,
-            this.destroyToolStripMenuItem,
-            this.toolStripSeparator1,
-            this.destroyAllClipsToolStripMenuItem});
-            this.ContextMenu.LayoutStyle = System.Windows.Forms.ToolStripLayoutStyle.VerticalStackWithOverflow;
-            this.ContextMenu.Name = "contextMenuStrip1";
-            this.ContextMenu.Size = new System.Drawing.Size(197, 266);
+            this.cmMain.ImageScalingSize = new System.Drawing.Size(24, 24);
+            this.cmMain.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.tsmiCopyToolStripMenuItem,
+            this.tsmiAllowResizeToolStripMenuItem,
+            this.tsmiOCRToolStripMenuItem,
+            this.tsmiSaveToolStripMenuItem,
+            this.tssToolStripSeparator2,
+            this.tsmiDestroyToolStripMenuItem,
+            this.tssToolStripSeparator1,
+            this.tsmiDestroyAllClipsToolStripMenuItem});
+            this.cmMain.LayoutStyle = System.Windows.Forms.ToolStripLayoutStyle.VerticalStackWithOverflow;
+            this.cmMain.Name = "contextMenuStrip1";
+            this.cmMain.Size = new System.Drawing.Size(197, 266);
             // 
             // copyToolStripMenuItem
             // 
-            this.copyToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.copyDefaultContextMenuItem,
-            this.copyZoomScaledContextMenuItem});
-            this.copyToolStripMenuItem.Image = global::WinkingCat.ClipHelper.Properties.Resources.Clipboard_2_icon;
-            this.copyToolStripMenuItem.ImageScaling = System.Windows.Forms.ToolStripItemImageScaling.None;
-            this.copyToolStripMenuItem.Name = "copyToolStripMenuItem";
-            this.copyToolStripMenuItem.ShortcutKeyDisplayString = "Ctrl+C";
-            this.copyToolStripMenuItem.Size = new System.Drawing.Size(196, 38);
-            this.copyToolStripMenuItem.Text = "Copy";
+            this.tsmiCopyToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.tsmiCopyDefaultContextMenuItem,
+            this.tsmiCopyZoomScaledContextMenuItem});
+            this.tsmiCopyToolStripMenuItem.Image = global::WinkingCat.ClipHelper.Properties.Resources.Clipboard_2_icon;
+            this.tsmiCopyToolStripMenuItem.ImageScaling = System.Windows.Forms.ToolStripItemImageScaling.None;
+            this.tsmiCopyToolStripMenuItem.Name = "copyToolStripMenuItem";
+            this.tsmiCopyToolStripMenuItem.ShortcutKeyDisplayString = "Ctrl+C";
+            this.tsmiCopyToolStripMenuItem.Size = new System.Drawing.Size(196, 38);
+            this.tsmiCopyToolStripMenuItem.Text = "Copy";
             // 
             // copyDefaultContextMenuItem
             // 
-            this.copyDefaultContextMenuItem.Image = global::WinkingCat.ClipHelper.Properties.Resources.Clipboard_2_icon;
-            this.copyDefaultContextMenuItem.ImageScaling = System.Windows.Forms.ToolStripItemImageScaling.None;
-            this.copyDefaultContextMenuItem.Name = "copyDefaultContextMenuItem";
-            this.copyDefaultContextMenuItem.Size = new System.Drawing.Size(196, 38);
-            this.copyDefaultContextMenuItem.Text = "CopyDefault";
+            this.tsmiCopyDefaultContextMenuItem.Image = global::WinkingCat.ClipHelper.Properties.Resources.Clipboard_2_icon;
+            this.tsmiCopyDefaultContextMenuItem.ImageScaling = System.Windows.Forms.ToolStripItemImageScaling.None;
+            this.tsmiCopyDefaultContextMenuItem.Name = "copyDefaultContextMenuItem";
+            this.tsmiCopyDefaultContextMenuItem.Size = new System.Drawing.Size(196, 38);
+            this.tsmiCopyDefaultContextMenuItem.Text = "CopyDefault";
             // 
             // copyZoomScaledContextMenuItem
             // 
-            this.copyZoomScaledContextMenuItem.Image = ((System.Drawing.Image)(resources.GetObject("copyZoomScaledContextMenuItem.Image")));
-            this.copyZoomScaledContextMenuItem.ImageScaling = System.Windows.Forms.ToolStripItemImageScaling.None;
-            this.copyZoomScaledContextMenuItem.Name = "copyZoomScaledContextMenuItem";
-            this.copyZoomScaledContextMenuItem.Size = new System.Drawing.Size(196, 38);
-            this.copyZoomScaledContextMenuItem.Text = "CopyScaled";
+            this.tsmiCopyZoomScaledContextMenuItem.Image = ((System.Drawing.Image)(resources.GetObject("copyZoomScaledContextMenuItem.Image")));
+            this.tsmiCopyZoomScaledContextMenuItem.ImageScaling = System.Windows.Forms.ToolStripItemImageScaling.None;
+            this.tsmiCopyZoomScaledContextMenuItem.Name = "copyZoomScaledContextMenuItem";
+            this.tsmiCopyZoomScaledContextMenuItem.Size = new System.Drawing.Size(196, 38);
+            this.tsmiCopyZoomScaledContextMenuItem.Text = "CopyScaled";
             // 
             // allowResizeToolStripMenuItem
             // 
-            this.allowResizeToolStripMenuItem.CheckOnClick = true;
-            this.allowResizeToolStripMenuItem.Image = global::WinkingCat.ClipHelper.Properties.Resources.layer_resize_icon;
-            this.allowResizeToolStripMenuItem.ImageScaling = System.Windows.Forms.ToolStripItemImageScaling.None;
-            this.allowResizeToolStripMenuItem.Name = "allowResizeToolStripMenuItem";
-            this.allowResizeToolStripMenuItem.ShortcutKeyDisplayString = "Ctrl+R";
-            this.allowResizeToolStripMenuItem.Size = new System.Drawing.Size(196, 38);
-            this.allowResizeToolStripMenuItem.Text = "AllowResize";
+            this.tsmiAllowResizeToolStripMenuItem.CheckOnClick = true;
+            this.tsmiAllowResizeToolStripMenuItem.Image = global::WinkingCat.ClipHelper.Properties.Resources.layer_resize_icon;
+            this.tsmiAllowResizeToolStripMenuItem.ImageScaling = System.Windows.Forms.ToolStripItemImageScaling.None;
+            this.tsmiAllowResizeToolStripMenuItem.Name = "allowResizeToolStripMenuItem";
+            this.tsmiAllowResizeToolStripMenuItem.ShortcutKeyDisplayString = "Ctrl+R";
+            this.tsmiAllowResizeToolStripMenuItem.Size = new System.Drawing.Size(196, 38);
+            this.tsmiAllowResizeToolStripMenuItem.Text = "AllowResize";
             // 
             // oCRToolStripMenuItem
             // 
-            this.oCRToolStripMenuItem.Image = global::WinkingCat.ClipHelper.Properties.Resources.layer_shape_text_icon;
-            this.oCRToolStripMenuItem.ImageScaling = System.Windows.Forms.ToolStripItemImageScaling.None;
-            this.oCRToolStripMenuItem.Name = "oCRToolStripMenuItem";
-            this.oCRToolStripMenuItem.ShortcutKeyDisplayString = "Ctrl+T";
-            this.oCRToolStripMenuItem.Size = new System.Drawing.Size(196, 38);
-            this.oCRToolStripMenuItem.Text = "OCR";
+            this.tsmiOCRToolStripMenuItem.Image = global::WinkingCat.ClipHelper.Properties.Resources.layer_shape_text_icon;
+            this.tsmiOCRToolStripMenuItem.ImageScaling = System.Windows.Forms.ToolStripItemImageScaling.None;
+            this.tsmiOCRToolStripMenuItem.Name = "oCRToolStripMenuItem";
+            this.tsmiOCRToolStripMenuItem.ShortcutKeyDisplayString = "Ctrl+T";
+            this.tsmiOCRToolStripMenuItem.Size = new System.Drawing.Size(196, 38);
+            this.tsmiOCRToolStripMenuItem.Text = "OCR";
             // 
             // saveToolStripMenuItem
             // 
-            this.saveToolStripMenuItem.Image = global::WinkingCat.ClipHelper.Properties.Resources.save_download_icon;
-            this.saveToolStripMenuItem.ImageScaling = System.Windows.Forms.ToolStripItemImageScaling.None;
-            this.saveToolStripMenuItem.Name = "saveToolStripMenuItem";
-            this.saveToolStripMenuItem.ShortcutKeyDisplayString = "Ctrl+S";
-            this.saveToolStripMenuItem.Size = new System.Drawing.Size(196, 38);
-            this.saveToolStripMenuItem.Text = "Save";
+            this.tsmiSaveToolStripMenuItem.Image = global::WinkingCat.ClipHelper.Properties.Resources.save_download_icon;
+            this.tsmiSaveToolStripMenuItem.ImageScaling = System.Windows.Forms.ToolStripItemImageScaling.None;
+            this.tsmiSaveToolStripMenuItem.Name = "saveToolStripMenuItem";
+            this.tsmiSaveToolStripMenuItem.ShortcutKeyDisplayString = "Ctrl+S";
+            this.tsmiSaveToolStripMenuItem.Size = new System.Drawing.Size(196, 38);
+            this.tsmiSaveToolStripMenuItem.Text = "Save";
             // 
             // toolStripSeparator2
             // 
-            this.toolStripSeparator2.Name = "toolStripSeparator2";
-            this.toolStripSeparator2.Size = new System.Drawing.Size(193, 6);
+            this.tssToolStripSeparator2.Name = "toolStripSeparator2";
+            this.tssToolStripSeparator2.Size = new System.Drawing.Size(193, 6);
             // 
             // destroyToolStripMenuItem
             // 
-            this.destroyToolStripMenuItem.Image = global::WinkingCat.ClipHelper.Properties.Resources.Error_Symbol_icon;
-            this.destroyToolStripMenuItem.ImageScaling = System.Windows.Forms.ToolStripItemImageScaling.None;
-            this.destroyToolStripMenuItem.Name = "destroyToolStripMenuItem";
-            this.destroyToolStripMenuItem.ShortcutKeyDisplayString = "Esc";
-            this.destroyToolStripMenuItem.Size = new System.Drawing.Size(196, 38);
-            this.destroyToolStripMenuItem.Text = "Destroy";
+            this.tsmiDestroyToolStripMenuItem.Image = global::WinkingCat.ClipHelper.Properties.Resources.Error_Symbol_icon;
+            this.tsmiDestroyToolStripMenuItem.ImageScaling = System.Windows.Forms.ToolStripItemImageScaling.None;
+            this.tsmiDestroyToolStripMenuItem.Name = "destroyToolStripMenuItem";
+            this.tsmiDestroyToolStripMenuItem.ShortcutKeyDisplayString = "Esc";
+            this.tsmiDestroyToolStripMenuItem.Size = new System.Drawing.Size(196, 38);
+            this.tsmiDestroyToolStripMenuItem.Text = "Destroy";
             // 
             // toolStripSeparator1
             // 
-            this.toolStripSeparator1.Name = "toolStripSeparator1";
-            this.toolStripSeparator1.Size = new System.Drawing.Size(193, 6);
+            this.tssToolStripSeparator1.Name = "toolStripSeparator1";
+            this.tssToolStripSeparator1.Size = new System.Drawing.Size(193, 6);
             // 
             // destroyAllClipsToolStripMenuItem
             // 
-            this.destroyAllClipsToolStripMenuItem.Image = global::WinkingCat.ClipHelper.Properties.Resources.fire_icon;
-            this.destroyAllClipsToolStripMenuItem.ImageScaling = System.Windows.Forms.ToolStripItemImageScaling.None;
-            this.destroyAllClipsToolStripMenuItem.Name = "destroyAllClipsToolStripMenuItem";
-            this.destroyAllClipsToolStripMenuItem.Size = new System.Drawing.Size(196, 38);
-            this.destroyAllClipsToolStripMenuItem.Text = "DestroyAllClips";
+            this.tsmiDestroyAllClipsToolStripMenuItem.Image = global::WinkingCat.ClipHelper.Properties.Resources.fire_icon;
+            this.tsmiDestroyAllClipsToolStripMenuItem.ImageScaling = System.Windows.Forms.ToolStripItemImageScaling.None;
+            this.tsmiDestroyAllClipsToolStripMenuItem.Name = "destroyAllClipsToolStripMenuItem";
+            this.tsmiDestroyAllClipsToolStripMenuItem.Size = new System.Drawing.Size(196, 38);
+            this.tsmiDestroyAllClipsToolStripMenuItem.Text = "DestroyAllClips";
             // 
             // ClipForm
             // 
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.None;
             this.BackColor = System.Drawing.Color.White;
             this.ClientSize = new System.Drawing.Size(284, 261);
-            this.ContextMenuStrip = this.ContextMenu;
+            this.ContextMenuStrip = this.cmMain;
             this.Cursor = System.Windows.Forms.Cursors.Default;
             this.DoubleBuffered = true;
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.None;
@@ -156,22 +156,22 @@
             this.SizeGripStyle = System.Windows.Forms.SizeGripStyle.Hide;
             this.StartPosition = System.Windows.Forms.FormStartPosition.Manual;
             this.Text = "Form1";
-            this.ContextMenu.ResumeLayout(false);
+            this.cmMain.ResumeLayout(false);
             this.ResumeLayout(false);
 
         }
 
         #endregion
-        private System.Windows.Forms.ContextMenuStrip ContextMenu;
-        private System.Windows.Forms.ToolStripMenuItem copyToolStripMenuItem;
-        private System.Windows.Forms.ToolStripMenuItem allowResizeToolStripMenuItem;
-        private System.Windows.Forms.ToolStripMenuItem oCRToolStripMenuItem;
-        private System.Windows.Forms.ToolStripMenuItem saveToolStripMenuItem;
-        private System.Windows.Forms.ToolStripSeparator toolStripSeparator2;
-        private System.Windows.Forms.ToolStripMenuItem destroyToolStripMenuItem;
-        private System.Windows.Forms.ToolStripSeparator toolStripSeparator1;
-        private System.Windows.Forms.ToolStripMenuItem destroyAllClipsToolStripMenuItem;
-        private System.Windows.Forms.ToolStripMenuItem copyDefaultContextMenuItem;
-        private System.Windows.Forms.ToolStripMenuItem copyZoomScaledContextMenuItem;
+        private System.Windows.Forms.ContextMenuStrip cmMain;
+        private System.Windows.Forms.ToolStripMenuItem tsmiCopyToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem tsmiAllowResizeToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem tsmiOCRToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem tsmiSaveToolStripMenuItem;
+        private System.Windows.Forms.ToolStripSeparator tssToolStripSeparator2;
+        private System.Windows.Forms.ToolStripMenuItem tsmiDestroyToolStripMenuItem;
+        private System.Windows.Forms.ToolStripSeparator tssToolStripSeparator1;
+        private System.Windows.Forms.ToolStripMenuItem tsmiDestroyAllClipsToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem tsmiCopyDefaultContextMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem tsmiCopyZoomScaledContextMenuItem;
     }
 }

@@ -70,17 +70,17 @@ namespace WinkingCat.ClipHelper
             MouseMove += MouseMove_Event;
 
             #region context menu
-            copyToolStripMenuItem.Click += CopyClipImage;
-            allowResizeToolStripMenuItem.Click += AllowResize_Click;
-            oCRToolStripMenuItem.Click += OCR_Click;
-            saveToolStripMenuItem.Click += Save_Click;
-            destroyToolStripMenuItem.Click += Destroy_Click;
-            destroyAllClipsToolStripMenuItem.Click += DestroyAllClips_Click;
+            tsmiCopyToolStripMenuItem.Click += CopyClipImage;
+            tsmiAllowResizeToolStripMenuItem.Click += AllowResize_Click;
+            tsmiOCRToolStripMenuItem.Click += OCR_Click;
+            tsmiSaveToolStripMenuItem.Click += Save_Click;
+            tsmiDestroyToolStripMenuItem.Click += Destroy_Click;
+            tsmiDestroyAllClipsToolStripMenuItem.Click += DestroyAllClips_Click;
 
-            copyDefaultContextMenuItem.Click += CopyClipImage;
-            copyZoomScaledContextMenuItem.Click += CopyScaledImage;
+            tsmiCopyDefaultContextMenuItem.Click += CopyClipImage;
+            tsmiCopyZoomScaledContextMenuItem.Click += CopyScaledImage;
 
-            if (isResizable) allowResizeToolStripMenuItem.Checked = true;
+            if (isResizable) tsmiAllowResizeToolStripMenuItem.Checked = true;
             #endregion
 
             #region form
@@ -142,7 +142,7 @@ namespace WinkingCat.ClipHelper
         public void CopyClipImage(object sender = null, EventArgs e = null)
         {
             ClipboardHelpers.CopyImageDefault(image);
-            ContextMenu.Close();
+            cmMain.Close();
         }
 
         public void AllowResize_Click(object sender = null, EventArgs e = null)
@@ -150,12 +150,12 @@ namespace WinkingCat.ClipHelper
             if (isResizable)
             {
                 isResizable = false;
-                allowResizeToolStripMenuItem.Checked = false;
+                tsmiAllowResizeToolStripMenuItem.Checked = false;
             }
             else
             {
                 isResizable = true;
-                allowResizeToolStripMenuItem.Checked = true;
+                tsmiAllowResizeToolStripMenuItem.Checked = true;
             }
             Invalidate();
         }
@@ -392,7 +392,7 @@ namespace WinkingCat.ClipHelper
 
         public void Destroy()
         {
-            ContextMenu?.Dispose();
+            cmMain?.Dispose();
             image?.Dispose();
             zoomImage?.Dispose();
             backgroundBrush?.Dispose();

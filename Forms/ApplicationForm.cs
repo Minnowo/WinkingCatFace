@@ -43,29 +43,29 @@ namespace WinkingCat
             niTrayIcon.Visible = MainFormSettings.showInTray;
 
 #region Capture dropdown buttons
-            ToolStripDropDownButton_Capture.DropDown.Closing += toolStripDropDown_Closing;
-            ToolStripDropDownButton_Capture.DropDownOpening += tsmiCapture_DropDownOpening;
+            tsddbToolStripDropDownButton_Capture.DropDown.Closing += toolStripDropDown_Closing;
+            tsddbToolStripDropDownButton_Capture.DropDownOpening += tsmiCapture_DropDownOpening;
 
-            ToolStripMenuItem_region.Click += RegionCapture_Click;
-            ToolStripMenuItem_fullscreen.Click += FullscreenCapture_Click;
-            ToolStripMenuItem_lastRegion.Click += LastRegionCapture_Click;
-            ToolStripMenuItem_captureCursor.Click += CursorCapture_Click;
+            tsmiToolStripMenuItem_region.Click += RegionCapture_Click;
+            tsmiToolStripMenuItem_fullscreen.Click += FullscreenCapture_Click;
+            tsmiToolStripMenuItem_lastRegion.Click += LastRegionCapture_Click;
+            tsmiToolStripMenuItem_captureCursor.Click += CursorCapture_Click;
 #endregion
 
 #region Clips dropdown buttons
-            ToolStripDropDownButton_Clips.DropDown.Closing += toolStripDropDown_Closing;
+            tsddbToolStripDropDownButton_Clips.DropDown.Closing += toolStripDropDown_Closing;
 
-            ToolStripMenuItem_newClip.Click += NewClip_Click;
-            ToolStripMenuItem_clipFromClipboard.Click += ClipFromClipboard_Click;
-            ToolStripMenuItem_clipFromFile.Click += ClipFromFile_Click;
-            ToolStripMenuItem_createClipAfterRegionCapture.Click += CreateClipAfterRegionCapture_Click;
+            tsmiToolStripMenuItem_newClip.Click += NewClip_Click;
+            tsmiToolStripMenuItem_clipFromClipboard.Click += ClipFromClipboard_Click;
+            tsmiToolStripMenuItem_clipFromFile.Click += ClipFromFile_Click;
+            tsmiToolStripMenuItem_createClipAfterRegionCapture.Click += CreateClipAfterRegionCapture_Click;
 #endregion
 
 #region Tools dropdown buttons
-            ToolStripDropDownButton_Tools.DropDown.Closing += toolStripDropDown_Closing;
+            tsddbToolStripDropDownButton_Tools.DropDown.Closing += toolStripDropDown_Closing;
 
-            ToolStripDropDownButton_screenColorPicker.Click += ScreenColorPicker_Click;
-            ToolStripDropDownButton_ColorPicker.Click += ColorPicker_Click;
+            tsmiToolStripDropDownButton_screenColorPicker.Click += ScreenColorPicker_Click;
+            tsmiToolStripDropDownButton_ColorPicker.Click += ColorPicker_Click;
 #endregion
 
             #region Tray icon
@@ -75,20 +75,20 @@ namespace WinkingCat
             cmTray.Opening += tsmiCapture_DropDownOpening;
 
             // capture
-            regionToolStripMenuItem.Click += RegionCapture_Click;
-            fullscreenToolStripMenuItem.Click += FullscreenCapture_Click;
-            lastRegionToolStripMenuItem.Click += LastRegionCapture_Click;
-            captureCursorToolStripMenuItem.Click += CursorCapture_Click;
+            tsmiRegionToolStripMenuItem.Click += RegionCapture_Click;
+            tsmiFullscreenToolStripMenuItem.Click += FullscreenCapture_Click;
+            tsmiLastRegionToolStripMenuItem.Click += LastRegionCapture_Click;
+            tsmiCaptureCursorToolStripMenuItem.Click += CursorCapture_Click;
 
             // clip
-            newClipToolStripMenuItem.Click += NewClip_Click;
-            clipFromClipboardToolStripMenuItem.Click += ClipFromClipboard_Click;
-            clipFromFileToolStripMenuItem.Click += ClipFromFile_Click;
+            tsmiNewClipToolStripMenuItem.Click += NewClip_Click;
+            tsmiClipFromClipboardToolStripMenuItem.Click += ClipFromClipboard_Click;
+            tsmiClipFromFileToolStripMenuItem.Click += ClipFromFile_Click;
 
             // other
-            settingsToolStripMenuItem.Click += ToolStripDropDownButton_Settings_Click;
-            openMainWindowToolStripMenuItem.Click += OpenMainWindow_Click;
-            exitToolStripMenuItem.Click += ExitApplication_Click;
+            tsmiSettingsToolStripMenuItem.Click += ToolStripDropDownButton_Settings_Click;
+            tsmiOpenMainWindowToolStripMenuItem.Click += OpenMainWindow_Click;
+            tsmiExitToolStripMenuItem.Click += ExitApplication_Click;
 #endregion
 
             HandleCreated += MainForm_HandleCreated;
@@ -96,7 +96,6 @@ namespace WinkingCat
             GotFocus += mainForm_GotFocus;
             Resize += MainForm_Resize;
 
-            //ImageHandler.CaptureEvent += AfterCaptureEvent;
             ImageHandler.ImageSaved += ImageSaved_Event;
             ApplicationStyles.UpdateStylesEvent += ApplicationStyles_UpdateSylesEvent;
 
@@ -140,7 +139,6 @@ namespace WinkingCat
 
             this.Text = "";// ApplicationStyles.mainFormName;
             this.BackColor = ApplicationStyles.currentStyle.mainFormStyle.backgroundColor;
-            this.DisplayPanel.BackColor = ApplicationStyles.currentStyle.mainFormStyle.backgroundColor;
             tsMain.Renderer = new ToolStripCustomRenderer();
 
             cmTray.Renderer = new ToolStripCustomRenderer();
@@ -178,9 +176,9 @@ namespace WinkingCat
         private async void tsmiCapture_DropDownOpening(object sender, EventArgs e)
         {
             if(sender.GetType().Name == "ToolStripDropDownButton") 
-                await PrepareCaptureMenuAsync(ToolStripMenuItem_window, WindowItems_Click, ToolStripMenuItem_monitor, MonitorItems_Click);
+                await PrepareCaptureMenuAsync(tsmiToolStripMenuItem_window, WindowItems_Click, tsmiToolStripMenuItem_monitor, MonitorItems_Click);
             else
-                await PrepareCaptureMenuAsync(windowToolStripMenuItem, WindowItems_Click, monitorToolStripMenuItem, MonitorItems_Click);
+                await PrepareCaptureMenuAsync(tsmiWindowToolStripMenuItem, WindowItems_Click, tsmiMonitorToolStripMenuItem, MonitorItems_Click);
         }
 
         private void WindowItems_Click(object sender, EventArgs e)
@@ -205,7 +203,6 @@ namespace WinkingCat
 
             Thread.Sleep(MainFormSettings.waitHideTime);
             TaskHandler.CaptureWindow(win);
-            //Thread.Sleep(MainFormSettings.waitHideTime);
 
             ShowAll();
         }
@@ -222,8 +219,15 @@ namespace WinkingCat
                 HideAll();
             }
             Thread.Sleep(MainFormSettings.waitHideTime);
-            ImageHandler.Save(img: ScreenShotManager.CaptureRectangle((Rectangle)tsi.Tag));
-            //Thread.Sleep(MainFormSettings.waitHideTime);
+
+            using (Bitmap img = ScreenShotManager.CaptureRectangle((Rectangle)tsi.Tag))
+            {
+                ImageHandler.Save(img: img);
+                if (RegionCaptureOptions.autoCopyImage)
+                {
+                    ClipboardHelpers.CopyImageDefault(img);
+                }
+            }
 
             ShowAll();
         }
@@ -239,7 +243,6 @@ namespace WinkingCat
 
             if (MainFormSettings.hideMainFormOnCapture && !isInTrayOrMinimized)
             {
-                //Thread.Sleep(MainFormSettings.waitHideTime);
                 ShowAll();
             }
         }
@@ -254,7 +257,6 @@ namespace WinkingCat
 
             if (MainFormSettings.hideMainFormOnCapture && !isInTrayOrMinimized)
             {
-                //Thread.Sleep(MainFormSettings.waitHideTime);
                 ShowAll();
             }
         }
@@ -269,7 +271,6 @@ namespace WinkingCat
 
             if (MainFormSettings.hideMainFormOnCapture && !isInTrayOrMinimized)
             {
-                //Thread.Sleep(MainFormSettings.waitHideTime);
                 ShowAll();
             }
         }
@@ -284,23 +285,23 @@ namespace WinkingCat
 
             if (MainFormSettings.hideMainFormOnCapture)
             {
-                //Thread.Sleep(MainFormSettings.waitHideTime);
+
                 ShowAll();
             }
         }
         private void CursorCapture_Click(object sender, EventArgs e)
         {
-            if (ToolStripMenuItem_captureCursor.Checked || captureCursorToolStripMenuItem.Checked)
+            if (tsmiToolStripMenuItem_captureCursor.Checked || tsmiCaptureCursorToolStripMenuItem.Checked)
             {
                 ScreenShotManager.captureCursor = true;
-                ToolStripMenuItem_captureCursor.Checked = true;
-                captureCursorToolStripMenuItem.Checked = true;
+                tsmiToolStripMenuItem_captureCursor.Checked = true;
+                tsmiCaptureCursorToolStripMenuItem.Checked = true;
             }
             else
             {
                 ScreenShotManager.captureCursor = false;
-                ToolStripMenuItem_captureCursor.Checked = false;
-                captureCursorToolStripMenuItem.Checked = false;
+                tsmiToolStripMenuItem_captureCursor.Checked = false;
+                tsmiCaptureCursorToolStripMenuItem.Checked = false;
 
             }
         }
@@ -438,18 +439,18 @@ namespace WinkingCat
         {
             MainForm_Resize(null, EventArgs.Empty); // just to check the window state
             forceDropDownClose = true;
-            ToolStripDropDownButton_Capture.DropDown.Close();
-            ToolStripDropDownButton_Clips.DropDown.Close();
-            ToolStripDropDownButton_Tools.DropDown.Close();
+            tsddbToolStripDropDownButton_Capture.DropDown.Close();
+            tsddbToolStripDropDownButton_Clips.DropDown.Close();
+            tsddbToolStripDropDownButton_Tools.DropDown.Close();
         }
 
         private void mainForm_GotFocus(object sender, EventArgs e)
         {
             MainForm_Resize(null, EventArgs.Empty); // just to check the window state
             forceDropDownClose = true;
-            ToolStripDropDownButton_Capture.DropDown.Close();
-            ToolStripDropDownButton_Clips.DropDown.Close();
-            ToolStripDropDownButton_Tools.DropDown.Close();
+            tsddbToolStripDropDownButton_Capture.DropDown.Close();
+            tsddbToolStripDropDownButton_Clips.DropDown.Close();
+            tsddbToolStripDropDownButton_Tools.DropDown.Close();
         }
 
         private void MainForm_FormClosing(object sender, FormClosingEventArgs e)
@@ -608,10 +609,8 @@ namespace WinkingCat
         }
         private void ShowMe()
         {
-            if (WindowState == FormWindowState.Minimized)
-            {
-                WindowState = FormWindowState.Normal;
-            }
+            isInTrayOrMinimized = false;
+            Helpers.ForceActivate(this);
 
             bool top = TopMost;
             TopMost = true;
