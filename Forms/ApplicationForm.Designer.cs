@@ -545,7 +545,7 @@
             // _PictureBox1
             // 
             this.pbPreviewBox.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.pbPreviewBox.Image = null;
+            //this.pbPreviewBox.Image = null;
             this.pbPreviewBox.Location = new System.Drawing.Point(0, 0);
             this.pbPreviewBox.Name = "_PictureBox1";
             this.pbPreviewBox.Size = new System.Drawing.Size(599, 211);
@@ -561,7 +561,7 @@
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.MinimumSize = new System.Drawing.Size(666, 250);
             this.Name = "ApplicationForm";
-            this.Text = "Form1";
+            this.Text = "";
             this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.MainForm_FormClosing);
             this.scMain.Panel2Collapsed = true;
             this.scMain.Panel2.Hide();

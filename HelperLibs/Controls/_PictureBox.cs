@@ -17,19 +17,61 @@ namespace WinkingCat.HelperLibs
         {
             get
             {
-                return image;
+                return this.pbMain.Image;
             }
-            set
+            private set
             {
                 this.pbMain.Image = value;
             }
         }
-        private Image image;
+
+        public bool IsImageValid
+        {
+            get
+            {
+                return isImageValid;
+            }
+            private set
+            {
+                if(this.Image != null)
+                {
+
+                }
+            }
+        }
+        private bool isImageValid;
+
+        private readonly object imageLock = new object();
+        private bool isImageLoading = false;
         public _PictureBox()
         {
             InitializeComponent();
         }
 
+        public void SetImage(Image img)
+        {
+            lock (imageLock)
+            {
+                if (!isImageLoading)
+                {
+                    this.Reset();
+                    isImageLoading = true;
+                    this.Image = (Image)img.Clone();
+                    this.isImageLoading = false;
+                    ImageSizeMode();
+                }
+            }
+        }
+
+        public void ImageSizeMode()
+        {
+
+        }
+
+        public void Reset()
+        {
+
+        }
 
         #region Component Designer generated code
         /// <summary> 
@@ -58,10 +100,13 @@ namespace WinkingCat.HelperLibs
         private void InitializeComponent()
         {
             components = new System.ComponentModel.Container();
+            this.DoubleBuffered = true;
             pbMain = new PictureBox();
             pbMain.Name = "pbMain";
             pbMain.Dock = DockStyle.Fill;
             pbMain.BackColor = Color.Transparent;
+            pbMain.InitialImage = Properties.Resources.loading;
+            pbMain.ErrorImage = Properties.Resources.failed_to_load;
 
             this.Controls.Add(pbMain);
         }
