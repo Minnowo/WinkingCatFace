@@ -89,16 +89,26 @@
     <Compile Include="Controls\ColorPickerSlider.Designer.cs">
       <DependentUpon>ColorPickerSlider.cs</DependentUpon>
     </Compile>
+    <Compile Include="Controls\DrawingBoard.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Controls\DrawingBoard.Designer.cs">
+      <DependentUpon>DrawingBoard.cs</DependentUpon>
+    </Compile>
     <Compile Include="Controls\_PictureBox.cs">
       <SubType>UserControl</SubType>
     </Compile>
     <Compile Include="Events\ColorChangedEvent.cs" />
+    <Compile Include="Forms\ImageViewerForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
     <Compile Include="Helpers\ColorHelper.cs" />
     <Compile Include="Enums.cs" />
     <Compile Include="Extensions\Extensions.cs" />
     <Compile Include="Helpers.cs" />
     <Compile Include="Helpers\ClipboardHelpers.cs" />
     <Compile Include="Helpers\CursorData.cs" />
+    <Compile Include="Helpers\ImageHelper.cs" />
     <Compile Include="Helpers\PathHelpler.cs" />
     <Compile Include="Helpers\MathHelper.cs" />
     <Compile Include="Helpers\ScreenHelpers.cs" />

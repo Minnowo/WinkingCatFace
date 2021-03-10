@@ -10,6 +10,23 @@ namespace WinkingCat.HelperLibs
 {
     public static class Extensions
     {
+        public static T CloneSafe<T>(this T obj) where T : class, ICloneable
+        {
+            try
+            {
+                if (obj != null)
+                {
+                    return obj.Clone() as T;
+                }
+            }
+            catch (Exception e)
+            {
+                Logger.WriteException(e);
+            }
+
+            return null;
+        }
+
         public static string ToLowerString(this bool input)
         {
             if (input)

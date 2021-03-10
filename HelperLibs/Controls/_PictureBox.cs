@@ -7,6 +7,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using System.IO;
 
 namespace WinkingCat.HelperLibs
 {
@@ -29,17 +30,11 @@ namespace WinkingCat.HelperLibs
         {
             get
             {
-                return isImageValid;
-            }
-            private set
-            {
-                if(this.Image != null)
-                {
-
-                }
+                return this.Image != null && this.Image != this.pbMain.ErrorImage && this.Image != this.pbMain.InitialImage;
             }
         }
-        private bool isImageValid;
+
+        public bool previewOnClick = false;
 
         private readonly object imageLock = new object();
         private bool isImageLoading = false;
@@ -63,14 +58,72 @@ namespace WinkingCat.HelperLibs
             }
         }
 
+        public void SetImage(string path)
+        {
+            lock (imageLock)
+            {
+                if (!isImageLoading)
+                    if (File.Exists(path))
+                    {
+                        this.Reset();
+                        isImageLoading = true;
+                    
+                        using (FileStream fileStream = new FileStream(path, FileMode.Open, FileAccess.Read, FileShare.Read))
+                        {
+                            try
+                            {
+                                using (Image image = Image.FromStream(fileStream, false, false))
+                                {
+                                    this.Image = (Image)image.Clone();
+                                }
+                            }
+                            catch (Exception e)
+                            {
+                                Logger.WriteException(e);
+                            }
+                        }
+                    
+                        this.isImageLoading = false;
+                        ImageSizeMode();
+                }
+            }
+        }
+
         public void ImageSizeMode()
         {
-
+            if(IsImageValid)
+            {
+                if(this.Image.Width > this.ClientSize.Width || this.Image.Height > this.ClientSize.Height)
+                {
+                    this.pbMain.SizeMode = PictureBoxSizeMode.Zoom;
+                }
+                else
+                {
+                    this.pbMain.SizeMode = PictureBoxSizeMode.CenterImage;
+                }
+            }
         }
 
         public void Reset()
         {
+            if (!isImageLoading && IsImageValid)
+            {
+                lock (imageLock)
+                {
+                    this.Image.Dispose();
+                    this.Image = null;
+                }
+            }
+        }
 
+        private void _PictureBox_MouseClick(object sender, MouseEventArgs e)
+        {
+            if (previewOnClick)
+            {
+                this.pbMain.Enabled = false;
+                ImageViewerForm.ShowImage(this.Image);
+                this.pbMain.Enabled = true;
+            }
         }
 
         #region Component Designer generated code
@@ -107,6 +160,8 @@ namespace WinkingCat.HelperLibs
             pbMain.BackColor = Color.Transparent;
             pbMain.InitialImage = Properties.Resources.loading;
             pbMain.ErrorImage = Properties.Resources.failed_to_load;
+
+            pbMain.MouseClick += _PictureBox_MouseClick;
 
             this.Controls.Add(pbMain);
         }

@@ -105,6 +105,25 @@ namespace WinkingCat
             ResumeLayout();
 
             MainFormSettings.SettingsChangedEvent += UpdateSettings;
+            lvListView.ItemSelectionChanged += LvListView_ItemSelectionChanged;
+
+            this.pbPreviewBox.previewOnClick = true;
+        }
+
+        private void LvListView_ItemSelectionChanged(object sender, ListViewItemSelectionChangedEventArgs e)
+        {
+            if (e.IsSelected)
+            {
+                this.scMain.Panel2.Show();
+                this.scMain.Panel2Collapsed = false;
+                this.pbPreviewBox.SetImage((string)e.Item.Tag);
+            }
+            else
+            {
+                this.scMain.Panel2Collapsed = true;
+                this.scMain.Panel2.Hide();
+                this.pbPreviewBox.Reset();
+            }
         }
 
         private void ApplicationStyles_UpdateSylesEvent(object sender, EventArgs e)

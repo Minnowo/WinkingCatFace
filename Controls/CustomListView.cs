@@ -170,6 +170,7 @@ namespace WinkingCat
             UpdateTheme();
         }
 
+
         private void ApplicationStyles_UpdateSylesEvent(object sender, EventArgs e)
         {
             UpdateTheme();
