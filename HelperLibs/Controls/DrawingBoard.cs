@@ -17,7 +17,7 @@ namespace WinkingCat.HelperLibs
         public delegate void ScrollPositionChanged(object sender, EventArgs e);
         public event ScrollPositionChanged ScrollChanged;
 
-        public Bitmap Image
+        public Image Image
         {
             get
             {
@@ -25,7 +25,7 @@ namespace WinkingCat.HelperLibs
             }
             set
             {
-                if(originalImage != null)
+                if (originalImage != null)
                 {
                     originalImage.Dispose();
                     origin = new Point(0, 0);
@@ -34,7 +34,7 @@ namespace WinkingCat.HelperLibs
                     GC.Collect();
                 }
 
-                if(value == null)
+                if (value == null)
                 {
                     originalImage = null;
                     Invalidate();
@@ -42,40 +42,14 @@ namespace WinkingCat.HelperLibs
                 }
 
                 originalImage = new Bitmap(value.Width, value.Height, PixelFormat.Format24bppRgb);
-                using (Graphics g = Graphics.FromImage(value))
+                using (Graphics g = Graphics.FromImage(originalImage))
                 {
-                    g.DrawImage(originalImage, new Point(0, 0));
+                    g.DrawImage(value, new Point(0, 0));
                 }
+                Invalidate();
             }
         }
 
-        public Bitmap InitialImage
-        {
-            get
-            {
-                return originalImage;
-            }
-            set
-            {
-                this.Image = value;
-                this.zoomFactor = 1f;
-            }
-        }
-
-#pragma warning disable CS0114 // Member hides inherited member; missing override keyword
-        public Bitmap BackgroundImage
-#pragma warning restore CS0114 // Member hides inherited member; missing override keyword
-        {
-            get
-            {
-                return null;
-            }
-            set
-            {
-                this.Image = value;
-                this.zoomFactor = 1f;
-            }
-        }
 
         public double ZoomFactor
         {
@@ -86,8 +60,8 @@ namespace WinkingCat.HelperLibs
             set
             {
                 zoomFactor = value.Clamp(0.05, 15);
-                
-                if(originalImage != null)
+
+                if (originalImage != null)
                 {
                     apparentImageSize.Height = (int)Math.Round(originalImage.Height * zoomFactor);
                     apparentImageSize.Width = (int)Math.Round(originalImage.Width * zoomFactor);
@@ -136,12 +110,14 @@ namespace WinkingCat.HelperLibs
         private double zoomFactor = 1.0d;
 
         //private bool zoomOnMouseWheel = true;
+        private bool isLeftClicking = false;
 
         public DrawingBoard()
         {
             SetStyle(ControlStyles.OptimizedDoubleBuffer | ControlStyles.UserPaint | ControlStyles.AllPaintingInWmPaint, true);
             InitializeComponent();
             this.MouseDown += ImageViewer_MouseDown;
+            this.MouseUp += ImageViewer_MouseUp;
             this.MouseWheel += ImageViewer_MouseWheel;
             this.MouseMove += ImageViewer_MouseMove;
             this.Resize += DrawingBoard_Resize;
@@ -187,10 +163,11 @@ namespace WinkingCat.HelperLibs
                 zoomFactor = Math.Round(zoomFactor * 0.9d, 2);
             }
 
-            origin.X = (centerPoint.X - (int)Math.Round(ClientSize.Width / zoomFactor / 2)).Clamp(0, originalImage.Width - (int)Math.Round(ClientSize.Width / zoomFactor)); ;
-            origin.Y = (centerPoint.Y - (int)Math.Round(ClientSize.Height / zoomFactor / 2)).Clamp(0, originalImage.Height - (int)Math.Round(ClientSize.Height / zoomFactor));
+            origin = new Point((centerPoint.X - (int)Math.Round(ClientSize.Width / zoomFactor / 2)).Clamp(0, originalImage.Width - (int)Math.Round(ClientSize.Width / zoomFactor)),
+                (centerPoint.Y - (int)Math.Round(ClientSize.Height / zoomFactor / 2)).Clamp(0, originalImage.Height - (int)Math.Round(ClientSize.Height / zoomFactor)));
 
-            CheckBounds();
+            //CheckBounds();
+            Invalidate();
         }
 
         private void DrawImage(Graphics g)
@@ -219,14 +196,29 @@ namespace WinkingCat.HelperLibs
             if (originalImage == null)
                 return;
 
-            if(e.Delta > 0)
+            if (e.Delta > 0)
             {
                 ZoomImage(true);
             }
-            else if(e.Delta < 0)
+            else if (e.Delta < 0)
             {
                 ZoomImage(false);
             }
+        }
+
+        private void ImageViewer_MouseUp(object sender, MouseEventArgs e)
+        {
+            if (originalImage == null)
+                return;
+
+            switch (e.Button)
+            {
+                case MouseButtons.Left:
+                    isLeftClicking = false;
+                    break;
+            }
+
+            this.Focus();
         }
 
         private void ImageViewer_MouseDown(object sender, MouseEventArgs e)
@@ -234,7 +226,14 @@ namespace WinkingCat.HelperLibs
             if (originalImage == null)
                 return;
 
-            startPoint = e.Location;
+            switch (e.Button)
+            {
+                case MouseButtons.Left:
+                    startPoint = e.Location;
+                    isLeftClicking = true;
+                    break;
+            }
+
             this.Focus();
         }
 
@@ -243,27 +242,24 @@ namespace WinkingCat.HelperLibs
             if (originalImage == null)
                 return;
 
-            switch (e.Button)
+            if (isLeftClicking)
             {
-                case MouseButtons.Left:
-                    int deltaX = startPoint.X - e.X;
-                    int deltaY = startPoint.Y - e.Y;
+                origin = new Point(origin.X + (int)Math.Round((startPoint.X - e.X) / zoomFactor),
+                    origin.Y + (int)Math.Round((startPoint.Y - e.Y) / zoomFactor));
+                CheckBounds();
 
-                    CheckBounds();
-
-                    startPoint = e.Location;
-                    Invalidate();
-                    break;
+                startPoint = e.Location;
+                Invalidate();
             }
         }
 
         private void CheckBounds()
         {
-            //if (originalImage == null)
+            if (originalImage == null)
                 return;
 
-            //origin.X = origin.X.Clamp(0, originalImage.Width - (int)Math.Round(ClientSize.Width / zoomFactor));
-            //origin.Y = origin.Y.Clamp(0, originalImage.Height - (int)Math.Round(ClientSize.Height / zoomFactor));
+            origin.X = origin.X.Clamp(0, originalImage.Width - (int)Math.Round(ClientSize.Width / zoomFactor));
+            origin.Y = origin.Y.Clamp(0, originalImage.Height - (int)Math.Round(ClientSize.Height / zoomFactor));
         }
 
         private void ComputeDrawingArea()
@@ -274,7 +270,7 @@ namespace WinkingCat.HelperLibs
 
         private void OnScrollChanged()
         {
-            if(ScrollChanged != null)
+            if (ScrollChanged != null)
             {
                 ScrollChanged(this, EventArgs.Empty);
             }
@@ -286,15 +282,16 @@ namespace WinkingCat.HelperLibs
         protected override void OnPaint(PaintEventArgs e)
         {
             e.Graphics.Clear(Color.White);
-            
-            // draw image functions
+            Graphics g = e.Graphics;
+            g.CompositingMode = CompositingMode.SourceOver;
+            DrawImage(g);
 
             base.OnPaint(e);
         }
 
         protected override void OnSizeChanged(EventArgs e)
         {
-
+            destRect = new Rectangle(0, 0, ClientSize.Width, ClientSize.Height);
             base.OnSizeChanged(e);
         }
 

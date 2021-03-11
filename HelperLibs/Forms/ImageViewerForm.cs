@@ -145,10 +145,10 @@ namespace WinkingCat.HelperLibs
                 image.Dispose();
             }
 
-            if(pbMain.Image != null)
+            /*if(pbMain.Image != null)
             {
                 pbMain.Image.Dispose();
-            }
+            }*/
 
             base.Dispose(disposing);
         }
@@ -161,7 +161,7 @@ namespace WinkingCat.HelperLibs
         private void InitializeComponent()
         {
             this.SuspendLayout();
-            
+
             this.Text = ";3 Image Viewer";
             this.StartPosition = FormStartPosition.Manual;
             this.WindowState = FormWindowState.Normal;
@@ -170,27 +170,21 @@ namespace WinkingCat.HelperLibs
             this.TopMost = true;
             this.BackColor = Color.Black;
 
-            pbMain = new PictureBox();
-            //pbMain.Dock = DockStyle.Fill;
-            pbMain.BackColor = Color.White;
-            pbMain.Location = new Point(this.ClientSize.Width / 2 - image.Size.Width / 2, this.ClientSize.Height / 2 - image.Size.Height / 2);
-            pbMain.Size = this.image.Size;
-            pbMain.Image = this.image.CloneSafe();
-            pbMain.SizeMode = PictureBoxSizeMode.CenterImage;
-            pbMain.MouseUp += PbMain_MouseUp;
-            pbMain.MouseDown += PbMain_MouseDown;
-            pbMain.MouseMove += PbMain_MouseMove;
-            pbMain.MouseWheel += PbMain_MouseWheel;
-            this.Controls.Add(pbMain);
 
+            ivMain = new ImageView();
+           
+            ivMain.Dock = DockStyle.Fill;
+            ivMain.Image = (Bitmap)this.image;
+            this.Controls.Add(ivMain);
 
             this.KeyDown += ImageViewerForm_KeyDown;
             this.BringToFront();
             this.Activate();
             this.ResumeLayout();
+
         }
 
-
+        private ImageView ivMain;
         private PictureBox pbMain;
         #endregion
     }
