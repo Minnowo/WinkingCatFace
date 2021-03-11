@@ -161,7 +161,7 @@ namespace WinkingCat.HelperLibs
         private void InitializeComponent()
         {
             this.SuspendLayout();
-
+            this.KeyPreview = true;
             this.Text = ";3 Image Viewer";
             this.StartPosition = FormStartPosition.Manual;
             this.WindowState = FormWindowState.Normal;

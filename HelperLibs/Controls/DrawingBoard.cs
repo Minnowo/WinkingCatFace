@@ -120,7 +120,7 @@ namespace WinkingCat.HelperLibs
             this.MouseUp += ImageViewer_MouseUp;
             this.MouseWheel += ImageViewer_MouseWheel;
             this.MouseMove += ImageViewer_MouseMove;
-            this.Resize += DrawingBoard_Resize;
+            //this.Resize += DrawingBoard_Resize;
         }
 
         #region public properties
@@ -151,8 +151,7 @@ namespace WinkingCat.HelperLibs
 
         private void ZoomImage(bool zoomIn)
         {
-            centerPoint.X = origin.X + srcRect.Width / 2;
-            centerPoint.Y = origin.Y + srcRect.Height / 2;
+
 
             if (zoomIn)
             {
@@ -163,10 +162,13 @@ namespace WinkingCat.HelperLibs
                 zoomFactor = Math.Round(zoomFactor * 0.9d, 2);
             }
 
-            origin = new Point((centerPoint.X - (int)Math.Round(ClientSize.Width / zoomFactor / 2)).Clamp(0, originalImage.Width - (int)Math.Round(ClientSize.Width / zoomFactor)),
-                (centerPoint.Y - (int)Math.Round(ClientSize.Height / zoomFactor / 2)).Clamp(0, originalImage.Height - (int)Math.Round(ClientSize.Height / zoomFactor)));
+            centerPoint.X = origin.X + srcRect.Width / 2;
+            centerPoint.Y = origin.Y + srcRect.Height / 2;
+            origin = new Point(centerPoint.X - (int)Math.Round(ClientSize.Width / zoomFactor / 2),
+                centerPoint.Y - (int)Math.Round(ClientSize.Height / zoomFactor / 2));
 
-            //CheckBounds();
+            CheckBounds();
+            ComputeDrawingArea();
             Invalidate();
         }
 
@@ -179,6 +181,7 @@ namespace WinkingCat.HelperLibs
             g.SmoothingMode = SmoothingMode.None;
             g.InterpolationMode = InterpolationMode.NearestNeighbor;
 
+
             srcRect = new Rectangle(origin.X, origin.Y, drawWidth, drawHeight);
 
             g.DrawImage(originalImage, destRect, srcRect, GraphicsUnit.Pixel);
@@ -186,10 +189,10 @@ namespace WinkingCat.HelperLibs
             OnScrollChanged();
         }
 
-        private void DrawingBoard_Resize(object sender, EventArgs e)
-        {
-            ComputeDrawingArea();
-        }
+        /*        private void DrawingBoard_Resize(object sender, EventArgs e)
+                {
+                    ComputeDrawingArea();
+                }*/
 
         private void ImageViewer_MouseWheel(object sender, MouseEventArgs e)
         {
@@ -231,6 +234,7 @@ namespace WinkingCat.HelperLibs
                 case MouseButtons.Left:
                     startPoint = e.Location;
                     isLeftClicking = true;
+                    ComputeDrawingArea();
                     break;
             }
 
@@ -244,10 +248,10 @@ namespace WinkingCat.HelperLibs
 
             if (isLeftClicking)
             {
-                origin = new Point(origin.X + (int)Math.Round((startPoint.X - e.X) / zoomFactor),
-                    origin.Y + (int)Math.Round((startPoint.Y - e.Y) / zoomFactor));
+                // need to fix the flicker when dragging left
+                origin = new Point(origin.X + (int)Math.Round((startPoint.X - e.X) / zoomFactor), origin.Y + (int)Math.Round((startPoint.Y - e.Y) / zoomFactor));
                 CheckBounds();
-
+                Console.WriteLine(origin);
                 startPoint = e.Location;
                 Invalidate();
             }
@@ -292,6 +296,7 @@ namespace WinkingCat.HelperLibs
         protected override void OnSizeChanged(EventArgs e)
         {
             destRect = new Rectangle(0, 0, ClientSize.Width, ClientSize.Height);
+            ComputeDrawingArea();
             base.OnSizeChanged(e);
         }
 
