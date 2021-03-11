@@ -121,7 +121,10 @@ namespace WinkingCat.HelperLibs
             if (previewOnClick)
             {
                 this.pbMain.Enabled = false;
-                ImageViewerForm.ShowImage(this.Image);
+                //ImageViewerForm.ShowImage(this.Image);
+                //WinkingCat.HelperLibs.Form1 a = new Form1((Bitmap)this.Image);
+                Form1 a = new Form1((Bitmap)this.Image);
+                a.Show();
                 this.pbMain.Enabled = true;
             }
         }
