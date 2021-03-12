@@ -66,7 +66,7 @@ namespace WinkingCat.HelperLibs
                     apparentImageSize.Height = (int)Math.Round(originalImage.Height * zoomFactor);
                     apparentImageSize.Width = (int)Math.Round(originalImage.Width * zoomFactor);
                     ComputeDrawingArea();
-                    CheckBounds();
+                    //CheckBounds();
                 }
                 Invalidate();
             }
@@ -151,7 +151,8 @@ namespace WinkingCat.HelperLibs
 
         private void ZoomImage(bool zoomIn)
         {
-
+            centerPoint.X = origin.X + srcRect.Width / 2;
+            centerPoint.Y = origin.Y + srcRect.Height / 2;
 
             if (zoomIn)
             {
@@ -162,12 +163,13 @@ namespace WinkingCat.HelperLibs
                 zoomFactor = Math.Round(zoomFactor * 0.9d, 2);
             }
 
-            centerPoint.X = origin.X + srcRect.Width / 2;
-            centerPoint.Y = origin.Y + srcRect.Height / 2;
+
             origin = new Point(centerPoint.X - (int)Math.Round(ClientSize.Width / zoomFactor / 2),
                 centerPoint.Y - (int)Math.Round(ClientSize.Height / zoomFactor / 2));
+            //origin.X = centerPoint.X - (int)(ClientSize.Width / zoomFactor / 2);
+            //origin.Y = centerPoint.Y - (int)(ClientSize.Height / zoomFactor / 2);
 
-            CheckBounds();
+            //CheckBounds();
             ComputeDrawingArea();
             Invalidate();
         }
@@ -180,7 +182,8 @@ namespace WinkingCat.HelperLibs
             g.PixelOffsetMode = PixelOffsetMode.Half;
             g.SmoothingMode = SmoothingMode.None;
             g.InterpolationMode = InterpolationMode.NearestNeighbor;
-
+            g.CompositingMode = CompositingMode.SourceOver;
+            g.CompositingQuality = CompositingQuality.HighSpeed;
 
             srcRect = new Rectangle(origin.X, origin.Y, drawWidth, drawHeight);
 
@@ -189,10 +192,6 @@ namespace WinkingCat.HelperLibs
             OnScrollChanged();
         }
 
-        /*        private void DrawingBoard_Resize(object sender, EventArgs e)
-                {
-                    ComputeDrawingArea();
-                }*/
 
         private void ImageViewer_MouseWheel(object sender, MouseEventArgs e)
         {
@@ -224,6 +223,11 @@ namespace WinkingCat.HelperLibs
             this.Focus();
         }
 
+        private Point PointToImage(Point p)
+        {
+            return new Point((int)((p.X + origin.X) / zoomFactor), (int)((p.Y + origin.Y) / zoomFactor));
+        }
+
         private void ImageViewer_MouseDown(object sender, MouseEventArgs e)
         {
             if (originalImage == null)
@@ -232,9 +236,9 @@ namespace WinkingCat.HelperLibs
             switch (e.Button)
             {
                 case MouseButtons.Left:
-                    startPoint = e.Location;
-                    isLeftClicking = true;
+                    startPoint = PointToImage(e.Location);
                     ComputeDrawingArea();
+                    isLeftClicking = true;
                     break;
             }
 
@@ -248,28 +252,53 @@ namespace WinkingCat.HelperLibs
 
             if (isLeftClicking)
             {
-                // need to fix the flicker when dragging left
-                origin = new Point(origin.X + (int)Math.Round((startPoint.X - e.X) / zoomFactor), origin.Y + (int)Math.Round((startPoint.Y - e.Y) / zoomFactor));
-                CheckBounds();
-                Console.WriteLine(origin);
-                startPoint = e.Location;
+                Point p = PointToImage(e.Location);
+                origin.X = origin.X + (startPoint.X - p.X);
+                origin.Y = origin.Y + (startPoint.Y - p.Y);
+                startPoint = PointToImage(e.Location);
+                //CheckBounds();
                 Invalidate();
             }
         }
 
-        private void CheckBounds()
+        /*private void CheckBounds()
         {
             if (originalImage == null)
                 return;
 
-            origin.X = origin.X.Clamp(0, originalImage.Width - (int)Math.Round(ClientSize.Width / zoomFactor));
-            origin.Y = origin.Y.Clamp(0, originalImage.Height - (int)Math.Round(ClientSize.Height / zoomFactor));
-        }
+
+
+            if (origin.X < 0)
+            {
+                origin.X = 0;
+            }
+            else if (origin.X > originalImage.Width - (int)(ClientSize.Width / zoomFactor))
+            {
+                origin.X = originalImage.Width - (int)(ClientSize.Width / zoomFactor);
+                if (origin.X < 0)
+                {
+                    origin.X = 0;
+                }
+            }
+
+            if (origin.Y < 0)
+            {
+                origin.Y = 0;
+            }
+            else if (origin.Y > originalImage.Height - (int)(ClientSize.Height / zoomFactor))
+            {
+                origin.Y = originalImage.Height - (int)(ClientSize.Height / zoomFactor);
+                if (origin.Y < 0)
+                {
+                    origin.Y = 0;
+                }
+            }
+    }*/
 
         private void ComputeDrawingArea()
         {
-            drawHeight = (int)Math.Round(Height / zoomFactor);
-            drawWidth = (int)Math.Round(Width / zoomFactor);
+            drawHeight = (int)(Height / zoomFactor);
+            drawWidth = (int)(Width / zoomFactor);
         }
 
         private void OnScrollChanged()
@@ -285,12 +314,12 @@ namespace WinkingCat.HelperLibs
 
         protected override void OnPaint(PaintEventArgs e)
         {
-            e.Graphics.Clear(Color.White);
+            e.Graphics.Clear(ApplicationStyles.currentStyle.mainFormStyle.imageViewerBackColor);
             Graphics g = e.Graphics;
-            g.CompositingMode = CompositingMode.SourceOver;
+            //g.CompositingMode = CompositingMode.SourceCopy;
             DrawImage(g);
 
-            base.OnPaint(e);
+            //base.OnPaint(e);
         }
 
         protected override void OnSizeChanged(EventArgs e)

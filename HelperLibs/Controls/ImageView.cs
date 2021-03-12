@@ -91,7 +91,7 @@ namespace WinkingCat.HelperLibs
         }
 
         private bool scrollVisible = true;
-
+        private bool preventUpdate = false;
         public ImageView()
         {
             InitializeComponent();
@@ -123,6 +123,7 @@ namespace WinkingCat.HelperLibs
 
         private void DrawingBoard_SetScrollPosition(object sender, EventArgs e)
         {
+            preventUpdate = true;
             int factoredWidth = (int)Math.Round(drawingBoard1.Width / drawingBoard1.ZoomFactor);
             int factoredHeight = (int)Math.Round(drawingBoard1.Height / drawingBoard1.ZoomFactor);
 
@@ -134,7 +135,7 @@ namespace WinkingCat.HelperLibs
                 hScrollBar1.Enabled = false;
                 hScrollBar1.Value = 0;
             }
-            else
+            else if (drawingBoard1.Origin.X > 0 && drawingBoard1.Origin.X < hScrollBar1.Maximum)
             {
                 hScrollBar1.LargeChange = factoredWidth;
                 hScrollBar1.Enabled = true;
@@ -146,16 +147,19 @@ namespace WinkingCat.HelperLibs
                 vScrollBar1.Enabled = false;
                 vScrollBar1.Value = 0;
             }
-            else
+            else if (drawingBoard1.Origin.Y > 0 && drawingBoard1.Origin.Y < vScrollBar1.Maximum)
             {
                 vScrollBar1.Enabled = true;
                 vScrollBar1.LargeChange = factoredHeight;
                 vScrollBar1.Value = drawingBoard1.Origin.Y;
             }
+            preventUpdate = false;
         }
 
         private void ScrollbarValue_Changed(object sender, EventArgs e)
         {
+            if (preventUpdate)
+                return;
             this.drawingBoard1.Origin = new Point(hScrollBar1.Value, vScrollBar1.Value);
         }
     }

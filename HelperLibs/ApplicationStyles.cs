@@ -26,6 +26,8 @@ namespace WinkingCat.HelperLibs
         public Color separatorLightColor { get; set; } = Color.FromArgb(56, 64, 75);
         public Color contextMenuFontColor { get; set; } = Color.White;
 
+        public Color imageViewerBackColor { get; set; } = Color.Black;
+
         #endregion
         public MainFormStyle()
         {
@@ -43,6 +45,7 @@ namespace WinkingCat.HelperLibs
             separatorDarkColor = Color.FromArgb(45, 47, 61);
             separatorLightColor = Color.FromArgb(33, 35, 43);
             contextMenuFontColor = Color.FromArgb(248, 248, 242);
+            imageViewerBackColor = Color.Black;
         }
     }
     
