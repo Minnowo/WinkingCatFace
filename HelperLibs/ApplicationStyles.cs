@@ -25,7 +25,6 @@ namespace WinkingCat.HelperLibs
         public Color separatorDarkColor { get; set; } = Color.FromArgb(22, 26, 31);
         public Color separatorLightColor { get; set; } = Color.FromArgb(56, 64, 75);
         public Color contextMenuFontColor { get; set; } = Color.White;
-
         public Color imageViewerBackColor { get; set; } = Color.Black;
 
         #endregion
@@ -227,10 +226,12 @@ namespace WinkingCat.HelperLibs
     public class ClipStyle
     {
         public Color clipBorderColor { get; set; } = Color.FromArgb(249, 0, 187);
+        public ushort clipBorderThickness { get; set; } = 2;
 
         public ClipStyle()
         {
             clipBorderColor = Color.FromArgb(249, 0, 187);
+            clipBorderThickness = 2;
         }
     }
 

@@ -128,6 +128,28 @@ namespace WinkingCat.HelperLibs.Properties
 
         [global::System.Configuration.ApplicationScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("\\AppConfig\\Settings\\RegionCaptureStyles.config")]
+        public string regionCaptureStyles
+        {
+            get
+            {
+                return ((string)(this["regionCaptureStyles"]));
+            }
+        }
+
+        [global::System.Configuration.ApplicationScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("\\AppConfig\\Settings\\ClipStyles.config")]
+        public string clipStyles
+        {
+            get
+            {
+                return ((string)(this["clipStyles"]));
+            }
+        }
+
+        [global::System.Configuration.ApplicationScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute("\\AppConfig\\Settings\\Clipboard.config")]
         public string clipboardSettings
         {

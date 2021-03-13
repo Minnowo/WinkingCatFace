@@ -83,7 +83,7 @@ namespace WinkingCat
                     string path = PathHelper.AskChooseImageFile();
                     if (!string.IsNullOrEmpty(path))
                     {
-                        img = Bitmap.FromFile(path);
+                        img = ImageHelper.LoadImage(path);
                         Point p = ScreenHelper.GetCursorPosition();
                         ClipOptions ops = new ClipOptions() { location = new Point(p.X - img.Width / 2, p.Y - img.Height / 2) };
 

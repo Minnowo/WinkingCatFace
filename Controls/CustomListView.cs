@@ -275,18 +275,15 @@ namespace WinkingCat
             {
                 if (File.Exists(Items[SelectedIndex].Tag.ToString()))
                 {
-                    try
-                    {
-                        Image img = Bitmap.FromFile(Items[SelectedIndex].Tag.ToString());
-                        ClipboardHelpers.CopyImageDefault(img);
-                        img.Dispose();
-                    }
-                    catch(Exception ex)
-                    {
-                        Logger.WriteException(ex);
-                        MessageBox.Show("The file is either not an image file or is corrupt");
-                    }
-                    
+                        using (Image img = ImageHelper.LoadImage(Items[SelectedIndex].Tag.ToString()))
+                        {
+                            if(img != null)
+                                ClipboardHelpers.CopyImageDefault(img);
+                            else
+                            {
+                                MessageBox.Show("The file is either not an image file or is corrupt");
+                            }
+                        }
                 }
                 else
                 {

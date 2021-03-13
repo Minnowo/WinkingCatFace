@@ -17,8 +17,6 @@ namespace WinkingCat.HelperLibs
         public Size initialSize { get; private set; }
         public float zoomScale { get; set; } = 1.2f;
 
-        private bool isLeftClicking = false;
-        private Point lastLocation;
         public ImageViewerForm(Image img)
         {
             SetStyle(ControlStyles.OptimizedDoubleBuffer | ControlStyles.UserPaint | ControlStyles.AllPaintingInWmPaint, true);
@@ -45,67 +43,21 @@ namespace WinkingCat.HelperLibs
             }
         }
 
-
-        private void PbMain_MouseWheel(object sender, MouseEventArgs e)
+        public static void ShowImage(string path)
         {
-            if(e.Delta > 0)
-            {
-                // scroll up
-                pbMain.Image.Dispose();
-                pbMain.Image = ImageHelper.ResizeImage((Bitmap)this.image, ResizeWidth((int)Math.Round(pbMain.Size.Width * zoomScale)));
-                pbMain.Size = ResizeWidth((int)Math.Round(pbMain.Size.Width * zoomScale));
-            }
-            else if((int)Math.Round(pbMain.Size.Width / zoomScale) > 0)
-            {
-                // scroll down
-                pbMain.Image.Dispose();
-                pbMain.Image = ImageHelper.ResizeImage((Bitmap)this.image, ResizeWidth((int)Math.Round(pbMain.Size.Width / zoomScale)));
-                pbMain.Size = ResizeWidth((int)Math.Round(pbMain.Size.Width / zoomScale));
-            }
+                using (Image tempImage = ImageHelper.LoadImage(path))
+                {
+                    if (tempImage != null)
+                    {
+                        using (ImageViewerForm viewer = new ImageViewerForm(tempImage))
+                        {
+                            viewer.ShowDialog();
+                        }
+                    }
+                }
+            
         }
 
-        private void PbMain_MouseUp(object sender, MouseEventArgs e)
-        {
-            switch (e.Button)
-            {
-                case MouseButtons.Left:
-                    isLeftClicking = false;
-                    break;
-
-                case MouseButtons.Right:
-                    break;
-
-                case MouseButtons.Middle:
-                    break;
-            }
-        }
-
-        private void PbMain_MouseDown(object sender, MouseEventArgs e)
-        {
-            switch (e.Button)
-            {
-                case MouseButtons.Left:
-                    isLeftClicking = true;
-                    lastLocation = new Point(e.X, e.Y);
-                    break;
-
-                case MouseButtons.Right:
-                    break;
-
-                case MouseButtons.Middle:
-                    break;
-            }
-        }
-
-
-        private void PbMain_MouseMove(object sender, MouseEventArgs e)
-        {
-            if (isLeftClicking)
-            {
-                Point p = this.PointToClient(ScreenHelper.GetCursorPosition());
-                pbMain.Location = new Point(p.X - lastLocation.X, p.Y - lastLocation.Y);
-            }
-        }
 
         private void ImageViewerForm_KeyDown(object sender, KeyEventArgs e)
         {
@@ -145,11 +97,6 @@ namespace WinkingCat.HelperLibs
                 image.Dispose();
             }
 
-            /*if(pbMain.Image != null)
-            {
-                pbMain.Image.Dispose();
-            }*/
-
             base.Dispose(disposing);
         }
 
@@ -172,7 +119,7 @@ namespace WinkingCat.HelperLibs
 
 
             ivMain = new ImageView();
-           
+            ivMain.ScrollbarsVisible = false;
             ivMain.Dock = DockStyle.Fill;
             ivMain.Image = (Bitmap)this.image;
             this.Controls.Add(ivMain);
@@ -185,7 +132,7 @@ namespace WinkingCat.HelperLibs
         }
 
         private ImageView ivMain;
-        private PictureBox pbMain;
+        //private PictureBox pbMain;
         #endregion
     }
 }

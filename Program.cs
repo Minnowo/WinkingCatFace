@@ -64,7 +64,22 @@ namespace WinkingCat
             if (SettingsManager.LoadClipboardSettings())
             {
                 Logger.WriteLine("Clipboard settings loaded successfully");
-            }            
+            }
+
+            if (SettingsManager.LoadMainFormStyles())
+            {
+                Logger.WriteLine("MainForm styles loaded successfully");
+            }
+
+            if (SettingsManager.LoadRegionCaptureStyles())
+            {
+                Logger.WriteLine("RegionCapture styles loaded successfully");
+            }
+
+            if (SettingsManager.LoadClipStyles())
+            {
+                Logger.WriteLine("Clip styles loaded successfully");
+            }
 
             HotkeyManager.Init();
 

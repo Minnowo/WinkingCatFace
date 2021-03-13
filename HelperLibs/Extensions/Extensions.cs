@@ -63,7 +63,8 @@ namespace WinkingCat.HelperLibs
                         e.Graphics.FillRectangle(brush, e.Bounds);
                     }
 
-                    TextRenderer.DrawText(e.Graphics, e.Header.Text, e.Font, e.Bounds.LocationOffset(2, 0).SizeOffset(-4, 0), ApplicationStyles.currentStyle.mainFormStyle.textColor,
+                    TextRenderer.DrawText(e.Graphics, e.Header.Text, e.Font, e.Bounds.LocationOffset(2, 0).SizeOffset(-4, 0), 
+                        ApplicationStyles.currentStyle.mainFormStyle.textColor,
                         TextFormatFlags.Left | TextFormatFlags.VerticalCenter | TextFormatFlags.EndEllipsis);
 
                     if (e.Bounds.Right < lv.ClientRectangle.Right)

@@ -13,7 +13,6 @@ namespace WinkingCat.HelperLibs
     public partial class ImageView : UserControl
     {
 
-
         public Image Image
         {
             get
@@ -30,8 +29,6 @@ namespace WinkingCat.HelperLibs
                 }
             }
         }
-
-
         public Double ZoomFactor
         {
             get
@@ -43,7 +40,6 @@ namespace WinkingCat.HelperLibs
                 drawingBoard1.ZoomFactor = value;
             }
         }
-
         public Point Origin
         {
             get
@@ -55,7 +51,6 @@ namespace WinkingCat.HelperLibs
                 drawingBoard1.Origin = value;
             }
         }
-
         public Size ApparentImageSize
         {
             get
@@ -63,7 +58,6 @@ namespace WinkingCat.HelperLibs
                 return drawingBoard1.ApparentImageSize;
             }
         }
-
         public bool ScrollbarsVisible
         {
             get

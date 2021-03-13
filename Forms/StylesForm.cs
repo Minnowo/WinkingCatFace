@@ -15,17 +15,24 @@ namespace WinkingCat
     {
         public Form activeForm;
         private bool isHandleCreated = false;
+        private IntPtr hwnd;
         public StylesForm()
         {
             InitializeComponent();
             this.Text = "Styles";
             this.HandleCreated += StylesForm_HandleCreated;
             ApplicationStyles.UpdateStylesEvent += ApplicationStyles_UpdateStylesEvent;
+            this.FormClosing += new FormClosingEventHandler(OnFormClosing_Event);
+            OpenChildForm(new MainWindowStylesForm());
         }
 
         private void StylesForm_HandleCreated(object sender, EventArgs e)
         {
             isHandleCreated = true;
+            // handle gets disposed when changing property grid value or something idk, 
+            // need this otherwise closing and re opening the form, 
+            // then trying to change a value throws an exception
+            hwnd = Handle; 
             UpdateTheme();
         }
 
@@ -34,21 +41,45 @@ namespace WinkingCat
             UpdateTheme();
         }
 
+        private void OnFormClosing_Event(object sender, EventArgs e)
+        {
+            SaveSettingsToDisk();
+        }
+
+        private void SaveSettingsToDisk()
+        {
+            if (SettingsManager.SaveMainFormStyles())
+                Logger.WriteLine("MainForm Styles Saved Successfully");
+            if (SettingsManager.SaveRegionCaptureStyles())
+                Logger.WriteLine("RegionCapture Styles Saved Successfully");
+            if (SettingsManager.SaveClipStyles())
+                Logger.WriteLine("Clip Styles Saved Successfully");
+        }
+
         public void UpdateTheme()
         {
-            if (ApplicationStyles.currentStyle.mainFormStyle.useImersiveDarkMode && isHandleCreated)
+            Console.WriteLine(hwnd);
+            try
             {
-                NativeMethods.UseImmersiveDarkMode(Handle, true);
-                this.Icon = Properties.Resources._3white;
+                if (ApplicationStyles.currentStyle.mainFormStyle.useImersiveDarkMode && isHandleCreated)
+                {
+
+                    NativeMethods.UseImmersiveDarkMode(this.hwnd, true);
+                    this.Icon = Properties.Resources._3white;
+                }
+                else
+                {
+                    NativeMethods.UseImmersiveDarkMode(this.hwnd, false);
+                    this.Icon = Properties.Resources._3black;
+                }
+                //this.BackColor = ApplicationStyles.currentStyle.mainFormStyle.backgroundColor;
+                ApplicationStyles.ApplyCustomThemeToControl(this);
+                Refresh();
             }
-            else
+            catch(Exception e)
             {
-                NativeMethods.UseImmersiveDarkMode(Handle, false);
-                this.Icon = Properties.Resources._3black;
+                Logger.WriteException(e);
             }
-            //this.BackColor = ApplicationStyles.currentStyle.mainFormStyle.backgroundColor;
-            ApplicationStyles.ApplyCustomThemeToControl(this);
-            Refresh();
         }
 
         private void OpenChildForm(Form childForm)

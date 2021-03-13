@@ -162,6 +162,8 @@ namespace WinkingCat
 
             cmTray.Renderer = new ToolStripCustomRenderer();
             cmTray.Opacity = ApplicationStyles.currentStyle.mainFormStyle.contextMenuOpacity;
+
+            lvListView.ForeColor = ApplicationStyles.currentStyle.mainFormStyle.textColor;
             Refresh();
         }
 
@@ -185,11 +187,6 @@ namespace WinkingCat
                 lvListView.InsertItem(0, item);
             }
         }
-
-       /* public void AfterCaptureEvent(object sender, LastRegionCaptureInfo e)
-        {
-
-        }*/
 
 #region Capture dropdown buttons
         private async void tsmiCapture_DropDownOpening(object sender, EventArgs e)

@@ -40,19 +40,26 @@ namespace WinkingCat
 
         public void UpdateTheme()
         {
-            if (ApplicationStyles.currentStyle.mainFormStyle.useImersiveDarkMode && isHandleCreated)
+            try
             {
-                NativeMethods.UseImmersiveDarkMode(Handle, true);
-                this.Icon = Properties.Resources._3white;
+                if (ApplicationStyles.currentStyle.mainFormStyle.useImersiveDarkMode && isHandleCreated)
+                {
+                    NativeMethods.UseImmersiveDarkMode(Handle, true);
+                    this.Icon = Properties.Resources._3white;
+                }
+                else
+                {
+                    NativeMethods.UseImmersiveDarkMode(Handle, false);
+                    this.Icon = Properties.Resources._3black;
+                }
+                //this.BackColor = ApplicationStyles.currentStyle.mainFormStyle.backgroundColor;
+                ApplicationStyles.ApplyCustomThemeToControl(this);
+                Refresh();
             }
-            else
+            catch (Exception e)
             {
-                NativeMethods.UseImmersiveDarkMode(Handle, false);
-                this.Icon = Properties.Resources._3black;
+                Logger.WriteException(e);
             }
-            //this.BackColor = ApplicationStyles.currentStyle.mainFormStyle.backgroundColor;
-            ApplicationStyles.ApplyCustomThemeToControl(this);
-            Refresh();
         }
 
         public void HandleCreated_Event(object sender, EventArgs e)
