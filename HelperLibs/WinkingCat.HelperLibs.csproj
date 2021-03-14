@@ -124,6 +124,7 @@
     <Compile Include="Helpers\PathHelpler.cs" />
     <Compile Include="Helpers\MathHelper.cs" />
     <Compile Include="Helpers\ScreenHelpers.cs" />
+    <Compile Include="Helpers\TranslatorHelper.cs" />
     <Compile Include="Helpers\WindowHelpers.cs" />
     <Compile Include="HotkeyInfo.cs" />
     <Compile Include="HotkeySettings.cs" />

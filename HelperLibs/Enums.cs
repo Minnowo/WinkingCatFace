@@ -22,6 +22,8 @@ namespace WinkingCat.HelperLibs
     {
         [Description("CRC-32")]
         CRC32,
+        [Description("CRC-64 (ECMA-182)")]
+        CRC64,
         [Description("MD5")]
         MD5,
         [Description("SHA-1")]

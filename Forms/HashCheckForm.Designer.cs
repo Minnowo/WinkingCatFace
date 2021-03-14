@@ -54,6 +54,11 @@
             this.btnBrowse2 = new System.Windows.Forms.Button();
             this.tbFilePathInput2 = new System.Windows.Forms.TextBox();
             this.label6 = new System.Windows.Forms.Label();
+            this.btnClearFileHash2 = new System.Windows.Forms.Button();
+            this.btnPasteFileHash2 = new System.Windows.Forms.Button();
+            this.btnCopyFileHash2 = new System.Windows.Forms.Button();
+            this.label7 = new System.Windows.Forms.Label();
+            this.tbFileHash2 = new System.Windows.Forms.TextBox();
             this.SuspendLayout();
             // 
             // cbHashType
@@ -69,7 +74,7 @@
             // 
             this.tbHashTarget.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.tbHashTarget.Location = new System.Drawing.Point(12, 437);
+            this.tbHashTarget.Location = new System.Drawing.Point(12, 520);
             this.tbHashTarget.Multiline = true;
             this.tbHashTarget.Name = "tbHashTarget";
             this.tbHashTarget.Size = new System.Drawing.Size(463, 38);
@@ -87,7 +92,7 @@
             // label2
             // 
             this.label2.AutoSize = true;
-            this.label2.Location = new System.Drawing.Point(12, 421);
+            this.label2.Location = new System.Drawing.Point(12, 504);
             this.label2.Name = "label2";
             this.label2.Size = new System.Drawing.Size(41, 13);
             this.label2.TabIndex = 3;
@@ -145,7 +150,7 @@
             // label5
             // 
             this.label5.AutoSize = true;
-            this.label5.Location = new System.Drawing.Point(12, 338);
+            this.label5.Location = new System.Drawing.Point(12, 421);
             this.label5.Name = "label5";
             this.label5.Size = new System.Drawing.Size(34, 13);
             this.label5.TabIndex = 11;
@@ -155,7 +160,7 @@
             // 
             this.tbHashInput.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.tbHashInput.Location = new System.Drawing.Point(12, 354);
+            this.tbHashInput.Location = new System.Drawing.Point(12, 437);
             this.tbHashInput.Multiline = true;
             this.tbHashInput.Name = "tbHashInput";
             this.tbHashInput.Size = new System.Drawing.Size(463, 38);
@@ -185,7 +190,7 @@
             // btnCopyInput
             // 
             this.btnCopyInput.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.btnCopyInput.Location = new System.Drawing.Point(400, 325);
+            this.btnCopyInput.Location = new System.Drawing.Point(400, 408);
             this.btnCopyInput.Name = "btnCopyInput";
             this.btnCopyInput.Size = new System.Drawing.Size(75, 23);
             this.btnCopyInput.TabIndex = 14;
@@ -196,7 +201,7 @@
             // btnCopyTarget
             // 
             this.btnCopyTarget.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.btnCopyTarget.Location = new System.Drawing.Point(400, 408);
+            this.btnCopyTarget.Location = new System.Drawing.Point(400, 491);
             this.btnCopyTarget.Name = "btnCopyTarget";
             this.btnCopyTarget.Size = new System.Drawing.Size(75, 23);
             this.btnCopyTarget.TabIndex = 15;
@@ -218,7 +223,7 @@
             // btnPasteInput
             // 
             this.btnPasteInput.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.btnPasteInput.Location = new System.Drawing.Point(319, 325);
+            this.btnPasteInput.Location = new System.Drawing.Point(319, 408);
             this.btnPasteInput.Name = "btnPasteInput";
             this.btnPasteInput.Size = new System.Drawing.Size(75, 23);
             this.btnPasteInput.TabIndex = 17;
@@ -229,7 +234,7 @@
             // btnPasteTarget
             // 
             this.btnPasteTarget.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.btnPasteTarget.Location = new System.Drawing.Point(319, 408);
+            this.btnPasteTarget.Location = new System.Drawing.Point(319, 491);
             this.btnPasteTarget.Name = "btnPasteTarget";
             this.btnPasteTarget.Size = new System.Drawing.Size(75, 23);
             this.btnPasteTarget.TabIndex = 18;
@@ -258,7 +263,7 @@
             // btnClearHashInput
             // 
             this.btnClearHashInput.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.btnClearHashInput.Location = new System.Drawing.Point(238, 325);
+            this.btnClearHashInput.Location = new System.Drawing.Point(238, 408);
             this.btnClearHashInput.Name = "btnClearHashInput";
             this.btnClearHashInput.Size = new System.Drawing.Size(75, 23);
             this.btnClearHashInput.TabIndex = 21;
@@ -269,7 +274,7 @@
             // btnClearHashTarget
             // 
             this.btnClearHashTarget.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.btnClearHashTarget.Location = new System.Drawing.Point(238, 408);
+            this.btnClearHashTarget.Location = new System.Drawing.Point(238, 491);
             this.btnClearHashTarget.Name = "btnClearHashTarget";
             this.btnClearHashTarget.Size = new System.Drawing.Size(75, 23);
             this.btnClearHashTarget.TabIndex = 22;
@@ -299,13 +304,13 @@
             this.btnBrowse2.UseVisualStyleBackColor = true;
             this.btnBrowse2.Click += new System.EventHandler(this.btnBrowse2_Click);
             // 
-            // tbFilePath2
+            // tbFilePathInput2
             // 
             this.tbFilePathInput2.AllowDrop = true;
             this.tbFilePathInput2.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.tbFilePathInput2.Location = new System.Drawing.Point(12, 137);
-            this.tbFilePathInput2.Name = "tbFilePath2";
+            this.tbFilePathInput2.Name = "tbFilePathInput2";
             this.tbFilePathInput2.Size = new System.Drawing.Size(463, 20);
             this.tbFilePathInput2.TabIndex = 25;
             // 
@@ -318,11 +323,68 @@
             this.label6.TabIndex = 24;
             this.label6.Text = "File Path:";
             // 
+            // btnClearFileHash2
+            // 
+            this.btnClearFileHash2.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.btnClearFileHash2.Location = new System.Drawing.Point(238, 325);
+            this.btnClearFileHash2.Name = "btnClearFileHash2";
+            this.btnClearFileHash2.Size = new System.Drawing.Size(75, 23);
+            this.btnClearFileHash2.TabIndex = 31;
+            this.btnClearFileHash2.Text = "Clear";
+            this.btnClearFileHash2.UseVisualStyleBackColor = true;
+            this.btnClearFileHash2.Click += new System.EventHandler(this.btnClearFileHash2_Click);
+            // 
+            // btnPasteFileHash2
+            // 
+            this.btnPasteFileHash2.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.btnPasteFileHash2.Location = new System.Drawing.Point(319, 325);
+            this.btnPasteFileHash2.Name = "btnPasteFileHash2";
+            this.btnPasteFileHash2.Size = new System.Drawing.Size(75, 23);
+            this.btnPasteFileHash2.TabIndex = 30;
+            this.btnPasteFileHash2.Text = "Paste";
+            this.btnPasteFileHash2.UseVisualStyleBackColor = true;
+            this.btnPasteFileHash2.Click += new System.EventHandler(this.btnPasteFileHash2_Click);
+            // 
+            // btnCopyFileHash2
+            // 
+            this.btnCopyFileHash2.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.btnCopyFileHash2.Location = new System.Drawing.Point(400, 325);
+            this.btnCopyFileHash2.Name = "btnCopyFileHash2";
+            this.btnCopyFileHash2.Size = new System.Drawing.Size(75, 23);
+            this.btnCopyFileHash2.TabIndex = 29;
+            this.btnCopyFileHash2.Text = "Copy";
+            this.btnCopyFileHash2.UseVisualStyleBackColor = true;
+            this.btnCopyFileHash2.Click += new System.EventHandler(this.btnCopyFileHash2_Click);
+            // 
+            // label7
+            // 
+            this.label7.AutoSize = true;
+            this.label7.Location = new System.Drawing.Point(12, 335);
+            this.label7.Name = "label7";
+            this.label7.Size = new System.Drawing.Size(54, 13);
+            this.label7.TabIndex = 28;
+            this.label7.Text = "File Hash:";
+            // 
+            // tbFileHash2
+            // 
+            this.tbFileHash2.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.tbFileHash2.Location = new System.Drawing.Point(12, 354);
+            this.tbFileHash2.Multiline = true;
+            this.tbFileHash2.Name = "tbFileHash2";
+            this.tbFileHash2.Size = new System.Drawing.Size(463, 38);
+            this.tbFileHash2.TabIndex = 27;
+            // 
             // HashCheckForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(490, 486);
+            this.ClientSize = new System.Drawing.Size(490, 568);
+            this.Controls.Add(this.btnClearFileHash2);
+            this.Controls.Add(this.btnPasteFileHash2);
+            this.Controls.Add(this.btnCopyFileHash2);
+            this.Controls.Add(this.label7);
+            this.Controls.Add(this.tbFileHash2);
             this.Controls.Add(this.btnBrowse2);
             this.Controls.Add(this.tbFilePathInput2);
             this.Controls.Add(this.label6);
@@ -385,5 +447,10 @@
         private System.Windows.Forms.Button btnBrowse2;
         private System.Windows.Forms.TextBox tbFilePathInput2;
         private System.Windows.Forms.Label label6;
+        private System.Windows.Forms.Button btnClearFileHash2;
+        private System.Windows.Forms.Button btnPasteFileHash2;
+        private System.Windows.Forms.Button btnCopyFileHash2;
+        private System.Windows.Forms.Label label7;
+        private System.Windows.Forms.TextBox tbFileHash2;
     }
 }
