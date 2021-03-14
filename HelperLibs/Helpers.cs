@@ -183,6 +183,11 @@ namespace WinkingCat.HelperLibs
                 return Size.Empty;
         }
 
+        public static string[] GetEnumDescriptions<T>(int skip = 0)
+        {
+            return Enum.GetValues(typeof(T)).OfType<Enum>().Skip(skip).Select(x => x.GetDescription()).ToArray();
+        }
+
         public static string GetUniqueID()
         {
             return Guid.NewGuid().ToString("N");

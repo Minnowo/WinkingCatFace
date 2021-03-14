@@ -262,6 +262,28 @@ namespace WinkingCat.HelperLibs
             }
         }
 
+        public static string AskChooseFile(string dir = "")
+        {
+            using (CommonOpenFileDialog dialog = new CommonOpenFileDialog())
+            {
+                dialog.EnsurePathExists = true;
+                dialog.Multiselect = false;
+                dialog.EnsureValidNames = true;
+
+                if (!string.IsNullOrEmpty(dir))
+                    dialog.InitialDirectory = dir;
+
+                if (dialog.ShowDialog() == CommonFileDialogResult.Ok)
+                {
+                    return dialog.FileName;
+                }
+                else
+                {
+                    return null;
+                }
+            }
+        }
+
         public static bool OpenWithDefaultProgram(string path)
         {
             if (File.Exists(path))

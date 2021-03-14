@@ -7,6 +7,8 @@ using System.Drawing;
 using System.Windows.Forms;
 using System.Security.Cryptography;
 using System.IO;
+using System.Reflection;
+using System.ComponentModel;
 
 namespace WinkingCat.HelperLibs
 {
@@ -123,6 +125,23 @@ namespace WinkingCat.HelperLibs
         public static Rectangle SizeOffset(this Rectangle rect, int width, int height)
         {
             return new Rectangle(rect.X, rect.Y, rect.Width + width, rect.Height + height);
+        }
+
+        public static string GetDescription(this Enum value)
+        {
+            FieldInfo fi = value.GetType().GetField(value.ToString());
+
+            if (fi != null)
+            {
+                DescriptionAttribute[] attributes = (DescriptionAttribute[])fi.GetCustomAttributes(typeof(DescriptionAttribute), false);
+
+                if (attributes.Length > 0)
+                {
+                    return attributes[0].Description;
+                }
+            }
+
+            return value.ToString();
         }
 
         public static T Clamp<T>(this T input, T min, T max) where T : IComparable<T>

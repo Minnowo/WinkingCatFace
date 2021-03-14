@@ -25,6 +25,7 @@ namespace WinkingCat
         public StylesForm stylesForm { get; private set; } = null;
         public ColorPickerForm colorPickerForm { get; private set; } = null;
         public BarcodeForm qrCodeForm { get; private set; } = null;
+        public HashCheckForm hashCheckForm { get; private set; } = null;
 
         private int trayClickCount = 0;
         private bool forceClose = false;
@@ -68,6 +69,7 @@ namespace WinkingCat
             tsmiToolStripDropDownButton_screenColorPicker.Click += ScreenColorPicker_Click;
             tsmiToolStripDropDownButton_ColorPicker.Click += ColorPicker_Click;
             tsmiToolStripDropDownButton_QrCode.Click += QrCode_Click;
+            tsmiToolStripDropDownButton_HashCheck.Click += HashCheck_Click;
 #endregion
 
             #region Tray icon
@@ -399,7 +401,21 @@ namespace WinkingCat
                 qrCodeForm.Show();
             }
         }
-#endregion
+
+        private void HashCheck_Click(object sender, EventArgs e)
+        {
+            if (hashCheckForm != null)
+            {
+                hashCheckForm.ForceActivate();
+            }
+            else
+            {
+                hashCheckForm = new HashCheckForm();
+                hashCheckForm.FormClosing += ChildFormClosing;
+                hashCheckForm.Show();
+            }
+        }
+        #endregion
 
         #region tray icon
         private void TrayClickTimer_Interval(object sender, EventArgs e)
@@ -614,6 +630,10 @@ namespace WinkingCat
                 case "Qr Code":
                     qrCodeForm?.Dispose();
                     qrCodeForm = null;
+                    break;
+                case "HashCheck":
+                    hashCheckForm?.Dispose();
+                    hashCheckForm = null;
                     break;
             }
         }
