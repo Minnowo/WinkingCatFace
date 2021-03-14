@@ -24,6 +24,7 @@ namespace WinkingCat
         public SettingsForm settingsForm { get; private set; } = null;
         public StylesForm stylesForm { get; private set; } = null;
         public ColorPickerForm colorPickerForm { get; private set; } = null;
+        public BarcodeForm qrCodeForm { get; private set; } = null;
 
         private int trayClickCount = 0;
         private bool forceClose = false;
@@ -66,6 +67,7 @@ namespace WinkingCat
 
             tsmiToolStripDropDownButton_screenColorPicker.Click += ScreenColorPicker_Click;
             tsmiToolStripDropDownButton_ColorPicker.Click += ColorPicker_Click;
+            tsmiToolStripDropDownButton_QrCode.Click += QrCode_Click;
 #endregion
 
             #region Tray icon
@@ -86,6 +88,7 @@ namespace WinkingCat
             tsmiClipFromFileToolStripMenuItem.Click += ClipFromFile_Click;
 
             // other
+            tsmiStylesToolStripMenuItem.Click += ToolStripDropDownButton_Styles_Click;
             tsmiSettingsToolStripMenuItem.Click += ToolStripDropDownButton_Settings_Click;
             tsmiOpenMainWindowToolStripMenuItem.Click += OpenMainWindow_Click;
             tsmiExitToolStripMenuItem.Click += ExitApplication_Click;
@@ -373,13 +376,27 @@ namespace WinkingCat
         {
             if(colorPickerForm != null)
             {
-                colorPickerForm.Show();
+                colorPickerForm.ForceActivate();
             }
             else
             {
                 colorPickerForm = new ColorPickerForm();
                 colorPickerForm.FormClosing += ChildFormClosing;
                 colorPickerForm.Show();
+            }
+        }
+
+        private void QrCode_Click(object sender, EventArgs e) 
+        {
+            if(qrCodeForm != null)
+            {
+                qrCodeForm.ForceActivate();
+            }
+            else
+            {
+                qrCodeForm = new BarcodeForm();
+                qrCodeForm.FormClosing += ChildFormClosing;
+                qrCodeForm.Show();
             }
         }
 #endregion
@@ -425,7 +442,7 @@ namespace WinkingCat
         private void OpenMainWindow_Click(object sender, EventArgs e)
         {
             isInTrayOrMinimized = false;
-            Helpers.ForceActivate(this);
+            this.ForceActivate();
         }
 
         private void ExitApplication_Click(object sender, EventArgs e)
@@ -435,7 +452,7 @@ namespace WinkingCat
         }
 #endregion
 
-#region MainForm events
+        #region MainForm events
 
         private void MainForm_Resize(object sender, EventArgs e)
         {
@@ -577,16 +594,6 @@ namespace WinkingCat
             tsmiMonitor.Invalidate();
         }
 
-        private void ToolStripDropDownButton_Settings_Click(object sender, EventArgs e)
-        {
-            settingsForm?.Close();
-            settingsForm?.Dispose();
-            settingsForm = new SettingsForm();
-            settingsForm.Owner = this;
-            settingsForm.TopMost = MainFormSettings.alwaysOnTop;
-            settingsForm.FormClosing += ChildFormClosing;
-            settingsForm.Show();
-        }
 
         private void ChildFormClosing(object sender, EventArgs e)
         {
@@ -604,7 +611,22 @@ namespace WinkingCat
                     colorPickerForm?.Dispose();
                     colorPickerForm = null;
                     break;
+                case "Qr Code":
+                    qrCodeForm?.Dispose();
+                    qrCodeForm = null;
+                    break;
             }
+        }
+
+        private void ToolStripDropDownButton_Settings_Click(object sender, EventArgs e)
+        {
+            settingsForm?.Close();
+            settingsForm?.Dispose();
+            settingsForm = new SettingsForm();
+            settingsForm.Owner = this;
+            settingsForm.TopMost = MainFormSettings.alwaysOnTop;
+            settingsForm.FormClosing += ChildFormClosing;
+            settingsForm.Show();
         }
 
         private void ToolStripDropDownButton_Styles_Click(object sender, EventArgs e)
@@ -618,20 +640,25 @@ namespace WinkingCat
             stylesForm.Show();
         }
 
-        protected override void SetVisibleCore(bool value)
-        {
-            base.SetVisibleCore(allowShowDisplay ? value : allowShowDisplay);
-            allowShowDisplay = true;
-        }
         private void ShowMe()
         {
             isInTrayOrMinimized = false;
-            Helpers.ForceActivate(this);
+            this.ForceActivate();
 
             bool top = TopMost;
             TopMost = true;
             TopMost = top;
         }
+
+        #region overrides
+
+        // this hides the window before its shown if requested 
+        protected override void SetVisibleCore(bool value)
+        {
+            base.SetVisibleCore(allowShowDisplay ? value : allowShowDisplay);
+            allowShowDisplay = true;
+        }
+        
         protected override void WndProc(ref Message m)
         {
             if (m.Msg == NativeMethods.WM_SHOWME) // will be posted if instance is running
@@ -640,5 +667,7 @@ namespace WinkingCat
             }
             base.WndProc(ref m);
         }
+
+        #endregion
     }
 }

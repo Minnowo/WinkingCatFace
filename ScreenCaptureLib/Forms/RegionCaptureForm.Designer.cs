@@ -17,6 +17,20 @@
             {
                 components.Dispose();
             }
+
+            borderDotPen?.Dispose();
+            borderPen?.Dispose();
+            infoFont?.Dispose();
+            magnifierBorderPen?.Dispose();
+            magnifierBorderPen?.Dispose();
+            magnifierCrosshairBrush?.Dispose();
+            textBackgroundBrush?.Dispose();
+            textFontBrush?.Dispose();
+
+            image?.Dispose();
+            backgroundBrush?.Dispose();
+            backgroundHighlightBrush?.Dispose();
+
             base.Dispose(disposing);
         }
 

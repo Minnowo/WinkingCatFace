@@ -20,7 +20,6 @@ namespace WinkingCat.ScreenCaptureLib
         public static LastRegionCaptureInfo LastInfo { get; private set; }
 
         public static int imagesToHandle { get; private set; } = 10;
-        public static bool isUsingRegionCaptureWindow { get; private set; } = false;
 
         public static void OnCaptureEvent(LastRegionCaptureInfo info)
         {
@@ -47,55 +46,60 @@ namespace WinkingCat.ScreenCaptureLib
             defaultImageType = _default;
         }
 
+        public static Image GetRegionResultImage()
+        {
+            using (ClippingWindowForm regionCapture = new ClippingWindowForm(ScreenHelper.GetScreenBounds()))
+            {
+                regionCapture.ShowDialog();
+                LastInfo?.Destroy();
+                LastInfo = regionCapture.GetResultImage();
+                return LastInfo.Image.CloneSafe();
+            }
+        }
+
         public static void RegionCapture()
         {
-            if (!isUsingRegionCaptureWindow)
+            using (ClippingWindowForm regionCapture = new ClippingWindowForm(ScreenHelper.GetScreenBounds()))
             {
-                isUsingRegionCaptureWindow = true;
-                using (ClippingWindowForm regionCapture = new ClippingWindowForm(ScreenHelper.GetScreenBounds()))
+                regionCapture.ShowDialog();
+                LastInfo?.Destroy();
+                LastInfo = regionCapture.GetResultImage();
+
+                if (LastInfo.Result != RegionResult.Close)
                 {
-                    regionCapture.ShowDialog();
-                    LastInfo?.Destroy();
-                    LastInfo = regionCapture.GetResultImage();
-
-                    if (LastInfo.Result != RegionResult.Close)
+                    if (LastInfo.Result != RegionResult.Color)
                     {
-                        if (LastInfo.Result != RegionResult.Color)
-                        {
-                            HandleRegionReturnImage(LastInfo.Img);
+                        HandleRegionReturnImage(LastInfo.Image);
 
-                            if (RegionCaptureOptions.autoCopyImage)
-                                ClipboardHelpers.CopyImageDefault(LastInfo.Img);
+                        if (RegionCaptureOptions.autoCopyImage)
+                            ClipboardHelpers.CopyImageDefault(LastInfo.Image);
 
-                            if (RegionCaptureOptions.createClipAfterRegionCapture || RegionCaptureOptions.createSingleClipAfterRegionCapture)
-                            {
-                                RegionCaptureOptions.createSingleClipAfterRegionCapture = false;
-                                ClipOptions ops = new ClipOptions();
-                                ops.location = ScreenHelper.GetRectangle0Based(LastInfo.Region).Location;
-                                ClipManager.CreateClip(LastInfo.Img, ops);
-                            }    
-                        }
-                        else
+                        if (RegionCaptureOptions.createClipAfterRegionCapture || RegionCaptureOptions.createSingleClipAfterRegionCapture)
                         {
-                            HandleRegionReturnColor(LastInfo.color);
+                            RegionCaptureOptions.createSingleClipAfterRegionCapture = false;
+                            ClipOptions ops = new ClipOptions();
+                            ops.location = ScreenHelper.GetRectangle0Based(LastInfo.Region).Location;
+                            ClipManager.CreateClip(LastInfo.Image, ops);
                         }
-                        OnCaptureEvent(LastInfo);
                     }
-                    regionCapture.Destroy();
+                    else
+                    {
+                        HandleRegionReturnColor(LastInfo.color);
+                    }
+                    OnCaptureEvent(LastInfo);
                 }
-                isUsingRegionCaptureWindow = false;
             }
         }
 
 
         public static string Save(string imageName = null, ImageFormat format = null, Image img = null)
-        {            
+        {
             if (img == null)
                 return string.Empty;
 
             if (imageName == null)
                 imageName = $"{PathHelper.CreateScreenshotSubFolder()}{DateTime.Now.ToString("yyyy-MM-dd h-m-ss-fffff")}.{defaultImageType.ToString().ToLower()}";
-            
+
             if (format == null)
                 format = ImageFormat.Png;
 
@@ -122,7 +126,7 @@ namespace WinkingCat.ScreenCaptureLib
         public static void HandleRegionReturnImage(Image img)
         {
             string fileName = $"{PathHelper.CreateScreenshotSubFolder()}{DateTime.Now.ToString("yyyy-MM-dd h-m-ss-fffff")}.{defaultImageType.ToString().ToLower()}";
-            while(File.Exists(fileName)) fileName = $"{PathHelper.CreateScreenshotSubFolder()}{DateTime.Now.ToString("yyyy-MM-dd h-m-ss-fffff")}.{defaultImageType.ToString().ToLower()}";
+            while (File.Exists(fileName)) fileName = $"{PathHelper.CreateScreenshotSubFolder()}{DateTime.Now.ToString("yyyy-MM-dd h-m-ss-fffff")}.{defaultImageType.ToString().ToLower()}";
 
             Save(fileName, defaultImageType, img);
             images.Add(fileName);

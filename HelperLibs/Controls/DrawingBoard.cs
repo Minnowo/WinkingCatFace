@@ -188,7 +188,7 @@ namespace WinkingCat.HelperLibs
             srcRect = new Rectangle(origin.X, origin.Y, drawWidth, drawHeight);
 
             g.DrawImage(originalImage, destRect, srcRect, GraphicsUnit.Pixel);
-
+            
             OnScrollChanged();
         }
 

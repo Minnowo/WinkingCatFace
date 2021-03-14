@@ -11,7 +11,7 @@ namespace WinkingCat.ScreenCaptureLib
 {
     public class LastRegionCaptureInfo : EventArgs
     {
-        public Image Img { get; private set; }
+        public Image Image { get; private set; }
         public Color color { get; private set; }
         public Point StartLeftClick { get; private set; }
         public Point StopLeftClick { get; private set; }
@@ -31,7 +31,7 @@ namespace WinkingCat.ScreenCaptureLib
             StartLeftClick = startLeftClick;
             StopLeftClick = stopLeftClick;
             Region = region;
-            Img = img;
+            Image = img;
         }
 
         public LastRegionCaptureInfo(RegionResult result, bool capturedFullscreen = false, Image img = null) : this(result, default, default, default, img)
@@ -57,7 +57,7 @@ namespace WinkingCat.ScreenCaptureLib
 
         public void Destroy()
         {
-            Img?.Dispose();
+            Image?.Dispose();
         }
     }
 }

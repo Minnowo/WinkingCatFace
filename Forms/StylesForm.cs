@@ -58,7 +58,6 @@ namespace WinkingCat
 
         public void UpdateTheme()
         {
-            Console.WriteLine(hwnd);
             try
             {
                 if (ApplicationStyles.currentStyle.mainFormStyle.useImersiveDarkMode && isHandleCreated)

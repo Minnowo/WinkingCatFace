@@ -7,6 +7,10 @@ using System.Drawing;
 using System.Windows.Forms;
 using System.Drawing.Imaging;
 using System.IO;
+using ZXing;
+using ZXing.Common;
+using ZXing.QrCode;
+using ZXing.Rendering;
 
 namespace WinkingCat.HelperLibs
 {
@@ -15,6 +19,82 @@ namespace WinkingCat.HelperLibs
         public static readonly Version OSVersion = Environment.OSVersion.Version;
         public static readonly string[] SizeSuffixes =
                    { "bytes", "KB", "MB", "GB", "TB", "PB", "EB", "ZB", "YB" };
+
+        #region just stolen from sharex changed 1 function a little bit
+        public static Image CreateBarCode(string text, int width, int height, BarcodeFormat format = BarcodeFormat.QR_CODE)
+        {
+            if (CheckQRCodeContent(text))
+            {
+                try
+                {
+                    BarcodeWriter writer = new BarcodeWriter
+                    {
+                        Format = format,
+
+                        Options = new QrCodeEncodingOptions
+                        {
+                            Width = width,
+                            Height = height,
+                            CharacterSet = "UTF-8"
+                        },
+                        Renderer = new BitmapRenderer()
+                    };
+
+                    return writer.Write(text);
+                }
+                catch (Exception e)
+                {
+                    Console.WriteLine(e);
+                }
+            }
+
+            return null;
+        }
+
+        public static Image CreateQRCode(string text, int size, BarcodeFormat format = BarcodeFormat.QR_CODE)
+        {
+            return CreateBarCode(text, size, size, format);
+        }
+
+        public static string[] BarcodeScan(Bitmap bmp, bool scanQRCodeOnly = false)
+        {
+            try
+            {
+                BarcodeReader barcodeReader = new BarcodeReader
+                {
+                    AutoRotate = true,
+                    TryInverted = true,
+                    Options = new DecodingOptions
+                    {
+                        TryHarder = true
+                    }
+                };
+
+                if (scanQRCodeOnly)
+                {
+                    barcodeReader.Options.PossibleFormats = new List<BarcodeFormat>() { BarcodeFormat.QR_CODE };
+                }
+
+                Result[] results = barcodeReader.DecodeMultiple(bmp);
+
+                if (results != null)
+                {
+                    return results.Where(x => x != null && !string.IsNullOrEmpty(x.Text)).Select(x => x.Text).ToArray();
+                }
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e);
+            }
+
+            return null;
+        }
+
+        public static bool CheckQRCodeContent(string content)
+        {
+            return !string.IsNullOrEmpty(content) && Encoding.UTF8.GetByteCount(content) <= 2952;
+        }
+        #endregion
         public static string SizeSuffix(Int64 value, int decimalPlaces = 1)
         {
             if (decimalPlaces < 0) { throw new ArgumentOutOfRangeException("decimalPlaces"); }
@@ -102,24 +182,7 @@ namespace WinkingCat.HelperLibs
             else
                 return Size.Empty;
         }
-        public static void ForceActivate(Form form)
-        {
-            if (!form.IsDisposed)
-            {
-                if (!form.Visible)
-                {
-                    form.Show();
-                }
 
-                if (form.WindowState == FormWindowState.Minimized)
-                {
-                    form.WindowState = FormWindowState.Normal;
-                }
-
-                form.BringToFront();
-                form.Activate();
-            }
-        }
         public static string GetUniqueID()
         {
             return Guid.NewGuid().ToString("N");

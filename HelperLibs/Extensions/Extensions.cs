@@ -5,11 +5,39 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Drawing;
 using System.Windows.Forms;
+using System.Security.Cryptography;
+using System.IO;
 
 namespace WinkingCat.HelperLibs
 {
     public static class Extensions
     {
+        public static string GetHash<T>(this string str) where T : HashAlgorithm, new()
+        {
+            using (T crypt = new T())
+            {
+                return ReturnStrHash(crypt.ComputeHash(Encoding.UTF8.GetBytes(str)));
+            }
+        }
+
+        public static string GetHash<T>(this Stream stream) where T : HashAlgorithm, new() 
+        { 
+            using (T crypt = new T()) 
+            { 
+                return ReturnStrHash(crypt.ComputeHash(stream)); 
+            }
+        }
+
+        public static string ReturnStrHash(byte[] crypto)
+        {
+            StringBuilder hash = new System.Text.StringBuilder();
+            foreach (byte theByte in crypto)
+            {
+                hash.Append(theByte.ToString("x2"));
+            }
+            return hash.ToString();
+        }
+
         public static T CloneSafe<T>(this T obj) where T : class, ICloneable
         {
             try
@@ -27,17 +55,29 @@ namespace WinkingCat.HelperLibs
             return null;
         }
 
-        public static string ToLowerString(this bool input)
-        {
-            if (input)
-                return "true";
-            else
-                return "false";
-        }
 
         public static Rectangle LocationOffset(this Rectangle rect, int x, int y)
         {
             return new Rectangle(rect.X + x, rect.Y + y, rect.Width, rect.Height);
+        }
+
+        public static void ForceActivate(this Form form)
+        {
+            if (!form.IsDisposed)
+            {
+                if (!form.Visible)
+                {
+                    form.Show();
+                }
+
+                if (form.WindowState == FormWindowState.Minimized)
+                {
+                    form.WindowState = FormWindowState.Normal;
+                }
+
+                form.BringToFront();
+                form.Activate();
+            }
         }
 
         public static void SupportCustomTheme(this ListView lv)
@@ -63,7 +103,7 @@ namespace WinkingCat.HelperLibs
                         e.Graphics.FillRectangle(brush, e.Bounds);
                     }
 
-                    TextRenderer.DrawText(e.Graphics, e.Header.Text, e.Font, e.Bounds.LocationOffset(2, 0).SizeOffset(-4, 0), 
+                    TextRenderer.DrawText(e.Graphics, e.Header.Text, e.Font, e.Bounds.LocationOffset(2, 0).SizeOffset(-4, 0),
                         ApplicationStyles.currentStyle.mainFormStyle.textColor,
                         TextFormatFlags.Left | TextFormatFlags.VerticalCenter | TextFormatFlags.EndEllipsis);
 

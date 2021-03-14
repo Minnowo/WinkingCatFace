@@ -35,6 +35,10 @@ namespace WinkingCat.ScreenCaptureLib
         private Brush textBackgroundBrush, textFontBrush, backgroundHighlightBrush;
         private Font infoFont;
 
+        public ClippingWindowForm() : this(ScreenHelper.GetScreenBounds())
+        {
+
+        }
         public ClippingWindowForm(Rectangle region)
         {
             SetStyle(ControlStyles.OptimizedDoubleBuffer | ControlStyles.UserPaint | ControlStyles.AllPaintingInWmPaint, true);
@@ -560,24 +564,6 @@ namespace WinkingCat.ScreenCaptureLib
                     return new LastRegionCaptureInfo(RegionResult.Color, leftClickStart, leftClickStop, (image).GetPixel(leftClickStop.X, leftClickStop.Y));
             }
             return null;
-        }
-
-        public void Destroy()
-        {
-            borderDotPen?.Dispose();
-            borderPen?.Dispose();
-            infoFont?.Dispose();
-            magnifierBorderPen?.Dispose();
-            magnifierBorderPen?.Dispose();
-            magnifierCrosshairBrush?.Dispose();
-            textBackgroundBrush?.Dispose();
-            textFontBrush?.Dispose();
-
-            image?.Dispose();
-            backgroundBrush?.Dispose();
-            backgroundHighlightBrush?.Dispose();
-
-            base.Dispose(true);
         }
     }
 }

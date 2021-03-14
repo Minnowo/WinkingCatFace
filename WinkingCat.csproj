@@ -72,6 +72,12 @@
     <Reference Include="System.Windows.Forms" />
     <Reference Include="System.Xml" />
     <Reference Include="WindowsBase" />
+    <Reference Include="zxing, Version=0.16.6.0, Culture=neutral, PublicKeyToken=4e88037ac681fe60, processorArchitecture=MSIL">
+      <HintPath>packages\ZXing.Net.0.16.6\lib\net47\zxing.dll</HintPath>
+    </Reference>
+    <Reference Include="zxing.presentation, Version=0.16.6.0, Culture=neutral, PublicKeyToken=4e88037ac681fe60, processorArchitecture=MSIL">
+      <HintPath>packages\ZXing.Net.0.16.6\lib\net47\zxing.presentation.dll</HintPath>
+    </Reference>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Controls\ColorLabel.cs">
@@ -134,6 +140,12 @@
     </Compile>
     <Compile Include="Forms\PathSettingsForm.Designer.cs">
       <DependentUpon>PathSettingsForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Forms\QrCodeForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\QrCodeForm.Designer.cs">
+      <DependentUpon>QrCodeForm.cs</DependentUpon>
     </Compile>
     <Compile Include="HotkeyManager.cs" />
     <Compile Include="Forms\MainWindowStylesForm.cs">
@@ -206,6 +218,9 @@
     <EmbeddedResource Include="Forms\PathSettingsForm.resx">
       <DependentUpon>PathSettingsForm.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="Forms\QrCodeForm.resx">
+      <DependentUpon>QrCodeForm.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Forms\RegionCaptureSettingsForm.resx">
       <DependentUpon>RegionCaptureSettingsForm.cs</DependentUpon>
     </EmbeddedResource>
@@ -232,6 +247,7 @@
       <DesignTime>True</DesignTime>
     </Compile>
     <None Include="app.manifest" />
+    <None Include="packages.config" />
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>

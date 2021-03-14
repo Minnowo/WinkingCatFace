@@ -179,7 +179,7 @@ namespace WinkingCat
                     return false;
 
                 case Tasks.OpenMainForm:
-                    Helpers.ForceActivate(Program.mainForm);
+                    Program.mainForm.ForceActivate();
                     result = true;
                     break;
             }
