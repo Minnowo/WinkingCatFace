@@ -51,12 +51,7 @@
             this.tsmiOpenMainWindowToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.tsmiExitToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.scMain = new System.Windows.Forms.SplitContainer();
-            this.lvListView = new WinkingCat.NoCheckboxListView();
-            this.chColumnHeader1 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
-            this.chColumnHeader5 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
-            this.chColumnHeader2 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
-            this.chColumnHeader3 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
-            this.chColumnHeader4 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
+            this.pbPreviewBox = new WinkingCat.HelperLibs._PictureBox();
             this.tsMain = new System.Windows.Forms.ToolStrip();
             this.tsddbToolStripDropDownButton_Capture = new System.Windows.Forms.ToolStripDropDownButton();
             this.tsmiToolStripMenuItem_region = new System.Windows.Forms.ToolStripMenuItem();
@@ -78,7 +73,16 @@
             this.tssToolStripSeparator1 = new System.Windows.Forms.ToolStripSeparator();
             this.tsbToolStripButton_Style = new System.Windows.Forms.ToolStripButton();
             this.tsbToolStripDropDownButton_Settings = new System.Windows.Forms.ToolStripButton();
-            this.pbPreviewBox = new WinkingCat.HelperLibs._PictureBox();
+            this.lvListView = new WinkingCat.NoCheckboxListView();
+            this.chColumnHeader1 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
+            this.chColumnHeader5 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
+            this.chColumnHeader2 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
+            this.chColumnHeader3 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
+            this.chColumnHeader4 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
+            this.tsmiTrayScreenColorPicker = new System.Windows.Forms.ToolStripMenuItem();
+            this.tsmiTrayColorWheel = new System.Windows.Forms.ToolStripMenuItem();
+            this.tsmiTrayHashCheck = new System.Windows.Forms.ToolStripMenuItem();
+            this.tsmiTrayQrCodeScan = new System.Windows.Forms.ToolStripMenuItem();
             this.cmTray.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.scMain)).BeginInit();
             this.scMain.Panel1.SuspendLayout();
@@ -109,9 +113,9 @@
             this.tsmiExitToolStripMenuItem});
             this.cmTray.LayoutStyle = System.Windows.Forms.ToolStripLayoutStyle.VerticalStackWithOverflow;
             this.cmTray.Name = "cmTray";
-            this.cmTray.Size = new System.Drawing.Size(197, 282);
+            this.cmTray.Size = new System.Drawing.Size(197, 304);
             // 
-            // captureToolStripMenuItem
+            // tsmiCaptureToolStripMenuItem
             // 
             this.tsmiCaptureToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.tsmiRegionToolStripMenuItem,
@@ -122,60 +126,60 @@
             this.tsmiCaptureCursorToolStripMenuItem});
             this.tsmiCaptureToolStripMenuItem.Image = global::WinkingCat.Properties.Resources.Camera_icon;
             this.tsmiCaptureToolStripMenuItem.ImageScaling = System.Windows.Forms.ToolStripItemImageScaling.None;
-            this.tsmiCaptureToolStripMenuItem.Name = "captureToolStripMenuItem";
+            this.tsmiCaptureToolStripMenuItem.Name = "tsmiCaptureToolStripMenuItem";
             this.tsmiCaptureToolStripMenuItem.Size = new System.Drawing.Size(196, 38);
             this.tsmiCaptureToolStripMenuItem.Text = "Capture";
             // 
-            // regionToolStripMenuItem
+            // tsmiRegionToolStripMenuItem
             // 
             this.tsmiRegionToolStripMenuItem.Image = global::WinkingCat.Properties.Resources.Region_icon;
             this.tsmiRegionToolStripMenuItem.ImageScaling = System.Windows.Forms.ToolStripItemImageScaling.None;
-            this.tsmiRegionToolStripMenuItem.Name = "regionToolStripMenuItem";
+            this.tsmiRegionToolStripMenuItem.Name = "tsmiRegionToolStripMenuItem";
             this.tsmiRegionToolStripMenuItem.Size = new System.Drawing.Size(167, 38);
             this.tsmiRegionToolStripMenuItem.Text = "Region";
             // 
-            // monitorToolStripMenuItem
+            // tsmiMonitorToolStripMenuItem
             // 
             this.tsmiMonitorToolStripMenuItem.Image = global::WinkingCat.Properties.Resources.monitor_icon;
             this.tsmiMonitorToolStripMenuItem.ImageScaling = System.Windows.Forms.ToolStripItemImageScaling.None;
-            this.tsmiMonitorToolStripMenuItem.Name = "monitorToolStripMenuItem";
+            this.tsmiMonitorToolStripMenuItem.Name = "tsmiMonitorToolStripMenuItem";
             this.tsmiMonitorToolStripMenuItem.Size = new System.Drawing.Size(167, 38);
             this.tsmiMonitorToolStripMenuItem.Text = "Monitor";
             // 
-            // windowToolStripMenuItem
+            // tsmiWindowToolStripMenuItem
             // 
             this.tsmiWindowToolStripMenuItem.Image = global::WinkingCat.Properties.Resources.Aero_Window_Explorer_icon;
             this.tsmiWindowToolStripMenuItem.ImageScaling = System.Windows.Forms.ToolStripItemImageScaling.None;
-            this.tsmiWindowToolStripMenuItem.Name = "windowToolStripMenuItem";
+            this.tsmiWindowToolStripMenuItem.Name = "tsmiWindowToolStripMenuItem";
             this.tsmiWindowToolStripMenuItem.Size = new System.Drawing.Size(167, 38);
             this.tsmiWindowToolStripMenuItem.Text = "Window";
             // 
-            // fullscreenToolStripMenuItem
+            // tsmiFullscreenToolStripMenuItem
             // 
             this.tsmiFullscreenToolStripMenuItem.Image = global::WinkingCat.Properties.Resources.Fullscreen_icon;
             this.tsmiFullscreenToolStripMenuItem.ImageScaling = System.Windows.Forms.ToolStripItemImageScaling.None;
-            this.tsmiFullscreenToolStripMenuItem.Name = "fullscreenToolStripMenuItem";
+            this.tsmiFullscreenToolStripMenuItem.Name = "tsmiFullscreenToolStripMenuItem";
             this.tsmiFullscreenToolStripMenuItem.Size = new System.Drawing.Size(167, 38);
             this.tsmiFullscreenToolStripMenuItem.Text = "Fullscreen";
             // 
-            // lastRegionToolStripMenuItem
+            // tsmiLastRegionToolStripMenuItem
             // 
             this.tsmiLastRegionToolStripMenuItem.Image = global::WinkingCat.Properties.Resources.lastRegion_icon;
             this.tsmiLastRegionToolStripMenuItem.ImageScaling = System.Windows.Forms.ToolStripItemImageScaling.None;
-            this.tsmiLastRegionToolStripMenuItem.Name = "lastRegionToolStripMenuItem";
+            this.tsmiLastRegionToolStripMenuItem.Name = "tsmiLastRegionToolStripMenuItem";
             this.tsmiLastRegionToolStripMenuItem.Size = new System.Drawing.Size(167, 38);
             this.tsmiLastRegionToolStripMenuItem.Text = "LastRegion";
             // 
-            // captureCursorToolStripMenuItem
+            // tsmiCaptureCursorToolStripMenuItem
             // 
             this.tsmiCaptureCursorToolStripMenuItem.CheckOnClick = true;
             this.tsmiCaptureCursorToolStripMenuItem.Image = global::WinkingCat.Properties.Resources.cursor_icon;
             this.tsmiCaptureCursorToolStripMenuItem.ImageScaling = System.Windows.Forms.ToolStripItemImageScaling.None;
-            this.tsmiCaptureCursorToolStripMenuItem.Name = "captureCursorToolStripMenuItem";
+            this.tsmiCaptureCursorToolStripMenuItem.Name = "tsmiCaptureCursorToolStripMenuItem";
             this.tsmiCaptureCursorToolStripMenuItem.Size = new System.Drawing.Size(167, 38);
             this.tsmiCaptureCursorToolStripMenuItem.Text = "CaptureCursor";
             // 
-            // clipsToolStripMenuItem
+            // tsmiClipsToolStripMenuItem
             // 
             this.tsmiClipsToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.tsmiNewClipToolStripMenuItem,
@@ -183,148 +187,114 @@
             this.tsmiClipFromFileToolStripMenuItem});
             this.tsmiClipsToolStripMenuItem.Image = global::WinkingCat.Properties.Resources.Binder_Clip_icon;
             this.tsmiClipsToolStripMenuItem.ImageScaling = System.Windows.Forms.ToolStripItemImageScaling.None;
-            this.tsmiClipsToolStripMenuItem.Name = "clipsToolStripMenuItem";
+            this.tsmiClipsToolStripMenuItem.Name = "tsmiClipsToolStripMenuItem";
             this.tsmiClipsToolStripMenuItem.Size = new System.Drawing.Size(196, 38);
             this.tsmiClipsToolStripMenuItem.Text = "Clips";
             // 
-            // newClipToolStripMenuItem
+            // tsmiNewClipToolStripMenuItem
             // 
             this.tsmiNewClipToolStripMenuItem.Image = global::WinkingCat.Properties.Resources.new_document_icon;
             this.tsmiNewClipToolStripMenuItem.ImageScaling = System.Windows.Forms.ToolStripItemImageScaling.None;
-            this.tsmiNewClipToolStripMenuItem.Name = "newClipToolStripMenuItem";
+            this.tsmiNewClipToolStripMenuItem.Name = "tsmiNewClipToolStripMenuItem";
             this.tsmiNewClipToolStripMenuItem.Size = new System.Drawing.Size(191, 38);
             this.tsmiNewClipToolStripMenuItem.Text = "NewClip";
             // 
-            // clipFromClipboardToolStripMenuItem
+            // tsmiClipFromClipboardToolStripMenuItem
             // 
             this.tsmiClipFromClipboardToolStripMenuItem.Image = global::WinkingCat.Properties.Resources.Clipboard_2_icon;
             this.tsmiClipFromClipboardToolStripMenuItem.ImageScaling = System.Windows.Forms.ToolStripItemImageScaling.None;
-            this.tsmiClipFromClipboardToolStripMenuItem.Name = "clipFromClipboardToolStripMenuItem";
+            this.tsmiClipFromClipboardToolStripMenuItem.Name = "tsmiClipFromClipboardToolStripMenuItem";
             this.tsmiClipFromClipboardToolStripMenuItem.Size = new System.Drawing.Size(191, 38);
             this.tsmiClipFromClipboardToolStripMenuItem.Text = "ClipFromClipboard";
             // 
-            // clipFromFileToolStripMenuItem
+            // tsmiClipFromFileToolStripMenuItem
             // 
             this.tsmiClipFromFileToolStripMenuItem.Image = global::WinkingCat.Properties.Resources.new_doc_icon;
             this.tsmiClipFromFileToolStripMenuItem.ImageScaling = System.Windows.Forms.ToolStripItemImageScaling.None;
-            this.tsmiClipFromFileToolStripMenuItem.Name = "clipFromFileToolStripMenuItem";
+            this.tsmiClipFromFileToolStripMenuItem.Name = "tsmiClipFromFileToolStripMenuItem";
             this.tsmiClipFromFileToolStripMenuItem.Size = new System.Drawing.Size(191, 38);
             this.tsmiClipFromFileToolStripMenuItem.Text = "ClipFromFile";
             // 
-            // toolsToolStripMenuItem
+            // tsmiToolsToolStripMenuItem
             // 
+            this.tsmiToolsToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.tsmiTrayScreenColorPicker,
+            this.tsmiTrayColorWheel,
+            this.tsmiTrayHashCheck,
+            this.tsmiTrayQrCodeScan});
             this.tsmiToolsToolStripMenuItem.Image = global::WinkingCat.Properties.Resources.google_webmaster_tools_icon;
             this.tsmiToolsToolStripMenuItem.ImageScaling = System.Windows.Forms.ToolStripItemImageScaling.None;
-            this.tsmiToolsToolStripMenuItem.Name = "toolsToolStripMenuItem";
+            this.tsmiToolsToolStripMenuItem.Name = "tsmiToolsToolStripMenuItem";
             this.tsmiToolsToolStripMenuItem.Size = new System.Drawing.Size(196, 38);
             this.tsmiToolsToolStripMenuItem.Text = "Tools";
             // 
-            // toolStripSeparator2
+            // tssToolStripSeparator2
             // 
-            this.tssToolStripSeparator2.Name = "toolStripSeparator2";
+            this.tssToolStripSeparator2.Name = "tssToolStripSeparator2";
             this.tssToolStripSeparator2.Size = new System.Drawing.Size(193, 6);
             // 
-            // stylesToolStripMenuItem
+            // tsmiStylesToolStripMenuItem
             // 
             this.tsmiStylesToolStripMenuItem.Image = global::WinkingCat.Properties.Resources.style_icon;
             this.tsmiStylesToolStripMenuItem.ImageScaling = System.Windows.Forms.ToolStripItemImageScaling.None;
-            this.tsmiStylesToolStripMenuItem.Name = "stylesToolStripMenuItem";
+            this.tsmiStylesToolStripMenuItem.Name = "tsmiStylesToolStripMenuItem";
             this.tsmiStylesToolStripMenuItem.Size = new System.Drawing.Size(196, 38);
             this.tsmiStylesToolStripMenuItem.Text = "Styles";
             // 
-            // settingsToolStripMenuItem
+            // tsmiSettingsToolStripMenuItem
             // 
             this.tsmiSettingsToolStripMenuItem.Image = global::WinkingCat.Properties.Resources.gear_in_icon;
             this.tsmiSettingsToolStripMenuItem.ImageScaling = System.Windows.Forms.ToolStripItemImageScaling.None;
-            this.tsmiSettingsToolStripMenuItem.Name = "settingsToolStripMenuItem";
+            this.tsmiSettingsToolStripMenuItem.Name = "tsmiSettingsToolStripMenuItem";
             this.tsmiSettingsToolStripMenuItem.Size = new System.Drawing.Size(196, 38);
             this.tsmiSettingsToolStripMenuItem.Text = "Settings";
             // 
-            // toolStripSeparator3
+            // tssToolStripSeparator3
             // 
-            this.tssToolStripSeparator3.Name = "toolStripSeparator3";
+            this.tssToolStripSeparator3.Name = "tssToolStripSeparator3";
             this.tssToolStripSeparator3.Size = new System.Drawing.Size(193, 6);
             // 
-            // openMainWindowToolStripMenuItem
+            // tsmiOpenMainWindowToolStripMenuItem
             // 
             this.tsmiOpenMainWindowToolStripMenuItem.Image = global::WinkingCat.Properties.Resources.Open_icon;
             this.tsmiOpenMainWindowToolStripMenuItem.ImageScaling = System.Windows.Forms.ToolStripItemImageScaling.None;
-            this.tsmiOpenMainWindowToolStripMenuItem.Name = "openMainWindowToolStripMenuItem";
+            this.tsmiOpenMainWindowToolStripMenuItem.Name = "tsmiOpenMainWindowToolStripMenuItem";
             this.tsmiOpenMainWindowToolStripMenuItem.Size = new System.Drawing.Size(196, 38);
             this.tsmiOpenMainWindowToolStripMenuItem.Text = "Open Main Window";
             // 
-            // exitToolStripMenuItem
+            // tsmiExitToolStripMenuItem
             // 
             this.tsmiExitToolStripMenuItem.Image = global::WinkingCat.Properties.Resources.Error_Symbol_icon;
             this.tsmiExitToolStripMenuItem.ImageScaling = System.Windows.Forms.ToolStripItemImageScaling.None;
-            this.tsmiExitToolStripMenuItem.Name = "exitToolStripMenuItem";
+            this.tsmiExitToolStripMenuItem.Name = "tsmiExitToolStripMenuItem";
             this.tsmiExitToolStripMenuItem.Size = new System.Drawing.Size(196, 38);
             this.tsmiExitToolStripMenuItem.Text = "Exit";
             // 
-            // spMain
+            // scMain
             // 
             this.scMain.Dock = System.Windows.Forms.DockStyle.Fill;
             this.scMain.Location = new System.Drawing.Point(184, 0);
-            this.scMain.Name = "spMain";
+            this.scMain.Name = "scMain";
             // 
-            // spMain.Panel1
+            // scMain.Panel1
             // 
             this.scMain.Panel1.Controls.Add(this.lvListView);
             // 
-            // spMain.Panel2
+            // scMain.Panel2
             // 
             this.scMain.Panel2.Controls.Add(this.pbPreviewBox);
+            this.scMain.Panel2Collapsed = true;
             this.scMain.Size = new System.Drawing.Size(902, 211);
             this.scMain.SplitterDistance = 299;
             this.scMain.TabIndex = 2;
             // 
-            // lvListView
+            // pbPreviewBox
             // 
-            this.lvListView.autoFillColumn = true;
-            this.lvListView.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(40)))), ((int)(((byte)(42)))), ((int)(((byte)(54)))));
-            this.lvListView.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.lvListView.Columns.AddRange(new System.Windows.Forms.ColumnHeader[] {
-            this.chColumnHeader1,
-            this.chColumnHeader5,
-            this.chColumnHeader2,
-            this.chColumnHeader3,
-            this.chColumnHeader4});
-            this.lvListView.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.lvListView.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(248)))), ((int)(((byte)(248)))), ((int)(((byte)(242)))));
-            this.lvListView.FullRowSelect = true;
-            this.lvListView.HideSelection = false;
-            this.lvListView.Location = new System.Drawing.Point(0, 0);
-            this.lvListView.Name = "lvListView";
-            this.lvListView.OwnerDraw = true;
-            this.lvListView.Size = new System.Drawing.Size(299, 211);
-            this.lvListView.TabIndex = 2;
-            this.lvListView.UseCompatibleStateImageBehavior = false;
-            this.lvListView.View = System.Windows.Forms.View.Details;
-            // 
-            // columnHeader1
-            // 
-            this.chColumnHeader1.Text = "Name";
-            this.chColumnHeader1.Width = 200;
-            // 
-            // columnHeader5
-            // 
-            this.chColumnHeader5.Text = "Type";
-            this.chColumnHeader5.Width = 100;
-            // 
-            // columnHeader2
-            // 
-            this.chColumnHeader2.Text = "Dimensions";
-            this.chColumnHeader2.Width = 120;
-            // 
-            // columnHeader3
-            // 
-            this.chColumnHeader3.Text = "Size";
-            this.chColumnHeader3.Width = 120;
-            // 
-            // columnHeader4
-            // 
-            this.chColumnHeader4.Text = "DateModified";
-            this.chColumnHeader4.Width = 200;
+            this.pbPreviewBox.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.pbPreviewBox.Location = new System.Drawing.Point(0, 0);
+            this.pbPreviewBox.Name = "pbPreviewBox";
+            this.pbPreviewBox.Size = new System.Drawing.Size(599, 211);
+            this.pbPreviewBox.TabIndex = 0;
             // 
             // tsMain
             // 
@@ -347,7 +317,7 @@
             this.tsMain.TabIndex = 1;
             this.tsMain.Text = "toolStrip1";
             // 
-            // ToolStripDropDownButton_Capture
+            // tsddbToolStripDropDownButton_Capture
             // 
             this.tsddbToolStripDropDownButton_Capture.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.tsmiToolStripMenuItem_region,
@@ -357,65 +327,65 @@
             this.tsmiToolStripMenuItem_lastRegion,
             this.tsmiToolStripMenuItem_captureCursor});
             this.tsddbToolStripDropDownButton_Capture.Font = new System.Drawing.Font("Consolas", 11.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.tsddbToolStripDropDownButton_Capture.Image = ((System.Drawing.Image)(resources.GetObject("ToolStripDropDownButton_Capture.Image")));
+            this.tsddbToolStripDropDownButton_Capture.Image = ((System.Drawing.Image)(resources.GetObject("tsddbToolStripDropDownButton_Capture.Image")));
             this.tsddbToolStripDropDownButton_Capture.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
             this.tsddbToolStripDropDownButton_Capture.ImageScaling = System.Windows.Forms.ToolStripItemImageScaling.None;
             this.tsddbToolStripDropDownButton_Capture.ImageTransparentColor = System.Drawing.Color.Magenta;
-            this.tsddbToolStripDropDownButton_Capture.Name = "ToolStripDropDownButton_Capture";
+            this.tsddbToolStripDropDownButton_Capture.Name = "tsddbToolStripDropDownButton_Capture";
             this.tsddbToolStripDropDownButton_Capture.Size = new System.Drawing.Size(182, 36);
             this.tsddbToolStripDropDownButton_Capture.Text = "Capture";
             this.tsddbToolStripDropDownButton_Capture.ToolTipText = "Capture";
             // 
-            // ToolStripMenuItem_region
+            // tsmiToolStripMenuItem_region
             // 
             this.tsmiToolStripMenuItem_region.Image = global::WinkingCat.Properties.Resources.Region_icon;
             this.tsmiToolStripMenuItem_region.ImageScaling = System.Windows.Forms.ToolStripItemImageScaling.None;
-            this.tsmiToolStripMenuItem_region.Name = "ToolStripMenuItem_region";
+            this.tsmiToolStripMenuItem_region.Name = "tsmiToolStripMenuItem_region";
             this.tsmiToolStripMenuItem_region.Size = new System.Drawing.Size(204, 38);
             this.tsmiToolStripMenuItem_region.Text = "Region";
             // 
-            // ToolStripMenuItem_monitor
+            // tsmiToolStripMenuItem_monitor
             // 
             this.tsmiToolStripMenuItem_monitor.Image = global::WinkingCat.Properties.Resources.monitor_icon;
             this.tsmiToolStripMenuItem_monitor.ImageScaling = System.Windows.Forms.ToolStripItemImageScaling.None;
-            this.tsmiToolStripMenuItem_monitor.Name = "ToolStripMenuItem_monitor";
+            this.tsmiToolStripMenuItem_monitor.Name = "tsmiToolStripMenuItem_monitor";
             this.tsmiToolStripMenuItem_monitor.Size = new System.Drawing.Size(204, 38);
             this.tsmiToolStripMenuItem_monitor.Text = "Monitor";
             // 
-            // ToolStripMenuItem_window
+            // tsmiToolStripMenuItem_window
             // 
             this.tsmiToolStripMenuItem_window.Image = global::WinkingCat.Properties.Resources.Aero_Window_Explorer_icon;
             this.tsmiToolStripMenuItem_window.ImageScaling = System.Windows.Forms.ToolStripItemImageScaling.None;
-            this.tsmiToolStripMenuItem_window.Name = "ToolStripMenuItem_window";
+            this.tsmiToolStripMenuItem_window.Name = "tsmiToolStripMenuItem_window";
             this.tsmiToolStripMenuItem_window.Size = new System.Drawing.Size(204, 38);
             this.tsmiToolStripMenuItem_window.Text = "Window";
             // 
-            // ToolStripMenuItem_fullscreen
+            // tsmiToolStripMenuItem_fullscreen
             // 
             this.tsmiToolStripMenuItem_fullscreen.Image = global::WinkingCat.Properties.Resources.Fullscreen_icon;
             this.tsmiToolStripMenuItem_fullscreen.ImageScaling = System.Windows.Forms.ToolStripItemImageScaling.None;
-            this.tsmiToolStripMenuItem_fullscreen.Name = "ToolStripMenuItem_fullscreen";
+            this.tsmiToolStripMenuItem_fullscreen.Name = "tsmiToolStripMenuItem_fullscreen";
             this.tsmiToolStripMenuItem_fullscreen.Size = new System.Drawing.Size(204, 38);
             this.tsmiToolStripMenuItem_fullscreen.Text = "Fullscreen";
             // 
-            // ToolStripMenuItem_lastRegion
+            // tsmiToolStripMenuItem_lastRegion
             // 
             this.tsmiToolStripMenuItem_lastRegion.Image = global::WinkingCat.Properties.Resources.lastRegion_icon;
             this.tsmiToolStripMenuItem_lastRegion.ImageScaling = System.Windows.Forms.ToolStripItemImageScaling.None;
-            this.tsmiToolStripMenuItem_lastRegion.Name = "ToolStripMenuItem_lastRegion";
+            this.tsmiToolStripMenuItem_lastRegion.Name = "tsmiToolStripMenuItem_lastRegion";
             this.tsmiToolStripMenuItem_lastRegion.Size = new System.Drawing.Size(204, 38);
             this.tsmiToolStripMenuItem_lastRegion.Text = "Last Region";
             // 
-            // ToolStripMenuItem_captureCursor
+            // tsmiToolStripMenuItem_captureCursor
             // 
             this.tsmiToolStripMenuItem_captureCursor.CheckOnClick = true;
             this.tsmiToolStripMenuItem_captureCursor.Image = global::WinkingCat.Properties.Resources.cursor_icon;
             this.tsmiToolStripMenuItem_captureCursor.ImageScaling = System.Windows.Forms.ToolStripItemImageScaling.None;
-            this.tsmiToolStripMenuItem_captureCursor.Name = "ToolStripMenuItem_captureCursor";
+            this.tsmiToolStripMenuItem_captureCursor.Name = "tsmiToolStripMenuItem_captureCursor";
             this.tsmiToolStripMenuItem_captureCursor.Size = new System.Drawing.Size(204, 38);
             this.tsmiToolStripMenuItem_captureCursor.Text = "Capture Cursor";
             // 
-            // ToolStripDropDownButton_Clips
+            // tsddbToolStripDropDownButton_Clips
             // 
             this.tsddbToolStripDropDownButton_Clips.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.tsmiToolStripMenuItem_newClip,
@@ -427,42 +397,42 @@
             this.tsddbToolStripDropDownButton_Clips.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
             this.tsddbToolStripDropDownButton_Clips.ImageScaling = System.Windows.Forms.ToolStripItemImageScaling.None;
             this.tsddbToolStripDropDownButton_Clips.ImageTransparentColor = System.Drawing.Color.Magenta;
-            this.tsddbToolStripDropDownButton_Clips.Name = "ToolStripDropDownButton_Clips";
+            this.tsddbToolStripDropDownButton_Clips.Name = "tsddbToolStripDropDownButton_Clips";
             this.tsddbToolStripDropDownButton_Clips.Size = new System.Drawing.Size(182, 36);
             this.tsddbToolStripDropDownButton_Clips.Text = "Clips";
             // 
-            // ToolStripMenuItem_newClip
+            // tsmiToolStripMenuItem_newClip
             // 
             this.tsmiToolStripMenuItem_newClip.Image = global::WinkingCat.Properties.Resources.new_document_icon;
             this.tsmiToolStripMenuItem_newClip.ImageScaling = System.Windows.Forms.ToolStripItemImageScaling.None;
-            this.tsmiToolStripMenuItem_newClip.Name = "ToolStripMenuItem_newClip";
+            this.tsmiToolStripMenuItem_newClip.Name = "tsmiToolStripMenuItem_newClip";
             this.tsmiToolStripMenuItem_newClip.Size = new System.Drawing.Size(348, 38);
             this.tsmiToolStripMenuItem_newClip.Text = "New Clip";
             // 
-            // ToolStripMenuItem_clipFromClipboard
+            // tsmiToolStripMenuItem_clipFromClipboard
             // 
             this.tsmiToolStripMenuItem_clipFromClipboard.Image = global::WinkingCat.Properties.Resources.Clipboard_2_icon;
             this.tsmiToolStripMenuItem_clipFromClipboard.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
             this.tsmiToolStripMenuItem_clipFromClipboard.ImageScaling = System.Windows.Forms.ToolStripItemImageScaling.None;
-            this.tsmiToolStripMenuItem_clipFromClipboard.Name = "ToolStripMenuItem_clipFromClipboard";
+            this.tsmiToolStripMenuItem_clipFromClipboard.Name = "tsmiToolStripMenuItem_clipFromClipboard";
             this.tsmiToolStripMenuItem_clipFromClipboard.Size = new System.Drawing.Size(348, 38);
             this.tsmiToolStripMenuItem_clipFromClipboard.Text = "Clip From Clipboard";
             // 
-            // ToolStripMenuItem_clipFromFile
+            // tsmiToolStripMenuItem_clipFromFile
             // 
             this.tsmiToolStripMenuItem_clipFromFile.Image = global::WinkingCat.Properties.Resources.new_doc_icon;
             this.tsmiToolStripMenuItem_clipFromFile.ImageScaling = System.Windows.Forms.ToolStripItemImageScaling.None;
-            this.tsmiToolStripMenuItem_clipFromFile.Name = "ToolStripMenuItem_clipFromFile";
+            this.tsmiToolStripMenuItem_clipFromFile.Name = "tsmiToolStripMenuItem_clipFromFile";
             this.tsmiToolStripMenuItem_clipFromFile.Size = new System.Drawing.Size(348, 38);
             this.tsmiToolStripMenuItem_clipFromFile.Text = "Clip From File";
             // 
-            // ToolStripMenuItem_createClipAfterRegionCapture
+            // tsmiToolStripMenuItem_createClipAfterRegionCapture
             // 
-            this.tsmiToolStripMenuItem_createClipAfterRegionCapture.Name = "ToolStripMenuItem_createClipAfterRegionCapture";
+            this.tsmiToolStripMenuItem_createClipAfterRegionCapture.Name = "tsmiToolStripMenuItem_createClipAfterRegionCapture";
             this.tsmiToolStripMenuItem_createClipAfterRegionCapture.Size = new System.Drawing.Size(348, 38);
             this.tsmiToolStripMenuItem_createClipAfterRegionCapture.Text = "Create Clip Afte rRegion Capture";
             // 
-            // ToolStripDropDownButton_Tools
+            // tsddbToolStripDropDownButton_Tools
             // 
             this.tsddbToolStripDropDownButton_Tools.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.tsmiToolStripDropDownButton_screenColorPicker,
@@ -474,82 +444,153 @@
             this.tsddbToolStripDropDownButton_Tools.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
             this.tsddbToolStripDropDownButton_Tools.ImageScaling = System.Windows.Forms.ToolStripItemImageScaling.None;
             this.tsddbToolStripDropDownButton_Tools.ImageTransparentColor = System.Drawing.Color.Magenta;
-            this.tsddbToolStripDropDownButton_Tools.Name = "ToolStripDropDownButton_Tools";
+            this.tsddbToolStripDropDownButton_Tools.Name = "tsddbToolStripDropDownButton_Tools";
             this.tsddbToolStripDropDownButton_Tools.Size = new System.Drawing.Size(182, 36);
             this.tsddbToolStripDropDownButton_Tools.Text = "Tools";
             // 
-            // ToolStripDropDownButton_screenColorPicker
+            // tsmiToolStripDropDownButton_screenColorPicker
             // 
-            this.tsmiToolStripDropDownButton_screenColorPicker.Image = ((System.Drawing.Image)(resources.GetObject("ToolStripDropDownButton_screenColorPicker.Image")));
+            this.tsmiToolStripDropDownButton_screenColorPicker.Image = ((System.Drawing.Image)(resources.GetObject("tsmiToolStripDropDownButton_screenColorPicker.Image")));
             this.tsmiToolStripDropDownButton_screenColorPicker.ImageScaling = System.Windows.Forms.ToolStripItemImageScaling.None;
-            this.tsmiToolStripDropDownButton_screenColorPicker.Name = "ToolStripDropDownButton_screenColorPicker";
+            this.tsmiToolStripDropDownButton_screenColorPicker.Name = "tsmiToolStripDropDownButton_screenColorPicker";
             this.tsmiToolStripDropDownButton_screenColorPicker.Size = new System.Drawing.Size(244, 38);
             this.tsmiToolStripDropDownButton_screenColorPicker.Text = "Screen Color Picker";
             // 
-            // ToolStripDropDownButton_ColorPicker
+            // tsmiToolStripDropDownButton_ColorPicker
             // 
             this.tsmiToolStripDropDownButton_ColorPicker.Image = global::WinkingCat.Properties.Resources.color_wheel_icon;
             this.tsmiToolStripDropDownButton_ColorPicker.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
             this.tsmiToolStripDropDownButton_ColorPicker.ImageScaling = System.Windows.Forms.ToolStripItemImageScaling.None;
-            this.tsmiToolStripDropDownButton_ColorPicker.Name = "ToolStripDropDownButton_ColorPicker";
+            this.tsmiToolStripDropDownButton_ColorPicker.Name = "tsmiToolStripDropDownButton_ColorPicker";
             this.tsmiToolStripDropDownButton_ColorPicker.Size = new System.Drawing.Size(244, 38);
             this.tsmiToolStripDropDownButton_ColorPicker.Text = "Color Picker";
             // 
-            // ToolStripDropDownButton_HashCheck
+            // tsmiToolStripDropDownButton_HashCheck
             // 
             this.tsmiToolStripDropDownButton_HashCheck.Image = global::WinkingCat.Properties.Resources.hashcheck;
             this.tsmiToolStripDropDownButton_HashCheck.ImageScaling = System.Windows.Forms.ToolStripItemImageScaling.None;
-            this.tsmiToolStripDropDownButton_HashCheck.Name = "ToolStripDropDownButton_HashCheck";
+            this.tsmiToolStripDropDownButton_HashCheck.Name = "tsmiToolStripDropDownButton_HashCheck";
             this.tsmiToolStripDropDownButton_HashCheck.Size = new System.Drawing.Size(244, 38);
             this.tsmiToolStripDropDownButton_HashCheck.Text = "Hash Check";
             // 
-            // ToolStripDropDownButton_QrCode
+            // tsmiToolStripDropDownButton_QrCode
             // 
             this.tsmiToolStripDropDownButton_QrCode.Image = global::WinkingCat.Properties.Resources.qrCode;
             this.tsmiToolStripDropDownButton_QrCode.ImageScaling = System.Windows.Forms.ToolStripItemImageScaling.None;
-            this.tsmiToolStripDropDownButton_QrCode.Name = "ToolStripDropDownButton_QrCode";
+            this.tsmiToolStripDropDownButton_QrCode.Name = "tsmiToolStripDropDownButton_QrCode";
             this.tsmiToolStripDropDownButton_QrCode.Size = new System.Drawing.Size(244, 38);
             this.tsmiToolStripDropDownButton_QrCode.Text = "QrCode Scan";
             // 
-            // toolStripSeparator1
+            // tssToolStripSeparator1
             // 
             this.tssToolStripSeparator1.AutoSize = false;
-            this.tssToolStripSeparator1.Name = "toolStripSeparator1";
+            this.tssToolStripSeparator1.Name = "tssToolStripSeparator1";
             this.tssToolStripSeparator1.Size = new System.Drawing.Size(167, 10);
             // 
-            // ToolStripButton_Style
+            // tsbToolStripButton_Style
             // 
             this.tsbToolStripButton_Style.Font = new System.Drawing.Font("Consolas", 11.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.tsbToolStripButton_Style.Image = global::WinkingCat.Properties.Resources.style_icon;
             this.tsbToolStripButton_Style.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
             this.tsbToolStripButton_Style.ImageScaling = System.Windows.Forms.ToolStripItemImageScaling.None;
             this.tsbToolStripButton_Style.ImageTransparentColor = System.Drawing.Color.Magenta;
-            this.tsbToolStripButton_Style.Name = "ToolStripButton_Style";
+            this.tsbToolStripButton_Style.Name = "tsbToolStripButton_Style";
             this.tsbToolStripButton_Style.Size = new System.Drawing.Size(182, 36);
             this.tsbToolStripButton_Style.Text = "Styles";
             this.tsbToolStripButton_Style.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             this.tsbToolStripButton_Style.Click += new System.EventHandler(this.ToolStripDropDownButton_Styles_Click);
             // 
-            // ToolStripDropDownButton_Settings
+            // tsbToolStripDropDownButton_Settings
             // 
             this.tsbToolStripDropDownButton_Settings.Font = new System.Drawing.Font("Consolas", 11.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.tsbToolStripDropDownButton_Settings.Image = global::WinkingCat.Properties.Resources.gear_in_icon;
             this.tsbToolStripDropDownButton_Settings.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
             this.tsbToolStripDropDownButton_Settings.ImageScaling = System.Windows.Forms.ToolStripItemImageScaling.None;
             this.tsbToolStripDropDownButton_Settings.ImageTransparentColor = System.Drawing.Color.Magenta;
-            this.tsbToolStripDropDownButton_Settings.Name = "ToolStripDropDownButton_Settings";
+            this.tsbToolStripDropDownButton_Settings.Name = "tsbToolStripDropDownButton_Settings";
             this.tsbToolStripDropDownButton_Settings.Size = new System.Drawing.Size(182, 36);
             this.tsbToolStripDropDownButton_Settings.Text = "Settings";
             this.tsbToolStripDropDownButton_Settings.Click += new System.EventHandler(this.ToolStripDropDownButton_Settings_Click);
             // 
-            // _PictureBox1
+            // lvListView
             // 
-            this.pbPreviewBox.Dock = System.Windows.Forms.DockStyle.Fill;
-            //this.pbPreviewBox.Image = null;
-            this.pbPreviewBox.Location = new System.Drawing.Point(0, 0);
-            this.pbPreviewBox.Name = "_PictureBox1";
-            this.pbPreviewBox.Size = new System.Drawing.Size(599, 211);
-            this.pbPreviewBox.TabIndex = 0;
+            this.lvListView.autoFillColumn = true;
+            this.lvListView.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(40)))), ((int)(((byte)(42)))), ((int)(((byte)(54)))));
+            this.lvListView.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.lvListView.Columns.AddRange(new System.Windows.Forms.ColumnHeader[] {
+            this.chColumnHeader1,
+            this.chColumnHeader5,
+            this.chColumnHeader2,
+            this.chColumnHeader3,
+            this.chColumnHeader4});
+            this.lvListView.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.lvListView.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(248)))), ((int)(((byte)(248)))), ((int)(((byte)(242)))));
+            this.lvListView.FullRowSelect = true;
+            this.lvListView.HideSelection = false;
+            this.lvListView.Location = new System.Drawing.Point(0, 0);
+            this.lvListView.Name = "lvListView";
+            this.lvListView.OwnerDraw = true;
+            this.lvListView.Size = new System.Drawing.Size(902, 211);
+            this.lvListView.TabIndex = 2;
+            this.lvListView.UseCompatibleStateImageBehavior = false;
+            this.lvListView.View = System.Windows.Forms.View.Details;
+            // 
+            // chColumnHeader1
+            // 
+            this.chColumnHeader1.Text = "Name";
+            this.chColumnHeader1.Width = 200;
+            // 
+            // chColumnHeader5
+            // 
+            this.chColumnHeader5.Text = "Type";
+            this.chColumnHeader5.Width = 100;
+            // 
+            // chColumnHeader2
+            // 
+            this.chColumnHeader2.Text = "Dimensions";
+            this.chColumnHeader2.Width = 120;
+            // 
+            // chColumnHeader3
+            // 
+            this.chColumnHeader3.Text = "Size";
+            this.chColumnHeader3.Width = 120;
+            // 
+            // chColumnHeader4
+            // 
+            this.chColumnHeader4.Text = "DateModified";
+            this.chColumnHeader4.Width = 200;
+            // 
+            // tsmiTrayScreenColorPicker
+            // 
+            this.tsmiTrayScreenColorPicker.Image = global::WinkingCat.Properties.Resources.color_picker_icon;
+            this.tsmiTrayScreenColorPicker.ImageScaling = System.Windows.Forms.ToolStripItemImageScaling.None;
+            this.tsmiTrayScreenColorPicker.Name = "tsmiTrayScreenColorPicker";
+            this.tsmiTrayScreenColorPicker.Size = new System.Drawing.Size(196, 38);
+            this.tsmiTrayScreenColorPicker.Text = "Screen Color Picker";
+            // 
+            // tsmiTrayColorWheel
+            // 
+            this.tsmiTrayColorWheel.Image = global::WinkingCat.Properties.Resources.color_wheel_icon;
+            this.tsmiTrayColorWheel.ImageScaling = System.Windows.Forms.ToolStripItemImageScaling.None;
+            this.tsmiTrayColorWheel.Name = "tsmiTrayColorWheel";
+            this.tsmiTrayColorWheel.Size = new System.Drawing.Size(196, 38);
+            this.tsmiTrayColorWheel.Text = "Color Picker";
+            // 
+            // tsmiTrayHashCheck
+            // 
+            this.tsmiTrayHashCheck.Image = global::WinkingCat.Properties.Resources.hashcheck;
+            this.tsmiTrayHashCheck.ImageScaling = System.Windows.Forms.ToolStripItemImageScaling.None;
+            this.tsmiTrayHashCheck.Name = "tsmiTrayHashCheck";
+            this.tsmiTrayHashCheck.Size = new System.Drawing.Size(196, 38);
+            this.tsmiTrayHashCheck.Text = "Hash Check";
+            // 
+            // tsmiTrayQrCodeScan
+            // 
+            this.tsmiTrayQrCodeScan.Image = global::WinkingCat.Properties.Resources.qrCode;
+            this.tsmiTrayQrCodeScan.ImageScaling = System.Windows.Forms.ToolStripItemImageScaling.None;
+            this.tsmiTrayQrCodeScan.Name = "tsmiTrayQrCodeScan";
+            this.tsmiTrayQrCodeScan.Size = new System.Drawing.Size(196, 38);
+            this.tsmiTrayQrCodeScan.Text = "QrCode Scan";
             // 
             // ApplicationForm
             // 
@@ -561,10 +602,7 @@
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.MinimumSize = new System.Drawing.Size(666, 250);
             this.Name = "ApplicationForm";
-            this.Text = "";
             this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.MainForm_FormClosing);
-            this.scMain.Panel2Collapsed = true;
-            this.scMain.Panel2.Hide();
             this.cmTray.ResumeLayout(false);
             this.scMain.Panel1.ResumeLayout(false);
             this.scMain.Panel2.ResumeLayout(false);
@@ -626,6 +664,10 @@
         private System.Windows.Forms.ColumnHeader chColumnHeader3;
         private System.Windows.Forms.ColumnHeader chColumnHeader4;
         private HelperLibs._PictureBox pbPreviewBox;
+        private System.Windows.Forms.ToolStripMenuItem tsmiTrayScreenColorPicker;
+        private System.Windows.Forms.ToolStripMenuItem tsmiTrayColorWheel;
+        private System.Windows.Forms.ToolStripMenuItem tsmiTrayHashCheck;
+        private System.Windows.Forms.ToolStripMenuItem tsmiTrayQrCodeScan;
     }
 }
 

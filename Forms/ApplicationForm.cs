@@ -89,6 +89,12 @@ namespace WinkingCat
             tsmiClipFromClipboardToolStripMenuItem.Click += ClipFromClipboard_Click;
             tsmiClipFromFileToolStripMenuItem.Click += ClipFromFile_Click;
 
+            // tools
+            tsmiTrayScreenColorPicker.Click += ScreenColorPicker_Click;
+            tsmiTrayColorWheel.Click += ColorPicker_Click;
+            tsmiTrayHashCheck.Click += HashCheck_Click;
+            tsmiTrayQrCodeScan.Click += QrCode_Click;
+
             // other
             tsmiStylesToolStripMenuItem.Click += ToolStripDropDownButton_Styles_Click;
             tsmiSettingsToolStripMenuItem.Click += ToolStripDropDownButton_Settings_Click;
@@ -193,7 +199,7 @@ namespace WinkingCat
             }
         }
 
-#region Capture dropdown buttons
+        #region Capture dropdown buttons
         private async void tsmiCapture_DropDownOpening(object sender, EventArgs e)
         {
             if(sender.GetType().Name == "ToolStripDropDownButton") 
@@ -328,7 +334,7 @@ namespace WinkingCat
         }
 #endregion
 
-#region Clips dropdown buttons
+        #region Clips dropdown buttons
         private void NewClip_Click(object sender, EventArgs e)
         {
             if (MainFormSettings.hideMainFormOnCapture && !isInTrayOrMinimized)
@@ -357,7 +363,7 @@ namespace WinkingCat
         }
 #endregion
 
-#region Tools dropdown buttons
+        #region Tools dropdown buttons
         private void ScreenColorPicker_Click(object sender, EventArgs e)
         {
             if (MainFormSettings.hideMainFormOnCapture && !isInTrayOrMinimized)

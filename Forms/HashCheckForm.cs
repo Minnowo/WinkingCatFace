@@ -27,11 +27,35 @@ namespace WinkingCat
             hashCheck = new HashCheck();
             hashCheck.FileCheckProgressChanged += HashCheck_FileCheckProgressChanged;
             HandleCreated += HashCheckForm_HandleCreated;
+            ApplicationStyles.UpdateStylesEvent += ApplicationStyles_UpdateStylesEvent;
+        }
+
+        private void ApplicationStyles_UpdateStylesEvent(object sender, EventArgs e)
+        {
+            UpdateTheme();
         }
 
         private void HashCheckForm_HandleCreated(object sender, EventArgs e)
         {
             isHandleCreated = true;
+            UpdateTheme();
+        }
+
+        public void UpdateTheme()
+        {
+            if (ApplicationStyles.currentStyle.mainFormStyle.useImersiveDarkMode && isHandleCreated)
+            {
+                NativeMethods.UseImmersiveDarkMode(Handle, true);
+                this.Icon = Properties.Resources._3white;
+            }
+            else
+            {
+                NativeMethods.UseImmersiveDarkMode(Handle, false);
+                this.Icon = Properties.Resources._3black;
+            }
+
+            ApplicationStyles.ApplyCustomThemeToControl(this);
+            Refresh();
         }
 
         private void HashCheck_FileCheckProgressChanged(float progress)
@@ -146,10 +170,10 @@ namespace WinkingCat
 
         private void ResetTextBoxColor()
         {
-            tbFileHash.BackColor = SystemColors.Window;
-            tbFileHash2.BackColor = SystemColors.Window;
-            tbHashInput.BackColor = SystemColors.Window;
-            tbHashTarget.BackColor = SystemColors.Window;
+            tbFileHash.BackColor = ApplicationStyles.currentStyle.mainFormStyle.lightBackgroundColor;
+            tbFileHash2.BackColor = ApplicationStyles.currentStyle.mainFormStyle.lightBackgroundColor;
+            tbHashInput.BackColor = ApplicationStyles.currentStyle.mainFormStyle.lightBackgroundColor;
+            tbHashTarget.BackColor = ApplicationStyles.currentStyle.mainFormStyle.lightBackgroundColor;
         }
 
         private void UpdateTextBoxColor()

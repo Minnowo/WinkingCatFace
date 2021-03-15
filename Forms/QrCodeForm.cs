@@ -144,7 +144,6 @@ namespace WinkingCat
                         Decode(img);
                     }
                 }
-                this.ForceActivate();
             }
         }
 
