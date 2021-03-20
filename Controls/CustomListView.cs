@@ -89,7 +89,7 @@ namespace WinkingCat
                         if (File.Exists(line))
                         {
                             info = new FileInfo(line);
-                            dimensions = Helpers.GetImageDimensionsFile(info.FullName);
+                            dimensions = ImageHelper.GetImageDimensionsFile(info.FullName);
 
                             if (dimensions == Size.Empty)
                                 row = new string[4]{ info.Extension, 
@@ -300,7 +300,7 @@ namespace WinkingCat
             {
                 if (File.Exists(Items[SelectedIndex].Tag.ToString()))
                 {
-                    Size dims = Helpers.GetImageDimensionsFile(Items[SelectedIndex].Tag.ToString());
+                    Size dims = ImageHelper.GetImageDimensionsFile(Items[SelectedIndex].Tag.ToString());
                     ClipboardHelpers.CopyStringDefault(
                         string.Format("{0} x {1}", dims.Width, dims.Height));
                 }

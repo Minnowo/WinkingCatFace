@@ -19,15 +19,17 @@ namespace WinkingCat
 
     public partial class ApplicationForm : Form
     {
-        private Image image { get; set; } = null;
-        private System.Windows.Forms.Timer trayClickTimer { get; set; }
+        
         public SettingsForm settingsForm { get; private set; } = null;
         public StylesForm stylesForm { get; private set; } = null;
         public ColorPickerForm colorPickerForm { get; private set; } = null;
         public BarcodeForm qrCodeForm { get; private set; } = null;
         public HashCheckForm hashCheckForm { get; private set; } = null;
 
+        private System.Windows.Forms.Timer trayClickTimer;
+
         private int trayClickCount = 0;
+
         private bool forceClose = false;
         private bool allowShowDisplay = !MainFormSettings.startInTray;
         private bool isInTrayOrMinimized = MainFormSettings.startInTray;
@@ -44,7 +46,7 @@ namespace WinkingCat
 #endif
             niTrayIcon.Visible = MainFormSettings.showInTray;
 
-#region Capture dropdown buttons
+            #region Capture dropdown buttons
             tsddbToolStripDropDownButton_Capture.DropDown.Closing += toolStripDropDown_Closing;
             tsddbToolStripDropDownButton_Capture.DropDownOpening += tsmiCapture_DropDownOpening;
 
@@ -54,7 +56,7 @@ namespace WinkingCat
             tsmiToolStripMenuItem_captureCursor.Click += CursorCapture_Click;
 #endregion
 
-#region Clips dropdown buttons
+            #region Clips dropdown buttons
             tsddbToolStripDropDownButton_Clips.DropDown.Closing += toolStripDropDown_Closing;
 
             tsmiToolStripMenuItem_newClip.Click += NewClip_Click;
@@ -63,7 +65,7 @@ namespace WinkingCat
             tsmiToolStripMenuItem_createClipAfterRegionCapture.Click += CreateClipAfterRegionCapture_Click;
 #endregion
 
-#region Tools dropdown buttons
+            #region Tools dropdown buttons
             tsddbToolStripDropDownButton_Tools.DropDown.Closing += toolStripDropDown_Closing;
 
             tsmiToolStripDropDownButton_screenColorPicker.Click += ScreenColorPicker_Click;
@@ -109,81 +111,25 @@ namespace WinkingCat
 
             ImageHandler.ImageSaved += ImageSaved_Event;
             ApplicationStyles.UpdateStylesEvent += ApplicationStyles_UpdateSylesEvent;
+            MainFormSettings.SettingsChangedEvent += UpdateSettings;
+            lvListView.ItemSelectionChanged += LvListView_ItemSelectionChanged;
 
             lvListView.AutoResizeColumns(ColumnHeaderAutoResizeStyle.ColumnContent);
             lvListView.AutoResizeColumns(ColumnHeaderAutoResizeStyle.HeaderSize);
 
             ResumeLayout();
 
-            MainFormSettings.SettingsChangedEvent += UpdateSettings;
-            lvListView.ItemSelectionChanged += LvListView_ItemSelectionChanged;
-
             this.pbPreviewBox.previewOnClick = true;
-        }
-
-        private void LvListView_ItemSelectionChanged(object sender, ListViewItemSelectionChangedEventArgs e)
-        {
-            if (e.IsSelected)
-            {
-                this.scMain.Panel2.Show();
-                this.scMain.Panel2Collapsed = false;
-                this.pbPreviewBox.SetImage((string)e.Item.Tag);
-            }
-            else
-            {
-                this.scMain.Panel2Collapsed = true;
-                this.scMain.Panel2.Hide();
-                this.pbPreviewBox.Reset();
-            }
-        }
-
-        private void ApplicationStyles_UpdateSylesEvent(object sender, EventArgs e)
-        {
-            UpdateTheme();
-        }
-
-        private void MainForm_HandleCreated(object sender, EventArgs e)
-        {
-            isHandleCreated = true;
-            UpdateTheme();
-        }
-
-        private void UpdateSettings(object sender, EventArgs e)
-        {
-            TopMost = MainFormSettings.alwaysOnTop;
-            niTrayIcon.Visible = MainFormSettings.showInTray;
-        }
-
-        public void UpdateTheme()
-        {
-            if(ApplicationStyles.currentStyle.mainFormStyle.useImersiveDarkMode && isHandleCreated)
-            {
-                NativeMethods.UseImmersiveDarkMode(Handle, true);
-                this.Icon = Properties.Resources._3white;
-            }
-            else
-            {
-                NativeMethods.UseImmersiveDarkMode(Handle, false);
-                this.Icon = Properties.Resources._3black;
-            }
-
-            this.Text = "";// ApplicationStyles.mainFormName;
-            this.BackColor = ApplicationStyles.currentStyle.mainFormStyle.backgroundColor;
-            tsMain.Renderer = new ToolStripCustomRenderer();
-
-            cmTray.Renderer = new ToolStripCustomRenderer();
-            cmTray.Opacity = ApplicationStyles.currentStyle.mainFormStyle.contextMenuOpacity;
-
-            lvListView.ForeColor = ApplicationStyles.currentStyle.mainFormStyle.textColor;
-            Refresh();
         }
 
         public void ImageSaved_Event(object sender, ImageSavedEvent e)
         {
-            string[] row1 = { e.info.Extension,  // name
-                $"{e.dimensions.Width}, {e.dimensions.Height}", // dimensions
-                Helpers.SizeSuffix(e.size), // size
-                File.GetLastWriteTime(e.info.FullName).ToString() }; // date modified
+            string[] row1 = { 
+                e.info.Extension,                                   // file type
+                $"{e.dimensions.Width}, {e.dimensions.Height}",     // dimensions
+                Helpers.SizeSuffix(e.size),                         // size
+                File.GetLastWriteTime(e.info.FullName).ToString()   // date modified
+            }; 
 
             ListViewItem item = new ListViewItem() { Text = e.info.Name, Tag = e.info.FullName};
 
@@ -198,6 +144,7 @@ namespace WinkingCat
                 lvListView.InsertItem(0, item);
             }
         }
+        #region DropDowns
 
         #region Capture dropdown buttons
         private async void tsmiCapture_DropDownOpening(object sender, EventArgs e)
@@ -423,6 +370,8 @@ namespace WinkingCat
         }
         #endregion
 
+        #endregion
+
         #region tray icon
         private void TrayClickTimer_Interval(object sender, EventArgs e)
         {
@@ -472,9 +421,15 @@ namespace WinkingCat
             forceClose = true;
             Close();
         }
-#endregion
+        #endregion
 
         #region MainForm events
+
+        private void MainForm_HandleCreated(object sender, EventArgs e)
+        {
+            isHandleCreated = true;
+            UpdateTheme();
+        }
 
         private void MainForm_Resize(object sender, EventArgs e)
         {
@@ -517,20 +472,64 @@ namespace WinkingCat
                 Hide();
             }
         }
-#endregion
 
-        public void HideAll()
+        #endregion
+
+        #region Settings / Styles
+
+        private void UpdateSettings(object sender, EventArgs e)
         {
-            Hide();
-            settingsForm?.Hide();
-            stylesForm?.Hide();
+            TopMost = MainFormSettings.alwaysOnTop;
+            niTrayIcon.Visible = MainFormSettings.showInTray;
         }
 
-        public void ShowAll()
+        private void ApplicationStyles_UpdateSylesEvent(object sender, EventArgs e)
         {
-            Show();
-            settingsForm?.Show();
-            stylesForm?.Show();
+            UpdateTheme();
+        }
+
+        public void UpdateTheme()
+        {
+            if (ApplicationStyles.currentStyle.mainFormStyle.useImersiveDarkMode && isHandleCreated)
+            {
+                NativeMethods.UseImmersiveDarkMode(Handle, true);
+                this.Icon = Properties.Resources._3white;
+            }
+            else
+            {
+                NativeMethods.UseImmersiveDarkMode(Handle, false);
+                this.Icon = Properties.Resources._3black;
+            }
+
+            this.Text = "";// ApplicationStyles.mainFormName;
+            this.BackColor = ApplicationStyles.currentStyle.mainFormStyle.backgroundColor;
+            tsMain.Renderer = new ToolStripCustomRenderer();
+
+            cmTray.Renderer = new ToolStripCustomRenderer();
+            cmTray.Opacity = ApplicationStyles.currentStyle.mainFormStyle.contextMenuOpacity;
+
+            lvListView.ForeColor = ApplicationStyles.currentStyle.mainFormStyle.textColor;
+            Refresh();
+        }
+
+        #endregion
+
+        #region Control Events
+
+        private void LvListView_ItemSelectionChanged(object sender, ListViewItemSelectionChangedEventArgs e)
+        {
+            if (e.IsSelected)
+            {
+                this.scMain.Panel2.Show();
+                this.scMain.Panel2Collapsed = false;
+                this.pbPreviewBox.SetImage((string)e.Item.Tag);
+            }
+            else
+            {
+                this.scMain.Panel2Collapsed = true;
+                this.scMain.Panel2.Hide();
+                this.pbPreviewBox.Reset();
+            }
         }
 
         private void toolStripDropDown_Closing(object sender, ToolStripDropDownClosingEventArgs e)
@@ -551,6 +550,75 @@ namespace WinkingCat
                         forceDropDownClose = false;
                     break;
             }
+        }
+
+        #endregion
+
+        #region ChildForms
+
+        private void ChildFormClosing(object sender, EventArgs e)
+        {
+            switch (((Form)sender).Text)
+            {
+                case "Styles":
+                    stylesForm?.Dispose();
+                    stylesForm = null;
+                    break;
+                case "Settings":
+                    settingsForm?.Dispose();
+                    settingsForm = null;
+                    break;
+                case "ColorPicker":
+                    colorPickerForm?.Dispose();
+                    colorPickerForm = null;
+                    break;
+                case "Qr Code":
+                    qrCodeForm?.Dispose();
+                    qrCodeForm = null;
+                    break;
+                case "HashCheck":
+                    hashCheckForm?.Dispose();
+                    hashCheckForm = null;
+                    break;
+            }
+        }
+
+        private void ToolStripDropDownButton_Settings_Click(object sender, EventArgs e)
+        {
+            settingsForm?.Close();
+            settingsForm?.Dispose();
+            settingsForm = new SettingsForm();
+            settingsForm.Owner = this;
+            settingsForm.TopMost = MainFormSettings.alwaysOnTop;
+            settingsForm.FormClosing += ChildFormClosing;
+            settingsForm.Show();
+        }
+
+        private void ToolStripDropDownButton_Styles_Click(object sender, EventArgs e)
+        {
+            stylesForm?.Close();
+            stylesForm?.Dispose();
+            stylesForm = new StylesForm();
+            stylesForm.Owner = this;
+            stylesForm.TopMost = MainFormSettings.alwaysOnTop;
+            stylesForm.FormClosing += ChildFormClosing;
+            stylesForm.Show();
+        }
+
+        #endregion
+
+        public void HideAll()
+        {
+            Hide();
+            settingsForm?.Hide();
+            stylesForm?.Hide();
+        }
+
+        public void ShowAll()
+        {
+            Show();
+            settingsForm?.Show();
+            stylesForm?.Show();
         }
 
         private async Task PrepareCaptureMenuAsync(ToolStripMenuItem tsmiWindow, EventHandler handlerWindow, ToolStripMenuItem tsmiMonitor, EventHandler handlerMonitor)
@@ -617,55 +685,7 @@ namespace WinkingCat
         }
 
 
-        private void ChildFormClosing(object sender, EventArgs e)
-        {
-            switch (((Form)sender).Text)
-            {
-                case "Styles":
-                    stylesForm?.Dispose();
-                    stylesForm = null;
-                    break;
-                case "Settings":
-                    settingsForm?.Dispose();
-                    settingsForm = null;
-                    break;
-                case "ColorPicker":
-                    colorPickerForm?.Dispose();
-                    colorPickerForm = null;
-                    break;
-                case "Qr Code":
-                    qrCodeForm?.Dispose();
-                    qrCodeForm = null;
-                    break;
-                case "HashCheck":
-                    hashCheckForm?.Dispose();
-                    hashCheckForm = null;
-                    break;
-            }
-        }
-
-        private void ToolStripDropDownButton_Settings_Click(object sender, EventArgs e)
-        {
-            settingsForm?.Close();
-            settingsForm?.Dispose();
-            settingsForm = new SettingsForm();
-            settingsForm.Owner = this;
-            settingsForm.TopMost = MainFormSettings.alwaysOnTop;
-            settingsForm.FormClosing += ChildFormClosing;
-            settingsForm.Show();
-        }
-
-        private void ToolStripDropDownButton_Styles_Click(object sender, EventArgs e)
-        {
-            stylesForm?.Close();
-            stylesForm?.Dispose();
-            stylesForm = new StylesForm();
-            stylesForm.Owner = this;
-            stylesForm.TopMost = MainFormSettings.alwaysOnTop;
-            stylesForm.FormClosing += ChildFormClosing;
-            stylesForm.Show();
-        }
-
+        
         private void ShowMe()
         {
             isInTrayOrMinimized = false;

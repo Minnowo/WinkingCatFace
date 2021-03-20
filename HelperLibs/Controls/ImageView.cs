@@ -84,6 +84,18 @@ namespace WinkingCat.HelperLibs
             }
         }
 
+        public bool CenterOnLoad
+        {
+            get
+            {
+                return drawingBoard1.centerOnLoad;
+            }
+            set
+            {
+                drawingBoard1.centerOnLoad = value;
+            }
+        }
+
         private bool scrollVisible = true;
         private bool preventUpdate = false;
         public ImageView()

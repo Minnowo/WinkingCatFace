@@ -158,30 +158,7 @@ namespace WinkingCat.HelperLibs
         {
             return OSVersion.Major >= 10 && OSVersion.Build >= build;
         }
-        public static Size GetImageDimensionsFile(string imagePath)
-        {
-            if (File.Exists(imagePath))
-            {
-                using (FileStream fileStream = new FileStream(imagePath, FileMode.Open, FileAccess.Read, FileShare.Read))
-                {
-                    try
-                    {
-                        using (Image image = Image.FromStream(fileStream, false, false))
-                        {
-                            return new Size(image.Width, image.Height);
-                        }
-                    }
-                    catch(Exception e)
-                    {
-                        Logger.WriteException(e);
-                        return Size.Empty;
-                    }
-                    
-                }
-            }
-            else
-                return Size.Empty;
-        }
+        
 
         public static string[] GetEnumDescriptions<T>(int skip = 0)
         {

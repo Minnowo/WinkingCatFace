@@ -13,6 +13,8 @@ namespace WinkingCat.HelperLibs
 {
     public partial class _PictureBox : UserControl
     {
+        public delegate void ImageViewerCalled(object sender);
+        public event ImageViewerCalled ImageViewCalled;
 
         public Image Image
         {
@@ -67,21 +69,8 @@ namespace WinkingCat.HelperLibs
                     {
                         this.Reset();
                         isImageLoading = true;
-                    
-                        using (FileStream fileStream = new FileStream(path, FileMode.Open, FileAccess.Read, FileShare.Read))
-                        {
-                            try
-                            {
-                                using (Image image = Image.FromStream(fileStream, false, false))
-                                {
-                                    this.Image = (Image)image.Clone();
-                                }
-                            }
-                            catch (Exception e)
-                            {
-                                Logger.WriteException(e);
-                            }
-                        }
+
+                        this.Image = ImageHelper.FastLoadImage(path);
                     
                         this.isImageLoading = false;
                         ImageSizeMode();
@@ -120,12 +109,21 @@ namespace WinkingCat.HelperLibs
         {
             if (previewOnClick)
             {
+                //Image tmp = this.Image.CloneSafe();
+                //OnImageViewCalled();
+
                 this.pbMain.Enabled = false;
                 ImageViewerForm.ShowImage(this.Image);
-                //WinkingCat.HelperLibs.Form1 a = new Form1((Bitmap)this.Image);
-                //Form1 a = new Form1((Bitmap)this.Image);
-                //a.Show();
+
                 this.pbMain.Enabled = true;
+            }
+        }
+
+        private void OnImageViewCalled()
+        {
+            if(ImageViewCalled != null)
+            {
+                ImageViewCalled(this);
             }
         }
 

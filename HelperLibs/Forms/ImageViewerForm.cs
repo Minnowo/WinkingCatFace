@@ -25,6 +25,22 @@ namespace WinkingCat.HelperLibs
             InitializeComponent();
         }
 
+        public static void ShowDisposeImage(Image img)
+        {
+            if (img != null)
+            {
+                using (Image tempImage = img)
+                {
+                    if (tempImage != null)
+                    {
+                        using (ImageViewerForm viewer = new ImageViewerForm(tempImage))
+                        {
+                            viewer.ShowDialog();
+                        }
+                    }
+                }
+            }
+        }
 
         public static void ShowImage(Image img)
         {
