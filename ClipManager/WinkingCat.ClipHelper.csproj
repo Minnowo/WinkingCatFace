@@ -100,5 +100,11 @@
   <ItemGroup>
     <None Include="Resources\layer-shape-text-icon.png" />
   </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\%3b3black.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\%3b3white.ico" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

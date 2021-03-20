@@ -31,7 +31,7 @@ namespace WinkingCat.ClipHelper
         {
             if (Clips.ContainsKey(clipName))
             {
-                Clips[clipName]?.Destroy();
+                Clips[clipName]?.Dispose();
                 Clips.Remove(clipName); 
             }
             
@@ -43,7 +43,7 @@ namespace WinkingCat.ClipHelper
             string[] names = Clips.Keys.ToArray();
             foreach(string clipName in names)
             {
-                Clips[clipName]?.Destroy();
+                Clips[clipName]?.Dispose();
                 Clips.Remove(clipName);
             }
         }

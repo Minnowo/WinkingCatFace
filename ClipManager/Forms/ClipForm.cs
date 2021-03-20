@@ -23,7 +23,7 @@ namespace WinkingCat.ClipHelper
     }
     public partial class ClipForm : Form
     {
-        private const int RESIZE_HANDLE_SIZE = 7;
+        //private const int RESIZE_HANDLE_SIZE = 7;
 
         public Size imageSize { get; private set; }
         public Size imageDefaultSize { get; private set; }
@@ -33,7 +33,7 @@ namespace WinkingCat.ClipHelper
         public ClipOptions Options { get; private set; }
         public string ClipName { get; private set; }
         public Bitmap image { get; private set; }
-        public Bitmap zoomImage { get; private set; }
+        //public Bitmap zoomImage { get; private set; }
         private TextureBrush backgroundBrush { get; set; }
 
         private DragLoc drag { get; set; }
@@ -41,12 +41,14 @@ namespace WinkingCat.ClipHelper
         private bool isResizing { get; set; } = false;
         public bool isResizable { get; set; } = true;
         public bool isMoving { get; set; } = false;
-
+        
         public ClipForm(ClipOptions options, Image displayImage, string clipName)
         {
             NativeMethods.SetProcessDpiAwarenessContext(-3);
             InitializeComponent();
             SuspendLayout();
+
+            this.Text = clipName;
 
             Options = options;
             Options.borderThickness = 2;
@@ -68,6 +70,8 @@ namespace WinkingCat.ClipHelper
             MouseDown += MouseDown_Event;
             MouseUp += MouseUp_Event;
             MouseMove += MouseMove_Event;
+            FormClosing += ClipForm_FormClosing;
+            ApplicationStyles.UpdateStylesEvent += UpdateTheme;
 
             #region context menu
             tsmiCopyToolStripMenuItem.Click += CopyClipImage;
@@ -94,6 +98,7 @@ namespace WinkingCat.ClipHelper
 
             backgroundBrush = new TextureBrush(image) { WrapMode = WrapMode.Clamp };
 
+            UpdateTheme(null, EventArgs.Empty);
 
             //for some reason if the clip is on a display that is scaled it makes it bigger than its supposed to be
             //so only allow it to be resized after 1000 ms
@@ -101,6 +106,26 @@ namespace WinkingCat.ClipHelper
             updateMaxSizeTimer.Tick += UpdateMaxSizeTimerTick_Event;
             updateMaxSizeTimer.Start();
 
+        }
+
+        private void ClipForm_FormClosing(object sender, FormClosingEventArgs e)
+        {
+            this.Dispose();
+        }
+
+        public void UpdateTheme(object sender, EventArgs e)
+        {
+            if (ApplicationStyles.currentStyle.mainFormStyle.useImersiveDarkMode)
+            {
+                this.Icon = Properties.Resources._3white;
+            }
+            else
+            {
+                this.Icon = Properties.Resources._3black;
+            }
+            cmMain.Renderer = new ToolStripCustomRenderer();
+            cmMain.Opacity = ApplicationStyles.currentStyle.mainFormStyle.contextMenuOpacity;
+            Refresh();
         }
 
 
@@ -125,18 +150,10 @@ namespace WinkingCat.ClipHelper
         #region context menu functions
         public void CopyScaledImage(object sender = null, EventArgs e = null)
         {
-            Bitmap bmp = new Bitmap(Width - Options.borderThickness, Height - Options.borderThickness);
-            using (Graphics gr = Graphics.FromImage(bmp))
+            using(Bitmap img = ImageHelper.ResizeImage(this.image, new Size(Width - Options.borderThickness, Height - Options.borderThickness)))
             {
-                gr.InterpolationMode = InterpolationMode.NearestNeighbor;
-                gr.PixelOffsetMode = PixelOffsetMode.Half;
-
-                gr.DrawImage(image, new Rectangle(0, 0, Width - Options.borderThickness, Height - Options.borderThickness),
-                    new Rectangle(0, 0, image.Width, image.Height),
-                    GraphicsUnit.Pixel);
+                ClipboardHelpers.CopyImageDefault(img);
             }
-            ClipboardHelpers.CopyImageDefault(bmp);
-            bmp.Dispose();
         }
 
         public void CopyClipImage(object sender = null, EventArgs e = null)
@@ -223,18 +240,19 @@ namespace WinkingCat.ClipHelper
         private void NewBrush()
         {
             backgroundBrush?.Dispose();
-            Bitmap bmp = new Bitmap(Width - Options.borderThickness, Height - Options.borderThickness);
-            using (Graphics gr = Graphics.FromImage(bmp))
-            {
+            using (Bitmap bmp = new Bitmap(Width - Options.borderThickness, Height - Options.borderThickness))
+            { using (Graphics gr = Graphics.FromImage(bmp))
+            
+                { 
                 gr.InterpolationMode = InterpolationMode.NearestNeighbor;
                 gr.PixelOffsetMode = PixelOffsetMode.Half;
 
                 gr.DrawImage(image, new Rectangle(0, 0, Width - Options.borderThickness, Height - Options.borderThickness),
                     new Rectangle(0, 0, image.Width, image.Height),
                     GraphicsUnit.Pixel);
+                }
+                backgroundBrush = new TextureBrush(bmp) { WrapMode = WrapMode.Clamp };
             }
-            backgroundBrush = new TextureBrush(bmp) { WrapMode = WrapMode.Clamp };
-            bmp.Dispose();
         }
 
         #region Mouse Events
@@ -361,14 +379,23 @@ namespace WinkingCat.ClipHelper
         #endregion
 
         #region other
+
+        /// <summary>
+        /// 
+        /// this is called 1000 ms after the clip is made, this is because
+        /// if the clip is made on a monitor that has dpi scaling 
+        /// it makes the clip bigger than it should be, so the max size
+        /// is set 1 second after its made to prevent that
+        /// 
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void UpdateMaxSizeTimerTick_Event(object sender, EventArgs e)
         {
             ((Timer)sender)?.Stop();
             ((Timer)sender)?.Dispose();
             MaximumSize = Options.maxClipSize;
             Height = startWindowSize.Height;
-            //Size = startWindowSize;
-            Console.WriteLine(Size);
             Refresh();
         }
 
@@ -388,15 +415,6 @@ namespace WinkingCat.ClipHelper
         {
             NativeMethods.SetForegroundWindow(Handle);
             NativeMethods.ShowWindow(Handle, (int)WindowShowStyle.Restore);
-        }
-
-        public void Destroy()
-        {
-            cmMain?.Dispose();
-            image?.Dispose();
-            zoomImage?.Dispose();
-            backgroundBrush?.Dispose();
-            base.Dispose(true);
         }
 
         protected override CreateParams CreateParams
