@@ -278,7 +278,7 @@ namespace WinkingCat
                         using (Image img = ImageHelper.LoadImage(Items[SelectedIndex].Tag.ToString()))
                         {
                             if(img != null)
-                                ClipboardHelpers.CopyImageDefault(img);
+                                ClipboardHelper.CopyImageDefault(img);
                             else
                             {
                                 MessageBox.Show("The file is either not an image file or is corrupt");
@@ -301,7 +301,7 @@ namespace WinkingCat
                 if (File.Exists(Items[SelectedIndex].Tag.ToString()))
                 {
                     Size dims = ImageHelper.GetImageDimensionsFile(Items[SelectedIndex].Tag.ToString());
-                    ClipboardHelpers.CopyStringDefault(
+                    ClipboardHelper.CopyStringDefault(
                         string.Format("{0} x {1}", dims.Width, dims.Height));
                 }
                 else
@@ -319,7 +319,7 @@ namespace WinkingCat
             {
                 if (File.Exists(Items[SelectedIndex].Tag.ToString()))
                 {
-                    ClipboardHelpers.CopyFile(Items[SelectedIndex].Tag.ToString());
+                    ClipboardHelper.CopyFile(Items[SelectedIndex].Tag.ToString());
                 }
                 else
                 {
@@ -336,7 +336,7 @@ namespace WinkingCat
             {
                 if (File.Exists(Items[SelectedIndex].Tag.ToString()))
                 {
-                    ClipboardHelpers.CopyStringDefault(Items[SelectedIndex].Text.ToString());
+                    ClipboardHelper.CopyStringDefault(Items[SelectedIndex].Text.ToString());
                 }
                 else
                 {
@@ -353,7 +353,7 @@ namespace WinkingCat
             {
                 if (File.Exists(Items[SelectedIndex].Tag.ToString()))
                 {
-                    ClipboardHelpers.CopyStringDefault(Items[SelectedIndex].Tag.ToString());
+                    ClipboardHelper.CopyStringDefault(Items[SelectedIndex].Tag.ToString());
                 }
                 else
                 {
@@ -370,7 +370,7 @@ namespace WinkingCat
             {
                 if (Directory.Exists(Path.GetDirectoryName(Items[SelectedIndex].Tag.ToString())))
                 {
-                    ClipboardHelpers.CopyStringDefault(Path.GetDirectoryName(Items[SelectedIndex].Tag.ToString()));
+                    ClipboardHelper.CopyStringDefault(Path.GetDirectoryName(Items[SelectedIndex].Tag.ToString()));
                 }
                 else
                 {

@@ -23,6 +23,12 @@ namespace WinkingCat
             this.Text = "ColorPicker";
             this.MaximizeBox = false;
 
+            foreach(ColorFormat format in Enum.GetValues(typeof(ColorFormat)))
+                cbCopyFormat.Items.Add(format);
+            cbCopyFormat.SelectedItem = ClipboardHelper.copyFormat;
+
+
+
             ccbRGBColor.ColorFormat = ColorFormat.RGB;
             ccbRGBColor.DecimalPlaces = 0;
 
@@ -84,20 +90,12 @@ namespace WinkingCat
             ccbHSBColor.UpdateColor(e.Color);
             ccbHSLColor.UpdateColor(e.Color);
             ccbAdobeRGBColor.UpdateColor(e.Color);
-
-            // it hecks with the values cause idk and this helps only really need for cmyk but the xyz stuff is kinda nice
-            if (((ColorComboBox)sender).Name != ccbYXYColor.Name)
-                ccbYXYColor.UpdateColor(e.Color);
-
-            if (((ColorComboBox)sender).Name != ccbXYZColor.Name)
-                ccbXYZColor.UpdateColor(e.Color);
-
-            if(((ColorComboBox)sender).Name != ccbCMYKColor.Name)
-                ccbCMYKColor.UpdateColor(e.Color);
+            ccbYXYColor.UpdateColor(e.Color);
+            ccbXYZColor.UpdateColor(e.Color);
+            ccbCMYKColor.UpdateColor(e.Color);
 
             displayColorLabel.BackColor = e.Color;
             preventUpdate = false;
-            //Console.WriteLine(e.Color.argb);
         }
 
         private void ChangeDrawStyle(string checkboxName)
@@ -201,6 +199,19 @@ namespace WinkingCat
                 this.Icon = Properties.Resources._3black;
             }
             ApplicationStyles.ApplyCustomThemeToControl(this);
+        }
+
+        private void button3_Click(object sender, EventArgs e)
+        {
+            if (colorPicker.DrawStyle != DrawStyles.xyz)
+            {
+                ClipboardHelper.FormatCopyColor((ColorFormat)cbCopyFormat.SelectedItem, colorPicker.SelectedColor);
+            }
+            else
+            {
+                ClipboardHelper.FormatCopyColor((ColorFormat)cbCopyFormat.SelectedItem, colorPicker.AbsoluteColor);
+            }
+            
         }
     }
 }

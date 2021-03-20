@@ -13,8 +13,6 @@ namespace WinkingCat.HelperLibs
 {
     public partial class _PictureBox : UserControl
     {
-        public delegate void ImageViewerCalled(object sender);
-        public event ImageViewerCalled ImageViewCalled;
 
         public Image Image
         {
@@ -107,24 +105,19 @@ namespace WinkingCat.HelperLibs
 
         private void _PictureBox_MouseClick(object sender, MouseEventArgs e)
         {
-            if (previewOnClick)
+            switch (e.Button)
             {
-                //Image tmp = this.Image.CloneSafe();
-                //OnImageViewCalled();
+                case MouseButtons.Left:
+                    if (previewOnClick)
+                    {
+                        this.pbMain.Enabled = false;
+                        ImageViewerForm.ShowImage(this.Image);
 
-                this.pbMain.Enabled = false;
-                ImageViewerForm.ShowImage(this.Image);
-
-                this.pbMain.Enabled = true;
+                        this.pbMain.Enabled = true;
+                    }
+                    break;
             }
-        }
-
-        private void OnImageViewCalled()
-        {
-            if(ImageViewCalled != null)
-            {
-                ImageViewCalled(this);
-            }
+            
         }
 
         #region Component Designer generated code
@@ -167,7 +160,7 @@ namespace WinkingCat.HelperLibs
             this.Controls.Add(pbMain);
         }
 
-        PictureBox pbMain;
+        public PictureBox pbMain;
         #endregion
     }
 }

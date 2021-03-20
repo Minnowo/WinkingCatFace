@@ -602,6 +602,7 @@
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.MinimumSize = new System.Drawing.Size(666, 250);
             this.Name = "ApplicationForm";
+            this.MaximizeBox = false;
             this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.MainForm_FormClosing);
             this.cmTray.ResumeLayout(false);
             this.scMain.Panel1.ResumeLayout(false);

@@ -118,7 +118,7 @@
     <Compile Include="Enums.cs" />
     <Compile Include="Extensions\Extensions.cs" />
     <Compile Include="Helpers.cs" />
-    <Compile Include="Helpers\ClipboardHelpers.cs" />
+    <Compile Include="Helpers\ClipboardHelper.cs" />
     <Compile Include="Helpers\CursorData.cs" />
     <Compile Include="Helpers\ImageHelper.cs" />
     <Compile Include="Helpers\PathHelpler.cs" />

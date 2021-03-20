@@ -149,6 +149,8 @@ namespace WinkingCat.HelperLibs
 
         public void UpdateColor(_Color newColor)
         {
+            if (preventOverflow)
+                return;
             preventOverflow = true;
             switch (ColorFormat)
             {
@@ -307,19 +309,6 @@ namespace WinkingCat.HelperLibs
             UpdateMin();
             UpdateMax();
             UpdateValues();
-            /*            Console.WriteLine(colorFormat);
-                        if (values.Length > 3)
-                        {
-                            Console.WriteLine($"{values[0]},{values[1]},{values[2]},{values[3]}");
-                            Console.WriteLine($"{minValues[0]},{minValues[1]},{minValues[2]},{minValues[3]}");
-                            Console.WriteLine($"{maxValues[0]},{maxValues[1]},{maxValues[2]},{maxValues[3]}");
-                        }
-                        else
-                        {
-                            Console.WriteLine($"{values[0]},{values[1]},{values[2]}");
-                            Console.WriteLine($"{minValues[0]},{minValues[1]},{minValues[2]}");
-                            Console.WriteLine($"{maxValues[0]},{maxValues[1]},{maxValues[2]}");
-                        }*/
         }
 
         private void NumericUpDownKeyUp_Event(object sender, KeyEventArgs e)
@@ -361,18 +350,6 @@ namespace WinkingCat.HelperLibs
             values[((NumericUpDown)sender).TabIndex] = ((NumericUpDown)sender).Value;
             OnColorChanged();
             preventOverflow = false;
-            /*if (values.Length > 3)
-            {
-                Console.WriteLine($"{values[0]},{values[1]},{values[2]},{values[3]}");
-                Console.WriteLine($"{minValues[0]},{minValues[1]},{minValues[2]},{minValues[3]}");
-                Console.WriteLine($"{maxValues[0]},{maxValues[1]},{maxValues[2]},{maxValues[3]}");
-            }
-            else
-            {
-                Console.WriteLine($"{values[0]},{values[1]},{values[2]}");
-                Console.WriteLine($"{minValues[0]},{minValues[1]},{minValues[2]}");
-                Console.WriteLine($"{maxValues[0]},{maxValues[1]},{maxValues[2]}");
-            }*/
         }
 
         private void CreateNumericUpDown()
@@ -394,7 +371,7 @@ namespace WinkingCat.HelperLibs
                 n.Minimum = minValues[i];
                 n.Maximum = maxValues[i];
                 n.Value = values[i];
-                n.KeyUp += NumericUpDownKeyUp_Event;
+                //n.KeyUp += NumericUpDownKeyUp_Event;
                 n.ValueChanged += NumericUpDown_ValueChanged;
                 //n.MouseUp += Button_MouseUp;
                 this.Controls.Add(n);

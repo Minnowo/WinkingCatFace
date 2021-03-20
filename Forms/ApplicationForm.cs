@@ -40,13 +40,13 @@ namespace WinkingCat
         {
             InitializeComponent();
             SuspendLayout();
-            this.MaximizeBox = false;
+
 #if !DEBUG
             TopMost = MainFormSettings.alwaysOnTop;
-#endif
             niTrayIcon.Visible = MainFormSettings.showInTray;
+#endif
 
-            #region Capture dropdown buttons
+            #region Capture dropdown buttons event bindings
             tsddbToolStripDropDownButton_Capture.DropDown.Closing += toolStripDropDown_Closing;
             tsddbToolStripDropDownButton_Capture.DropDownOpening += tsmiCapture_DropDownOpening;
 
@@ -54,27 +54,27 @@ namespace WinkingCat
             tsmiToolStripMenuItem_fullscreen.Click += FullscreenCapture_Click;
             tsmiToolStripMenuItem_lastRegion.Click += LastRegionCapture_Click;
             tsmiToolStripMenuItem_captureCursor.Click += CursorCapture_Click;
-#endregion
+            #endregion
 
-            #region Clips dropdown buttons
+            #region Clips dropdown buttons event bindings
             tsddbToolStripDropDownButton_Clips.DropDown.Closing += toolStripDropDown_Closing;
 
             tsmiToolStripMenuItem_newClip.Click += NewClip_Click;
             tsmiToolStripMenuItem_clipFromClipboard.Click += ClipFromClipboard_Click;
             tsmiToolStripMenuItem_clipFromFile.Click += ClipFromFile_Click;
             tsmiToolStripMenuItem_createClipAfterRegionCapture.Click += CreateClipAfterRegionCapture_Click;
-#endregion
+            #endregion
 
-            #region Tools dropdown buttons
+            #region Tools dropdown buttons event bindings
             tsddbToolStripDropDownButton_Tools.DropDown.Closing += toolStripDropDown_Closing;
 
             tsmiToolStripDropDownButton_screenColorPicker.Click += ScreenColorPicker_Click;
             tsmiToolStripDropDownButton_ColorPicker.Click += ColorPicker_Click;
             tsmiToolStripDropDownButton_QrCode.Click += QrCode_Click;
             tsmiToolStripDropDownButton_HashCheck.Click += HashCheck_Click;
-#endregion
+            #endregion
 
-            #region Tray icon
+            #region Tray icon event bindings
             trayClickTimer = new System.Windows.Forms.Timer();
             trayClickTimer.Tick += TrayClickTimer_Interval;
             niTrayIcon.MouseUp += NiTrayIcon_MouseClick1Up;
@@ -108,17 +108,18 @@ namespace WinkingCat
             LostFocus += mainForm_LostFocus;
             GotFocus += mainForm_GotFocus;
             Resize += MainForm_Resize;
+            ResizeEnd += MainForm_Resize;
 
             ImageHandler.ImageSaved += ImageSaved_Event;
             ApplicationStyles.UpdateStylesEvent += ApplicationStyles_UpdateSylesEvent;
             MainFormSettings.SettingsChangedEvent += UpdateSettings;
             lvListView.ItemSelectionChanged += LvListView_ItemSelectionChanged;
-
-            lvListView.AutoResizeColumns(ColumnHeaderAutoResizeStyle.ColumnContent);
-            lvListView.AutoResizeColumns(ColumnHeaderAutoResizeStyle.HeaderSize);
+            pbPreviewBox.pbMain.MouseClick += PbPreviewBox_MouseClick;
 
             ResumeLayout();
 
+            lvListView.AutoResizeColumns(ColumnHeaderAutoResizeStyle.ColumnContent);
+            lvListView.AutoResizeColumns(ColumnHeaderAutoResizeStyle.HeaderSize);
             this.pbPreviewBox.previewOnClick = true;
         }
 
@@ -144,6 +145,7 @@ namespace WinkingCat
                 lvListView.InsertItem(0, item);
             }
         }
+
         #region DropDowns
 
         #region Capture dropdown buttons
@@ -199,7 +201,7 @@ namespace WinkingCat
                 ImageHandler.Save(img: img);
                 if (RegionCaptureOptions.autoCopyImage)
                 {
-                    ClipboardHelpers.CopyImageDefault(img);
+                    ClipboardHelper.CopyImageDefault(img);
                 }
             }
 
@@ -443,24 +445,19 @@ namespace WinkingCat
                     isInTrayOrMinimized = false;
                     break;
             }
+            CloseDropDowns();
         }
 
         private void mainForm_LostFocus(object sender, EventArgs e)
         {
             MainForm_Resize(null, EventArgs.Empty); // just to check the window state
-            forceDropDownClose = true;
-            tsddbToolStripDropDownButton_Capture.DropDown.Close();
-            tsddbToolStripDropDownButton_Clips.DropDown.Close();
-            tsddbToolStripDropDownButton_Tools.DropDown.Close();
+            CloseDropDowns();
         }
 
         private void mainForm_GotFocus(object sender, EventArgs e)
         {
             MainForm_Resize(null, EventArgs.Empty); // just to check the window state
-            forceDropDownClose = true;
-            tsddbToolStripDropDownButton_Capture.DropDown.Close();
-            tsddbToolStripDropDownButton_Clips.DropDown.Close();
-            tsddbToolStripDropDownButton_Tools.DropDown.Close();
+            CloseDropDowns();
         }
 
         private void MainForm_FormClosing(object sender, FormClosingEventArgs e)
@@ -515,6 +512,16 @@ namespace WinkingCat
         #endregion
 
         #region Control Events
+
+        private void PbPreviewBox_MouseClick(object sender, MouseEventArgs e)
+        {
+            switch (e.Button)
+            {
+                case MouseButtons.Right:
+                    this.lvListView.UnselectAll();
+                    break;
+            }
+        }
 
         private void LvListView_ItemSelectionChanged(object sender, ListViewItemSelectionChangedEventArgs e)
         {
@@ -606,6 +613,14 @@ namespace WinkingCat
         }
 
         #endregion
+
+        private void CloseDropDowns()
+        {
+            forceDropDownClose = true;
+            tsddbToolStripDropDownButton_Capture.DropDown.Close();
+            tsddbToolStripDropDownButton_Clips.DropDown.Close();
+            tsddbToolStripDropDownButton_Tools.DropDown.Close();
+        }
 
         public void HideAll()
         {

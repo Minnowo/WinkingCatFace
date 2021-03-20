@@ -29,7 +29,6 @@
         private void InitializeComponent()
         {
             this.pnlRGBColor = new System.Windows.Forms.Panel();
-            this.ccbRGBColor = new WinkingCat.HelperLibs.ColorComboBox();
             this.rbBlue = new System.Windows.Forms.RadioButton();
             this.rbGreen = new System.Windows.Forms.RadioButton();
             this.rbRed = new System.Windows.Forms.RadioButton();
@@ -38,23 +37,19 @@
             this.rbHSBBrightness = new System.Windows.Forms.RadioButton();
             this.rbHSBSaturation = new System.Windows.Forms.RadioButton();
             this.rbHSBHue = new System.Windows.Forms.RadioButton();
-            this.ccbHSBColor = new WinkingCat.HelperLibs.ColorComboBox();
             this.label2 = new System.Windows.Forms.Label();
             this.label3 = new System.Windows.Forms.Label();
             this.pnlHSLColor = new System.Windows.Forms.Panel();
             this.rbHSLLightness = new System.Windows.Forms.RadioButton();
             this.rbHSLSaturation = new System.Windows.Forms.RadioButton();
             this.rbHSLHue = new System.Windows.Forms.RadioButton();
-            this.ccbHSLColor = new WinkingCat.HelperLibs.ColorComboBox();
             this.label4 = new System.Windows.Forms.Label();
             this.pnlAdobeRGBColor = new System.Windows.Forms.Panel();
             this.rbAdobeRGBBlue = new System.Windows.Forms.RadioButton();
             this.rbAdobeRGBGreen = new System.Windows.Forms.RadioButton();
             this.rbAdobeRGBRed = new System.Windows.Forms.RadioButton();
-            this.ccbAdobeRGBColor = new WinkingCat.HelperLibs.ColorComboBox();
             this.pnlXYZColor = new System.Windows.Forms.Panel();
             this.rbX = new System.Windows.Forms.RadioButton();
-            this.ccbXYZColor = new WinkingCat.HelperLibs.ColorComboBox();
             this.label5 = new System.Windows.Forms.Label();
             this.label6 = new System.Windows.Forms.Label();
             this.label7 = new System.Windows.Forms.Label();
@@ -66,10 +61,16 @@
             this.label8 = new System.Windows.Forms.Label();
             this.label9 = new System.Windows.Forms.Label();
             this.displayColorLabel = new System.Windows.Forms.Label();
+            this.cbCopyFormat = new System.Windows.Forms.ComboBox();
             this.ccbCMYKColor = new WinkingCat.HelperLibs.ColorComboBox();
             this.ccbYXYColor = new WinkingCat.HelperLibs.ColorComboBox();
+            this.ccbXYZColor = new WinkingCat.HelperLibs.ColorComboBox();
+            this.ccbAdobeRGBColor = new WinkingCat.HelperLibs.ColorComboBox();
+            this.ccbHSLColor = new WinkingCat.HelperLibs.ColorComboBox();
+            this.ccbHSBColor = new WinkingCat.HelperLibs.ColorComboBox();
+            this.ccbRGBColor = new WinkingCat.HelperLibs.ColorComboBox();
             this.colorPicker = new WinkingCat.HelperLibs.ColorPicker();
-            this.comboBox1 = new System.Windows.Forms.ComboBox();
+            this.label10 = new System.Windows.Forms.Label();
             this.pnlRGBColor.SuspendLayout();
             this.pnlHSBColor.SuspendLayout();
             this.pnlHSLColor.SuspendLayout();
@@ -88,63 +89,6 @@
             this.pnlRGBColor.Name = "pnlRGBColor";
             this.pnlRGBColor.Size = new System.Drawing.Size(242, 55);
             this.pnlRGBColor.TabIndex = 1;
-            // 
-            // ccbRGBColor
-            // 
-            this.ccbRGBColor.ColorFormat = WinkingCat.HelperLibs.ColorFormat.RGB;
-            this.ccbRGBColor.DecimalPlaces = ((byte)(1));
-            this.ccbRGBColor.Location = new System.Drawing.Point(3, 3);
-            this.ccbRGBColor.MaxValues = new decimal[] {
-        new decimal(new int[] {
-                    255,
-                    0,
-                    0,
-                    0}),
-        new decimal(new int[] {
-                    255,
-                    0,
-                    0,
-                    0}),
-        new decimal(new int[] {
-                    255,
-                    0,
-                    0,
-                    0})};
-            this.ccbRGBColor.MinValues = new decimal[] {
-        new decimal(new int[] {
-                    0,
-                    0,
-                    0,
-                    0}),
-        new decimal(new int[] {
-                    0,
-                    0,
-                    0,
-                    0}),
-        new decimal(new int[] {
-                    0,
-                    0,
-                    0,
-                    0})};
-            this.ccbRGBColor.Name = "ccbRGBColor";
-            this.ccbRGBColor.Size = new System.Drawing.Size(234, 20);
-            this.ccbRGBColor.TabIndex = 3;
-            this.ccbRGBColor.Values = new decimal[] {
-        new decimal(new int[] {
-                    1,
-                    0,
-                    0,
-                    0}),
-        new decimal(new int[] {
-                    1,
-                    0,
-                    0,
-                    0}),
-        new decimal(new int[] {
-                    1,
-                    0,
-                    0,
-                    0})};
             // 
             // rbBlue
             // 
@@ -233,63 +177,6 @@
             this.rbHSBHue.Text = "Hue";
             this.rbHSBHue.UseVisualStyleBackColor = true;
             // 
-            // ccbHSBColor
-            // 
-            this.ccbHSBColor.ColorFormat = WinkingCat.HelperLibs.ColorFormat.RGB;
-            this.ccbHSBColor.DecimalPlaces = ((byte)(1));
-            this.ccbHSBColor.Location = new System.Drawing.Point(4, 3);
-            this.ccbHSBColor.MaxValues = new decimal[] {
-        new decimal(new int[] {
-                    255,
-                    0,
-                    0,
-                    0}),
-        new decimal(new int[] {
-                    255,
-                    0,
-                    0,
-                    0}),
-        new decimal(new int[] {
-                    255,
-                    0,
-                    0,
-                    0})};
-            this.ccbHSBColor.MinValues = new decimal[] {
-        new decimal(new int[] {
-                    0,
-                    0,
-                    0,
-                    0}),
-        new decimal(new int[] {
-                    0,
-                    0,
-                    0,
-                    0}),
-        new decimal(new int[] {
-                    0,
-                    0,
-                    0,
-                    0})};
-            this.ccbHSBColor.Name = "ccbHSBColor";
-            this.ccbHSBColor.Size = new System.Drawing.Size(235, 23);
-            this.ccbHSBColor.TabIndex = 0;
-            this.ccbHSBColor.Values = new decimal[] {
-        new decimal(new int[] {
-                    1,
-                    0,
-                    0,
-                    0}),
-        new decimal(new int[] {
-                    1,
-                    0,
-                    0,
-                    0}),
-        new decimal(new int[] {
-                    1,
-                    0,
-                    0,
-                    0})};
-            // 
             // label2
             // 
             this.label2.AutoSize = true;
@@ -353,63 +240,6 @@
             this.rbHSLHue.Text = "Hue";
             this.rbHSLHue.UseVisualStyleBackColor = true;
             // 
-            // ccbHSLColor
-            // 
-            this.ccbHSLColor.ColorFormat = WinkingCat.HelperLibs.ColorFormat.RGB;
-            this.ccbHSLColor.DecimalPlaces = ((byte)(1));
-            this.ccbHSLColor.Location = new System.Drawing.Point(4, 3);
-            this.ccbHSLColor.MaxValues = new decimal[] {
-        new decimal(new int[] {
-                    255,
-                    0,
-                    0,
-                    0}),
-        new decimal(new int[] {
-                    255,
-                    0,
-                    0,
-                    0}),
-        new decimal(new int[] {
-                    255,
-                    0,
-                    0,
-                    0})};
-            this.ccbHSLColor.MinValues = new decimal[] {
-        new decimal(new int[] {
-                    0,
-                    0,
-                    0,
-                    0}),
-        new decimal(new int[] {
-                    0,
-                    0,
-                    0,
-                    0}),
-        new decimal(new int[] {
-                    0,
-                    0,
-                    0,
-                    0})};
-            this.ccbHSLColor.Name = "ccbHSLColor";
-            this.ccbHSLColor.Size = new System.Drawing.Size(233, 23);
-            this.ccbHSLColor.TabIndex = 0;
-            this.ccbHSLColor.Values = new decimal[] {
-        new decimal(new int[] {
-                    1,
-                    0,
-                    0,
-                    0}),
-        new decimal(new int[] {
-                    1,
-                    0,
-                    0,
-                    0}),
-        new decimal(new int[] {
-                    1,
-                    0,
-                    0,
-                    0})};
-            // 
             // label4
             // 
             this.label4.AutoSize = true;
@@ -464,63 +294,6 @@
             this.rbAdobeRGBRed.Text = "Red";
             this.rbAdobeRGBRed.UseVisualStyleBackColor = true;
             // 
-            // ccbAdobeRGBColor
-            // 
-            this.ccbAdobeRGBColor.ColorFormat = WinkingCat.HelperLibs.ColorFormat.RGB;
-            this.ccbAdobeRGBColor.DecimalPlaces = ((byte)(1));
-            this.ccbAdobeRGBColor.Location = new System.Drawing.Point(3, 4);
-            this.ccbAdobeRGBColor.MaxValues = new decimal[] {
-        new decimal(new int[] {
-                    255,
-                    0,
-                    0,
-                    0}),
-        new decimal(new int[] {
-                    255,
-                    0,
-                    0,
-                    0}),
-        new decimal(new int[] {
-                    255,
-                    0,
-                    0,
-                    0})};
-            this.ccbAdobeRGBColor.MinValues = new decimal[] {
-        new decimal(new int[] {
-                    0,
-                    0,
-                    0,
-                    0}),
-        new decimal(new int[] {
-                    0,
-                    0,
-                    0,
-                    0}),
-        new decimal(new int[] {
-                    0,
-                    0,
-                    0,
-                    0})};
-            this.ccbAdobeRGBColor.Name = "ccbAdobeRGBColor";
-            this.ccbAdobeRGBColor.Size = new System.Drawing.Size(236, 23);
-            this.ccbAdobeRGBColor.TabIndex = 0;
-            this.ccbAdobeRGBColor.Values = new decimal[] {
-        new decimal(new int[] {
-                    1,
-                    0,
-                    0,
-                    0}),
-        new decimal(new int[] {
-                    1,
-                    0,
-                    0,
-                    0}),
-        new decimal(new int[] {
-                    1,
-                    0,
-                    0,
-                    0})};
-            // 
             // pnlXYZColor
             // 
             this.pnlXYZColor.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
@@ -541,63 +314,6 @@
             this.rbX.TabStop = true;
             this.rbX.Text = "X";
             this.rbX.UseVisualStyleBackColor = true;
-            // 
-            // ccbXYZColor
-            // 
-            this.ccbXYZColor.ColorFormat = WinkingCat.HelperLibs.ColorFormat.RGB;
-            this.ccbXYZColor.DecimalPlaces = ((byte)(1));
-            this.ccbXYZColor.Location = new System.Drawing.Point(3, 4);
-            this.ccbXYZColor.MaxValues = new decimal[] {
-        new decimal(new int[] {
-                    255,
-                    0,
-                    0,
-                    0}),
-        new decimal(new int[] {
-                    255,
-                    0,
-                    0,
-                    0}),
-        new decimal(new int[] {
-                    255,
-                    0,
-                    0,
-                    0})};
-            this.ccbXYZColor.MinValues = new decimal[] {
-        new decimal(new int[] {
-                    0,
-                    0,
-                    0,
-                    0}),
-        new decimal(new int[] {
-                    0,
-                    0,
-                    0,
-                    0}),
-        new decimal(new int[] {
-                    0,
-                    0,
-                    0,
-                    0})};
-            this.ccbXYZColor.Name = "ccbXYZColor";
-            this.ccbXYZColor.Size = new System.Drawing.Size(236, 23);
-            this.ccbXYZColor.TabIndex = 0;
-            this.ccbXYZColor.Values = new decimal[] {
-        new decimal(new int[] {
-                    1,
-                    0,
-                    0,
-                    0}),
-        new decimal(new int[] {
-                    1,
-                    0,
-                    0,
-                    0}),
-        new decimal(new int[] {
-                    1,
-                    0,
-                    0,
-                    0})};
             // 
             // label5
             // 
@@ -652,6 +368,7 @@
             this.button3.TabIndex = 15;
             this.button3.Text = "Copy";
             this.button3.UseVisualStyleBackColor = true;
+            this.button3.Click += new System.EventHandler(this.button3_Click);
             // 
             // textBox1
             // 
@@ -693,6 +410,15 @@
             this.displayColorLabel.Name = "displayColorLabel";
             this.displayColorLabel.Size = new System.Drawing.Size(46, 46);
             this.displayColorLabel.TabIndex = 22;
+            // 
+            // cbCopyFormat
+            // 
+            this.cbCopyFormat.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.cbCopyFormat.FormattingEnabled = true;
+            this.cbCopyFormat.Location = new System.Drawing.Point(368, 315);
+            this.cbCopyFormat.Name = "cbCopyFormat";
+            this.cbCopyFormat.Size = new System.Drawing.Size(121, 21);
+            this.cbCopyFormat.TabIndex = 23;
             // 
             // ccbCMYKColor
             // 
@@ -823,6 +549,291 @@
                     0,
                     0})};
             // 
+            // ccbXYZColor
+            // 
+            this.ccbXYZColor.ColorFormat = WinkingCat.HelperLibs.ColorFormat.RGB;
+            this.ccbXYZColor.DecimalPlaces = ((byte)(1));
+            this.ccbXYZColor.Location = new System.Drawing.Point(3, 4);
+            this.ccbXYZColor.MaxValues = new decimal[] {
+        new decimal(new int[] {
+                    255,
+                    0,
+                    0,
+                    0}),
+        new decimal(new int[] {
+                    255,
+                    0,
+                    0,
+                    0}),
+        new decimal(new int[] {
+                    255,
+                    0,
+                    0,
+                    0})};
+            this.ccbXYZColor.MinValues = new decimal[] {
+        new decimal(new int[] {
+                    0,
+                    0,
+                    0,
+                    0}),
+        new decimal(new int[] {
+                    0,
+                    0,
+                    0,
+                    0}),
+        new decimal(new int[] {
+                    0,
+                    0,
+                    0,
+                    0})};
+            this.ccbXYZColor.Name = "ccbXYZColor";
+            this.ccbXYZColor.Size = new System.Drawing.Size(236, 23);
+            this.ccbXYZColor.TabIndex = 0;
+            this.ccbXYZColor.Values = new decimal[] {
+        new decimal(new int[] {
+                    1,
+                    0,
+                    0,
+                    0}),
+        new decimal(new int[] {
+                    1,
+                    0,
+                    0,
+                    0}),
+        new decimal(new int[] {
+                    1,
+                    0,
+                    0,
+                    0})};
+            // 
+            // ccbAdobeRGBColor
+            // 
+            this.ccbAdobeRGBColor.ColorFormat = WinkingCat.HelperLibs.ColorFormat.RGB;
+            this.ccbAdobeRGBColor.DecimalPlaces = ((byte)(1));
+            this.ccbAdobeRGBColor.Location = new System.Drawing.Point(3, 4);
+            this.ccbAdobeRGBColor.MaxValues = new decimal[] {
+        new decimal(new int[] {
+                    255,
+                    0,
+                    0,
+                    0}),
+        new decimal(new int[] {
+                    255,
+                    0,
+                    0,
+                    0}),
+        new decimal(new int[] {
+                    255,
+                    0,
+                    0,
+                    0})};
+            this.ccbAdobeRGBColor.MinValues = new decimal[] {
+        new decimal(new int[] {
+                    0,
+                    0,
+                    0,
+                    0}),
+        new decimal(new int[] {
+                    0,
+                    0,
+                    0,
+                    0}),
+        new decimal(new int[] {
+                    0,
+                    0,
+                    0,
+                    0})};
+            this.ccbAdobeRGBColor.Name = "ccbAdobeRGBColor";
+            this.ccbAdobeRGBColor.Size = new System.Drawing.Size(236, 23);
+            this.ccbAdobeRGBColor.TabIndex = 0;
+            this.ccbAdobeRGBColor.Values = new decimal[] {
+        new decimal(new int[] {
+                    1,
+                    0,
+                    0,
+                    0}),
+        new decimal(new int[] {
+                    1,
+                    0,
+                    0,
+                    0}),
+        new decimal(new int[] {
+                    1,
+                    0,
+                    0,
+                    0})};
+            // 
+            // ccbHSLColor
+            // 
+            this.ccbHSLColor.ColorFormat = WinkingCat.HelperLibs.ColorFormat.RGB;
+            this.ccbHSLColor.DecimalPlaces = ((byte)(1));
+            this.ccbHSLColor.Location = new System.Drawing.Point(4, 3);
+            this.ccbHSLColor.MaxValues = new decimal[] {
+        new decimal(new int[] {
+                    255,
+                    0,
+                    0,
+                    0}),
+        new decimal(new int[] {
+                    255,
+                    0,
+                    0,
+                    0}),
+        new decimal(new int[] {
+                    255,
+                    0,
+                    0,
+                    0})};
+            this.ccbHSLColor.MinValues = new decimal[] {
+        new decimal(new int[] {
+                    0,
+                    0,
+                    0,
+                    0}),
+        new decimal(new int[] {
+                    0,
+                    0,
+                    0,
+                    0}),
+        new decimal(new int[] {
+                    0,
+                    0,
+                    0,
+                    0})};
+            this.ccbHSLColor.Name = "ccbHSLColor";
+            this.ccbHSLColor.Size = new System.Drawing.Size(233, 23);
+            this.ccbHSLColor.TabIndex = 0;
+            this.ccbHSLColor.Values = new decimal[] {
+        new decimal(new int[] {
+                    1,
+                    0,
+                    0,
+                    0}),
+        new decimal(new int[] {
+                    1,
+                    0,
+                    0,
+                    0}),
+        new decimal(new int[] {
+                    1,
+                    0,
+                    0,
+                    0})};
+            // 
+            // ccbHSBColor
+            // 
+            this.ccbHSBColor.ColorFormat = WinkingCat.HelperLibs.ColorFormat.RGB;
+            this.ccbHSBColor.DecimalPlaces = ((byte)(1));
+            this.ccbHSBColor.Location = new System.Drawing.Point(4, 3);
+            this.ccbHSBColor.MaxValues = new decimal[] {
+        new decimal(new int[] {
+                    255,
+                    0,
+                    0,
+                    0}),
+        new decimal(new int[] {
+                    255,
+                    0,
+                    0,
+                    0}),
+        new decimal(new int[] {
+                    255,
+                    0,
+                    0,
+                    0})};
+            this.ccbHSBColor.MinValues = new decimal[] {
+        new decimal(new int[] {
+                    0,
+                    0,
+                    0,
+                    0}),
+        new decimal(new int[] {
+                    0,
+                    0,
+                    0,
+                    0}),
+        new decimal(new int[] {
+                    0,
+                    0,
+                    0,
+                    0})};
+            this.ccbHSBColor.Name = "ccbHSBColor";
+            this.ccbHSBColor.Size = new System.Drawing.Size(235, 23);
+            this.ccbHSBColor.TabIndex = 0;
+            this.ccbHSBColor.Values = new decimal[] {
+        new decimal(new int[] {
+                    1,
+                    0,
+                    0,
+                    0}),
+        new decimal(new int[] {
+                    1,
+                    0,
+                    0,
+                    0}),
+        new decimal(new int[] {
+                    1,
+                    0,
+                    0,
+                    0})};
+            // 
+            // ccbRGBColor
+            // 
+            this.ccbRGBColor.ColorFormat = WinkingCat.HelperLibs.ColorFormat.RGB;
+            this.ccbRGBColor.DecimalPlaces = ((byte)(1));
+            this.ccbRGBColor.Location = new System.Drawing.Point(3, 3);
+            this.ccbRGBColor.MaxValues = new decimal[] {
+        new decimal(new int[] {
+                    255,
+                    0,
+                    0,
+                    0}),
+        new decimal(new int[] {
+                    255,
+                    0,
+                    0,
+                    0}),
+        new decimal(new int[] {
+                    255,
+                    0,
+                    0,
+                    0})};
+            this.ccbRGBColor.MinValues = new decimal[] {
+        new decimal(new int[] {
+                    0,
+                    0,
+                    0,
+                    0}),
+        new decimal(new int[] {
+                    0,
+                    0,
+                    0,
+                    0}),
+        new decimal(new int[] {
+                    0,
+                    0,
+                    0,
+                    0})};
+            this.ccbRGBColor.Name = "ccbRGBColor";
+            this.ccbRGBColor.Size = new System.Drawing.Size(234, 20);
+            this.ccbRGBColor.TabIndex = 3;
+            this.ccbRGBColor.Values = new decimal[] {
+        new decimal(new int[] {
+                    1,
+                    0,
+                    0,
+                    0}),
+        new decimal(new int[] {
+                    1,
+                    0,
+                    0,
+                    0}),
+        new decimal(new int[] {
+                    1,
+                    0,
+                    0,
+                    0})};
+            // 
             // colorPicker
             // 
             this.colorPicker.AutoSize = true;
@@ -832,20 +843,22 @@
             this.colorPicker.Size = new System.Drawing.Size(290, 261);
             this.colorPicker.TabIndex = 0;
             // 
-            // comboBox1
+            // label10
             // 
-            this.comboBox1.FormattingEnabled = true;
-            this.comboBox1.Location = new System.Drawing.Point(368, 315);
-            this.comboBox1.Name = "comboBox1";
-            this.comboBox1.Size = new System.Drawing.Size(121, 21);
-            this.comboBox1.TabIndex = 23;
+            this.label10.AutoSize = true;
+            this.label10.Location = new System.Drawing.Point(365, 299);
+            this.label10.Name = "label10";
+            this.label10.Size = new System.Drawing.Size(66, 13);
+            this.label10.TabIndex = 24;
+            this.label10.Text = "Copy Format";
             // 
             // ColorPickerForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(836, 355);
-            this.Controls.Add(this.comboBox1);
+            this.Controls.Add(this.label10);
+            this.Controls.Add(this.cbCopyFormat);
             this.Controls.Add(this.displayColorLabel);
             this.Controls.Add(this.label9);
             this.Controls.Add(this.label8);
@@ -930,6 +943,7 @@
         private System.Windows.Forms.Label label8;
         private System.Windows.Forms.Label label9;
         private System.Windows.Forms.Label displayColorLabel;
-        private System.Windows.Forms.ComboBox comboBox1;
+        private System.Windows.Forms.ComboBox cbCopyFormat;
+        private System.Windows.Forms.Label label10;
     }
 }

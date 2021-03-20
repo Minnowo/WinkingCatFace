@@ -203,7 +203,6 @@ namespace WinkingCat.HelperLibs
                 destRect.X = 0;
                 destRect.Y = 0;
                 initialDraw = false;
-                Console.WriteLine("init");
             }
             else
             {

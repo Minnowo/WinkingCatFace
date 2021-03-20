@@ -87,7 +87,7 @@ namespace WinkingCat
         {
             if (!string.IsNullOrEmpty(tbFileHash.Text))
             {
-                ClipboardHelpers.CopyStringDefault(tbFileHash.Text);
+                ClipboardHelper.CopyStringDefault(tbFileHash.Text);
             }
         }
 
@@ -95,7 +95,7 @@ namespace WinkingCat
         {
             if (!string.IsNullOrEmpty(tbHashInput.Text))
             {
-                ClipboardHelpers.CopyStringDefault(tbHashInput.Text);
+                ClipboardHelper.CopyStringDefault(tbHashInput.Text);
             }
         }
 
@@ -103,7 +103,7 @@ namespace WinkingCat
         {
             if (!string.IsNullOrEmpty(tbHashTarget.Text))
             {
-                ClipboardHelpers.CopyStringDefault(tbHashTarget.Text);
+                ClipboardHelper.CopyStringDefault(tbHashTarget.Text);
             }
         }
 
@@ -111,7 +111,7 @@ namespace WinkingCat
         {
             if (!string.IsNullOrEmpty(tbHashTarget.Text))
             {
-                ClipboardHelpers.CopyStringDefault(tbFileHash2.Text);
+                ClipboardHelper.CopyStringDefault(tbFileHash2.Text);
             }
         }
 

@@ -10,7 +10,7 @@ using System.IO;
 
 namespace WinkingCat.HelperLibs
 {
-    public static class ClipboardHelpers
+    public static class ClipboardHelper
     {
         private const int RETRYTIMES = 20;
         private const int RETRYDELAY = 100;

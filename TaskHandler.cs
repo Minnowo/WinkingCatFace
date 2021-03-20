@@ -34,7 +34,7 @@ namespace WinkingCat
                 img = ScreenShotManager.CaptureRectangle(window.Rectangle);
                 if (RegionCaptureOptions.autoCopyImage)
                 {
-                    ClipboardHelpers.CopyImageDefault(img);
+                    ClipboardHelper.CopyImageDefault(img);
                 }
                 if (string.IsNullOrEmpty(ImageHandler.Save(img: img)))
                 {
@@ -96,7 +96,7 @@ namespace WinkingCat
                     break;
 
                 case Tasks.NewClipFromClipboard:
-                    img = ClipboardHelpers.GetImage();
+                    img = ClipboardHelper.GetImage();
                     if (img != null)
                     {
                         Point p = ScreenHelper.GetCursorPosition();
@@ -126,7 +126,7 @@ namespace WinkingCat
                             result = false;
                         if(RegionCaptureOptions.autoCopyImage)
                         {
-                            ClipboardHelpers.CopyImageDefault(img);
+                            ClipboardHelper.CopyImageDefault(img);
                         }
                     }
                     else
@@ -140,7 +140,7 @@ namespace WinkingCat
                         result = false;
                     if (RegionCaptureOptions.autoCopyImage)
                     {
-                        ClipboardHelpers.CopyImageDefault(img);
+                        ClipboardHelper.CopyImageDefault(img);
                     }
                     break;
 
@@ -151,7 +151,7 @@ namespace WinkingCat
                         result = false;
                     if (RegionCaptureOptions.autoCopyImage)
                     {
-                        ClipboardHelpers.CopyImageDefault(img);
+                        ClipboardHelper.CopyImageDefault(img);
                     }
                     break;
 
@@ -162,7 +162,7 @@ namespace WinkingCat
                         result = false;
                     if (RegionCaptureOptions.autoCopyImage)
                     {
-                        ClipboardHelpers.CopyImageDefault(img);
+                        ClipboardHelper.CopyImageDefault(img);
                     }
                     break;
 

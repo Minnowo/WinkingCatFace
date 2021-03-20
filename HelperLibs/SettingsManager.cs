@@ -432,7 +432,7 @@ namespace WinkingCat.HelperLibs
                 KeyValueConfigurationCollection keys = conf.AppSettings.Settings;
 
                 keys.Clear();
-                keys.Add("copyFormat", ClipboardHelpers.copyFormat.ToString("D"));
+                keys.Add("copyFormat", ClipboardHelper.copyFormat.ToString("D"));
                 conf.Save();
                 return true;
             }
@@ -667,7 +667,7 @@ namespace WinkingCat.HelperLibs
                         switch (key)
                         {
                             case "copyFormat":
-                                ClipboardHelpers.copyFormat = (ColorFormat)int.Parse(keys["copyFormat"].Value);
+                                ClipboardHelper.copyFormat = (ColorFormat)int.Parse(keys["copyFormat"].Value);
                                 break;
                             default:
                                 throw new Exception("Keys have been modified Clipboard.config will be reset with default values");

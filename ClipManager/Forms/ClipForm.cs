@@ -152,13 +152,13 @@ namespace WinkingCat.ClipHelper
         {
             using(Bitmap img = ImageHelper.ResizeImage(this.image, new Size(Width - Options.borderThickness, Height - Options.borderThickness)))
             {
-                ClipboardHelpers.CopyImageDefault(img);
+                ClipboardHelper.CopyImageDefault(img);
             }
         }
 
         public void CopyClipImage(object sender = null, EventArgs e = null)
         {
-            ClipboardHelpers.CopyImageDefault(image);
+            ClipboardHelper.CopyImageDefault(image);
             cmMain.Close();
         }
 

@@ -34,7 +34,7 @@ namespace WinkingCat
 
         public void UpdateComboBox()
         {
-            comboBox3.SelectedItem = ClipboardHelpers.copyFormat;
+            comboBox3.SelectedItem = ClipboardHelper.copyFormat;
         }
 
         // autocopy image checkbox
@@ -52,7 +52,7 @@ namespace WinkingCat
         // color format combobox
         private void comboBox3_SelectedIndexChanged(object sender, EventArgs e)
         {
-            ClipboardHelpers.copyFormat = (ColorFormat)comboBox3.SelectedItem;
+            ClipboardHelper.copyFormat = (ColorFormat)comboBox3.SelectedItem;
         }
     }
 }
