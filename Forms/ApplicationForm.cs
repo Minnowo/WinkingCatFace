@@ -25,6 +25,7 @@ namespace WinkingCat
         public ColorPickerForm colorPickerForm { get; private set; } = null;
         public BarcodeForm qrCodeForm { get; private set; } = null;
         public HashCheckForm hashCheckForm { get; private set; } = null;
+        public RegexForm regexForm { get; private set; } = null;
 
         private System.Windows.Forms.Timer trayClickTimer;
 
@@ -72,6 +73,7 @@ namespace WinkingCat
             tsmiToolStripDropDownButton_ColorPicker.Click += ColorPicker_Click;
             tsmiToolStripDropDownButton_QrCode.Click += QrCode_Click;
             tsmiToolStripDropDownButton_HashCheck.Click += HashCheck_Click;
+            tsmiToolStripDropDownButton_Regex.Click += Regex_Click;
             #endregion
 
             #region Tray icon event bindings
@@ -370,6 +372,20 @@ namespace WinkingCat
                 hashCheckForm.Show();
             }
         }
+
+        private void Regex_Click(object sender, EventArgs e)
+        {
+            if (regexForm != null)
+            {
+                regexForm.ForceActivate();
+            }
+            else
+            {
+                regexForm = new RegexForm();
+                regexForm.FormClosing += ChildFormClosing;
+                regexForm.Show();
+            }
+        }
         #endregion
 
         #endregion
@@ -586,6 +602,10 @@ namespace WinkingCat
                 case "HashCheck":
                     hashCheckForm?.Dispose();
                     hashCheckForm = null;
+                    break;
+                case "Regex":
+                    regexForm?.Dispose();
+                    regexForm = null;
                     break;
             }
         }

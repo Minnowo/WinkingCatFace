@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Drawing;
+using System.Text.RegularExpressions;
 
 namespace WinkingCat.HelperLibs
 {
@@ -13,7 +14,7 @@ namespace WinkingCat.HelperLibs
         public double g { get; set; }
         public double b { get; set; }
         public ushort alpha { get; set; }
-
+        public static readonly AdobeRGB Empty;
         public double R
         {
             get
@@ -215,7 +216,7 @@ namespace WinkingCat.HelperLibs
         private float x { get; set; }
         private float y { get; set; }
         private ushort alpha { get; set; }
-
+        public static readonly Yxy Empty;
         public float YY
         {
             get
@@ -396,7 +397,7 @@ namespace WinkingCat.HelperLibs
         private float y { get; set; }
         private float z { get; set; }
         private ushort alpha { get; set; }
-
+        public static readonly XYZ Empty;
         public float X
         {
             get
@@ -608,7 +609,7 @@ namespace WinkingCat.HelperLibs
         private float y { get; set; }
         private float k { get; set; }
         private ushort alpha { get; set; }
-
+        public static readonly CMYK Empty;
         public float C
         {
             get
@@ -849,7 +850,7 @@ namespace WinkingCat.HelperLibs
         private float saturation { get; set; }
         private float lightness { get; set; }
         private ushort alpha { get; set; }
-
+        public static readonly HSL Empty;
         public float Hue
         {
             get
@@ -1088,6 +1089,7 @@ namespace WinkingCat.HelperLibs
         private float brightness { get; set; }
         private ushort alpha { get; set; }
 
+        public static readonly HSB Empty;
         public float Brightness
         {
             get
@@ -1170,6 +1172,14 @@ namespace WinkingCat.HelperLibs
             {
                 alpha = (ushort)ColorHelper.ValidColor(value);
             }
+        }
+
+        public HSB(float h, float s, float b, int a = 255) : this()
+        {
+            Hue360 = h;
+            Saturation100 = s;
+            Brightness100 = b;
+            Alpha = (ushort)a;
         }
 
         public HSB(int h, int s, int b, int a = 255) : this()
@@ -1364,7 +1374,7 @@ namespace WinkingCat.HelperLibs
         private ushort g { get; set; }
         private ushort b { get; set; }
         private ushort alpha { get; set; }
-
+        public static readonly ARGB Empty;
         public int R
         {
             get
@@ -1521,6 +1531,7 @@ namespace WinkingCat.HelperLibs
     }
     public struct _Color
     {
+        public static readonly _Color Empty;
         private ushort alpha { get; set; }
         public ARGB argb;
         public HSB hsb;
@@ -1660,8 +1671,11 @@ namespace WinkingCat.HelperLibs
     public static class ColorHelper
     {
         public static int decimalPlaces { get; set; } = 2;
-
-
+        public static Regex regHex = new Regex(@"^(?:#|0x)?((?:[0-9A-F]{2}){3})$");
+        public static Regex regRGB = new Regex(@"^([1]?[0-9]?[0-9]|2[0-4][0-9]|25[0-5])(?:\s|,)+([1]?[0-9]?[0-9]|2[0-4][0-9]|25[0-5])(?:\s|,)+([1]?[0-9]?[0-9]|2[0-4][0-9]|25[0-5])(?:\s)?$");
+        //public static Regex regARGB = new Regex(@"^([1]?[0-9]?[0-9]|2[0-4][0-9]|25[0-5])(?:\s|,)+([1]?[0-9]?[0-9]|2[0-4][0-9]|25[0-5])(?:\s|,)+([1]?[0-9]?[0-9]|2[0-4][0-9]|25[0-5])(?:\s|,)+([1]?[0-9]?[0-9]|2[0-4][0-9]|25[0-5])(?:\s)?$");
+        public static Regex regHSB = new Regex(@"^([1-2]?[0-9]?[0-9](?:[.][0-9]?[0-9]?[0-9]|)|3[0-5][0-9](?:[.][0-9]?[0-9]?[0-9]|)|360)(?:\s|,)+([0-9]?[0-9](?:[.][0-9]?[0-9]?[0-9]|)|100)(?:\s|,)+([0-9]?[0-9](?:[.][0-9]?[0-9]?[0-9]|)|100)(?:\s)?$");
+        public static Regex regCMYK = new Regex(@"^([0-9]?[0-9](?:[.][0-9]?[0-9]?[0-9]|)|100)(?:\s|,)+([0-9]?[0-9](?:[.][0-9]?[0-9]?[0-9]|)|100)(?:\s|,)+([0-9]?[0-9](?:[.][0-9]?[0-9]?[0-9]|)|100)(?:\s|,)+([0-9]?[0-9](?:[.][0-9]?[0-9]?[0-9]|)|100)(?:\s)?$");
         public static string ColorToHex(Color color, ColorFormat format = ColorFormat.RGB)
         {
             return ColorToHex(color.R, color.G, color.B, color.A, format);
@@ -1696,7 +1710,69 @@ namespace WinkingCat.HelperLibs
             }
         }
 
-        public static Color Subract(Color a, Color b)
+        public static bool ParseRGB(string input, out Color color)
+        {
+            Match matchRGB = Regex.Match(input, @"^([1]?[0-9]?[0-9]|2[0-4][0-9]|25[0-5])(?:\s|,)+([1]?[0-9]?[0-9]|2[0-4][0-9]|25[0-5])(?:\s|,)+([1]?[0-9]?[0-9]|2[0-4][0-9]|25[0-5])(?:\s)?$");
+            if (matchRGB.Success)
+            {
+                color = Color.FromArgb(int.Parse(matchRGB.Groups[1].Value), int.Parse(matchRGB.Groups[2].Value), int.Parse(matchRGB.Groups[3].Value));
+                return true;
+            }
+            color = Color.Empty;
+            return false;
+        }
+
+        public static bool ParseHex(string input, out Color color)
+        {
+            Match matchHex = Regex.Match(input, @"^(?:#|0x)?((?:[0-9A-Fa-f]{2}){3})$");
+            if (matchHex.Success)
+            {
+                color = HexToColor(matchHex.Groups[1].Value);
+                return true;
+            }
+            color = Color.Empty;
+            return false;
+        }
+
+        public static bool ParseHSB(string input, out HSB color)
+        {
+            Match matchHSB = Regex.Match(input, @"^([1-2]?[0-9]?[0-9](?:[.][0-9]?[0-9]?[0-9]|)|3[0-5][0-9](?:[.][0-9]?[0-9]?[0-9]|)|360)(?:\s|,)+([0-9]?[0-9](?:[.][0-9]?[0-9]?[0-9]|)|100)(?:\s|,)+([0-9]?[0-9](?:[.][0-9]?[0-9]?[0-9]|)|100)(?:\s)?$");
+            if (matchHSB.Success)
+            {
+                color = new HSB(float.Parse(matchHSB.Groups[1].Value), float.Parse(matchHSB.Groups[2].Value), float.Parse(matchHSB.Groups[3].Value));
+                return true;
+            }
+            color = HSB.Empty;
+            return false;
+        }
+
+
+        public static Color HexToColor(string hex)
+        {
+            if (string.IsNullOrEmpty(hex))
+            {
+                return Color.Empty;
+            }
+
+            if (hex[0] == '#')
+            {
+                hex = hex.Remove(0, 1);
+            }
+            else if (hex.StartsWith("0x", StringComparison.InvariantCultureIgnoreCase))
+            {
+                hex = hex.Remove(0, 2);
+            }
+            try
+            {
+                return ColorTranslator.FromHtml("#" + hex);
+            }
+            catch
+            {
+                return Color.Empty;
+            }
+        }
+
+        public static Color Subtract(Color a, Color b)
         {
             return Color.FromArgb(Math.Abs(a.R - b.R), Math.Abs(a.G - b.G), Math.Abs(a.B - b.B));
         }

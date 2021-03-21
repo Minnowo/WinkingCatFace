@@ -170,6 +170,7 @@ namespace WinkingCat
                 ccbYXYColor.UpdateColor(colorPicker.SelectedColor);
                 ccbXYZColor.UpdateColor(colorPicker.SelectedColor);
                 ccbCMYKColor.UpdateColor(colorPicker.SelectedColor);
+                textBox1.Text = colorPicker.SelectedColor.ToHex();
                 displayColorLabel.BackColor = colorPicker.SelectedColor;
             }
             else
@@ -181,6 +182,7 @@ namespace WinkingCat
                 ccbYXYColor.UpdateColor(colorPicker.AbsoluteColor);
                 ccbXYZColor.UpdateColor(colorPicker.AbsoluteColor);
                 ccbCMYKColor.UpdateColor(colorPicker.AbsoluteColor);
+                textBox1.Text = colorPicker.AbsoluteColor.ToHex();
                 displayColorLabel.BackColor = colorPicker.AbsoluteColor;
             }
             
@@ -212,6 +214,19 @@ namespace WinkingCat
                 ClipboardHelper.FormatCopyColor((ColorFormat)cbCopyFormat.SelectedItem, colorPicker.AbsoluteColor);
             }
             
+        }
+
+        private void textBox1_TextChanged(object sender, EventArgs e)
+        {
+            Color a;
+            ColorHelper.ParseHex(textBox1.Text, out a);
+            if (a != Color.Empty)
+                colorPicker.SelectedColor = a;
+        }
+
+        private void textBox2_TextChanged(object sender, EventArgs e)
+        {
+            //colorPicker.SelectedColor = ColorHelper.HexToColor(textBox2.Text);
         }
     }
 }

@@ -44,6 +44,10 @@
             this.tsmiClipFromClipboardToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.tsmiClipFromFileToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.tsmiToolsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.tsmiTrayScreenColorPicker = new System.Windows.Forms.ToolStripMenuItem();
+            this.tsmiTrayColorWheel = new System.Windows.Forms.ToolStripMenuItem();
+            this.tsmiTrayHashCheck = new System.Windows.Forms.ToolStripMenuItem();
+            this.tsmiTrayQrCodeScan = new System.Windows.Forms.ToolStripMenuItem();
             this.tssToolStripSeparator2 = new System.Windows.Forms.ToolStripSeparator();
             this.tsmiStylesToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.tsmiSettingsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -51,6 +55,12 @@
             this.tsmiOpenMainWindowToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.tsmiExitToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.scMain = new System.Windows.Forms.SplitContainer();
+            this.lvListView = new WinkingCat.NoCheckboxListView();
+            this.chColumnHeader1 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
+            this.chColumnHeader5 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
+            this.chColumnHeader2 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
+            this.chColumnHeader3 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
+            this.chColumnHeader4 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.pbPreviewBox = new WinkingCat.HelperLibs._PictureBox();
             this.tsMain = new System.Windows.Forms.ToolStrip();
             this.tsddbToolStripDropDownButton_Capture = new System.Windows.Forms.ToolStripDropDownButton();
@@ -73,16 +83,7 @@
             this.tssToolStripSeparator1 = new System.Windows.Forms.ToolStripSeparator();
             this.tsbToolStripButton_Style = new System.Windows.Forms.ToolStripButton();
             this.tsbToolStripDropDownButton_Settings = new System.Windows.Forms.ToolStripButton();
-            this.lvListView = new WinkingCat.NoCheckboxListView();
-            this.chColumnHeader1 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
-            this.chColumnHeader5 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
-            this.chColumnHeader2 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
-            this.chColumnHeader3 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
-            this.chColumnHeader4 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
-            this.tsmiTrayScreenColorPicker = new System.Windows.Forms.ToolStripMenuItem();
-            this.tsmiTrayColorWheel = new System.Windows.Forms.ToolStripMenuItem();
-            this.tsmiTrayHashCheck = new System.Windows.Forms.ToolStripMenuItem();
-            this.tsmiTrayQrCodeScan = new System.Windows.Forms.ToolStripMenuItem();
+            this.tsmiToolStripDropDownButton_Regex = new System.Windows.Forms.ToolStripMenuItem();
             this.cmTray.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.scMain)).BeginInit();
             this.scMain.Panel1.SuspendLayout();
@@ -113,7 +114,7 @@
             this.tsmiExitToolStripMenuItem});
             this.cmTray.LayoutStyle = System.Windows.Forms.ToolStripLayoutStyle.VerticalStackWithOverflow;
             this.cmTray.Name = "cmTray";
-            this.cmTray.Size = new System.Drawing.Size(197, 304);
+            this.cmTray.Size = new System.Drawing.Size(197, 282);
             // 
             // tsmiCaptureToolStripMenuItem
             // 
@@ -228,6 +229,38 @@
             this.tsmiToolsToolStripMenuItem.Size = new System.Drawing.Size(196, 38);
             this.tsmiToolsToolStripMenuItem.Text = "Tools";
             // 
+            // tsmiTrayScreenColorPicker
+            // 
+            this.tsmiTrayScreenColorPicker.Image = global::WinkingCat.Properties.Resources.color_picker_icon;
+            this.tsmiTrayScreenColorPicker.ImageScaling = System.Windows.Forms.ToolStripItemImageScaling.None;
+            this.tsmiTrayScreenColorPicker.Name = "tsmiTrayScreenColorPicker";
+            this.tsmiTrayScreenColorPicker.Size = new System.Drawing.Size(192, 38);
+            this.tsmiTrayScreenColorPicker.Text = "Screen Color Picker";
+            // 
+            // tsmiTrayColorWheel
+            // 
+            this.tsmiTrayColorWheel.Image = global::WinkingCat.Properties.Resources.color_wheel_icon;
+            this.tsmiTrayColorWheel.ImageScaling = System.Windows.Forms.ToolStripItemImageScaling.None;
+            this.tsmiTrayColorWheel.Name = "tsmiTrayColorWheel";
+            this.tsmiTrayColorWheel.Size = new System.Drawing.Size(192, 38);
+            this.tsmiTrayColorWheel.Text = "Color Picker";
+            // 
+            // tsmiTrayHashCheck
+            // 
+            this.tsmiTrayHashCheck.Image = global::WinkingCat.Properties.Resources.hashcheck;
+            this.tsmiTrayHashCheck.ImageScaling = System.Windows.Forms.ToolStripItemImageScaling.None;
+            this.tsmiTrayHashCheck.Name = "tsmiTrayHashCheck";
+            this.tsmiTrayHashCheck.Size = new System.Drawing.Size(192, 38);
+            this.tsmiTrayHashCheck.Text = "Hash Check";
+            // 
+            // tsmiTrayQrCodeScan
+            // 
+            this.tsmiTrayQrCodeScan.Image = global::WinkingCat.Properties.Resources.qrCode;
+            this.tsmiTrayQrCodeScan.ImageScaling = System.Windows.Forms.ToolStripItemImageScaling.None;
+            this.tsmiTrayQrCodeScan.Name = "tsmiTrayQrCodeScan";
+            this.tsmiTrayQrCodeScan.Size = new System.Drawing.Size(192, 38);
+            this.tsmiTrayQrCodeScan.Text = "QrCode Scan";
+            // 
             // tssToolStripSeparator2
             // 
             this.tssToolStripSeparator2.Name = "tssToolStripSeparator2";
@@ -288,12 +321,60 @@
             this.scMain.SplitterDistance = 299;
             this.scMain.TabIndex = 2;
             // 
+            // lvListView
+            // 
+            this.lvListView.autoFillColumn = true;
+            this.lvListView.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(40)))), ((int)(((byte)(42)))), ((int)(((byte)(54)))));
+            this.lvListView.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.lvListView.Columns.AddRange(new System.Windows.Forms.ColumnHeader[] {
+            this.chColumnHeader1,
+            this.chColumnHeader5,
+            this.chColumnHeader2,
+            this.chColumnHeader3,
+            this.chColumnHeader4});
+            this.lvListView.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.lvListView.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(248)))), ((int)(((byte)(248)))), ((int)(((byte)(242)))));
+            this.lvListView.FullRowSelect = true;
+            this.lvListView.HideSelection = false;
+            this.lvListView.Location = new System.Drawing.Point(0, 0);
+            this.lvListView.Name = "lvListView";
+            this.lvListView.OwnerDraw = true;
+            this.lvListView.Size = new System.Drawing.Size(902, 211);
+            this.lvListView.TabIndex = 2;
+            this.lvListView.UseCompatibleStateImageBehavior = false;
+            this.lvListView.View = System.Windows.Forms.View.Details;
+            // 
+            // chColumnHeader1
+            // 
+            this.chColumnHeader1.Text = "Name";
+            this.chColumnHeader1.Width = 200;
+            // 
+            // chColumnHeader5
+            // 
+            this.chColumnHeader5.Text = "Type";
+            this.chColumnHeader5.Width = 100;
+            // 
+            // chColumnHeader2
+            // 
+            this.chColumnHeader2.Text = "Dimensions";
+            this.chColumnHeader2.Width = 120;
+            // 
+            // chColumnHeader3
+            // 
+            this.chColumnHeader3.Text = "Size";
+            this.chColumnHeader3.Width = 120;
+            // 
+            // chColumnHeader4
+            // 
+            this.chColumnHeader4.Text = "DateModified";
+            this.chColumnHeader4.Width = 200;
+            // 
             // pbPreviewBox
             // 
             this.pbPreviewBox.Dock = System.Windows.Forms.DockStyle.Fill;
             this.pbPreviewBox.Location = new System.Drawing.Point(0, 0);
             this.pbPreviewBox.Name = "pbPreviewBox";
-            this.pbPreviewBox.Size = new System.Drawing.Size(599, 211);
+            this.pbPreviewBox.Size = new System.Drawing.Size(96, 100);
             this.pbPreviewBox.TabIndex = 0;
             // 
             // tsMain
@@ -438,7 +519,8 @@
             this.tsmiToolStripDropDownButton_screenColorPicker,
             this.tsmiToolStripDropDownButton_ColorPicker,
             this.tsmiToolStripDropDownButton_HashCheck,
-            this.tsmiToolStripDropDownButton_QrCode});
+            this.tsmiToolStripDropDownButton_QrCode,
+            this.tsmiToolStripDropDownButton_Regex});
             this.tsddbToolStripDropDownButton_Tools.Font = new System.Drawing.Font("Consolas", 11.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.tsddbToolStripDropDownButton_Tools.Image = global::WinkingCat.Properties.Resources.google_webmaster_tools_icon;
             this.tsddbToolStripDropDownButton_Tools.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
@@ -508,89 +590,15 @@
             this.tsbToolStripDropDownButton_Settings.ImageScaling = System.Windows.Forms.ToolStripItemImageScaling.None;
             this.tsbToolStripDropDownButton_Settings.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.tsbToolStripDropDownButton_Settings.Name = "tsbToolStripDropDownButton_Settings";
-            this.tsbToolStripDropDownButton_Settings.Size = new System.Drawing.Size(182, 36);
+            this.tsbToolStripDropDownButton_Settings.Size = new System.Drawing.Size(108, 36);
             this.tsbToolStripDropDownButton_Settings.Text = "Settings";
             this.tsbToolStripDropDownButton_Settings.Click += new System.EventHandler(this.ToolStripDropDownButton_Settings_Click);
             // 
-            // lvListView
+            // tsmiToolStripDropDownButton_Regex
             // 
-            this.lvListView.autoFillColumn = true;
-            this.lvListView.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(40)))), ((int)(((byte)(42)))), ((int)(((byte)(54)))));
-            this.lvListView.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.lvListView.Columns.AddRange(new System.Windows.Forms.ColumnHeader[] {
-            this.chColumnHeader1,
-            this.chColumnHeader5,
-            this.chColumnHeader2,
-            this.chColumnHeader3,
-            this.chColumnHeader4});
-            this.lvListView.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.lvListView.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(248)))), ((int)(((byte)(248)))), ((int)(((byte)(242)))));
-            this.lvListView.FullRowSelect = true;
-            this.lvListView.HideSelection = false;
-            this.lvListView.Location = new System.Drawing.Point(0, 0);
-            this.lvListView.Name = "lvListView";
-            this.lvListView.OwnerDraw = true;
-            this.lvListView.Size = new System.Drawing.Size(902, 211);
-            this.lvListView.TabIndex = 2;
-            this.lvListView.UseCompatibleStateImageBehavior = false;
-            this.lvListView.View = System.Windows.Forms.View.Details;
-            // 
-            // chColumnHeader1
-            // 
-            this.chColumnHeader1.Text = "Name";
-            this.chColumnHeader1.Width = 200;
-            // 
-            // chColumnHeader5
-            // 
-            this.chColumnHeader5.Text = "Type";
-            this.chColumnHeader5.Width = 100;
-            // 
-            // chColumnHeader2
-            // 
-            this.chColumnHeader2.Text = "Dimensions";
-            this.chColumnHeader2.Width = 120;
-            // 
-            // chColumnHeader3
-            // 
-            this.chColumnHeader3.Text = "Size";
-            this.chColumnHeader3.Width = 120;
-            // 
-            // chColumnHeader4
-            // 
-            this.chColumnHeader4.Text = "DateModified";
-            this.chColumnHeader4.Width = 200;
-            // 
-            // tsmiTrayScreenColorPicker
-            // 
-            this.tsmiTrayScreenColorPicker.Image = global::WinkingCat.Properties.Resources.color_picker_icon;
-            this.tsmiTrayScreenColorPicker.ImageScaling = System.Windows.Forms.ToolStripItemImageScaling.None;
-            this.tsmiTrayScreenColorPicker.Name = "tsmiTrayScreenColorPicker";
-            this.tsmiTrayScreenColorPicker.Size = new System.Drawing.Size(196, 38);
-            this.tsmiTrayScreenColorPicker.Text = "Screen Color Picker";
-            // 
-            // tsmiTrayColorWheel
-            // 
-            this.tsmiTrayColorWheel.Image = global::WinkingCat.Properties.Resources.color_wheel_icon;
-            this.tsmiTrayColorWheel.ImageScaling = System.Windows.Forms.ToolStripItemImageScaling.None;
-            this.tsmiTrayColorWheel.Name = "tsmiTrayColorWheel";
-            this.tsmiTrayColorWheel.Size = new System.Drawing.Size(196, 38);
-            this.tsmiTrayColorWheel.Text = "Color Picker";
-            // 
-            // tsmiTrayHashCheck
-            // 
-            this.tsmiTrayHashCheck.Image = global::WinkingCat.Properties.Resources.hashcheck;
-            this.tsmiTrayHashCheck.ImageScaling = System.Windows.Forms.ToolStripItemImageScaling.None;
-            this.tsmiTrayHashCheck.Name = "tsmiTrayHashCheck";
-            this.tsmiTrayHashCheck.Size = new System.Drawing.Size(196, 38);
-            this.tsmiTrayHashCheck.Text = "Hash Check";
-            // 
-            // tsmiTrayQrCodeScan
-            // 
-            this.tsmiTrayQrCodeScan.Image = global::WinkingCat.Properties.Resources.qrCode;
-            this.tsmiTrayQrCodeScan.ImageScaling = System.Windows.Forms.ToolStripItemImageScaling.None;
-            this.tsmiTrayQrCodeScan.Name = "tsmiTrayQrCodeScan";
-            this.tsmiTrayQrCodeScan.Size = new System.Drawing.Size(196, 38);
-            this.tsmiTrayQrCodeScan.Text = "QrCode Scan";
+            this.tsmiToolStripDropDownButton_Regex.Name = "tsmiToolStripDropDownButton_Regex";
+            this.tsmiToolStripDropDownButton_Regex.Size = new System.Drawing.Size(244, 38);
+            this.tsmiToolStripDropDownButton_Regex.Text = "Regex";
             // 
             // ApplicationForm
             // 
@@ -600,9 +608,9 @@
             this.Controls.Add(this.scMain);
             this.Controls.Add(this.tsMain);
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
+            this.MaximizeBox = false;
             this.MinimumSize = new System.Drawing.Size(666, 250);
             this.Name = "ApplicationForm";
-            this.MaximizeBox = false;
             this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.MainForm_FormClosing);
             this.cmTray.ResumeLayout(false);
             this.scMain.Panel1.ResumeLayout(false);
@@ -669,6 +677,7 @@
         private System.Windows.Forms.ToolStripMenuItem tsmiTrayColorWheel;
         private System.Windows.Forms.ToolStripMenuItem tsmiTrayHashCheck;
         private System.Windows.Forms.ToolStripMenuItem tsmiTrayQrCodeScan;
+        private System.Windows.Forms.ToolStripMenuItem tsmiToolStripDropDownButton_Regex;
     }
 }
 

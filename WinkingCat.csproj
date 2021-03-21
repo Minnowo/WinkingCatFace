@@ -153,6 +153,12 @@
     <Compile Include="Forms\QrCodeForm.Designer.cs">
       <DependentUpon>QrCodeForm.cs</DependentUpon>
     </Compile>
+    <Compile Include="Forms\RegexForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\RegexForm.Designer.cs">
+      <DependentUpon>RegexForm.cs</DependentUpon>
+    </Compile>
     <Compile Include="HotkeyManager.cs" />
     <Compile Include="Forms\MainWindowStylesForm.cs">
       <SubType>Form</SubType>
@@ -229,6 +235,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\QrCodeForm.resx">
       <DependentUpon>QrCodeForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\RegexForm.resx">
+      <DependentUpon>RegexForm.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\RegionCaptureSettingsForm.resx">
       <DependentUpon>RegionCaptureSettingsForm.cs</DependentUpon>

@@ -62,6 +62,7 @@
             this.label9 = new System.Windows.Forms.Label();
             this.displayColorLabel = new System.Windows.Forms.Label();
             this.cbCopyFormat = new System.Windows.Forms.ComboBox();
+            this.label10 = new System.Windows.Forms.Label();
             this.ccbCMYKColor = new WinkingCat.HelperLibs.ColorComboBox();
             this.ccbYXYColor = new WinkingCat.HelperLibs.ColorComboBox();
             this.ccbXYZColor = new WinkingCat.HelperLibs.ColorComboBox();
@@ -70,7 +71,6 @@
             this.ccbHSBColor = new WinkingCat.HelperLibs.ColorComboBox();
             this.ccbRGBColor = new WinkingCat.HelperLibs.ColorComboBox();
             this.colorPicker = new WinkingCat.HelperLibs.ColorPicker();
-            this.label10 = new System.Windows.Forms.Label();
             this.pnlRGBColor.SuspendLayout();
             this.pnlHSBColor.SuspendLayout();
             this.pnlHSLColor.SuspendLayout();
@@ -372,10 +372,13 @@
             // 
             // textBox1
             // 
+            this.textBox1.Font = new System.Drawing.Font("Consolas", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.textBox1.Location = new System.Drawing.Point(718, 290);
+            this.textBox1.MaxLength = 8;
             this.textBox1.Name = "textBox1";
             this.textBox1.Size = new System.Drawing.Size(100, 20);
             this.textBox1.TabIndex = 18;
+            this.textBox1.TextChanged += new System.EventHandler(this.textBox1_TextChanged);
             // 
             // textBox2
             // 
@@ -383,6 +386,7 @@
             this.textBox2.Name = "textBox2";
             this.textBox2.Size = new System.Drawing.Size(100, 20);
             this.textBox2.TabIndex = 19;
+            this.textBox2.TextChanged += new System.EventHandler(this.textBox2_TextChanged);
             // 
             // label8
             // 
@@ -419,6 +423,15 @@
             this.cbCopyFormat.Name = "cbCopyFormat";
             this.cbCopyFormat.Size = new System.Drawing.Size(121, 21);
             this.cbCopyFormat.TabIndex = 23;
+            // 
+            // label10
+            // 
+            this.label10.AutoSize = true;
+            this.label10.Location = new System.Drawing.Point(365, 299);
+            this.label10.Name = "label10";
+            this.label10.Size = new System.Drawing.Size(66, 13);
+            this.label10.TabIndex = 24;
+            this.label10.Text = "Copy Format";
             // 
             // ccbCMYKColor
             // 
@@ -842,15 +855,6 @@
             this.colorPicker.Name = "colorPicker";
             this.colorPicker.Size = new System.Drawing.Size(290, 261);
             this.colorPicker.TabIndex = 0;
-            // 
-            // label10
-            // 
-            this.label10.AutoSize = true;
-            this.label10.Location = new System.Drawing.Point(365, 299);
-            this.label10.Name = "label10";
-            this.label10.Size = new System.Drawing.Size(66, 13);
-            this.label10.TabIndex = 24;
-            this.label10.Text = "Copy Format";
             // 
             // ColorPickerForm
             // 
