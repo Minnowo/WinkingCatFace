@@ -41,6 +41,7 @@
             this.lblState = new System.Windows.Forms.Label();
             this.label5 = new System.Windows.Forms.Label();
             this.lblFileSize = new System.Windows.Forms.Label();
+            this.clShowFailed = new WinkingCat.HelperLibs.ColorLabel();
             this.SuspendLayout();
             // 
             // btnBrowse
@@ -166,11 +167,20 @@
             this.lblFileSize.TabIndex = 12;
             this.lblFileSize.Text = "0 bytes";
             // 
+            // clShowFailed
+            // 
+            this.clShowFailed.Location = new System.Drawing.Point(244, 64);
+            this.clShowFailed.Name = "clShowFailed";
+            this.clShowFailed.Size = new System.Drawing.Size(12, 12);
+            this.clShowFailed.StaticBackColor = System.Drawing.SystemColors.Control;
+            this.clShowFailed.TabIndex = 13;
+            // 
             // OCRForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(585, 450);
+            this.Controls.Add(this.clShowFailed);
             this.Controls.Add(this.lblFileSize);
             this.Controls.Add(this.label5);
             this.Controls.Add(this.lblState);
@@ -207,5 +217,6 @@
         private System.Windows.Forms.Label lblState;
         private System.Windows.Forms.Label label5;
         private System.Windows.Forms.Label lblFileSize;
+        private HelperLibs.ColorLabel clShowFailed;
     }
 }

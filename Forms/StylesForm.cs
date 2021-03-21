@@ -64,12 +64,12 @@ namespace WinkingCat
                 {
 
                     NativeMethods.UseImmersiveDarkMode(this.hwnd, true);
-                    this.Icon = Properties.Resources._3white;
+                    this.Icon = ApplicationStyles.whiteIcon; //Properties.Resources._3white;
                 }
                 else
                 {
                     NativeMethods.UseImmersiveDarkMode(this.hwnd, false);
-                    this.Icon = Properties.Resources._3black;
+                    this.Icon = ApplicationStyles.blackIcon; //Properties.Resources._3black;
                 }
                 //this.BackColor = ApplicationStyles.currentStyle.mainFormStyle.backgroundColor;
                 ApplicationStyles.ApplyCustomThemeToControl(this);

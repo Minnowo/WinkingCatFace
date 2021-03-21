@@ -61,22 +61,22 @@ namespace WinkingCat.HelperLibs.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        ///   Looks up a localized resource of type System.Drawing.Icon similar to (Icon).
         /// </summary>
-        internal static System.Drawing.Bitmap failed_to_load {
+        internal static System.Drawing.Icon _3black {
             get {
-                object obj = ResourceManager.GetObject("failed_to_load", resourceCulture);
-                return ((System.Drawing.Bitmap)(obj));
+                object obj = ResourceManager.GetObject("_3black", resourceCulture);
+                return ((System.Drawing.Icon)(obj));
             }
         }
         
         /// <summary>
-        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        ///   Looks up a localized resource of type System.Drawing.Icon similar to (Icon).
         /// </summary>
-        internal static System.Drawing.Bitmap loading {
+        internal static System.Drawing.Icon _3white {
             get {
-                object obj = ResourceManager.GetObject("loading", resourceCulture);
-                return ((System.Drawing.Bitmap)(obj));
+                object obj = ResourceManager.GetObject("_3white", resourceCulture);
+                return ((System.Drawing.Icon)(obj));
             }
         }
     }

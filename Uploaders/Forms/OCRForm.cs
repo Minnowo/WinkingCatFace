@@ -15,21 +15,21 @@ namespace WinkingCat.Uploaders
     
     public partial class OCRForm : Form
     {
-        private bool isHangleCreated = false;
+        private bool isHandleCreated = false;
         public OCRForm(string path = "")
         {
             InitializeComponent();
             HandleCreated += OCRForm_HandleCreated;
 
             cbLanguage.Items.AddRange(Helpers.GetEnumDescriptions<OCRSpaceLanguages>());
-            cbLanguage.SelectedIndex = 6;
+            cbLanguage.SelectedIndex = 8;
 
             tbFilePath.Text = path;
         }
 
         private void OCRForm_HandleCreated(object sender, EventArgs e)
         {
-            isHangleCreated = true;
+            isHandleCreated = true;
             UpdateTheme();
         }
 
@@ -38,12 +38,12 @@ namespace WinkingCat.Uploaders
             if (ApplicationStyles.currentStyle.mainFormStyle.useImersiveDarkMode && isHandleCreated)
             {
                 NativeMethods.UseImmersiveDarkMode(Handle, true);
-                this.Icon = Properties.Resources._3white;
+                this.Icon = ApplicationStyles.whiteIcon; //Properties.Resources._3white;
             }
             else
             {
                 NativeMethods.UseImmersiveDarkMode(Handle, false);
-                this.Icon = Properties.Resources._3black;
+                this.Icon = ApplicationStyles.blackIcon; //Properties.Resources._3black;
             }
             ApplicationStyles.ApplyCustomThemeToControl(this);
         }
@@ -94,11 +94,11 @@ namespace WinkingCat.Uploaders
                 long fileSize = PathHelper.GetFileSizeBytes(tbFilePath.Text);
                 if(fileSize > OCRManager.maxUploadSizeBytes)
                 {
-                    lblFileSize.BackColor = Color.Red;
+                    clShowFailed.StaticBackColor = Color.Red;
                 }
                 else
                 {
-                    lblFileSize.BackColor = Color.LightGreen;
+                    clShowFailed.StaticBackColor = Color.LightGreen;
                 }
                 lblFileSize.Text = Helpers.SizeSuffix(PathHelper.GetFileSizeBytes(tbFilePath.Text));
             }

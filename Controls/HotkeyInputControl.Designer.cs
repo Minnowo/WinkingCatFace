@@ -29,7 +29,7 @@
         private void InitializeComponent()
         {
             this.buttonHotkey = new System.Windows.Forms.Button();
-            this.labelHotkeySuccess = new ColorLabel();
+            this.labelHotkeySuccess = new WinkingCat.HelperLibs.ColorLabel();
             this.HotkeyTask = new System.Windows.Forms.ComboBox();
             this.isSelectedCheckbox = new System.Windows.Forms.CheckBox();
             this.SuspendLayout();
@@ -98,7 +98,7 @@
 
         #endregion
         private System.Windows.Forms.Button buttonHotkey;
-        private ColorLabel labelHotkeySuccess;
+        private WinkingCat.HelperLibs.ColorLabel labelHotkeySuccess;
         private System.Windows.Forms.ComboBox HotkeyTask;
         private System.Windows.Forms.CheckBox isSelectedCheckbox;
     }

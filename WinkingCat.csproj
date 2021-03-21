@@ -80,12 +80,6 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Controls\ColorLabel.cs">
-      <SubType>UserControl</SubType>
-    </Compile>
-    <Compile Include="Controls\ColorLabel.Designer.cs">
-      <DependentUpon>ColorLabel.cs</DependentUpon>
-    </Compile>
     <Compile Include="Forms\ClipStylesForm.cs">
       <SubType>Form</SubType>
     </Compile>

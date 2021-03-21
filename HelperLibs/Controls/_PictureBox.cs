@@ -152,8 +152,8 @@ namespace WinkingCat.HelperLibs
             pbMain.Name = "pbMain";
             pbMain.Dock = DockStyle.Fill;
             pbMain.BackColor = Color.Transparent;
-            pbMain.InitialImage = Properties.Resources.loading;
-            pbMain.ErrorImage = Properties.Resources.failed_to_load;
+            //pbMain.InitialImage = Properties.Resources.loading;
+            //pbMain.ErrorImage = Properties.Resources.failed_to_load;
 
             pbMain.MouseClick += _PictureBox_MouseClick;
 

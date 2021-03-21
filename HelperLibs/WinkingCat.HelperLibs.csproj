@@ -74,6 +74,12 @@
     <Compile Include="Controls\ColorComboBox.Designer.cs">
       <DependentUpon>ColorComboBox.cs</DependentUpon>
     </Compile>
+    <Compile Include="Controls\ColorLabel.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Controls\ColorLabel.Designer.cs">
+      <DependentUpon>ColorLabel.cs</DependentUpon>
+    </Compile>
     <Compile Include="Controls\ColorPicker.cs">
       <SubType>UserControl</SubType>
     </Compile>
@@ -180,10 +186,10 @@
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
-    <None Include="Resources\failed_to_load.png" />
+    <None Include="Resources\%3b3black.ico" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="Resources\loading.png" />
+    <None Include="Resources\%3b3white.ico" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

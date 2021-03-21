@@ -1,4 +1,4 @@
-﻿namespace WinkingCat
+﻿namespace WinkingCat.HelperLibs
 {
     partial class ColorLabel
     {

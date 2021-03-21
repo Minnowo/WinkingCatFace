@@ -84,8 +84,9 @@ namespace WinkingCat.Uploaders
     public static class OCRManager
     {
         public static readonly int maxUploadSizeBytes = 1048576;
+        public static readonly int englishLanguageIndex = 8;
+
         private static readonly string apiURL = "https://api.ocr.space/Parse/Image";
-        public static readonly int englishLanguageIndex = 6;
 
         private static async Task<string> Upload(string path, int index)
         {
