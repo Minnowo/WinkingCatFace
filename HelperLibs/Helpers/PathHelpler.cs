@@ -231,7 +231,7 @@ namespace WinkingCat.HelperLibs
                 }
                 else
                 {
-                    return null;
+                    return string.Empty;
                 }
             } 
         }
@@ -257,7 +257,7 @@ namespace WinkingCat.HelperLibs
                 }
                 else
                 {
-                    return null;
+                    return string.Empty;
                 }
             }
         }
@@ -279,7 +279,7 @@ namespace WinkingCat.HelperLibs
                 }
                 else
                 {
-                    return null;
+                    return string.Empty;
                 }
             }
         }
@@ -330,6 +330,15 @@ namespace WinkingCat.HelperLibs
             }
             else
                 return false;
+        }
+
+        public static long GetFileSizeBytes(string path)
+        {
+            if (File.Exists(path))
+            {
+                return new FileInfo(path).Length;
+            }
+            return 0;
         }
     }
 }

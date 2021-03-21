@@ -11,7 +11,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using System.Collections.Generic;
 using System.Linq;
-
+using WinkingCat.Uploaders;
 namespace WinkingCat
 {
     public class NoCheckboxListView : ListView
@@ -384,7 +384,10 @@ namespace WinkingCat
 
         private void ToolStripMenuItemOCR_Click(object sender, EventArgs e)
         {
-
+            using(OCRForm form = new OCRForm(Items[SelectedIndex].Tag.ToString()))
+            {
+                form.ShowDialog();
+            }
         }
 
         private async void ToolStripMenuItemDelete_Click(object sender, EventArgs e)

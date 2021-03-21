@@ -242,7 +242,8 @@ namespace WinkingCat.HelperLibs
         public MainFormStyle mainFormStyle { get; set; }
         public RegionCaptureStyle regionCaptureStyle { get; set; }
         public ClipStyle clipStyle { get; set; }
-
+        //public static Icon blackIcon = 
+        //public static Icon whiteIcon =
         public ApplicationStyles()
         {
             mainFormStyle = new MainFormStyle();

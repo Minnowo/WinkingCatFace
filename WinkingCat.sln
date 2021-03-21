@@ -11,6 +11,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WinkingCat.ScreenCaptureLib
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WinkingCat.ClipHelper", "ClipManager\WinkingCat.ClipHelper.csproj", "{E9346324-4F31-4035-B72C-22D79335112D}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Uploaders", "Uploaders\Uploaders.csproj", "{3D8102C2-8543-48AA-A357-A1E2FCC7C93C}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -33,6 +35,10 @@ Global
 		{E9346324-4F31-4035-B72C-22D79335112D}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{E9346324-4F31-4035-B72C-22D79335112D}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{E9346324-4F31-4035-B72C-22D79335112D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{3D8102C2-8543-48AA-A357-A1E2FCC7C93C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{3D8102C2-8543-48AA-A357-A1E2FCC7C93C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{3D8102C2-8543-48AA-A357-A1E2FCC7C93C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{3D8102C2-8543-48AA-A357-A1E2FCC7C93C}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
