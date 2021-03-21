@@ -26,6 +26,7 @@ namespace WinkingCat.HelperLibs
         public Color separatorLightColor { get; set; } = Color.FromArgb(56, 64, 75);
         public Color contextMenuFontColor { get; set; } = Color.White;
         public Color imageViewerBackColor { get; set; } = Color.Black;
+        public Color linkColor { get; set; } = Color.FromArgb(164, 98, 160);
 
         #endregion
         public MainFormStyle()
@@ -45,6 +46,7 @@ namespace WinkingCat.HelperLibs
             separatorLightColor = Color.FromArgb(33, 35, 43);
             contextMenuFontColor = Color.FromArgb(248, 248, 242);
             imageViewerBackColor = Color.Black;
+            linkColor = Color.FromArgb(164, 98, 160);
         }
     }
     
@@ -330,6 +332,9 @@ namespace WinkingCat.HelperLibs
                     dgv.ColumnHeadersDefaultCellStyle.ForeColor = currentStyle.mainFormStyle.textColor;
                     dgv.ColumnHeadersDefaultCellStyle.SelectionForeColor = currentStyle.mainFormStyle.textColor;
                     dgv.EnableHeadersVisualStyles = false;
+                    break;
+                case LinkLabel ll:
+                    ll.LinkColor = currentStyle.mainFormStyle.linkColor;
                     break;
             }
 

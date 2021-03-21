@@ -53,6 +53,8 @@ namespace WinkingCat.Uploaders
             if (string.IsNullOrEmpty(tbFilePath.Text))
                 return;
 
+            btnRunOCR.Enabled = false;
+
             string result = "";
             lblState.Text = "Waiting...";
             if(Path.GetExtension(tbFilePath.Text).ToLower() == ".pdf")
@@ -72,6 +74,7 @@ namespace WinkingCat.Uploaders
                     tbResult.Text = "the ocr result is empty, either the file contains no text, or the file size exceeds 1MB";
             }
             lblState.Text = "Idle";
+            btnRunOCR.Enabled = true;
         }
 
         private void btnBrowse_Click(object sender, EventArgs e)
@@ -102,6 +105,11 @@ namespace WinkingCat.Uploaders
                 }
                 lblFileSize.Text = Helpers.SizeSuffix(PathHelper.GetFileSizeBytes(tbFilePath.Text));
             }
+        }
+
+        private void linkLabel1_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
+        {
+            System.Diagnostics.Process.Start("https://translate.google.com/#auto/en/" + Uri.EscapeDataString(tbResult.Text));
         }
     }
 }

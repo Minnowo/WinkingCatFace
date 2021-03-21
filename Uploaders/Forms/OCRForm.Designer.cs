@@ -41,6 +41,7 @@
             this.lblState = new System.Windows.Forms.Label();
             this.label5 = new System.Windows.Forms.Label();
             this.lblFileSize = new System.Windows.Forms.Label();
+            this.linkLabel1 = new System.Windows.Forms.LinkLabel();
             this.clShowFailed = new WinkingCat.HelperLibs.ColorLabel();
             this.SuspendLayout();
             // 
@@ -167,8 +168,21 @@
             this.lblFileSize.TabIndex = 12;
             this.lblFileSize.Text = "0 bytes";
             // 
+            // linkLabel1
+            // 
+            this.linkLabel1.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.linkLabel1.AutoSize = true;
+            this.linkLabel1.Location = new System.Drawing.Point(388, 83);
+            this.linkLabel1.Name = "linkLabel1";
+            this.linkLabel1.Size = new System.Drawing.Size(129, 13);
+            this.linkLabel1.TabIndex = 14;
+            this.linkLabel1.TabStop = true;
+            this.linkLabel1.Text = "Open In Google Translate";
+            this.linkLabel1.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.linkLabel1_LinkClicked);
+            // 
             // clShowFailed
             // 
+            this.clShowFailed.BackColor = System.Drawing.SystemColors.Control;
             this.clShowFailed.Location = new System.Drawing.Point(244, 64);
             this.clShowFailed.Name = "clShowFailed";
             this.clShowFailed.Size = new System.Drawing.Size(12, 12);
@@ -180,6 +194,7 @@
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(585, 450);
+            this.Controls.Add(this.linkLabel1);
             this.Controls.Add(this.clShowFailed);
             this.Controls.Add(this.lblFileSize);
             this.Controls.Add(this.label5);
@@ -194,7 +209,7 @@
             this.Controls.Add(this.label1);
             this.Controls.Add(this.tbFilePath);
             this.Controls.Add(this.btnBrowse);
-            this.MinimumSize = new System.Drawing.Size(402, 215);
+            this.MinimumSize = new System.Drawing.Size(554, 215);
             this.Name = "OCRForm";
             this.Text = "OCR";
             this.ResumeLayout(false);
@@ -218,5 +233,6 @@
         private System.Windows.Forms.Label label5;
         private System.Windows.Forms.Label lblFileSize;
         private HelperLibs.ColorLabel clShowFailed;
+        private System.Windows.Forms.LinkLabel linkLabel1;
     }
 }
