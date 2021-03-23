@@ -38,12 +38,12 @@ namespace WinkingCat
                 }
                 if (string.IsNullOrEmpty(ImageHandler.Save(img: img)))
                 {
-                    img.Dispose();
+                    img?.Dispose();
                     return false;
                 }
                 else
                 {
-                    img.Dispose();
+                    img?.Dispose();
                     return true;
                 }
             }

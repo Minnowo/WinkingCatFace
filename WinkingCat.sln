@@ -11,7 +11,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WinkingCat.ScreenCaptureLib
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WinkingCat.ClipHelper", "ClipManager\WinkingCat.ClipHelper.csproj", "{E9346324-4F31-4035-B72C-22D79335112D}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Uploaders", "Uploaders\Uploaders.csproj", "{3D8102C2-8543-48AA-A357-A1E2FCC7C93C}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WinkingCat.Uploaders", "Uploaders\WinkingCat.Uploaders.csproj", "{3D8102C2-8543-48AA-A357-A1E2FCC7C93C}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

@@ -112,6 +112,7 @@ namespace WinkingCat.ScreenCaptureLib
 
             // used to make the selection box fill with the same color as background
             backgroundHighlightBrush = new TextureBrush(image) { WrapMode = WrapMode.Clamp }; 
+
         }
 
         // pretty sure this makes it look like everything is drawn at once?

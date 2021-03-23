@@ -541,18 +541,19 @@ namespace WinkingCat
 
         private void LvListView_ItemSelectionChanged(object sender, ListViewItemSelectionChangedEventArgs e)
         {
-            if (e.IsSelected)
-            {
-                this.scMain.Panel2.Show();
-                this.scMain.Panel2Collapsed = false;
-                this.pbPreviewBox.SetImage((string)e.Item.Tag);
-            }
-            else
-            {
-                this.scMain.Panel2Collapsed = true;
-                this.scMain.Panel2.Hide();
-                this.pbPreviewBox.Reset();
-            }
+                if (e.IsSelected)
+                {
+                    this.scMain.Panel2.Show();
+                    this.scMain.Panel2Collapsed = false;
+                    this.pbPreviewBox.SetImage((string)e.Item.Tag);
+                }
+                else
+                {
+                    this.scMain.Panel2Collapsed = true;
+                    this.scMain.Panel2.Hide();
+                    this.pbPreviewBox.Reset();
+                }
+            
         }
 
         private void toolStripDropDown_Closing(object sender, ToolStripDropDownClosingEventArgs e)

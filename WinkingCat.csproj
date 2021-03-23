@@ -352,9 +352,9 @@
       <Project>{3a626c93-b19a-48d7-9dc4-92f4063ff857}</Project>
       <Name>WinkingCat.ScreenCaptureLib</Name>
     </ProjectReference>
-    <ProjectReference Include="Uploaders\Uploaders.csproj">
+    <ProjectReference Include="Uploaders\WinkingCat.Uploaders.csproj">
       <Project>{3d8102c2-8543-48aa-a357-a1e2fcc7c93c}</Project>
-      <Name>Uploaders</Name>
+      <Name>WinkingCat.Uploaders</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>

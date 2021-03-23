@@ -125,6 +125,7 @@ namespace WinkingCat.ClipHelper
             }
             cmMain.Renderer = new ToolStripCustomRenderer();
             cmMain.Opacity = ApplicationStyles.currentStyle.mainFormStyle.contextMenuOpacity;
+            
             Refresh();
         }
 
@@ -135,7 +136,7 @@ namespace WinkingCat.ClipHelper
 
             g.PixelOffsetMode = PixelOffsetMode.HighQuality;
             g.InterpolationMode = InterpolationMode.NearestNeighbor;
-            e.Graphics.SmoothingMode = SmoothingMode.HighQuality; // for some reason highspeed crashes the window
+            e.Graphics.SmoothingMode = SmoothingMode.HighQuality; 
             g.CompositingQuality = CompositingQuality.HighSpeed;
             g.CompositingMode = CompositingMode.SourceOver;
 

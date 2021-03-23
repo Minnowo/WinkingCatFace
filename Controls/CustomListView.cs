@@ -67,6 +67,7 @@ namespace WinkingCat
 
         ToolStripMenuItem[] buttonOnlyItems;
         public bool autoFillColumn { get; set; } = true;
+        //public bool showingContextMenu { get; private set; } = false;
         public NoCheckboxListView()
         {
             SetStyle(ControlStyles.OptimizedDoubleBuffer | ControlStyles.AllPaintingInWmPaint | ControlStyles.EnableNotifyMessage, true);
@@ -128,6 +129,7 @@ namespace WinkingCat
             toolStripMenuItemAlwaysOnTop.Checked = MainFormSettings.alwaysOnTop;
 
             cmsMain.Opening += ContextMenuStrip_Opening;
+            //cmsMain.Closing += CmsMain_Closing;
             toolStripMenuItemOCR.Click += ToolStripMenuItemOCR_Click;
             toolStripMenuItemDelete.Click += ToolStripMenuItemDelete_Click;
             toolStripMenuItemAlwaysOnTop.Click += ToolStripMenuItemAlwaysOnTop_Click;
@@ -168,8 +170,32 @@ namespace WinkingCat
             toolStripMenuItemRemoveFromList};
             ApplicationStyles.UpdateStylesEvent += ApplicationStyles_UpdateSylesEvent;
             UpdateTheme();
+            
+
+        }
+        private bool supressIndexChangeEvent = false;
+        protected override void OnMouseDown(MouseEventArgs e)
+        {
+            switch (e.Button)
+            {
+                case MouseButtons.Left:
+                    supressIndexChangeEvent = false;
+                    break;
+                case MouseButtons.Right:
+                    supressIndexChangeEvent = true;
+                    break;
+            }
+                
+            base.OnMouseDown(e);
         }
 
+        protected override void OnItemSelectionChanged(ListViewItemSelectionChangedEventArgs e)
+        {
+            if (!supressIndexChangeEvent)
+            {
+                base.OnItemSelectionChanged(e);
+            }
+        }
 
         private void ApplicationStyles_UpdateSylesEvent(object sender, EventArgs e)
         {
@@ -384,11 +410,12 @@ namespace WinkingCat
 
         private void ToolStripMenuItemOCR_Click(object sender, EventArgs e)
         {
-            using(OCRForm form = new OCRForm(Items[SelectedIndex].Tag.ToString()))
-            {
-                form.ShowDialog();
-            }
+            OCRForm form = new OCRForm(Items[SelectedIndex].Tag.ToString());
+            form.Owner = Program.mainForm;
+            form.Show();
+            
         }
+        
 
         private async void ToolStripMenuItemDelete_Click(object sender, EventArgs e)
         {
