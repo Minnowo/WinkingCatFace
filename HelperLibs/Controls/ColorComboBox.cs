@@ -234,7 +234,7 @@ namespace WinkingCat.HelperLibs
 
             for (int index = 0; index < values.Length; index++)
             {
-                ((NumericUpDown)this.Controls[index]).Value = values[index];
+                ((NumericUpDown)this.Controls[index]).Value = values[index].Clamp(MinValues[index], MaxValues[index]);
             }
         }
 
