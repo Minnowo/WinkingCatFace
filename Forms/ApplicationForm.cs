@@ -340,6 +340,7 @@ namespace WinkingCat
             else
             {
                 colorPickerForm = new ColorPickerForm();
+                colorPickerForm.TopMost = MainFormSettings.alwaysOnTop;
                 colorPickerForm.FormClosing += ChildFormClosing;
                 colorPickerForm.Show();
             }
@@ -354,6 +355,7 @@ namespace WinkingCat
             else
             {
                 qrCodeForm = new BarcodeForm();
+                qrCodeForm.TopMost = MainFormSettings.alwaysOnTop;
                 qrCodeForm.FormClosing += ChildFormClosing;
                 qrCodeForm.Show();
             }
@@ -368,6 +370,7 @@ namespace WinkingCat
             else
             {
                 hashCheckForm = new HashCheckForm();
+                hashCheckForm.TopMost = MainFormSettings.alwaysOnTop;
                 hashCheckForm.FormClosing += ChildFormClosing;
                 hashCheckForm.Show();
             }
@@ -382,6 +385,7 @@ namespace WinkingCat
             else
             {
                 regexForm = new RegexForm();
+                regexForm.TopMost = MainFormSettings.alwaysOnTop;
                 regexForm.FormClosing += ChildFormClosing;
                 regexForm.Show();
             }
@@ -494,6 +498,27 @@ namespace WinkingCat
         {
             TopMost = MainFormSettings.alwaysOnTop;
             niTrayIcon.Visible = MainFormSettings.showInTray;
+
+            if(colorPickerForm != null)
+            {
+                colorPickerForm.TopMost = MainFormSettings.alwaysOnTop;
+            }
+
+            if(hashCheckForm != null)
+            {
+                hashCheckForm.TopMost = MainFormSettings.alwaysOnTop;
+            }
+
+            if(qrCodeForm != null)
+            {
+                qrCodeForm.TopMost = MainFormSettings.alwaysOnTop;
+            }
+
+            if(regexForm != null)
+            {
+                regexForm.TopMost = MainFormSettings.alwaysOnTop;
+            }
+
         }
 
         private void ApplicationStyles_UpdateSylesEvent(object sender, EventArgs e)
