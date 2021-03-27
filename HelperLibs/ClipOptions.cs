@@ -13,7 +13,7 @@ namespace WinkingCat.HelperLibs
         public Size maxClipSize { get; set; } = new Size(5000, 5000);
         public Color borderColor { get; set; } = ApplicationStyles.currentStyle.clipStyle.clipBorderColor;//Color.FromArgb(249, 0, 187);
         public Point location { get; set; } = new Point(0, 0);
-        public int borderThickness { get; set; } = 2;
+        public int borderThickness { get; set; } = ApplicationStyles.currentStyle.clipStyle.clipBorderThickness;
         public bool isDraggable { get; set; } = true;
         public bool isResizable { get; set; } = true;
 

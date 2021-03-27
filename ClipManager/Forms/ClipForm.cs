@@ -51,7 +51,7 @@ namespace WinkingCat.ClipHelper
             this.Text = clipName;
 
             Options = options;
-            Options.borderThickness = 2;
+
             imageSize = displayImage.Size;
             imageDefaultSize = displayImage.Size;
             ClipName = clipName;
