@@ -331,7 +331,7 @@ namespace WinkingCat
             }
         }
 
-        private void ColorPicker_Click(object sender, EventArgs e)
+        internal void ColorPicker_Click(object sender, EventArgs e)
         {
             if(colorPickerForm != null)
             {
@@ -346,7 +346,7 @@ namespace WinkingCat
             }
         }
 
-        private void QrCode_Click(object sender, EventArgs e) 
+        internal void QrCode_Click(object sender, EventArgs e) 
         {
             if(qrCodeForm != null)
             {
@@ -361,7 +361,7 @@ namespace WinkingCat
             }
         }
 
-        private void HashCheck_Click(object sender, EventArgs e)
+        internal void HashCheck_Click(object sender, EventArgs e)
         {
             if (hashCheckForm != null)
             {
@@ -376,7 +376,7 @@ namespace WinkingCat
             }
         }
 
-        private void Regex_Click(object sender, EventArgs e)
+        internal void Regex_Click(object sender, EventArgs e)
         {
             if (regexForm != null)
             {

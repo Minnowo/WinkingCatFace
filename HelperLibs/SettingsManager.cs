@@ -137,8 +137,6 @@ namespace WinkingCat.HelperLibs
 
         #region load styles
 
-        #endregion
-
         public static bool LoadMainFormStyles()
         {
             PathHelper.CreateAllPaths();
@@ -343,6 +341,8 @@ namespace WinkingCat.HelperLibs
             return false;
         }
 
+        #endregion
+
         #region save settings
 
         public static bool SaveMainFormSettings(Configuration conf = null)
@@ -363,6 +363,10 @@ namespace WinkingCat.HelperLibs
                 keys.Add("startInTray", MainFormSettings.startInTray.ToString());
                 keys.Add("alwaysOnTop", MainFormSettings.alwaysOnTop.ToString());
                 keys.Add("waitHideTime", MainFormSettings.waitHideTime.ToString());
+
+                keys.Add("onTrayLeftClick", MainFormSettings.onTrayLeftClick.ToString("D"));
+                keys.Add("onTrayDoubleLeftClick", MainFormSettings.onTrayDoubleLeftClick.ToString("D"));
+                keys.Add("onTrayMiddleClick", MainFormSettings.onTrayMiddleClick.ToString("D"));
                 conf.Save();
                 return true;
             }
@@ -521,10 +525,19 @@ namespace WinkingCat.HelperLibs
                             case "waitHideTime":
                                 MainFormSettings.waitHideTime = int.Parse(keys["waitHideTime"].Value);
                                 break;
+                            case "onTrayLeftClick":
+                                MainFormSettings.onTrayLeftClick = (Tasks)int.Parse(keys["onTrayLeftClick"].Value);
+                                break;
+                            case "onTrayDoubleLeftClick":
+                                MainFormSettings.onTrayDoubleLeftClick = (Tasks)int.Parse(keys["onTrayDoubleLeftClick"].Value);
+                                break;
+                            case "onTrayMiddleClick":
+                                MainFormSettings.onTrayMiddleClick = (Tasks)int.Parse(keys["onTrayMiddleClick"].Value);
+                                break;
                             default:
                                 throw new Exception("Keys have been modified MainForm.config will be reset with default values");
                         }
-                    if (keys.AllKeys.Length != 6)
+                    if (keys.AllKeys.Length != 9)
                         throw new Exception("Keys have been modified MainForm.config will be re-saved with recent values");
                     return true;
                 }

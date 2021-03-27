@@ -213,6 +213,7 @@ namespace WinkingCat.HelperLibs
                 fs.Dispose();
                 img.Dispose();
             }
+            saveFileDialog1.Dispose();
         }
 
         public static string AskChooseDirectory(string dir = "")

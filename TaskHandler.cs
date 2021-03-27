@@ -173,10 +173,20 @@ namespace WinkingCat
                     return false;
 
                 case Tasks.ColorWheelPicker:
-                    return false;
+                    Program.mainForm.ColorPicker_Click(null, EventArgs.Empty);
+                    return true;
 
                 case Tasks.HashCheck:
-                    return false;
+                    Program.mainForm.HashCheck_Click(null, EventArgs.Empty);
+                    return true;
+
+                case Tasks.Regex:
+                    Program.mainForm.Regex_Click(null, EventArgs.Empty);
+                    return true;
+
+                case Tasks.QRCode:
+                    Program.mainForm.QrCode_Click(null, EventArgs.Empty);
+                    return true;
 
                 case Tasks.OpenMainForm:
                     Program.mainForm.ForceActivate();

@@ -78,6 +78,8 @@ namespace WinkingCat.HelperLibs
         NewOCRCapture,
         ColorWheelPicker,
         HashCheck,
+        Regex,
+        QRCode,
         OpenMainForm
     }
 
