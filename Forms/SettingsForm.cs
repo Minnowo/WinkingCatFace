@@ -76,13 +76,17 @@ namespace WinkingCat
 
         private void SaveSettingsToDisk()
         {
+            if (SettingsManager.SavePathSettings())
+                Logger.WriteLine("PathSettings Settings Saved Successfully");
             if (SettingsManager.SaveMainFormSettings())
                 Logger.WriteLine("MainForm Settings Saved Successfully");
             if(SettingsManager.SaveRegionCaptureSettings())
                 Logger.WriteLine("RegionCapture Settings Saved Successfully");
             if(SettingsManager.SaveClipboardSettings())
                 Logger.WriteLine("Clipboard Settings Saved Successfully");
-            if(SettingsManager.SaveHotkeySettings(HotkeyManager.hotKeys))
+            if(SettingsManager.SaveMiscSettings())
+                Logger.WriteLine("Misc Settings Saved Successfully");
+            if (SettingsManager.SaveHotkeySettings(HotkeyManager.hotKeys))
                 Logger.WriteLine("Hotkeys Saved Successfully");
         }
         #endregion

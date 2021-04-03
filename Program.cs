@@ -38,7 +38,8 @@ namespace WinkingCat
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
 
-            PathHelper.LoadLocalSettings();
+            SettingsManager.LoadPathSettings();
+            PathHelper.UpdateRelativePaths();
 
             Logger.Init(PathHelper.logPath + "\\" + DateTime.Now.ToString("yyyy MM dd") + ".txt");
             Console.WriteLine("log path: " + PathHelper.logPath + "\\" + DateTime.Now.ToString("yyyy M dd") + ".txt");
@@ -48,7 +49,7 @@ namespace WinkingCat
             Logger.WriteLine(PathHelper.currentDirectory);
             Logger.WriteLine(PathHelper.configPath);
             Logger.WriteLine(PathHelper.resourcePath);
-            Logger.WriteLine(PathHelper.screenshotPath);
+            Logger.WriteLine(PathHelper.screenshotDefaultPath);
             Logger.WriteLine(PathHelper.logPath);
 
             if (SettingsManager.LoadMainFormSettings())
@@ -64,6 +65,11 @@ namespace WinkingCat
             if (SettingsManager.LoadClipboardSettings())
             {
                 Logger.WriteLine("Clipboard settings loaded successfully");
+            }
+
+            if (SettingsManager.LoadMiscSettings())
+            {
+                Logger.WriteLine("Misc settings loaded successfully");
             }
 
             if (SettingsManager.LoadMainFormStyles())
@@ -98,6 +104,8 @@ namespace WinkingCat
             
             Application.Run(mainForm);
             mutex.ReleaseMutex();
+
+            SettingsManager.SaveAllSettings(HotkeyManager.hotKeys);
         }
     }
 }

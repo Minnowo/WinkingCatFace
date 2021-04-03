@@ -200,7 +200,7 @@ namespace WinkingCat
 
             using (Bitmap img = ScreenShotManager.CaptureRectangle((Rectangle)tsi.Tag))
             {
-                ImageHandler.Save(img: img);
+                ImageHandler.Save(ImageHandler.newImageName, img);
                 if (RegionCaptureOptions.autoCopyImage)
                 {
                     ClipboardHelper.CopyImageDefault(img);

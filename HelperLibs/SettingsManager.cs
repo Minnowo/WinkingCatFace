@@ -13,6 +13,23 @@ namespace WinkingCat.HelperLibs
 {
     public static class SettingsManager
     {
+
+        public static void SaveAllSettings(List<HotkeySettings> hotkeys)
+        {
+            if (SettingsManager.SavePathSettings())
+                Logger.WriteLine("PathSettings Settings Saved Successfully");
+            if (SettingsManager.SaveMainFormSettings())
+                Logger.WriteLine("MainForm Settings Saved Successfully");
+            if (SettingsManager.SaveRegionCaptureSettings())
+                Logger.WriteLine("RegionCapture Settings Saved Successfully");
+            if (SettingsManager.SaveClipboardSettings())
+                Logger.WriteLine("Clipboard Settings Saved Successfully");
+            if (SettingsManager.SaveMiscSettings())
+                Logger.WriteLine("Misc Settings Saved Successfully");
+            if (SettingsManager.SaveHotkeySettings(hotkeys))
+                Logger.WriteLine("Hotkeys Saved Successfully");
+        }
+
         public static Configuration ConfigLoader(string path)
         {
             try
@@ -345,6 +362,30 @@ namespace WinkingCat.HelperLibs
 
         #region save settings
 
+        public static bool SavePathSettings(Configuration conf = null)
+        {
+            PathHelper.CreateAllPaths();
+            try
+            {
+                if (conf == null)
+                    conf = ConfigLoader(PathHelper.currentDirectory + PathHelper.pathHelperFile);
+                if (conf == null)
+                    return false;
+                KeyValueConfigurationCollection keys = conf.AppSettings.Settings;
+
+                keys.Clear();
+                keys.Add("screenshotFolderPathCustom", PathHelper.screenshotCustomPath);
+                keys.Add("UseCustomScreenshotPath", PathHelper.UseCustomScreenshotPath.ToString());
+                conf.Save();
+                return true;
+            }
+            catch (Exception e)
+            {
+                Logger.WriteException(e, "Exception saving Path settings");
+                return false;
+            }
+        }
+
         public static bool SaveMainFormSettings(Configuration conf = null)
         {
             PathHelper.CreateAllPaths();
@@ -447,6 +488,30 @@ namespace WinkingCat.HelperLibs
             }
         }
 
+        public static bool SaveMiscSettings(Configuration conf = null)
+        {
+            PathHelper.CreateAllPaths();
+            try
+            {
+                if (conf == null)
+                    conf = ConfigLoader(PathHelper.currentDirectory + Settings.Default.MiscSettings);
+                if (conf == null)
+                    return false;
+                KeyValueConfigurationCollection keys = conf.AppSettings.Settings;
+
+                keys.Clear();
+                keys.Add("imageCount", ImageHelper.imageCounter.ToString());
+                keys.Add("defaultImageType", ImageHelper.defaultImageFormat.ToString());
+                conf.Save();
+                return true;
+            }
+            catch (Exception e)
+            {
+                Logger.WriteException(e, "Exception saving Path settings");
+                return false;
+            }
+        }
+
         public static bool SaveHotkeySettings(List<HotkeySettings> hotkeys)
         {
             PathHelper.CreateAllPaths();
@@ -490,6 +555,47 @@ namespace WinkingCat.HelperLibs
         #endregion
 
         #region load settings
+
+        public static bool LoadPathSettings()
+        {
+            PathHelper.CreateAllPaths();
+            Configuration conf = ConfigLoader(PathHelper.currentDirectory + PathHelper.pathHelperFile);
+            if (conf == null)
+                return false;
+            KeyValueConfigurationCollection keys = conf.AppSettings.Settings;
+
+            if (File.Exists(PathHelper.currentDirectory + PathHelper.pathHelperFile))
+            {
+                try
+                {
+                    foreach (string key in keys.AllKeys)
+                        switch (key)
+                        {
+                            case "screenshotFolderPathCustom":
+                                PathHelper.screenshotCustomPath = keys["screenshotFolderPathCustom"].Value;
+                                break;
+                            case "UseCustomScreenshotPath":
+                                PathHelper.UseCustomScreenshotPath = bool.Parse(keys["UseCustomScreenshotPath"].Value);
+                                break;
+                            default:
+                                throw new Exception("Keys have been modified PathSettings.config will be reset with default values");
+                        }
+                    if (keys.AllKeys.Length != 2)
+                        throw new Exception("Keys have been modified PathSettings.config will be re-saved with recent values");
+                    return true;
+                }
+                catch (Exception e)
+                {
+                    // if it fails to load settings from the file 
+                    // the static class will just use the default settings that are hard coded
+                    // then just reset the file
+                    Logger.WriteException(e);
+                }
+            }
+            // rewrite the file
+            SavePathSettings(conf);
+            return false;
+        }
 
         public static bool LoadMainFormSettings()
         {
@@ -699,6 +805,45 @@ namespace WinkingCat.HelperLibs
             }
             // rewrite the file
             SaveClipboardSettings(conf);
+            return false;
+        }
+
+        public static bool LoadMiscSettings()
+        {
+            PathHelper.CreateAllPaths();
+            Configuration conf = ConfigLoader(PathHelper.currentDirectory + Settings.Default.MiscSettings);
+            if (conf == null)
+                return false;
+            KeyValueConfigurationCollection keys = conf.AppSettings.Settings;
+
+            try
+            {
+                foreach (string key in keys.AllKeys)
+                    switch (key)
+                    {
+                        case "imageCount":
+                            ImageHelper.imageCounter = int.Parse(keys["imageCount"].Value);
+                            break;
+                        case "defaultImageType":
+                            ImageHelper.defaultImageFormat = keys["defaultImageType"].Value.ImageFormatFromString();
+                            break;
+                        default:
+                            throw new Exception("Keys have been modified MiscSettings.config will be reset with default values");
+                    }
+                if (keys.AllKeys.Length != 2)
+                    throw new Exception("Keys have been modified MiscSettings.config will be re-saved with recent values");
+                return true;
+            }
+            catch (Exception e)
+            {
+                // if it fails to load settings from the file 
+                // the static class will just use the default settings that are hard coded
+                // then just reset the file
+                Logger.WriteException(e);
+            }
+            
+            // rewrite the file
+            SaveMiscSettings(conf);
             return false;
         }
 

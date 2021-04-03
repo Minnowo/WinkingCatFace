@@ -36,7 +36,7 @@ namespace WinkingCat
                 {
                     ClipboardHelper.CopyImageDefault(img);
                 }
-                if (string.IsNullOrEmpty(ImageHandler.Save(img: img)))
+                if (string.IsNullOrEmpty(ImageHandler.Save(ImageHandler.newImageName, img)))
                 {
                     img?.Dispose();
                     return false;
@@ -122,7 +122,7 @@ namespace WinkingCat
                     {
                         img = ScreenShotManager.CaptureRectangle(ScreenHelper.GetRectangle0Based(ImageHandler.LastInfo.Region));
                         result = true;
-                        if (string.IsNullOrEmpty(ImageHandler.Save(img: img)))
+                        if (string.IsNullOrEmpty(ImageHandler.Save(ImageHandler.newImageName, img)))
                             result = false;
                         if(RegionCaptureOptions.autoCopyImage)
                         {
@@ -136,7 +136,7 @@ namespace WinkingCat
                 case Tasks.CaptureFullScreen:
                     img = ScreenShotManager.CaptureFullscreen();
                     result = true;
-                    if (string.IsNullOrEmpty(ImageHandler.Save(img: img)))
+                    if (string.IsNullOrEmpty(ImageHandler.Save(ImageHandler.newImageName, img)))
                         result = false;
                     if (RegionCaptureOptions.autoCopyImage)
                     {
@@ -147,7 +147,7 @@ namespace WinkingCat
                 case Tasks.CaptureActiveMonitor:
                     img = ScreenShotManager.CaptureActiveMonitor();
                     result = true;
-                    if (string.IsNullOrEmpty(ImageHandler.Save(img: img)))
+                    if (string.IsNullOrEmpty(ImageHandler.Save(ImageHandler.newImageName, img)))
                         result = false;
                     if (RegionCaptureOptions.autoCopyImage)
                     {
@@ -158,7 +158,7 @@ namespace WinkingCat
                 case Tasks.CaptureActiveWindow:
                     img = ScreenShotManager.CaptureRectangle(ScreenHelper.GetWindowRectangle(NativeMethods.GetForegroundWindow()));
                     result = true;
-                    if (string.IsNullOrEmpty(ImageHandler.Save(img: img)))
+                    if (string.IsNullOrEmpty(ImageHandler.Save(ImageHandler.newImageName, img)))
                         result = false;
                     if (RegionCaptureOptions.autoCopyImage)
                     {

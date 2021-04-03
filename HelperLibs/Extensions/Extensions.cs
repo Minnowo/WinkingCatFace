@@ -9,11 +9,20 @@ using System.Security.Cryptography;
 using System.IO;
 using System.Reflection;
 using System.ComponentModel;
+using System.Drawing.Imaging;
 
 namespace WinkingCat.HelperLibs
 {
     public static class Extensions
     {
+        public static ImageFormat ImageFormatFromString(this string format)
+        {
+            Type type = typeof(System.Drawing.Imaging.ImageFormat);
+            BindingFlags flags = BindingFlags.GetProperty;
+            object o = type.InvokeMember(format, flags, null, type, null);
+            return (ImageFormat)o;
+        }
+
         public static string GetHash<T>(this string str) where T : HashAlgorithm, new()
         {
             using (T crypt = new T())

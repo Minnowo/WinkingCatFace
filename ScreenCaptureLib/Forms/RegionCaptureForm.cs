@@ -84,7 +84,7 @@ namespace WinkingCat.ScreenCaptureLib
             
 
             // set the cursor 
-            var buffer = Properties.Resources.ResourceManager.GetObject(ResourceManager.regionCaptureCursor) as byte[];
+            var buffer = Properties.Resources.ResourceManager.GetObject(PathHelper.regionCaptureCursor) as byte[];
             using (MemoryStream m = new MemoryStream(buffer))
             {
                 Cursor = new Cursor(m);

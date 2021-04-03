@@ -15,11 +15,17 @@ namespace WinkingCat.ScreenCaptureLib
     {
         public static event EventHandler<LastRegionCaptureInfo> CaptureEvent;
         public static event EventHandler<ImageSavedEvent> ImageSaved;
-        public static List<String> images { get; private set; } = new List<string> { };
-        public static ImageFormat defaultImageType { get; private set; } = ImageFormat.Png;
         public static LastRegionCaptureInfo LastInfo { get; private set; }
 
         public static int imagesToHandle { get; private set; } = 10;
+        public static string newImageName
+        {
+            get
+            {
+                ImageHelper.imageCounter++;
+                return PathHelper.GetScreenshotFolder() + ImageHelper.imageCounter.ToString() + "." + ImageHelper.newImageName;
+            }
+        }
 
         public static void OnCaptureEvent(LastRegionCaptureInfo info)
         {
@@ -40,10 +46,9 @@ namespace WinkingCat.ScreenCaptureLib
             }
         }
 
-        public static void Update(int maxImg, ImageFormat _default)
+        public static void Update(int maxImg)
         {
             imagesToHandle = maxImg;
-            defaultImageType = _default;
         }
 
         public static Image GetRegionResultImage()
@@ -92,29 +97,18 @@ namespace WinkingCat.ScreenCaptureLib
         }
 
 
-        public static string Save(string imageName = null, ImageFormat format = null, Image img = null)
+        public static string Save(string imageName, Image img, ImageFormat format = null)
         {
-            if (img == null)
-                return string.Empty;
 
-            if (imageName == null)
-                imageName = $"{PathHelper.CreateScreenshotSubFolder()}{DateTime.Now.ToString("yyyy-MM-dd h-m-ss-fffff")}.{defaultImageType.ToString().ToLower()}";
-
-            if (format == null)
-                format = ImageFormat.Png;
-
-            try
+            if (ImageHelper.Save(imageName, img, format))
             {
-                img.Save(imageName, format);
-                Logger.WriteLine(imageName);
                 OnImageSaved(imageName);
+                return imageName;
             }
-            catch (Exception e)
+            else
             {
-                Logger.WriteException(e);
                 return string.Empty;
             }
-            return imageName;
         }
 
         public static void HandleRegionReturnColor(Color color)
@@ -125,16 +119,7 @@ namespace WinkingCat.ScreenCaptureLib
 
         public static void HandleRegionReturnImage(Image img)
         {
-            string fileName = $"{PathHelper.CreateScreenshotSubFolder()}{DateTime.Now.ToString("yyyy-MM-dd h-m-ss-fffff")}.{defaultImageType.ToString().ToLower()}";
-            while (File.Exists(fileName)) fileName = $"{PathHelper.CreateScreenshotSubFolder()}{DateTime.Now.ToString("yyyy-MM-dd h-m-ss-fffff")}.{defaultImageType.ToString().ToLower()}";
-
-            Save(fileName, defaultImageType, img);
-            images.Add(fileName);
-
-            if (images.Count > imagesToHandle)
-            {
-                images.RemoveAt(0);
-            }
+            Save(newImageName, img, ImageHelper.defaultImageFormat);
         }
     }
 }

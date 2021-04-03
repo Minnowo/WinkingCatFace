@@ -13,59 +13,36 @@ using System.Diagnostics;
 
 namespace WinkingCat.HelperLibs
 {
-    public static class ResourceManager
-    {
-        public static string regionCaptureCursor { get; private set; } = ResourcePath.Default.regionCapturCrosshair;
-    }
     public static class PathHelper
     {
-        public static bool useCustomScreenshotPath { get; set; } = false;
+        public static bool UseCustomScreenshotPath
+        {
+            get
+            {
+                return useCustomScreenshotPath;
+            }
+            set
+            {
+                useCustomScreenshotPath = value;
+
+                if (value)
+                {
+                    CreateDirectory(screenshotCustomPath);
+                }
+            }
+        }
+        private static bool useCustomScreenshotPath = false;
+        public static string regionCaptureCursor { get; private set; } = ResourcePath.Default.regionCapturCrosshair;
+        public static string pathHelperFile { get; private set; } = ResourcePath.Default.pathSettingsFile;
         public static string currentDirectory { get; set; } = Directory.GetCurrentDirectory();
         public static string configPath { get; set; } = Settings.Default.configFolderPath;
         public static string resourcePath { get; set; } = Settings.Default.resourceFolderPath;
-        public static string screenshotPath { get; set; }
+        public static string screenshotDefaultPath { get; set; } = Settings.Default.screenshotFolderPathDefault;
+        public static string screenshotCustomPath { get; set; } = "";
         public static string logPath { get; set; } = Settings.Default.logFolderPath;
         public static string loadedItemsPath { get; set; } = Settings.Default.LoadedItems;
 
         public static string settingsPath { get; set; } = Settings.Default.settingsFolderPath;
-
-        public static void LoadLocalSettings()
-        {
-            CreateAllPaths();
-
-            ExeConfigurationFileMap fileMap = new ExeConfigurationFileMap();
-            fileMap.ExeConfigFilename = currentDirectory + ResourcePath.Default.pathSettingsFile;
-            Configuration conf = ConfigurationManager.OpenMappedExeConfiguration(fileMap, ConfigurationUserLevel.None);
-
-            if (File.Exists(currentDirectory + ResourcePath.Default.pathSettingsFile))
-            {
-                screenshotPath = conf.AppSettings.Settings["screenshotFolderPathCustom"].Value;
-
-                conf.AppSettings.Settings["currentDirectory"].Value = currentDirectory;
-
-                if (string.IsNullOrEmpty(screenshotPath) || !Directory.Exists(screenshotPath) || useCustomScreenshotPath == false)
-                {
-                    screenshotPath = currentDirectory + Settings.Default.screenshotFolderPathDefault;
-                    conf.AppSettings.Settings["screenshotFolderPathCustom"].Value = screenshotPath;
-                }
-                conf.Save();
-            }
-            else
-            {
-                conf.AppSettings.Settings.Add("currentDirectory", currentDirectory);
-                conf.AppSettings.Settings.Add("screenshotFolderPathCustom", currentDirectory + Settings.Default.screenshotFolderPathDefault);
-                conf.Save();
-                screenshotPath = currentDirectory + Settings.Default.screenshotFolderPathDefault;
-            }
-            UpdateRelativePaths();
-        }
-
-        public static void SavePaths()
-        {
-            var fileMap = new ConfigurationFileMap("");
-            Settings.Default.Save();
-
-        }
 
         public static void UpdateRelativePaths()
         {
@@ -80,30 +57,22 @@ namespace WinkingCat.HelperLibs
             settingsPath = currentDirectory + Settings.Default.settingsFolderPath;
 
             loadedItemsPath = currentDirectory + Settings.Default.LoadedItems;
+
+            screenshotDefaultPath = currentDirectory + Settings.Default.screenshotFolderPathDefault;
         }
 
         public static void CreateAllPaths()
         {
             UpdateRelativePaths();
-            if (!Directory.Exists(configPath))
-            {
-                CreateDirectory(configPath);
 
-                CreateDirectory(logPath);
-                CreateDirectory(settingsPath);
-                CreateDirectory(currentDirectory + Settings.Default.screenshotFolderPathDefault);
-            }
-            else
-            {
-                if (!Directory.Exists(logPath))
-                    CreateDirectory(logPath);
+            CreateDirectory(configPath);
 
-                if (!Directory.Exists(settingsPath))
-                    CreateDirectory(settingsPath);
+            CreateDirectory(logPath);
+            CreateDirectory(settingsPath);
+            CreateDirectory(screenshotDefaultPath);
 
-                if (!Directory.Exists(currentDirectory + Settings.Default.screenshotFolderPathDefault))
-                    CreateDirectory(currentDirectory + Settings.Default.screenshotFolderPathDefault);
-            }
+            if (!string.IsNullOrEmpty(screenshotCustomPath))
+                CreateDirectory(screenshotCustomPath);
         }
 
         public static void CreateDirectory(string directoryPath)
@@ -121,13 +90,26 @@ namespace WinkingCat.HelperLibs
             }
         }
 
+        public static string GetScreenshotFolder()
+        {
+            UpdateRelativePaths();
+            if (UseCustomScreenshotPath && !string.IsNullOrEmpty(screenshotCustomPath))
+            {
+                CreateDirectory(screenshotCustomPath);
+                return screenshotCustomPath;
+            }
+            else
+            {
+                return CreateScreenshotSubFolder();
+            }
+        }
 
         public static string CreateScreenshotSubFolder()
         {
-            String directoryName = screenshotPath + "\\" + DateTime.Today.ToString("yyy MM") + "\\";
-            if (!Directory.Exists(screenshotPath))
+            String directoryName = screenshotDefaultPath + "\\" + DateTime.Today.ToString("yyy MM") + "\\";
+            if (!Directory.Exists(screenshotDefaultPath))
             {
-                CreateDirectory(screenshotPath);
+                CreateDirectory(screenshotDefaultPath);
             }
 
             if (!Directory.Exists(directoryName))
@@ -151,6 +133,8 @@ namespace WinkingCat.HelperLibs
         {
             SaveFileDialog saveFileDialog1 = new SaveFileDialog();
             saveFileDialog1.Filter = "All Graphic Types | *.bmp; *.jpg; *.jpeg; *.png; *.tiff|JPeg Image|*.jpg|Png Image|*.png|Bitmap Image|*.bmp|Gif Image|*.gif|Tiff Image|*.tiff";
+
+            saveFileDialog1.FileName = ImageHelper.newImageName;
             saveFileDialog1.Title = "Save an Image File";
             saveFileDialog1.ShowDialog();
 
@@ -177,10 +161,14 @@ namespace WinkingCat.HelperLibs
 
                 if (formatIndex.ContainsKey(fileType))
                     saveFileDialog1.FilterIndex = formatIndex[fileType];
+
                 try
                 {
                     switch (saveFileDialog1.FilterIndex)
                     {
+                        default:
+                            img.Save(fs, ImageHelper.defaultImageFormat);
+                            break;
                         case 1:
                             img.Save(fs, ImageFormat.Jpeg);
                             break;
@@ -228,7 +216,7 @@ namespace WinkingCat.HelperLibs
                 
                 if (dialog.ShowDialog() == CommonFileDialogResult.Ok)
                 {
-                    return dialog.FileName;
+                    return dialog.FileName + "\\";
                 }
                 else
                 {

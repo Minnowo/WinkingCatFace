@@ -6,11 +6,61 @@ using System.Threading.Tasks;
 using System.Drawing;
 using System.Drawing.Drawing2D;
 using System.IO;
+using System.Drawing.Imaging;
 
 namespace WinkingCat.HelperLibs
 {
     public static class ImageHelper
     {
+        public static int imageCounter { get; set; } = -1;
+        public static string newImageName
+        {
+            get
+            {
+                // i just hate hoe jpeg looks in the file system cause i'm used to jpg
+                string fileFormat = defaultImageFormat.ToString().ToLower();
+                if (fileFormat == "jpeg") fileFormat = "jpg";
+
+                for (int x = 0; x < 10; x++)
+                {
+                    string fileName = DateTime.Now.Ticks.GetHashCode().ToString("x").ToUpper() + "." + fileFormat;
+
+                    if (!File.Exists(fileName))
+                        return fileName;
+                }
+
+                while (true)
+                {
+                    string fileName = string.Format(@"{0}", Guid.NewGuid()) + "." + fileFormat;
+
+                    if (!File.Exists(fileName))
+                        return fileName;
+                }
+            }
+        }
+        public static ImageFormat defaultImageFormat = ImageFormat.Jpeg;
+
+        public static bool Save(string imageName, Image img, ImageFormat format = null)
+        {
+            if (img == null || string.IsNullOrEmpty(imageName))
+                return false;
+
+            if (format == null)
+                format = defaultImageFormat;
+
+            Console.WriteLine(imageName);
+            try
+            {
+                img.Save(imageName, format);
+                return true;
+            }
+            catch (Exception e)
+            {
+                Logger.WriteException(e);
+                return false;
+            }
+        }
+
         public static Bitmap FastLoadImage(string imagePath)
         {
             if (File.Exists(imagePath))

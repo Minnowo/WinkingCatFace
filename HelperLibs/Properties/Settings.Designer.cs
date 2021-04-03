@@ -169,5 +169,16 @@ namespace WinkingCat.HelperLibs.Properties
                 return ((string)(this["LoadedItems"]));
             }
         }
+
+        [global::System.Configuration.ApplicationScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("\\AppConfig\\Settings\\MiscSettings.config")]
+        public string MiscSettings
+        {
+            get
+            {
+                return ((string)(this["MiscSettings"]));
+            }
+        }
     }
 }
