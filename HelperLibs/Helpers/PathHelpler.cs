@@ -96,12 +96,12 @@ namespace WinkingCat.HelperLibs
             if (UseCustomScreenshotPath && !string.IsNullOrEmpty(screenshotCustomPath))
             {
                 CreateDirectory(screenshotCustomPath);
-                return screenshotCustomPath;
+
+                if(Directory.Exists(screenshotCustomPath))
+                    return screenshotCustomPath;
             }
-            else
-            {
-                return CreateScreenshotSubFolder();
-            }
+
+            return CreateScreenshotSubFolder();
         }
 
         public static string CreateScreenshotSubFolder()

@@ -16,6 +16,7 @@ namespace WinkingCat.Uploaders
     public partial class OCRForm : Form
     {
         private bool isHandleCreated = false;
+
         public OCRForm(string path = "")
         {
             InitializeComponent();

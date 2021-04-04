@@ -78,6 +78,10 @@
       <Project>{9d5d4aa3-5ff0-46b3-aca4-af277f4713cd}</Project>
       <Name>WinkingCat.HelperLibs</Name>
     </ProjectReference>
+    <ProjectReference Include="..\Uploaders\WinkingCat.Uploaders.csproj">
+      <Project>{3d8102c2-8543-48aa-a357-a1e2fcc7c93c}</Project>
+      <Name>WinkingCat.Uploaders</Name>
+    </ProjectReference>
   </ItemGroup>
   <ItemGroup>
     <None Include="Resources\Clipboard-2-icon.png" />

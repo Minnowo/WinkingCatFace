@@ -412,6 +412,7 @@ namespace WinkingCat
         {
             OCRForm form = new OCRForm(Items[SelectedIndex].Tag.ToString());
             form.Owner = Program.mainForm;
+            form.TopMost = MainFormSettings.alwaysOnTop;
             form.Show();
             
         }

@@ -18,14 +18,6 @@ namespace WinkingCat.ScreenCaptureLib
         public static LastRegionCaptureInfo LastInfo { get; private set; }
 
         public static int imagesToHandle { get; private set; } = 10;
-        public static string newImageName
-        {
-            get
-            {
-                ImageHelper.imageCounter++;
-                return PathHelper.GetScreenshotFolder() + ImageHelper.imageCounter.ToString() + "." + ImageHelper.newImageName;
-            }
-        }
 
         public static void OnCaptureEvent(LastRegionCaptureInfo info)
         {
@@ -74,7 +66,7 @@ namespace WinkingCat.ScreenCaptureLib
                 {
                     if (LastInfo.Result != RegionResult.Color)
                     {
-                        HandleRegionReturnImage(LastInfo.Image);
+                        string imgName = Save(ImageHelper.newImagePath, LastInfo.Image, ImageHelper.defaultImageFormat);
 
                         if (RegionCaptureOptions.autoCopyImage)
                             ClipboardHelper.CopyImageDefault(LastInfo.Image);
@@ -82,9 +74,17 @@ namespace WinkingCat.ScreenCaptureLib
                         if (RegionCaptureOptions.createClipAfterRegionCapture || RegionCaptureOptions.createSingleClipAfterRegionCapture)
                         {
                             RegionCaptureOptions.createSingleClipAfterRegionCapture = false;
+
                             ClipOptions ops = new ClipOptions();
                             ops.location = ScreenHelper.GetRectangle0Based(LastInfo.Region).Location;
-                            ClipManager.CreateClip(LastInfo.Image, ops);
+                            ops.date = DateTime.Now;
+                            ops.uuid = Guid.NewGuid().ToString();
+                            ops.filePath = imgName;
+
+                            using (LastInfo.Image)
+                            {
+                                ClipManager.CreateClip(LastInfo.Image, ops);
+                            }
                         }
                     }
                     else
@@ -115,11 +115,6 @@ namespace WinkingCat.ScreenCaptureLib
         {
             if (RegionCaptureOptions.autoCopyColor)
                 ClipboardHelper.FormatCopyColor(ClipboardHelper.copyFormat, color);
-        }
-
-        public static void HandleRegionReturnImage(Image img)
-        {
-            Save(newImageName, img, ImageHelper.defaultImageFormat);
         }
     }
 }

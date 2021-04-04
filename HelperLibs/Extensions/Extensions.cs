@@ -15,6 +15,13 @@ namespace WinkingCat.HelperLibs
 {
     public static class Extensions
     {
+        public static byte[] ToByteArray(this Image x)
+        {
+            ImageConverter _imageConverter = new ImageConverter();
+            byte[] xByte = (byte[])_imageConverter.ConvertTo(x, typeof(byte[]));
+            return xByte;
+        }
+
         public static ImageFormat ImageFormatFromString(this string format)
         {
             Type type = typeof(System.Drawing.Imaging.ImageFormat);

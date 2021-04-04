@@ -11,6 +11,7 @@ using System.Windows.Forms;
 using System.Drawing.Drawing2D;
 using WinkingCat.HelperLibs;
 using System.Windows.Forms.VisualStyles;
+using WinkingCat.Uploaders;
 
 namespace WinkingCat.ClipHelper
 {
@@ -23,8 +24,6 @@ namespace WinkingCat.ClipHelper
     }
     public partial class ClipForm : Form
     {
-        //private const int RESIZE_HANDLE_SIZE = 7;
-
         public Size imageSize { get; private set; }
         public Size imageDefaultSize { get; private set; }
         public Size startWindowSize { get; private set; }
@@ -34,7 +33,6 @@ namespace WinkingCat.ClipHelper
         public string ClipName { get; private set; }
         public Bitmap image { get; private set; }
         //public Bitmap zoomImage { get; private set; }
-        private TextureBrush backgroundBrush { get; set; }
 
         private DragLoc drag { get; set; }
         private bool isLeftClicking { get; set; } = false;
@@ -42,22 +40,21 @@ namespace WinkingCat.ClipHelper
         public bool isResizable { get; set; } = true;
         public bool isMoving { get; set; } = false;
         
-        public ClipForm(ClipOptions options, Image displayImage, string clipName)
+        public ClipForm(ClipOptions options, Image displayImage)
         {
-            NativeMethods.SetProcessDpiAwarenessContext(-3);
             InitializeComponent();
             SuspendLayout();
 
-            this.Text = clipName;
+            this.Text = options.uuid;
+            ClipName = options.uuid;
 
             Options = options;
 
             imageSize = displayImage.Size;
             imageDefaultSize = displayImage.Size;
-            ClipName = clipName;
             image = (Bitmap)displayImage;
+
             startWindowSize = new Size(imageSize.Width + Options.borderThickness, imageSize.Height + Options.borderThickness);
-            Console.WriteLine($"start window size: {startWindowSize}, image size: {image.Width}, {image.Height}");
 
             MinimumSize = startWindowSize;
             MaximumSize = startWindowSize;
@@ -71,6 +68,9 @@ namespace WinkingCat.ClipHelper
             MouseUp += MouseUp_Event;
             MouseMove += MouseMove_Event;
             FormClosing += ClipForm_FormClosing;
+            ResizeEnd += ResizeEnded;
+            KeyDown += FormKeyDown;
+
             ApplicationStyles.UpdateStylesEvent += UpdateTheme;
 
             #region context menu
@@ -87,16 +87,9 @@ namespace WinkingCat.ClipHelper
             if (isResizable) tsmiAllowResizeToolStripMenuItem.Checked = true;
             #endregion
 
-            #region form
-            ResizeEnd += ResizeEnded;
-            KeyDown += FormKeyDown;
-
             TopMost = true;
             ResumeLayout(true);
             Show();
-            #endregion
-
-            backgroundBrush = new TextureBrush(image) { WrapMode = WrapMode.Clamp };
 
             UpdateTheme(null, EventArgs.Empty);
 
@@ -108,10 +101,7 @@ namespace WinkingCat.ClipHelper
 
         }
 
-        private void ClipForm_FormClosing(object sender, FormClosingEventArgs e)
-        {
-            this.Dispose();
-        }
+
 
         public void UpdateTheme(object sender, EventArgs e)
         {
@@ -127,25 +117,6 @@ namespace WinkingCat.ClipHelper
             cmMain.Opacity = ApplicationStyles.currentStyle.mainFormStyle.contextMenuOpacity;
             
             Refresh();
-        }
-
-
-        protected override void OnPaint(PaintEventArgs e)
-        {
-            Graphics g = e.Graphics;
-
-            g.PixelOffsetMode = PixelOffsetMode.HighQuality;
-            g.InterpolationMode = InterpolationMode.NearestNeighbor;
-            e.Graphics.SmoothingMode = SmoothingMode.HighQuality; 
-            g.CompositingQuality = CompositingQuality.HighSpeed;
-            g.CompositingMode = CompositingMode.SourceOver;
-
-            g.FillRectangle(backgroundBrush, new Rectangle(
-                new Point(Options.borderThickness, Options.borderThickness), 
-                new Size(Width, Height)));
-            
-
-            base.OnPaint(e);
         }
 
         #region context menu functions
@@ -180,7 +151,29 @@ namespace WinkingCat.ClipHelper
 
         public void OCR_Click(object sender = null, EventArgs e = null)
         {
+            if (System.IO.File.Exists(Options.filePath))
+            {
+                OCRForm form = new OCRForm(Options.filePath);
+                form.Owner = this;
+                form.TopMost = true;
+                form.Show();
+            }
+            else
+            {
+                string fileName = ImageHelper.newImagePath;
 
+                if(ImageHelper.Save(fileName, this.image))
+                {
+                    OCRForm form = new OCRForm(fileName);
+                    form.Owner = this;
+                    form.TopMost = true;
+                    form.Show();
+                }
+                else
+                {
+                    MessageBox.Show("The path to the image has does not exist, and the image failed to save");
+                }
+            }
         }
 
         public void Save_Click(object sender = null, EventArgs e = null)
@@ -201,6 +194,34 @@ namespace WinkingCat.ClipHelper
         #endregion
 
         #region form events
+
+        protected override void OnPaint(PaintEventArgs e)
+        {
+            Graphics g = e.Graphics;
+
+            g.PixelOffsetMode = PixelOffsetMode.HighQuality;
+            g.InterpolationMode = InterpolationMode.NearestNeighbor;
+            e.Graphics.SmoothingMode = SmoothingMode.HighQuality;
+            g.CompositingQuality = CompositingQuality.HighSpeed;
+            g.CompositingMode = CompositingMode.SourceOver;
+
+            g.DrawImage(
+                image,
+                new Rectangle(
+                    new Point(Options.borderThickness, Options.borderThickness),
+                    new Size(Width - Options.borderThickness * 2, Height - Options.borderThickness * 2)),
+                new Rectangle(0, 0, image.Width, image.Height),
+                GraphicsUnit.Pixel
+                );
+
+            base.OnPaint(e);
+        }
+
+        private void ClipForm_FormClosing(object sender, FormClosingEventArgs e)
+        {
+            this.Dispose();
+        }
+
         private void FormKeyDown(object sender, KeyEventArgs e)
         {
             e.Handled = true;
@@ -211,7 +232,7 @@ namespace WinkingCat.ClipHelper
                     break;
 
                 case (Keys.T | Keys.Control):
-
+                    OCR_Click();
                     break;
 
                 case (Keys.R | Keys.Control):
@@ -236,27 +257,7 @@ namespace WinkingCat.ClipHelper
         {
             Invalidate();
         }
-        #endregion
 
-        private void NewBrush()
-        {
-            backgroundBrush?.Dispose();
-            using (Bitmap bmp = new Bitmap(Width - Options.borderThickness, Height - Options.borderThickness))
-            { using (Graphics gr = Graphics.FromImage(bmp))
-            
-                { 
-                gr.InterpolationMode = InterpolationMode.NearestNeighbor;
-                gr.PixelOffsetMode = PixelOffsetMode.Half;
-
-                gr.DrawImage(image, new Rectangle(0, 0, Width - Options.borderThickness, Height - Options.borderThickness),
-                    new Rectangle(0, 0, image.Width, image.Height),
-                    GraphicsUnit.Pixel);
-                }
-                backgroundBrush = new TextureBrush(bmp) { WrapMode = WrapMode.Clamp };
-            }
-        }
-
-        #region Mouse Events
         private void MouseMove_Event(object sender, MouseEventArgs e)
         {
             if (isResizable)
@@ -281,8 +282,7 @@ namespace WinkingCat.ClipHelper
                             ResizeHeight(mousepos.Y - Location.Y);
                             break;
                     }
-                    
-                    NewBrush();
+
                     Invalidate();
                 }
                 else
@@ -410,12 +410,6 @@ namespace WinkingCat.ClipHelper
         {
             Width = (int)(newHeight * (startWindowSize.Width / (float)startWindowSize.Height));
             Height = newHeight;
-        }
-
-        public void BringFront()
-        {
-            NativeMethods.SetForegroundWindow(Handle);
-            NativeMethods.ShowWindow(Handle, (int)WindowShowStyle.Restore);
         }
 
         protected override CreateParams CreateParams

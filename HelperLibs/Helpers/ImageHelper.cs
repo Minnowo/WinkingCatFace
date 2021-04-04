@@ -38,6 +38,14 @@ namespace WinkingCat.HelperLibs
                 }
             }
         }
+        public static string newImagePath
+        {
+            get
+            {
+                imageCounter++;
+                return PathHelper.GetScreenshotFolder() + ImageHelper.imageCounter.ToString() + "." + ImageHelper.newImageName;
+            }
+        }
         public static ImageFormat defaultImageFormat = ImageFormat.Jpeg;
 
         public static bool Save(string imageName, Image img, ImageFormat format = null)

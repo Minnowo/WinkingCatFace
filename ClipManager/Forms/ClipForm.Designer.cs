@@ -15,7 +15,6 @@
         {
             cmMain?.Dispose();
             image?.Dispose();
-            backgroundBrush?.Dispose();
             
             if (disposing && (components != null))
             {

@@ -200,7 +200,7 @@ namespace WinkingCat
 
             using (Bitmap img = ScreenShotManager.CaptureRectangle((Rectangle)tsi.Tag))
             {
-                ImageHandler.Save(ImageHandler.newImageName, img);
+                ImageHandler.Save(ImageHelper.newImagePath, img);
                 if (RegionCaptureOptions.autoCopyImage)
                 {
                     ClipboardHelper.CopyImageDefault(img);
@@ -498,27 +498,11 @@ namespace WinkingCat
         {
             TopMost = MainFormSettings.alwaysOnTop;
             niTrayIcon.Visible = MainFormSettings.showInTray;
-
-            if(colorPickerForm != null)
+            
+            foreach(Form a in Application.OpenForms)
             {
-                colorPickerForm.TopMost = MainFormSettings.alwaysOnTop;
+                a.TopMost = MainFormSettings.alwaysOnTop;
             }
-
-            if(hashCheckForm != null)
-            {
-                hashCheckForm.TopMost = MainFormSettings.alwaysOnTop;
-            }
-
-            if(qrCodeForm != null)
-            {
-                qrCodeForm.TopMost = MainFormSettings.alwaysOnTop;
-            }
-
-            if(regexForm != null)
-            {
-                regexForm.TopMost = MainFormSettings.alwaysOnTop;
-            }
-
         }
 
         private void ApplicationStyles_UpdateSylesEvent(object sender, EventArgs e)
@@ -560,8 +544,10 @@ namespace WinkingCat
             {
                 case MouseButtons.Right:
                     this.lvListView.UnselectAll();
+                    Logger.WriteLine("right click event on picturebox");
                     break;
             }
+            Logger.WriteLine("mouse button down on picturebox");
         }
 
         private void LvListView_ItemSelectionChanged(object sender, ListViewItemSelectionChangedEventArgs e)
