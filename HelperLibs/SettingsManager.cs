@@ -437,24 +437,25 @@ namespace WinkingCat.HelperLibs
                 keys.Add("createClipAfterRegionCapture", RegionCaptureOptions.createClipAfterRegionCapture.ToString());// bool
                 keys.Add("autoCopyImage", RegionCaptureOptions.autoCopyImage.ToString());  // bool
                 keys.Add("autoCopyColor", RegionCaptureOptions.autoCopyColor.ToString());  // bool
-                keys.Add("tryCenterMagnifier", RegionCaptureOptions.tryCenterMagnifier.ToString());  // bool
-                keys.Add("drawMagnifierCrosshair", RegionCaptureOptions.drawMagnifierCrosshair.ToString());  // bool
-                keys.Add("drawMagnifierGrid", RegionCaptureOptions.drawMagnifierGrid.ToString());  // bool
-                keys.Add("dimBackground", RegionCaptureOptions.dimBackground.ToString());  // bool
-                keys.Add("drawMagnifierBorder", RegionCaptureOptions.drawMagnifierBorder.ToString());  // bool
-                keys.Add("updateOnMouseMove", RegionCaptureOptions.updateOnMouseMove.ToString());  // bool
-                keys.Add("magnifierZoomLevel", RegionCaptureOptions.magnifierZoomLevel.ToString());  // float
-                keys.Add("magnifierZoomScale", RegionCaptureOptions.magnifierZoomScale.ToString()); // float
-                keys.Add("cursorInfoOffset", RegionCaptureOptions.cursorInfoOffset.ToString()); // int
+                keys.Add("tryCenterMagnifier", RegionCaptureOptions.tryCenterMagnifier.ToString());         // bool
+                keys.Add("drawMagnifierCrosshair", RegionCaptureOptions.drawMagnifierCrosshair.ToString()); // bool
+                keys.Add("drawMagnifierGrid", RegionCaptureOptions.drawMagnifierGrid.ToString());       // bool
+                keys.Add("dimBackground", RegionCaptureOptions.dimBackground.ToString());               // bool
+                keys.Add("drawMagnifierBorder", RegionCaptureOptions.drawMagnifierBorder.ToString());   // bool
+                keys.Add("updateOnMouseMove", RegionCaptureOptions.updateOnMouseMove.ToString());       // bool
+                keys.Add("useSolidCrossHair", RegionCaptureOptions.useSolidCrossHair.ToString());       // bool
+                keys.Add("magnifierZoomLevel", RegionCaptureOptions.magnifierZoomLevel.ToString());     // float
+                keys.Add("magnifierZoomScale", RegionCaptureOptions.magnifierZoomScale.ToString());     // float
+                keys.Add("cursorInfoOffset", RegionCaptureOptions.cursorInfoOffset.ToString());         // int
                 keys.Add("MagnifierPixelCount", RegionCaptureOptions.magnifierPixelCount.ToString());   // int
                 keys.Add("MagnifierPixelSize", RegionCaptureOptions.magnifierPixelSize.ToString());     // int
-                keys.Add("mode", RegionCaptureOptions.mode.ToString("D"));
-                keys.Add("onMouseMiddleClick", RegionCaptureOptions.onMouseMiddleClick.ToString("D"));
-                keys.Add("onMouseRightClick", RegionCaptureOptions.onMouseRightClick.ToString("D"));
-                keys.Add("onXButton1Click", RegionCaptureOptions.onXButton1Click.ToString("D"));
-                keys.Add("onXButton2Click", RegionCaptureOptions.onXButton2Click.ToString("D"));
-                keys.Add("onEscapePress", RegionCaptureOptions.onEscapePress.ToString("D"));
-                keys.Add("onZPress", RegionCaptureOptions.onZPress.ToString("D"));
+                keys.Add("mode", RegionCaptureOptions.mode.ToString("D"));                              // enum
+                keys.Add("onMouseMiddleClick", RegionCaptureOptions.onMouseMiddleClick.ToString("D"));  // enum
+                keys.Add("onMouseRightClick", RegionCaptureOptions.onMouseRightClick.ToString("D"));    // enum
+                keys.Add("onXButton1Click", RegionCaptureOptions.onXButton1Click.ToString("D"));        // enum
+                keys.Add("onXButton2Click", RegionCaptureOptions.onXButton2Click.ToString("D"));        // enum
+                keys.Add("onEscapePress", RegionCaptureOptions.onEscapePress.ToString("D"));            // enum
+                keys.Add("onZPress", RegionCaptureOptions.onZPress.ToString("D"));                      // enum
                 conf.Save();
                 return true;
             }
@@ -714,6 +715,9 @@ namespace WinkingCat.HelperLibs
                             case "updateOnMouseMove":
                                 RegionCaptureOptions.updateOnMouseMove = bool.Parse(keys["updateOnMouseMove"].Value);
                                 break;
+                            case "useSolidCrossHair":
+                                RegionCaptureOptions.useSolidCrossHair = bool.Parse(keys["useSolidCrossHair"].Value);
+                                break;
                             case "magnifierZoomLevel":
                                 RegionCaptureOptions.magnifierZoomLevel = float.Parse(keys["magnifierZoomLevel"].Value);
                                 break;
@@ -753,7 +757,7 @@ namespace WinkingCat.HelperLibs
                             default:
                                 throw new Exception("Keys have been modified RegionCapture.config will be reset with default values");
                         }
-                    if (keys.AllKeys.Length != 25)
+                    if (keys.AllKeys.Length != 26)
                         throw new Exception("Keys have been modified RegionCapture.config will be re-saved with recent values");
                     return true;
                 }

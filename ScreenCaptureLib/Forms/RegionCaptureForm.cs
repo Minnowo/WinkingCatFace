@@ -51,7 +51,7 @@ namespace WinkingCat.ScreenCaptureLib
             // magnifierGridPen draws the grid on the magnifier
             // borderPen draws the border on the info text
             // magnifierCrosshairBrush draws the magnifier crosshair
-            borderDotPen = new Pen(ApplicationStyles.currentStyle.regionCaptureStyle.ScreenWideCrosshairColor) { DashPattern = new float[] { 5, 5 } };
+            borderDotPen = new Pen(ApplicationStyles.currentStyle.regionCaptureStyle.ScreenWideCrosshairColor);
             magnifierBorderPen = new Pen(ApplicationStyles.currentStyle.regionCaptureStyle.MagnifierBorderColor);
             magnifierGridPen = new Pen(ApplicationStyles.currentStyle.regionCaptureStyle.MagnifierGridColor);
             borderPen = new Pen(ApplicationStyles.currentStyle.regionCaptureStyle.infoTextBorderColor);
@@ -65,6 +65,8 @@ namespace WinkingCat.ScreenCaptureLib
             // infoFont is used to specify the font / size of the info text
             infoFont = new Font("Verdana", 12); // 10
 
+            if (!RegionCaptureOptions.useSolidCrossHair)
+                borderDotPen.DashPattern = new float[] { 5, 5 };
 
             InitializeComponent();
 
@@ -304,7 +306,7 @@ namespace WinkingCat.ScreenCaptureLib
 
             g.PixelOffsetMode = PixelOffsetMode.HighSpeed;
             g.InterpolationMode = InterpolationMode.NearestNeighbor;
-            e.Graphics.SmoothingMode = SmoothingMode.HighQuality; // for some reason highspeed crashes the window
+            g.SmoothingMode = SmoothingMode.HighQuality; // for some reason highspeed crashes the window
             g.CompositingQuality = CompositingQuality.HighSpeed;
             g.CompositingMode = CompositingMode.SourceOver;
 

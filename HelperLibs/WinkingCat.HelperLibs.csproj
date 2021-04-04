@@ -113,6 +113,12 @@
     <Compile Include="Controls\ImageView.Designer.cs">
       <DependentUpon>ImageView.cs</DependentUpon>
     </Compile>
+    <Compile Include="Controls\ZoomDrawingBoard.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Controls\ZoomDrawingBoard.Designer.cs">
+      <DependentUpon>ZoomDrawingBoard.cs</DependentUpon>
+    </Compile>
     <Compile Include="Controls\_PictureBox.cs">
       <SubType>UserControl</SubType>
     </Compile>

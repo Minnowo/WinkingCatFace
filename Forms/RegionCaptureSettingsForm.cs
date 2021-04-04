@@ -40,6 +40,7 @@ namespace WinkingCat
             cbDrawMagnifierGrid.Checked = RegionCaptureOptions.drawMagnifierGrid;
             cbDrawMagnifierBorder.Checked = RegionCaptureOptions.drawMagnifierBorder;
             cbCenterMagnifierOnMouse.Checked = RegionCaptureOptions.tryCenterMagnifier;
+            cbUseSolidScreenWideCrossHair.Checked = RegionCaptureOptions.useSolidCrossHair;
 
             nudMagnifierPixelCount.Value = RegionCaptureOptions.magnifierPixelCount;
             nudMagnifierPixelSize.Value = RegionCaptureOptions.magnifierPixelSize;
@@ -52,6 +53,7 @@ namespace WinkingCat
         {
             ApplicationStyles.ApplyCustomThemeToControl(this);
         }
+
         #region ComboBox ValueChanged
         private void CombobMouseMiddleClickAction_SelectionChanged(object sender, EventArgs e)
         {
@@ -95,6 +97,11 @@ namespace WinkingCat
         #endregion
 
         #region Checkbox CheckChanged
+
+        private void cbUseSolidScreenWideCrossHair_CheckedChanged(object sender, EventArgs e)
+        {
+            RegionCaptureOptions.useSolidCrossHair = cbUseSolidScreenWideCrossHair.Checked;
+        }
 
         private void CbDrawScreenWideCrosshair_CheckedChanged(object sender, EventArgs e)
         {
@@ -145,6 +152,8 @@ namespace WinkingCat
         {
             RegionCaptureOptions.tryCenterMagnifier = cbCenterMagnifierOnMouse.Checked;
         }
-#endregion
+        #endregion
+
+
     }
 }

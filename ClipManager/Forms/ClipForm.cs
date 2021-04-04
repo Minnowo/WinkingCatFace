@@ -32,14 +32,20 @@ namespace WinkingCat.ClipHelper
         public ClipOptions Options { get; private set; }
         public string ClipName { get; private set; }
         public Bitmap image { get; private set; }
-        //public Bitmap zoomImage { get; private set; }
+        public Bitmap zoomedImage { get; private set; } = null;
 
-        private DragLoc drag { get; set; }
-        private bool isLeftClicking { get; set; } = false;
-        private bool isResizing { get; set; } = false;
-        public bool isResizable { get; set; } = true;
-        public bool isMoving { get; set; } = false;
+        private double zoomLevel = 1;
         
+        private DragLoc drag;
+
+        private Size zoomControlSize;
+
+        private bool isLeftClicking  = false;
+        private bool isResizing = false;
+        public bool isResizable = true;
+        public bool isMoving = false;
+        private bool showingZoomed = false;
+
         public ClipForm(ClipOptions options, Image displayImage)
         {
             InitializeComponent();
@@ -54,7 +60,12 @@ namespace WinkingCat.ClipHelper
             imageDefaultSize = displayImage.Size;
             image = (Bitmap)displayImage;
 
-            startWindowSize = new Size(imageSize.Width + Options.borderThickness, imageSize.Height + Options.borderThickness);
+            startWindowSize = new Size(
+                imageSize.Width + Options.borderThickness, 
+                imageSize.Height + Options.borderThickness);
+            zoomControlSize = new Size(
+                startWindowSize.Width / 4, 
+                startWindowSize.Height / 4);
 
             MinimumSize = startWindowSize;
             MaximumSize = startWindowSize;
@@ -63,6 +74,10 @@ namespace WinkingCat.ClipHelper
             Bounds = new Rectangle(options.location, startWindowSize); 
             BackColor = Options.borderColor;
 
+            zdbZoomedImageDisplay.Enabled = false;
+            zdbZoomedImageDisplay.BorderThickness = 2;
+            zdbZoomedImageDisplay.borderColor = Color.LightBlue;
+            zdbZoomedImageDisplay.replaceTransparent = Color.Black;
 
             MouseDown += MouseDown_Event;
             MouseUp += MouseUp_Event;
@@ -70,10 +85,12 @@ namespace WinkingCat.ClipHelper
             FormClosing += ClipForm_FormClosing;
             ResizeEnd += ResizeEnded;
             KeyDown += FormKeyDown;
+            MouseWheel += ClipForm_MouseWheel;
 
             ApplicationStyles.UpdateStylesEvent += UpdateTheme;
 
             #region context menu
+            cmMain.Opening += CmMain_Opening;
             tsmiCopyToolStripMenuItem.Click += CopyClipImage;
             tsmiAllowResizeToolStripMenuItem.Click += AllowResize_Click;
             tsmiOCRToolStripMenuItem.Click += OCR_Click;
@@ -83,6 +100,7 @@ namespace WinkingCat.ClipHelper
 
             tsmiCopyDefaultContextMenuItem.Click += CopyClipImage;
             tsmiCopyZoomScaledContextMenuItem.Click += CopyScaledImage;
+            tsmiCopyZoomedImage.Click += TsmiCopyZoomedImage_Click;
 
             if (isResizable) tsmiAllowResizeToolStripMenuItem.Checked = true;
             #endregion
@@ -102,6 +120,98 @@ namespace WinkingCat.ClipHelper
         }
 
 
+        private void ClipForm_MouseWheel(object sender, MouseEventArgs e)
+        {
+            if (e.Delta > 0)
+            {
+                zoomLevel = Math.Round(zoomLevel * 1.1d, 2);
+                showingZoomed = true;
+                zdbZoomedImageDisplay._Show();
+                DrawZoomedImage(e.Location);
+            }
+            else
+            {
+                zoomLevel = Math.Round(zoomLevel * 0.9d, 2);
+                if (zoomLevel <= 1)
+                {
+                    showingZoomed = false;
+                    zdbZoomedImageDisplay._Hide();
+                    zoomLevel = 1;
+                    zoomedImage?.Dispose();
+                    zoomedImage = null;
+                    GC.Collect();
+                }
+                else
+                {
+                    DrawZoomedImage(e.Location);
+                }
+            }
+        }
+
+        private void DrawZoomedImage(Point mousePos)
+        {
+            //zdbZoomedImageDisplay.Location = new Point(
+            //    mousePos.X - zdbZoomedImageDisplay.ClientSize.Width/2, 
+            //    mousePos.Y - zdbZoomedImageDisplay.ClientSize.Height / 2);
+
+            zdbZoomedImageDisplay.Size = new Size(
+                zoomControlSize.Width + zdbZoomedImageDisplay.BorderThickness * 2,
+                zoomControlSize.Height + zdbZoomedImageDisplay.BorderThickness * 2);
+
+            if (ClientSize != startWindowSize)
+            {
+                Size scaledImageSize = new Size(
+                    Width - Options.borderThickness * 2,
+                    Height - Options.borderThickness * 2);
+
+                if (zoomedImage == null || zoomedImage.Size != scaledImageSize)
+                {
+                    zoomedImage?.Dispose();
+                    zoomedImage = new Bitmap(
+                        scaledImageSize.Width,
+                        scaledImageSize.Height);
+
+                    using (Graphics g = Graphics.FromImage(zoomedImage))
+                    {
+                        g.PixelOffsetMode = PixelOffsetMode.HighQuality;
+                        g.InterpolationMode = InterpolationMode.NearestNeighbor;
+                        g.SmoothingMode = SmoothingMode.HighQuality;
+                        g.CompositingQuality = CompositingQuality.HighSpeed;
+                        g.CompositingMode = CompositingMode.SourceOver;
+
+                        g.DrawImage(
+                            image,
+                            new Rectangle(
+                                new Point(Options.borderThickness, Options.borderThickness),
+                                new Size(Width - Options.borderThickness * 2, Height - Options.borderThickness * 2)),
+                            new Rectangle(0, 0, image.Width, image.Height),
+                            GraphicsUnit.Pixel
+                            );
+                    }
+                }
+
+                zdbZoomedImageDisplay.DrawImage(
+                    zoomedImage,
+                    new Rectangle(0, 0, zoomControlSize.Width, zoomControlSize.Height),
+                    new Rectangle(
+                        mousePos.X - (int)Math.Round(zdbZoomedImageDisplay.Size.Width / zoomLevel / 2),
+                        mousePos.Y - (int)Math.Round(zdbZoomedImageDisplay.Size.Height / zoomLevel / 2),
+                        (int)Math.Round(zoomControlSize.Width / zoomLevel),
+                        (int)Math.Round(zoomControlSize.Height / zoomLevel)));
+            }
+            else
+            {
+                zdbZoomedImageDisplay.DrawImage(
+                    this.image,
+                    new Rectangle(0, 0, zoomControlSize.Width, zoomControlSize.Height),
+                    new Rectangle(
+                        mousePos.X - (int)Math.Round(zdbZoomedImageDisplay.Size.Width / zoomLevel / 2),
+                        mousePos.Y - (int)Math.Round(zdbZoomedImageDisplay.Size.Height / zoomLevel / 2),
+                        (int)Math.Round(zoomControlSize.Width / zoomLevel),
+                        (int)Math.Round(zoomControlSize.Height / zoomLevel)));
+            }
+
+        }
 
         public void UpdateTheme(object sender, EventArgs e)
         {
@@ -120,6 +230,27 @@ namespace WinkingCat.ClipHelper
         }
 
         #region context menu functions
+
+        private void CmMain_Opening(object sender, CancelEventArgs e)
+        {
+            if (zdbZoomedImageDisplay.image == null)
+            {
+                tsmiCopyZoomedImage.Enabled = false;
+            }
+            else
+            {
+                tsmiCopyZoomedImage.Enabled = true;
+            }
+        }
+
+        private void TsmiCopyZoomedImage_Click(object sender, EventArgs e)
+        {
+            if(zdbZoomedImageDisplay.image != null)
+            {
+                ClipboardHelper.CopyImageDefault(zdbZoomedImageDisplay.image);
+            }
+        }
+
         public void CopyScaledImage(object sender = null, EventArgs e = null)
         {
             using(Bitmap img = ImageHelper.ResizeImage(this.image, new Size(Width - Options.borderThickness, Height - Options.borderThickness)))
@@ -201,7 +332,7 @@ namespace WinkingCat.ClipHelper
 
             g.PixelOffsetMode = PixelOffsetMode.HighQuality;
             g.InterpolationMode = InterpolationMode.NearestNeighbor;
-            e.Graphics.SmoothingMode = SmoothingMode.HighQuality;
+            g.SmoothingMode = SmoothingMode.HighQuality;
             g.CompositingQuality = CompositingQuality.HighSpeed;
             g.CompositingMode = CompositingMode.SourceOver;
 
@@ -260,7 +391,11 @@ namespace WinkingCat.ClipHelper
 
         private void MouseMove_Event(object sender, MouseEventArgs e)
         {
-            if (isResizable)
+            if (showingZoomed)
+            {
+                DrawZoomedImage(e.Location);
+            }
+            else if (isResizable)
             {
                 if (isResizing)
                 {
@@ -284,6 +419,9 @@ namespace WinkingCat.ClipHelper
                     }
 
                     Invalidate();
+                    zoomControlSize = new Size(
+                        this.ClientSize.Width / 4,
+                        this.ClientSize.Height / 4);
                 }
                 else
                 {

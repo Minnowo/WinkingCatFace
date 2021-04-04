@@ -97,10 +97,14 @@ namespace WinkingCat
                             else
                             {
                                 Point p = ScreenHelper.GetCursorPosition();
-                                ClipOptions ops = new ClipOptions()
-                                {
-                                    location = new Point(p.X - img.Width / 2, p.Y - img.Height / 2)
-                                };
+
+                                ClipOptions ops = new ClipOptions();
+                                ops.location = new Point(p.X - img.Width / 2, p.Y - img.Height / 2);
+                                ops.date = DateTime.Now;
+                                ops.uuid = Guid.NewGuid().ToString();
+                                ops.filePath = path;
+
+                                ClipManager.CreateClip(img, ops);
                             }
                         }
                     }
@@ -119,10 +123,14 @@ namespace WinkingCat
                         else
                         {
                             Point p = ScreenHelper.GetCursorPosition();
-                            ClipOptions ops = new ClipOptions() 
-                            { 
-                                location = new Point(p.X - img.Width / 2, p.Y - img.Height / 2) 
-                            };
+
+                            ClipOptions ops = new ClipOptions();
+                            ops.location = new Point(p.X - img.Width / 2, p.Y - img.Height / 2);
+                            ops.date = DateTime.Now;
+                            ops.uuid = Guid.NewGuid().ToString();
+                            ops.filePath = string.Empty;
+
+                            ClipManager.CreateClip(img, ops);
                         }   
                     }
                         
