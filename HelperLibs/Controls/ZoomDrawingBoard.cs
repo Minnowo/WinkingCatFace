@@ -14,9 +14,8 @@ namespace WinkingCat.HelperLibs
     public partial class ZoomDrawingBoard : UserControl
     {
         /// <summary>
-        /// this only affects where the image is drawn
-        /// you have to take this value into account when passing the dest rect
-        /// into the draw image function otherwise it will only have top and left border
+        /// this affects where the image is drawn and the pen size of the borderpen
+        /// you are gonna want to take this into account when passing the dest rect value
         /// </summary>
         public int BorderThickness
         {
@@ -26,7 +25,7 @@ namespace WinkingCat.HelperLibs
             }
             set
             {
-                if (value >= 0)
+                if (value > 0)
                 {
                     borderColorPen.Width = value;
                     borderThickness = value;
@@ -117,17 +116,18 @@ namespace WinkingCat.HelperLibs
             this.image = new Bitmap(dest.Size.Width, dest.Size.Height);
             using (Graphics g = Graphics.FromImage(image))
             {
-                g.PixelOffsetMode = PixelOffsetMode.HighSpeed;
                 g.InterpolationMode = InterpolationMode.NearestNeighbor;
-                g.SmoothingMode = SmoothingMode.HighQuality;
-                g.CompositingQuality = CompositingQuality.HighSpeed;
-                g.CompositingMode = CompositingMode.SourceOver;
                 g.PixelOffsetMode = PixelOffsetMode.Half;
 
                 g.DrawImage(img, dest, source, gu);
             }
             Invalidate();
 
+        }
+        public void DrawImage(Bitmap img)
+        {
+            this.image = img;
+            Invalidate();
         }
 
         protected override void OnPaint(PaintEventArgs e)
@@ -142,7 +142,17 @@ namespace WinkingCat.HelperLibs
 
             if (image != null)
             {
-                g.DrawImage(image, new Point(borderThickness, borderThickness));
+                //g.DrawImage(image, new Point(borderThickness, borderThickness));
+                using(TextureBrush tb = new TextureBrush(this.image))
+                {
+                    g.FillRectangle(
+                    tb,
+                    new Rectangle(
+                        borderThickness,
+                        borderThickness,
+                        this.ClientSize.Width - borderThickness * 2,
+                        this.ClientSize.Height - borderThickness * 2));
+                }
             }
 
             if (drawBorder)

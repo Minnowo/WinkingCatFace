@@ -227,13 +227,41 @@ namespace WinkingCat.HelperLibs
 
     public class ClipStyle
     {
-        public Color clipBorderColor { get; set; } = Color.FromArgb(249, 0, 187);
-        public ushort clipBorderThickness { get; set; } = 2;
+        public Color borderColor { get; set; } = Color.FromArgb(249, 0, 187);
+        public ushort borderThickness { get; set; } = 2;
+        public ushort zoomBorderThickness { get; set; } = 2;
+
+        /// <summary>
+        /// this is how big the zoom rectangle is on the clips when you mouse wheel in
+        /// the size in width is the total window width * clipZoomSizePercent
+        /// and the height is the same thing
+        /// the bigger the window the bigger the zoom box, same for smaller
+        /// </summary>
+        public float ZoomSizePercent
+        {
+            get
+            {
+                return zoomSizePercent;
+            }
+            set
+            {
+                zoomSizePercent = value.Clamp(0.01f, 1f);
+            }
+        }
+        private float zoomSizePercent = 0.25f;
+
+        public Color zoomBorderColor { get; set; } = Color.LightBlue;
+        public Color zoomReplaceTransparentColor { get; set; } = Color.Black;
+        public bool zoomFollowMouse { get; set; } = false;
 
         public ClipStyle()
         {
-            clipBorderColor = Color.FromArgb(249, 0, 187);
-            clipBorderThickness = 2;
+            borderColor = Color.FromArgb(249, 0, 187);
+            borderThickness = 2;
+            zoomSizePercent = 0.25f;
+            zoomBorderColor = Color.LightBlue;
+            zoomReplaceTransparentColor = Color.Black;
+            zoomFollowMouse = false;
         }
     }
 

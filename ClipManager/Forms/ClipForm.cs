@@ -30,9 +30,10 @@ namespace WinkingCat.ClipHelper
         public Point lastLocation { get; private set; }
 
         public ClipOptions Options { get; private set; }
-        public string ClipName { get; private set; }
         public Bitmap image { get; private set; }
         public Bitmap zoomedImage { get; private set; } = null;
+
+        public string ClipName { get; private set; }
 
         private double zoomLevel = 1;
         
@@ -48,6 +49,7 @@ namespace WinkingCat.ClipHelper
 
         public ClipForm(ClipOptions options, Image displayImage)
         {
+            SetStyle(ControlStyles.OptimizedDoubleBuffer | ControlStyles.UserPaint | ControlStyles.AllPaintingInWmPaint, true);
             InitializeComponent();
             SuspendLayout();
 
@@ -61,11 +63,12 @@ namespace WinkingCat.ClipHelper
             image = (Bitmap)displayImage;
 
             startWindowSize = new Size(
-                imageSize.Width + Options.borderThickness, 
-                imageSize.Height + Options.borderThickness);
+                imageSize.Width + Options.borderThickness*2, 
+                imageSize.Height + Options.borderThickness*2);
+
             zoomControlSize = new Size(
-                startWindowSize.Width / 4, 
-                startWindowSize.Height / 4);
+                (int)Math.Round(startWindowSize.Width * ApplicationStyles.currentStyle.clipStyle.ZoomSizePercent),
+                (int)Math.Round(startWindowSize.Height * ApplicationStyles.currentStyle.clipStyle.ZoomSizePercent));
 
             MinimumSize = startWindowSize;
             MaximumSize = startWindowSize;
@@ -75,9 +78,17 @@ namespace WinkingCat.ClipHelper
             BackColor = Options.borderColor;
 
             zdbZoomedImageDisplay.Enabled = false;
-            zdbZoomedImageDisplay.BorderThickness = 2;
-            zdbZoomedImageDisplay.borderColor = Color.LightBlue;
-            zdbZoomedImageDisplay.replaceTransparent = Color.Black;
+            zdbZoomedImageDisplay.borderColor = ApplicationStyles.currentStyle.clipStyle.zoomBorderColor;
+            zdbZoomedImageDisplay.replaceTransparent = ApplicationStyles.currentStyle.clipStyle.zoomReplaceTransparentColor;
+            if (ApplicationStyles.currentStyle.clipStyle.ZoomSizePercent == 1)
+            {
+                zdbZoomedImageDisplay.BorderThickness = 0;
+            }
+            else
+            {
+                zdbZoomedImageDisplay.BorderThickness = ApplicationStyles.currentStyle.clipStyle.zoomBorderThickness;
+            }
+
 
             MouseDown += MouseDown_Event;
             MouseUp += MouseUp_Event;
@@ -135,8 +146,9 @@ namespace WinkingCat.ClipHelper
                 if (zoomLevel <= 1)
                 {
                     showingZoomed = false;
-                    zdbZoomedImageDisplay._Hide();
                     zoomLevel = 1;
+
+                    zdbZoomedImageDisplay._Hide();
                     zoomedImage?.Dispose();
                     zoomedImage = null;
                     GC.Collect();
@@ -150,20 +162,28 @@ namespace WinkingCat.ClipHelper
 
         private void DrawZoomedImage(Point mousePos)
         {
-            //zdbZoomedImageDisplay.Location = new Point(
-            //    mousePos.X - zdbZoomedImageDisplay.ClientSize.Width/2, 
-            //    mousePos.Y - zdbZoomedImageDisplay.ClientSize.Height / 2);
 
             zdbZoomedImageDisplay.Size = new Size(
                 zoomControlSize.Width + zdbZoomedImageDisplay.BorderThickness * 2,
-                zoomControlSize.Height + zdbZoomedImageDisplay.BorderThickness * 2);
+                zoomControlSize.Height + zdbZoomedImageDisplay.BorderThickness * 2); 
 
+            if (ApplicationStyles.currentStyle.clipStyle.zoomFollowMouse)
+            {
+                zdbZoomedImageDisplay.Location = new Point(
+                    mousePos.X - zdbZoomedImageDisplay.ClientSize.Width / 2,
+                    mousePos.Y - zdbZoomedImageDisplay.ClientSize.Height / 2);
+            }
+
+            // if the clip has been dragged larger then we need 
+            // to resize the image before trying to zoom in on it
             if (ClientSize != startWindowSize)
             {
                 Size scaledImageSize = new Size(
                     Width - Options.borderThickness * 2,
-                    Height - Options.borderThickness * 2);
+                    Height - Options.borderThickness  * 2);
 
+                // if the zoomed image is null or not the size its supposed to be
+                // try and dispose of it, then remake it
                 if (zoomedImage == null || zoomedImage.Size != scaledImageSize)
                 {
                     zoomedImage?.Dispose();
@@ -173,11 +193,8 @@ namespace WinkingCat.ClipHelper
 
                     using (Graphics g = Graphics.FromImage(zoomedImage))
                     {
-                        g.PixelOffsetMode = PixelOffsetMode.HighQuality;
                         g.InterpolationMode = InterpolationMode.NearestNeighbor;
-                        g.SmoothingMode = SmoothingMode.HighQuality;
-                        g.CompositingQuality = CompositingQuality.HighSpeed;
-                        g.CompositingMode = CompositingMode.SourceOver;
+                        g.PixelOffsetMode = PixelOffsetMode.Half;
 
                         g.DrawImage(
                             image,
@@ -223,9 +240,19 @@ namespace WinkingCat.ClipHelper
             {
                 this.Icon = Properties.Resources._3black;
             }
+
             cmMain.Renderer = new ToolStripCustomRenderer();
             cmMain.Opacity = ApplicationStyles.currentStyle.mainFormStyle.contextMenuOpacity;
-            
+
+            this.BackColor = ApplicationStyles.currentStyle.clipStyle.borderColor;
+
+            zdbZoomedImageDisplay.borderColor = ApplicationStyles.currentStyle.clipStyle.zoomBorderColor;
+            zdbZoomedImageDisplay.replaceTransparent = ApplicationStyles.currentStyle.clipStyle.zoomReplaceTransparentColor;
+
+            zoomControlSize = new Size(
+                (int)Math.Round(ClientSize.Width * ApplicationStyles.currentStyle.clipStyle.ZoomSizePercent),
+                (int)Math.Round(ClientSize.Height * ApplicationStyles.currentStyle.clipStyle.ZoomSizePercent));
+
             Refresh();
         }
 
@@ -344,7 +371,7 @@ namespace WinkingCat.ClipHelper
                 new Rectangle(0, 0, image.Width, image.Height),
                 GraphicsUnit.Pixel
                 );
-
+            
             base.OnPaint(e);
         }
 
@@ -419,9 +446,10 @@ namespace WinkingCat.ClipHelper
                     }
 
                     Invalidate();
+
                     zoomControlSize = new Size(
-                        this.ClientSize.Width / 4,
-                        this.ClientSize.Height / 4);
+                        (int)Math.Round(ClientSize.Width * ApplicationStyles.currentStyle.clipStyle.ZoomSizePercent),
+                        (int)Math.Round(ClientSize.Height * ApplicationStyles.currentStyle.clipStyle.ZoomSizePercent));
                 }
                 else
                 {
@@ -429,7 +457,7 @@ namespace WinkingCat.ClipHelper
                     {
                         Point m = e.Location;
 
-                        if ((m.X >= Size.Width - Options.borderThickness - 1))
+                        if ((m.X >= Size.Width - Options.borderThickness - 1)) // i really forget what this -1 is for but i think it just would always be 1 pixel off for some reason
                         {
                             Cursor = Cursors.SizeWE;
                             if (isLeftClicking)

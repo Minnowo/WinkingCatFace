@@ -136,9 +136,16 @@ namespace WinkingCat.HelperLibs
                 KeyValueConfigurationCollection keys = conf.AppSettings.Settings;
 
                 keys.Clear();
-                keys.Add("clipBorderColor", ColorTranslator.ToHtml(ApplicationStyles.currentStyle.clipStyle.clipBorderColor)); // color
+                keys.Add("clipBorderColor", ColorTranslator.ToHtml(ApplicationStyles.currentStyle.clipStyle.borderColor)); // color
+                keys.Add("zoomBorderColor", ColorTranslator.ToHtml(ApplicationStyles.currentStyle.clipStyle.zoomBorderColor)); // color
+                keys.Add("zoomReplaceTransparentColor", ColorTranslator.ToHtml(ApplicationStyles.currentStyle.clipStyle.zoomReplaceTransparentColor)); // color
 
-                keys.Add("clipBorderThickness", ApplicationStyles.currentStyle.clipStyle.clipBorderThickness.ToString()); // ushort
+                keys.Add("clipBorderThickness", ApplicationStyles.currentStyle.clipStyle.borderThickness.ToString());       // ushort
+                keys.Add("zoomBorderThickness", ApplicationStyles.currentStyle.clipStyle.zoomBorderThickness.ToString());   // ushort
+
+                keys.Add("ZoomSizePercent", ApplicationStyles.currentStyle.clipStyle.ZoomSizePercent.ToString());           // float
+
+                keys.Add("zoomFollowMouse", ApplicationStyles.currentStyle.clipStyle.zoomFollowMouse.ToString()); // bool;
 
                 conf.Save();
                 return true;
@@ -330,18 +337,33 @@ namespace WinkingCat.HelperLibs
                     foreach (string key in keys.AllKeys)
                         switch (key)
                         {
+                            case "zoomFollowMouse":
+                                ApplicationStyles.currentStyle.clipStyle.zoomFollowMouse = bool.Parse(keys["zoomFollowMouse"].Value);
+                                break;
                             case "clipBorderThickness":
-                                ApplicationStyles.currentStyle.clipStyle.clipBorderThickness = ushort.Parse(keys["clipBorderThickness"].Value);
+                                ApplicationStyles.currentStyle.clipStyle.borderThickness = ushort.Parse(keys["clipBorderThickness"].Value);
+                                break;
+                            case "zoomBorderThickness":
+                                ApplicationStyles.currentStyle.clipStyle.zoomBorderThickness = ushort.Parse(keys["zoomBorderThickness"].Value);
+                                break;
+                            case "ZoomSizePercent":
+                                ApplicationStyles.currentStyle.clipStyle.ZoomSizePercent = float.Parse(keys["ZoomSizePercent"].Value);
+                                break;
+                            case "zoomReplaceTransparentColor":
+                                ApplicationStyles.currentStyle.clipStyle.zoomReplaceTransparentColor = ColorTranslator.FromHtml(keys["zoomReplaceTransparentColor"].Value);
+                                break;
+                            case "zoomBorderColor":
+                                ApplicationStyles.currentStyle.clipStyle.zoomBorderColor = ColorTranslator.FromHtml(keys["zoomBorderColor"].Value);
                                 break;
                             case "clipBorderColor":
-                                ApplicationStyles.currentStyle.clipStyle.clipBorderColor = ColorTranslator.FromHtml(keys["clipBorderColor"].Value);
+                                ApplicationStyles.currentStyle.clipStyle.borderColor = ColorTranslator.FromHtml(keys["clipBorderColor"].Value);
                                 break;
                             default:
                                 throw new Exception("Keys have been modified ClipStyles.config will be re-saved with recent values");
                         }
                     // if the number of settings don't match they have been moded 
                     // so re-save the settings just loaded and re-write the file
-                    if (keys.AllKeys.Length != 2)
+                    if (keys.AllKeys.Length != 7)
                         throw new Exception("Keys have been modified ClipStyles.config will be re-saved with recent values");
                     return true;
                 }

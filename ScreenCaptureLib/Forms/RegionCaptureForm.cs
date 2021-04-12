@@ -148,7 +148,7 @@ namespace WinkingCat.ScreenCaptureLib
         {
             if(e.Delta > 0)
             {
-                if (RegionCaptureOptions.magnifierZoomLevel + RegionCaptureOptions.magnifierZoomScale < 6)
+                if (RegionCaptureOptions.magnifierZoomLevel + RegionCaptureOptions.magnifierZoomScale < 12)
                     RegionCaptureOptions.magnifierZoomLevel += RegionCaptureOptions.magnifierZoomScale;
                 if (RegionCaptureOptions.magnifierZoomLevel > 0)
                     RegionCaptureOptions.drawMagnifier = true;
@@ -308,7 +308,6 @@ namespace WinkingCat.ScreenCaptureLib
             g.InterpolationMode = InterpolationMode.NearestNeighbor;
             g.SmoothingMode = SmoothingMode.HighQuality; // for some reason highspeed crashes the window
             g.CompositingQuality = CompositingQuality.HighSpeed;
-            g.CompositingMode = CompositingMode.SourceOver;
 
             if (RegionCaptureOptions.marchingAnts)
             {
