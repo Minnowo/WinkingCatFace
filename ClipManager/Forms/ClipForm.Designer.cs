@@ -17,7 +17,7 @@
             image?.Dispose();
             zoomedImage?.Dispose();
             zdbZoomedImageDisplay?.Dispose();
-            
+
             if (disposing && (components != null))
             {
                 components.Dispose();

@@ -10,6 +10,21 @@ namespace WinkingCat.HelperLibs
 {
     public class ClipOptions
     {
+        public static int ZoomRefreshRate
+        {
+            get
+            {
+                return zoomRefreshRate;
+            }
+            set
+            {
+                zoomRefreshRate = value.Clamp(1, 5000);
+            }
+        }
+        private static int zoomRefreshRate = 10;
+
+        public static int extendBorderGrabRange { get; set; } = 1;
+
         public Size maxClipSize { get; set; } = new Size(5000, 5000);
         public Color borderColor { get; set; } = ApplicationStyles.currentStyle.clipStyle.borderColor;
         public Point location { get; set; } = new Point(0, 0);

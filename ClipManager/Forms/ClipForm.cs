@@ -12,6 +12,7 @@ using System.Drawing.Drawing2D;
 using WinkingCat.HelperLibs;
 using System.Windows.Forms.VisualStyles;
 using WinkingCat.Uploaders;
+using System.Diagnostics;
 
 namespace WinkingCat.ClipHelper
 {
@@ -35,13 +36,15 @@ namespace WinkingCat.ClipHelper
 
         public string ClipName { get; private set; }
 
+        private Stopwatch zoomRefreshRate = new Stopwatch();
+
         private double zoomLevel = 1;
-        
+
         private DragLoc drag;
 
         private Size zoomControlSize;
 
-        private bool isLeftClicking  = false;
+        private bool isLeftClicking = false;
         private bool isResizing = false;
         public bool isResizable = true;
         public bool isMoving = false;
@@ -63,8 +66,8 @@ namespace WinkingCat.ClipHelper
             image = (Bitmap)displayImage;
 
             startWindowSize = new Size(
-                imageSize.Width + Options.borderThickness*2, 
-                imageSize.Height + Options.borderThickness*2);
+                imageSize.Width + Options.borderThickness * 2,
+                imageSize.Height + Options.borderThickness * 2);
 
             zoomControlSize = new Size(
                 (int)Math.Round(startWindowSize.Width * ApplicationStyles.currentStyle.clipStyle.ZoomSizePercent),
@@ -74,7 +77,7 @@ namespace WinkingCat.ClipHelper
             MaximumSize = startWindowSize;
 
             // why tf can't you make the width / height of a windows form bigger than the screen width + 12 its bs
-            Bounds = new Rectangle(options.location, startWindowSize); 
+            Bounds = new Rectangle(options.location, startWindowSize);
             BackColor = Options.borderColor;
 
             zdbZoomedImageDisplay.Enabled = false;
@@ -135,6 +138,7 @@ namespace WinkingCat.ClipHelper
         {
             if (e.Delta > 0)
             {
+                zoomRefreshRate.Restart();
                 zoomLevel = Math.Round(zoomLevel * 1.1d, 2);
                 showingZoomed = true;
                 zdbZoomedImageDisplay._Show();
@@ -145,6 +149,8 @@ namespace WinkingCat.ClipHelper
                 zoomLevel = Math.Round(zoomLevel * 0.9d, 2);
                 if (zoomLevel <= 1)
                 {
+                    zoomRefreshRate.Reset();
+
                     showingZoomed = false;
                     zoomLevel = 1;
 
@@ -165,7 +171,7 @@ namespace WinkingCat.ClipHelper
 
             zdbZoomedImageDisplay.Size = new Size(
                 zoomControlSize.Width + zdbZoomedImageDisplay.BorderThickness * 2,
-                zoomControlSize.Height + zdbZoomedImageDisplay.BorderThickness * 2); 
+                zoomControlSize.Height + zdbZoomedImageDisplay.BorderThickness * 2);
 
             if (ApplicationStyles.currentStyle.clipStyle.zoomFollowMouse)
             {
@@ -180,7 +186,7 @@ namespace WinkingCat.ClipHelper
             {
                 Size scaledImageSize = new Size(
                     Width - Options.borderThickness * 2,
-                    Height - Options.borderThickness  * 2);
+                    Height - Options.borderThickness * 2);
 
                 // if the zoomed image is null or not the size its supposed to be
                 // try and dispose of it, then remake it
@@ -272,7 +278,7 @@ namespace WinkingCat.ClipHelper
 
         private void TsmiCopyZoomedImage_Click(object sender, EventArgs e)
         {
-            if(zdbZoomedImageDisplay.image != null)
+            if (zdbZoomedImageDisplay.image != null)
             {
                 ClipboardHelper.CopyImageDefault(zdbZoomedImageDisplay.image);
             }
@@ -280,7 +286,7 @@ namespace WinkingCat.ClipHelper
 
         public void CopyScaledImage(object sender = null, EventArgs e = null)
         {
-            using(Bitmap img = ImageHelper.ResizeImage(this.image, new Size(Width - Options.borderThickness, Height - Options.borderThickness)))
+            using (Bitmap img = ImageHelper.ResizeImage(this.image, new Size(Width - Options.borderThickness, Height - Options.borderThickness)))
             {
                 ClipboardHelper.CopyImageDefault(img);
             }
@@ -320,7 +326,7 @@ namespace WinkingCat.ClipHelper
             {
                 string fileName = ImageHelper.newImagePath;
 
-                if(ImageHelper.Save(fileName, this.image))
+                if (ImageHelper.Save(fileName, this.image))
                 {
                     OCRForm form = new OCRForm(fileName);
                     form.Owner = this;
@@ -371,7 +377,7 @@ namespace WinkingCat.ClipHelper
                 new Rectangle(0, 0, image.Width, image.Height),
                 GraphicsUnit.Pixel
                 );
-            
+
             base.OnPaint(e);
         }
 
@@ -420,9 +426,13 @@ namespace WinkingCat.ClipHelper
         {
             if (showingZoomed)
             {
-                DrawZoomedImage(e.Location);
+                if (zoomRefreshRate.ElapsedMilliseconds > ClipOptions.ZoomRefreshRate)
+                {
+                    DrawZoomedImage(e.Location);
+                    zoomRefreshRate.Restart();
+                }
             }
-            else if (isResizable)
+            else if (isResizable && !isMoving)
             {
                 if (isResizing)
                 {
@@ -453,50 +463,47 @@ namespace WinkingCat.ClipHelper
                 }
                 else
                 {
-                    if (!isMoving)
-                    {
-                        Point m = e.Location;
+                    Point m = e.Location;
 
-                        if ((m.X >= Size.Width - Options.borderThickness - 1)) // i really forget what this -1 is for but i think it just would always be 1 pixel off for some reason
+                    if (m.X >= Size.Width - Options.borderThickness - ClipOptions.extendBorderGrabRange)
+                    {
+                        Cursor = Cursors.SizeWE;
+                        if (isLeftClicking)
                         {
-                            Cursor = Cursors.SizeWE;
-                            if (isLeftClicking)
-                            {
-                                drag = DragLoc.Right;
-                                isResizing = true;
-                            }
+                            drag = DragLoc.Right;
+                            isResizing = true;
                         }
-                        else if ((m.Y >= Size.Height - Options.borderThickness - 1))
+                    }
+                    else if (m.Y >= Size.Height - Options.borderThickness - ClipOptions.extendBorderGrabRange)
+                    {
+                        Cursor = Cursors.SizeNS;
+                        if (isLeftClicking)
                         {
-                            Cursor = Cursors.SizeNS;
-                            if (isLeftClicking)
-                            {
-                                drag = DragLoc.Bottom;
-                                isResizing = true;
-                            }
+                            drag = DragLoc.Bottom;
+                            isResizing = true;
                         }
-                        else if (m.X < Options.borderThickness)
+                    }
+                    else if (m.X < Options.borderThickness + ClipOptions.extendBorderGrabRange)
+                    {
+                        Cursor = Cursors.SizeWE;
+                        if (isLeftClicking)
                         {
-                            Cursor = Cursors.SizeWE;
-                            if (isLeftClicking)
-                            {
-                                drag = DragLoc.Left;
-                                isResizing = true;
-                            }
+                            drag = DragLoc.Left;
+                            isResizing = true;
                         }
-                        else if (m.Y < Options.borderThickness)
+                    }
+                    else if (m.Y < Options.borderThickness + ClipOptions.extendBorderGrabRange)
+                    {
+                        Cursor = Cursors.SizeNS;
+                        if (isLeftClicking)
                         {
-                            Cursor = Cursors.SizeNS;
-                            if (isLeftClicking)
-                            {
-                                drag = DragLoc.Top;
-                                isResizing = true;
-                            }
+                            drag = DragLoc.Top;
+                            isResizing = true;
                         }
-                        else
-                        {
-                            Cursor = Cursors.Default;
-                        }
+                    }
+                    else
+                    {
+                        Cursor = Cursors.Default;
                     }
                 }
             }
