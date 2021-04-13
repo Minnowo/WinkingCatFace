@@ -163,5 +163,13 @@ namespace WinkingCat
                 }
             }
         }
+
+        private void btnCopyCode_Click(object sender, EventArgs e)
+        {
+            if (pbQRDisplay.Image != null)
+            {
+                ClipboardHelper.CopyImageDefault(pbQRDisplay.Image);
+            }
+        }
     }
 }

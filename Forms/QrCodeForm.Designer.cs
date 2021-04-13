@@ -39,6 +39,7 @@
             this.bFromClipboard = new System.Windows.Forms.Button();
             this.bFromFile = new System.Windows.Forms.Button();
             this.bFromScreen = new System.Windows.Forms.Button();
+            this.btnCopyCode = new System.Windows.Forms.Button();
             this.tabControl1.SuspendLayout();
             this.tabPage1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pbQRDisplay)).BeginInit();
@@ -58,6 +59,7 @@
             // 
             // tabPage1
             // 
+            this.tabPage1.Controls.Add(this.btnCopyCode);
             this.tabPage1.Controls.Add(this.label1);
             this.tabPage1.Controls.Add(this.cmFormat);
             this.tabPage1.Controls.Add(this.pbQRDisplay);
@@ -87,7 +89,7 @@
             this.cmFormat.FormattingEnabled = true;
             this.cmFormat.Location = new System.Drawing.Point(53, 6);
             this.cmFormat.Name = "cmFormat";
-            this.cmFormat.Size = new System.Drawing.Size(352, 21);
+            this.cmFormat.Size = new System.Drawing.Size(257, 21);
             this.cmFormat.TabIndex = 2;
             this.cmFormat.SelectedIndexChanged += new System.EventHandler(this.comboBox1_SelectedIndexChanged);
             // 
@@ -168,6 +170,17 @@
             this.bFromScreen.UseVisualStyleBackColor = true;
             this.bFromScreen.Click += new System.EventHandler(this.bFromScreen_Click);
             // 
+            // btnCopyCode
+            // 
+            this.btnCopyCode.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.btnCopyCode.Location = new System.Drawing.Point(316, 4);
+            this.btnCopyCode.Name = "btnCopyCode";
+            this.btnCopyCode.Size = new System.Drawing.Size(86, 23);
+            this.btnCopyCode.TabIndex = 4;
+            this.btnCopyCode.Text = "Copy";
+            this.btnCopyCode.UseVisualStyleBackColor = true;
+            this.btnCopyCode.Click += new System.EventHandler(this.btnCopyCode_Click);
+            // 
             // BarcodeForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -200,5 +213,6 @@
         private System.Windows.Forms.Button bFromFile;
         private System.Windows.Forms.Button bFromScreen;
         private System.Windows.Forms.TextBox tbTextOutput;
+        private System.Windows.Forms.Button btnCopyCode;
     }
 }

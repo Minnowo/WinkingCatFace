@@ -97,8 +97,9 @@ namespace WinkingCat.HelperLibs
             {
                 lock (imageLock)
                 {
-                    this.Image.Dispose();
+                    Image tmp = this.Image;
                     this.Image = null;
+                    tmp.Dispose();
                 }
             }
         }

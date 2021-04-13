@@ -544,10 +544,11 @@ namespace WinkingCat
             {
                 case MouseButtons.Right:
                     this.lvListView.UnselectAll();
-                    Logger.WriteLine("right click event on picturebox");
+                    this.scMain.Panel2Collapsed = true;
+                    this.scMain.Panel2.Hide();
+                    this.pbPreviewBox.Reset();
                     break;
             }
-            Logger.WriteLine("mouse button down on picturebox");
         }
 
         private void LvListView_ItemSelectionChanged(object sender, ListViewItemSelectionChangedEventArgs e)
