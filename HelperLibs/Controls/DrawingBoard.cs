@@ -152,16 +152,19 @@ namespace WinkingCat.HelperLibs
 
         private void ZoomImage(bool zoomIn)
         {
+            if (isLeftClicking)
+                return;
+
             centerPoint.X = origin.X + srcRect.Width / 2;
             centerPoint.Y = origin.Y + srcRect.Height / 2;
 
             if (zoomIn)
             {
-                zoomFactor = Math.Round(zoomFactor * 1.1d, 2);
+                ZoomFactor = Math.Round(zoomFactor * 1.1d, 2);
             }
             else
             {
-                zoomFactor = Math.Round(zoomFactor * 0.9d, 2);
+                ZoomFactor = Math.Round(zoomFactor * 0.9d, 2);
             }
 
 
@@ -245,7 +248,7 @@ namespace WinkingCat.HelperLibs
 
         private Point PointToImage(Point p)
         {
-            return new Point((int)((p.X + origin.X) / zoomFactor), (int)((p.Y + origin.Y) / zoomFactor));
+            return new Point((int)Math.Round((p.X - origin.X) / zoomFactor), (int)Math.Round((p.Y - origin.Y) / zoomFactor));
         }
 
         private void ImageViewer_MouseDown(object sender, MouseEventArgs e)
@@ -276,44 +279,9 @@ namespace WinkingCat.HelperLibs
                 origin.X = origin.X + (startPoint.X - p.X);
                 origin.Y = origin.Y + (startPoint.Y - p.Y);
                 startPoint = PointToImage(e.Location);
-                //CheckBounds();
                 Invalidate();
             }
         }
-
-        /*private void CheckBounds()
-        {
-            if (originalImage == null)
-                return;
-
-
-
-            if (origin.X < 0)
-            {
-                origin.X = 0;
-            }
-            else if (origin.X > originalImage.Width - (int)(ClientSize.Width / zoomFactor))
-            {
-                origin.X = originalImage.Width - (int)(ClientSize.Width / zoomFactor);
-                if (origin.X < 0)
-                {
-                    origin.X = 0;
-                }
-            }
-
-            if (origin.Y < 0)
-            {
-                origin.Y = 0;
-            }
-            else if (origin.Y > originalImage.Height - (int)(ClientSize.Height / zoomFactor))
-            {
-                origin.Y = originalImage.Height - (int)(ClientSize.Height / zoomFactor);
-                if (origin.Y < 0)
-                {
-                    origin.Y = 0;
-                }
-            }
-    }*/
 
         private void ComputeDrawingArea()
         {
@@ -336,7 +304,7 @@ namespace WinkingCat.HelperLibs
         {
             e.Graphics.Clear(ApplicationStyles.currentStyle.mainFormStyle.imageViewerBackColor);
             Graphics g = e.Graphics;
-            //g.CompositingMode = CompositingMode.SourceCopy;
+
             DrawImage(g);
 
             //base.OnPaint(e);
