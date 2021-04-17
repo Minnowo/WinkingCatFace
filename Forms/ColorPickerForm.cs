@@ -8,6 +8,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using WinkingCat.HelperLibs;
+using WinkingCat.ScreenCaptureLib;
 
 namespace WinkingCat
 {
@@ -22,6 +23,7 @@ namespace WinkingCat
             InitializeComponent();
             this.Text = "ColorPicker";
             this.MaximizeBox = false;
+            this.KeyPreview = true;
 
             foreach(ColorFormat format in Enum.GetValues(typeof(ColorFormat)))
                 cbCopyFormat.Items.Add(format);
@@ -74,6 +76,18 @@ namespace WinkingCat
             rbX.CheckedChanged += RadioButtonChanged;
 
             this.HandleCreated += ColorPickerForm_HandleCreated;
+            this.KeyDown += ColorPickerForm_KeyDown;
+        }
+
+        private void ColorPickerForm_KeyDown(object sender, KeyEventArgs e)
+        {
+            e.SuppressKeyPress = true;
+            switch (e.KeyData)
+            {
+                case Keys.Control | Keys.V:
+                    button4_Click(null, EventArgs.Empty);
+                    break;
+            }
         }
 
         private void ColorPickerForm_HandleCreated(object sender, EventArgs e)
@@ -93,6 +107,8 @@ namespace WinkingCat
             ccbYXYColor.UpdateColor(e.Color);
             ccbXYZColor.UpdateColor(e.Color);
             ccbCMYKColor.UpdateColor(e.Color);
+            textBox1.Text = e.Color.ToHex();
+            textBox2.Text = e.Color.ToDecimal().ToString();
 
             displayColorLabel.BackColor = e.Color;
             preventUpdate = false;
@@ -171,6 +187,7 @@ namespace WinkingCat
                 ccbXYZColor.UpdateColor(colorPicker.SelectedColor);
                 ccbCMYKColor.UpdateColor(colorPicker.SelectedColor);
                 textBox1.Text = colorPicker.SelectedColor.ToHex();
+                textBox2.Text = colorPicker.SelectedColor.ToDecimal().ToString();
                 displayColorLabel.BackColor = colorPicker.SelectedColor;
             }
             else
@@ -183,6 +200,7 @@ namespace WinkingCat
                 ccbXYZColor.UpdateColor(colorPicker.AbsoluteColor);
                 ccbCMYKColor.UpdateColor(colorPicker.AbsoluteColor);
                 textBox1.Text = colorPicker.AbsoluteColor.ToHex();
+                textBox2.Text = colorPicker.AbsoluteColor.ToDecimal().ToString();
                 displayColorLabel.BackColor = colorPicker.AbsoluteColor;
             }
             
@@ -218,6 +236,9 @@ namespace WinkingCat
 
         private void textBox1_TextChanged(object sender, EventArgs e)
         {
+            if (preventUpdate)
+                return;
+
             Color a;
             ColorHelper.ParseHex(textBox1.Text, out a);
             if (a != Color.Empty)
@@ -226,7 +247,59 @@ namespace WinkingCat
 
         private void textBox2_TextChanged(object sender, EventArgs e)
         {
-            //colorPicker.SelectedColor = ColorHelper.HexToColor(textBox2.Text);
+            if (preventUpdate)
+                return;
+
+            Color a;
+            ColorHelper.ParseDecimal(textBox2.Text, out a);
+            if (a != Color.Empty)
+                colorPicker.SelectedColor = a;
+        }
+
+        private void button4_Click(object sender, EventArgs e)
+        {
+            if (Clipboard.ContainsText())
+            {
+                string clipBoardContent = Clipboard.GetText();
+                Color c;
+
+                if(ColorHelper.ParseRGB(clipBoardContent, out c))
+                {
+                    colorPicker.SelectedColor = c;
+                    return;
+                }
+                if (ColorHelper.ParseHex(clipBoardContent, out c))
+                {
+                    colorPicker.SelectedColor = c;
+                    return;
+                }
+                if (ColorHelper.ParseDecimal(clipBoardContent, out c))
+                {
+                    colorPicker.SelectedColor = c;
+                    return;
+                }
+
+                HSB c2;
+                if (ColorHelper.ParseHSB(clipBoardContent, out c2))
+                {
+                    colorPicker.SelectedColor = c2.ToColor();
+                    return;
+                }
+            }
+        }
+
+        private void button1_Click(object sender, EventArgs e)
+        {
+            TaskHandler.ExecuteTask(Tasks.ScreenColorPicker);
+
+            Console.WriteLine(ImageHandler.LastInfo.color.ToString());
+
+            if(ImageHandler.LastInfo.color != Color.Empty && ImageHandler.LastInfo.Result == RegionResult.Color)
+            {
+                colorPicker.SelectedColor = ImageHandler.LastInfo.color;
+                tbXPosition.Text = ImageHandler.LastInfo.StopLeftClick.X.ToString();
+                tbYPosition.Text = ImageHandler.LastInfo.StopLeftClick.Y.ToString();
+            }
         }
     }
 }

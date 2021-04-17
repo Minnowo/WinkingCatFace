@@ -1710,6 +1710,30 @@ namespace WinkingCat.HelperLibs
             }
         }
 
+        public static Color DecimalToColor(int dec, ColorFormat format = ColorFormat.RGB)
+        {
+            switch (format)
+            {
+                default:
+                case ColorFormat.RGB:
+                    return Color.FromArgb((dec >> 16) & 0xFF, (dec >> 8) & 0xFF, dec & 0xFF);
+                case ColorFormat.ARGB:
+                    return Color.FromArgb((dec >> 24) & 0xFF, (dec >> 16) & 0xFF, (dec >> 8) & 0xFF, dec & 0xFF);
+            }
+        }
+
+        public static bool ParseDecimal(string input, out Color color)
+        {
+            Match matchDecimal = Regex.Match(input, @"^[0-9]{1,9}$");
+            if (matchDecimal.Success)
+            {
+                color = DecimalToColor(int.Parse(matchDecimal.Value));
+                return true;
+            }
+            color = Color.Empty;
+            return false;
+        }
+
         public static bool ParseRGB(string input, out Color color)
         {
             Match matchRGB = Regex.Match(input, @"^([1]?[0-9]?[0-9]|2[0-4][0-9]|25[0-5])(?:\s|,)+([1]?[0-9]?[0-9]|2[0-4][0-9]|25[0-5])(?:\s|,)+([1]?[0-9]?[0-9]|2[0-4][0-9]|25[0-5])(?:\s)?$");

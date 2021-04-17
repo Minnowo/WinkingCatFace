@@ -532,21 +532,24 @@ namespace WinkingCat.ScreenCaptureLib
 
         public LastRegionCaptureInfo GetResultImage()
         {
-            if (leftClickStart.X < leftClickStop.X)
-                leftClickStop = new Point(leftClickStop.X + 1, leftClickStop.Y);
-            else
-                leftClickStop = new Point(leftClickStop.X - 1, leftClickStop.Y);
-            if (leftClickStart.Y < leftClickStop.Y)
-                leftClickStop = new Point(leftClickStop.X, leftClickStop.Y + 1);
-            else
-                leftClickStop = new Point(leftClickStop.X, leftClickStop.Y - 1);
+            if (result == RegionResult.Region)
+            {
+                if (leftClickStart.X < leftClickStop.X)
+                    leftClickStop = new Point(leftClickStop.X + 1, leftClickStop.Y);
+                else
+                    leftClickStop = new Point(leftClickStop.X - 1, leftClickStop.Y);
+                if (leftClickStart.Y < leftClickStop.Y)
+                    leftClickStop = new Point(leftClickStop.X, leftClickStop.Y + 1);
+                else
+                    leftClickStop = new Point(leftClickStop.X, leftClickStop.Y - 1);
+            }
             switch (result)
             {
                 case RegionResult.Close:
                     return new LastRegionCaptureInfo(RegionResult.Close);
 
                 case RegionResult.Region:
-                    return new LastRegionCaptureInfo(RegionResult.Region, leftClickStart, leftClickStop, 
+                    return new LastRegionCaptureInfo(RegionResult.Region, PointToScreen(leftClickStart), PointToScreen(leftClickStop), 
                         ScreenHelper.CreateValidCropArea(leftClickStart, leftClickStop), 
                         ScreenShotManager.CropImage(leftClickStart, leftClickStop, image));                    //return ScreenShotManager.CropImage(leftClickStart, leftClickStop, clipWinPictureBox.Image);
 
@@ -563,7 +566,7 @@ namespace WinkingCat.ScreenCaptureLib
                         ScreenShotManager.CropImage(ScreenHelper.GetActiveScreenBounds0Based(), image));
 
                 case RegionResult.Color:
-                    return new LastRegionCaptureInfo(RegionResult.Color, leftClickStart, leftClickStop, (image).GetPixel(leftClickStop.X, leftClickStop.Y));
+                    return new LastRegionCaptureInfo(RegionResult.Color, PointToScreen(leftClickStart), PointToScreen(leftClickStop), (image).GetPixel(leftClickStop.X, leftClickStop.Y));
             }
             return null;
         }
