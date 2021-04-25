@@ -51,6 +51,7 @@
     <Reference Include="System.Configuration" />
     <Reference Include="System.Core" />
     <Reference Include="System.Drawing" />
+    <Reference Include="System.Runtime.Remoting" />
     <Reference Include="System.Web" />
     <Reference Include="System.Windows.Forms" />
     <Reference Include="System.Xml.Linq" />
@@ -140,6 +141,7 @@
     <Compile Include="Helpers\WindowHelpers.cs" />
     <Compile Include="HotkeyInfo.cs" />
     <Compile Include="HotkeySettings.cs" />
+    <Compile Include="InstanceManager.cs" />
     <Compile Include="Logger.cs" />
     <Compile Include="MainFormSettings.cs" />
     <Compile Include="ApplicationStyles.cs" />

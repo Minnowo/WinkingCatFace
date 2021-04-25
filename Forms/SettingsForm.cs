@@ -92,6 +92,12 @@ namespace WinkingCat
         #endregion
 
         #region Button events
+
+        private void btnIntegration_Click(object sender, EventArgs e)
+        {
+            OpenChildForm(new IntegrationForm());
+        }
+
         private void GeneralButtonClick_Event(object sender, EventArgs e)
         {
             OpenChildForm(new GeneralSettingsForm());
@@ -138,6 +144,7 @@ namespace WinkingCat
             childForm.Show();
             ResumeLayout();
         }
+
     }
 
 }

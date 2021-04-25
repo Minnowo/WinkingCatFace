@@ -32,8 +32,7 @@ namespace WinkingCat.ClipHelper
                 Clips[clipName]?.Dispose();
                 Clips.Remove(clipName); 
             }
-            
-
+            GC.Collect(); // free memory from the stream of LoadImage();
         }
 
         public static void DestroyAllClips()
@@ -44,6 +43,7 @@ namespace WinkingCat.ClipHelper
                 Clips[clipName]?.Dispose();
                 Clips.Remove(clipName);
             }
+            GC.Collect(); // free memory from the stream of LoadImage();
         }
     }
 }

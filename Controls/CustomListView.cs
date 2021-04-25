@@ -271,12 +271,17 @@ namespace WinkingCat
                 {
                     try
                     {
-                        Image img = Bitmap.FromFile(Items[SelectedIndex].Tag.ToString());
-                        Point p = ScreenHelper.GetCursorPosition();
-                        ClipOptions ops = new ClipOptions() { location = new Point(p.X - img.Width / 2, p.Y - img.Height / 2) };
+                        using (Bitmap img = ImageHelper.LoadImage(Items[SelectedIndex].Tag.ToString()))
+                        {
+                            ClipOptions ops = new ClipOptions();
+                            ops.location = Program.MainForm.Location;
+                            ops.date = DateTime.Now;
+                            ops.uuid = Guid.NewGuid().ToString();
+                            ops.filePath = Items[SelectedIndex].Tag.ToString();
 
-                        ClipManager.CreateClip(img, ops);
-                        img.Dispose();
+                            ClipManager.CreateClip(img, ops);
+                        }
+                        GC.Collect(); // free memory from the stream of LoadImage
                     }
                     catch (Exception ex)
                     {
@@ -299,17 +304,10 @@ namespace WinkingCat
         {
             if (SelectedIndex != -1)
             {
-                if (File.Exists(Items[SelectedIndex].Tag.ToString()))
+                string path = Items[SelectedIndex].Tag.ToString();
+                if (File.Exists(path))
                 {
-                        using (Image img = ImageHelper.LoadImage(Items[SelectedIndex].Tag.ToString()))
-                        {
-                            if(img != null)
-                                ClipboardHelper.CopyImageDefault(img);
-                            else
-                            {
-                                MessageBox.Show("The file is either not an image file or is corrupt");
-                            }
-                        }
+                    ClipboardHelper.CopyImageFromFile(path, false, false);
                 }
                 else
                 {
@@ -411,7 +409,7 @@ namespace WinkingCat
         private void ToolStripMenuItemOCR_Click(object sender, EventArgs e)
         {
             OCRForm form = new OCRForm(Items[SelectedIndex].Tag.ToString());
-            form.Owner = Program.mainForm;
+            form.Owner = Program.MainForm;
             form.TopMost = MainFormSettings.alwaysOnTop;
             form.Show();
             

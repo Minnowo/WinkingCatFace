@@ -68,7 +68,7 @@ namespace WinkingCat.HelperLibs
                         this.Reset();
                         isImageLoading = true;
 
-                        this.Image = ImageHelper.FastLoadImage(path);
+                        this.Image = ImageHelper.LoadImage(path);
                     
                         this.isImageLoading = false;
                         ImageSizeMode();
@@ -101,6 +101,7 @@ namespace WinkingCat.HelperLibs
                     this.Image = null;
                     tmp.Dispose();
                 }
+                GC.Collect(); // this is to garbage collect the memory stream used by the LoadImage function
             }
         }
 

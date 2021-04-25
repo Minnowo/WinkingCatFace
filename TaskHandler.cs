@@ -88,7 +88,7 @@ namespace WinkingCat
                     if (!string.IsNullOrEmpty(path))
                     {
                         result = true;
-                        using (Image img = ImageHelper.FastLoadImage(path))
+                        using (Image img = ImageHelper.LoadImage(path))
                         {
                             if (img == null)
                             {
@@ -211,23 +211,23 @@ namespace WinkingCat
                     return false;
 
                 case Tasks.ColorWheelPicker:
-                    Program.mainForm.ColorPicker_Click(null, EventArgs.Empty);
+                    Program.MainForm.ColorPicker_Click(null, EventArgs.Empty);
                     return true;
 
                 case Tasks.HashCheck:
-                    Program.mainForm.HashCheck_Click(null, EventArgs.Empty);
+                    Program.MainForm.HashCheck_Click(null, EventArgs.Empty);
                     return true;
 
                 case Tasks.Regex:
-                    Program.mainForm.Regex_Click(null, EventArgs.Empty);
+                    Program.MainForm.Regex_Click(null, EventArgs.Empty);
                     return true;
 
                 case Tasks.QRCode:
-                    Program.mainForm.QrCode_Click(null, EventArgs.Empty);
+                    Program.MainForm.QrCode_Click(null, EventArgs.Empty);
                     return true;
 
                 case Tasks.OpenMainForm:
-                    Program.mainForm.ForceActivate();
+                    Program.MainForm.ForceActivate();
                     result = true;
                     break;
             }

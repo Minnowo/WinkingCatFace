@@ -59,7 +59,7 @@ namespace WinkingCat
         private void AlwaysOnTopCheckbox_CheckedChanged(object sender, EventArgs e)
         {
             MainFormSettings.alwaysOnTop = AlwaysOnTopCheckbox.Checked;
-            Program.mainForm.TopMost = AlwaysOnTopCheckbox.Checked;
+            Program.MainForm.TopMost = AlwaysOnTopCheckbox.Checked;
         }
 
         private void ShowTrayIconCheckBox_CheckedChanged(object sender, EventArgs e)
@@ -76,7 +76,7 @@ namespace WinkingCat
             }
 
             MainFormSettings.showInTray = ShowTrayIconCheckBox.Checked;
-            Program.mainForm.niTrayIcon.Visible = ShowTrayIconCheckBox.Checked;
+            Program.MainForm.niTrayIcon.Visible = ShowTrayIconCheckBox.Checked;
         }
 
         private void MinimizeToTrayOnCloseCheckBox_CheckedChanged(object sender, EventArgs e)

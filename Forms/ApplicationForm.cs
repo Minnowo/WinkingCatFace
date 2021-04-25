@@ -19,7 +19,7 @@ namespace WinkingCat
 
     public partial class ApplicationForm : Form
     {
-        
+        public bool IsReady { get; private set; } = false;
         public SettingsForm settingsForm { get; private set; } = null;
         public StylesForm stylesForm { get; private set; } = null;
         public ColorPickerForm colorPickerForm { get; private set; } = null;
@@ -451,6 +451,7 @@ namespace WinkingCat
         {
             isHandleCreated = true;
             UpdateTheme();
+            IsReady = true;
         }
 
         private void MainForm_Resize(object sender, EventArgs e)

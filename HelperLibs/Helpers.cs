@@ -11,14 +11,14 @@ using ZXing;
 using ZXing.Common;
 using ZXing.QrCode;
 using ZXing.Rendering;
+using System.Diagnostics;
 
 namespace WinkingCat.HelperLibs
 {
     public class Helpers
     {
         public static readonly Version OSVersion = Environment.OSVersion.Version;
-        public static readonly string[] SizeSuffixes =
-                   { "bytes", "KB", "MB", "GB", "TB", "PB", "EB", "ZB", "YB" };
+        public static readonly string[] SizeSuffixes = { "bytes", "KB", "MB", "GB", "TB", "PB", "EB", "ZB", "YB" };
 
         #region just stolen from sharex changed 1 function a little bit
         public static Image CreateBarCode(string text, int width, int height, BarcodeFormat format = BarcodeFormat.QR_CODE)
@@ -49,6 +49,19 @@ namespace WinkingCat.HelperLibs
             }
 
             return null;
+        }
+
+        public static Size StringToSize(string s, string split = ",")
+        {
+            try
+            {
+                string[] sizeParts = s.Split(new string[] { split }, StringSplitOptions.None);
+                return new Size(int.Parse(sizeParts[0]), int.Parse(sizeParts[1]));
+            }
+            catch
+            {
+                return Size.Empty;
+            }
         }
 
         public static Image CreateQRCode(string text, int size, BarcodeFormat format = BarcodeFormat.QR_CODE)
@@ -95,6 +108,33 @@ namespace WinkingCat.HelperLibs
             return !string.IsNullOrEmpty(content) && Encoding.UTF8.GetByteCount(content) <= 2952;
         }
         #endregion
+
+        public static void LaunchProcess(string path, string args, bool asAdmin = false)
+        {
+            // Use ProcessStartInfo class
+            ProcessStartInfo startInfo = new ProcessStartInfo();
+            startInfo.CreateNoWindow = false;
+            startInfo.UseShellExecute = true;
+            startInfo.Verb = "runas";
+            startInfo.WindowStyle = ProcessWindowStyle.Hidden;
+            startInfo.FileName = path;
+            startInfo.Arguments = args;
+
+            try
+            {
+                // Start the process with the info we specified.
+                // Call WaitForExit and then the using statement will close.
+                using (Process exeProcess = Process.Start(startInfo))
+                {
+                    exeProcess.WaitForExit();
+                }
+            }
+            catch
+            {
+                // Log error.
+            }
+        }
+
         public static string SizeSuffix(Int64 value, int decimalPlaces = 1)
         {
             if (decimalPlaces < 0) { throw new ArgumentOutOfRangeException("decimalPlaces"); }

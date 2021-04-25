@@ -46,6 +46,21 @@ namespace WinkingCat.HelperLibs
             }
         }
 
+        public static void InvokeSafe(this Control control, Action action)
+        {
+            if (control != null && !control.IsDisposed)
+            {
+                if (control.InvokeRequired)
+                {
+                    control.Invoke(action);
+                }
+                else
+                {
+                    action();
+                }
+            }
+        }
+
         public static string ReturnStrHash(byte[] crypto)
         {
             StringBuilder hash = new System.Text.StringBuilder();

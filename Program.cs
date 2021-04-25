@@ -7,6 +7,7 @@ using System.Runtime.InteropServices;
 using WinkingCat.HelperLibs;
 using System.IO;
 using System.Threading;
+using System.Diagnostics;
 
 namespace WinkingCat
 {
@@ -15,25 +16,75 @@ namespace WinkingCat
         /// <summary>
         /// The main entry point for the application.
         /// </summary>
-        public static ApplicationForm mainForm;
-        static Mutex mutex = new Mutex(true, "{8F6F0AC4-B9A1-45fd-A8CF-72F04E6BDE8F}"); // this sets a single instance probably use different uuid each app
+        public static ApplicationForm MainForm;
+        public static string CurrentEXEPath
+        {
+            get
+            {
+                string p = System.Reflection.Assembly.GetExecutingAssembly().GetName().CodeBase;
+                return p.Substring(8, p.Length - 8);
+            }
+        }
 
         [STAThread]
-        static void Main()
+        static void Main(string[] args)
         {
 
-            // this checks for an instance, if it finds it return
-            if (!mutex.WaitOne(TimeSpan.Zero, true))
+            using (InstanceManager instanceManager = new InstanceManager(true, args, SingleInstanceCallback))
             {
-                NativeMethods.PostMessage(
-                   (IntPtr)NativeMethods.HWND_BROADCAST,
-                   NativeMethods.WM_SHOWME,
-                   IntPtr.Zero,
-                   IntPtr.Zero);
-                return;
+                Run();
             }
 
+        }
 
+        private static void SingleInstanceCallback(object sender, InstanceCallbackEventArgs args)
+        {
+            if (WaitFormLoad(3000))
+            {
+                Action d = () =>
+                {
+                    if (args.CommandLineArgs == null || args.CommandLineArgs.Length < 1)
+                    {
+                        if (MainForm.niTrayIcon != null && MainForm.niTrayIcon.Visible)
+                        {
+                            // Workaround for Windows startup tray icon bug
+                            MainForm.niTrayIcon.Visible = false;
+                            MainForm.niTrayIcon.Visible = true;
+                        }
+
+                        MainForm.ForceActivate();
+                    }
+                    else if (MainForm.Visible)
+                    {
+                        MainForm.ForceActivate();
+                    }
+
+                    //CLIManager cli = new CLIManager(args.CommandLineArgs);
+                    //cli.ParseCommands();
+
+                    //CLI.UseCommandLineArgs(cli.Commands);
+                };
+
+                MainForm.InvokeSafe(d);
+            }
+        }
+
+        private static bool WaitFormLoad(int wait)
+        {
+            Stopwatch timer = Stopwatch.StartNew();
+
+            while (timer.ElapsedMilliseconds < wait)
+            {
+                if (MainForm != null && MainForm.IsReady) return true;
+
+                Thread.Sleep(10);
+            }
+
+            return false;
+        }
+
+        private static void Run()
+        {
             NativeMethods.SetProcessDpiAwarenessContext(-3);
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
@@ -100,10 +151,10 @@ namespace WinkingCat
                 HotkeyManager.UpdateHotkeys(HotkeyManager.GetDefaultHotkeyList(), true);
             }
 
-            mainForm = new ApplicationForm();
-            
-            Application.Run(mainForm);
-            mutex.ReleaseMutex();
+            MainForm = new ApplicationForm();
+
+            Application.Run(MainForm);
+
 
             SettingsManager.SaveAllSettings(HotkeyManager.hotKeys);
         }

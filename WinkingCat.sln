@@ -4,6 +4,9 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 VisualStudioVersion = 16.0.30621.155
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WinkingCat", "WinkingCat.csproj", "{D3039595-1B90-451D-B853-3B6FD48C19E5}"
+	ProjectSection(ProjectDependencies) = postProject
+		{42412E60-D69E-4B3D-B716-7C613A527665} = {42412E60-D69E-4B3D-B716-7C613A527665}
+	EndProjectSection
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WinkingCat.HelperLibs", "HelperLibs\WinkingCat.HelperLibs.csproj", "{9D5D4AA3-5FF0-46B3-ACA4-AF277F4713CD}"
 EndProject
@@ -12,6 +15,10 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WinkingCat.ClipHelper", "ClipManager\WinkingCat.ClipHelper.csproj", "{E9346324-4F31-4035-B72C-22D79335112D}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WinkingCat.Uploaders", "Uploaders\WinkingCat.Uploaders.csproj", "{3D8102C2-8543-48AA-A357-A1E2FCC7C93C}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WinkingCat.RegistryHelper", "RegistryHelper\WinkingCat.RegistryHelper.csproj", "{42412E60-D69E-4B3D-B716-7C613A527665}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WinkingCat.TalkToMe", "TalkToMe\WinkingCat.TalkToMe.csproj", "{EEBD9EF0-7473-4131-80B8-068C2319A80D}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -39,6 +46,14 @@ Global
 		{3D8102C2-8543-48AA-A357-A1E2FCC7C93C}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{3D8102C2-8543-48AA-A357-A1E2FCC7C93C}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{3D8102C2-8543-48AA-A357-A1E2FCC7C93C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{42412E60-D69E-4B3D-B716-7C613A527665}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{42412E60-D69E-4B3D-B716-7C613A527665}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{42412E60-D69E-4B3D-B716-7C613A527665}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{42412E60-D69E-4B3D-B716-7C613A527665}.Release|Any CPU.Build.0 = Release|Any CPU
+		{EEBD9EF0-7473-4131-80B8-068C2319A80D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{EEBD9EF0-7473-4131-80B8-068C2319A80D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{EEBD9EF0-7473-4131-80B8-068C2319A80D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{EEBD9EF0-7473-4131-80B8-068C2319A80D}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

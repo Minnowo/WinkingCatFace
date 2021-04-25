@@ -25,6 +25,17 @@ namespace WinkingCat.HelperLibs
 
         public static int extendBorderGrabRange { get; set; } = 1;
 
+        //https://social.msdn.microsoft.com/Forums/windows/en-US/a1843fa0-64f3-41f7-a117-a28b8d83dd12/windows-form-larger-than-screen-size?forum=winformsdesigner
+        // you can't have a window greater than the screen size + 12
+        public static Size maxWinSize
+        {
+            get 
+            {
+                Rectangle r = ScreenHelper.GetScreenBounds();
+                return new Size(r.Width + 12, r.Height + 12);
+            }
+        }
+
         public Size maxClipSize { get; set; } = new Size(5000, 5000);
         public Color borderColor { get; set; } = ApplicationStyles.currentStyle.clipStyle.borderColor;
         public Point location { get; set; } = new Point(0, 0);

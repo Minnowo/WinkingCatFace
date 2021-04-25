@@ -153,6 +153,25 @@ namespace WinkingCat.HelperLibs
                 return false;
             }
         }
+
+        public static bool CopyImageFromFile(string path, bool useEmbededColorManagement = false, bool validateImage = false)
+        {
+            try
+            {
+                using (FileStream fileStream = new FileStream(path, FileMode.Open, FileAccess.Read, FileShare.Read))
+                using (Image image = Image.FromStream(fileStream, useEmbededColorManagement, validateImage))
+                {
+                    if (image != null)
+                        return CopyImageDefault(image);
+                }
+                return false;
+            }
+            finally
+            {
+                GC.Collect();
+            }
+        }
+
         public static bool CopyStringDefault(string str)
         {
             IDataObject dataObject = new DataObject();

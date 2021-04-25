@@ -29,19 +29,21 @@
         private void InitializeComponent()
         {
             this.panel1 = new System.Windows.Forms.Panel();
+            this.bPaths = new System.Windows.Forms.Button();
             this.bHotkeys = new System.Windows.Forms.Button();
             this.bClipboard = new System.Windows.Forms.Button();
             this.bUpload = new System.Windows.Forms.Button();
             this.bRegionCapture = new System.Windows.Forms.Button();
             this.bGeneral = new System.Windows.Forms.Button();
             this.FormDockPanel = new System.Windows.Forms.Panel();
-            this.bPaths = new System.Windows.Forms.Button();
+            this.btnIntegration = new System.Windows.Forms.Button();
             this.panel1.SuspendLayout();
             this.SuspendLayout();
             // 
             // panel1
             // 
             this.panel1.AutoScroll = true;
+            this.panel1.Controls.Add(this.btnIntegration);
             this.panel1.Controls.Add(this.bPaths);
             this.panel1.Controls.Add(this.bHotkeys);
             this.panel1.Controls.Add(this.bClipboard);
@@ -53,6 +55,16 @@
             this.panel1.Name = "panel1";
             this.panel1.Size = new System.Drawing.Size(200, 396);
             this.panel1.TabIndex = 0;
+            // 
+            // bPaths
+            // 
+            this.bPaths.Dock = System.Windows.Forms.DockStyle.Top;
+            this.bPaths.Location = new System.Drawing.Point(0, 200);
+            this.bPaths.Name = "bPaths";
+            this.bPaths.Size = new System.Drawing.Size(200, 40);
+            this.bPaths.TabIndex = 5;
+            this.bPaths.Text = "Paths";
+            this.bPaths.UseVisualStyleBackColor = true;
             // 
             // bHotkeys
             // 
@@ -112,15 +124,16 @@
             this.FormDockPanel.Size = new System.Drawing.Size(524, 396);
             this.FormDockPanel.TabIndex = 1;
             // 
-            // bPaths
+            // btnIntegration
             // 
-            this.bPaths.Dock = System.Windows.Forms.DockStyle.Top;
-            this.bPaths.Location = new System.Drawing.Point(0, 200);
-            this.bPaths.Name = "bPaths";
-            this.bPaths.Size = new System.Drawing.Size(200, 40);
-            this.bPaths.TabIndex = 5;
-            this.bPaths.Text = "Paths";
-            this.bPaths.UseVisualStyleBackColor = true;
+            this.btnIntegration.Dock = System.Windows.Forms.DockStyle.Top;
+            this.btnIntegration.Location = new System.Drawing.Point(0, 240);
+            this.btnIntegration.Name = "btnIntegration";
+            this.btnIntegration.Size = new System.Drawing.Size(200, 40);
+            this.btnIntegration.TabIndex = 6;
+            this.btnIntegration.Text = "Integration";
+            this.btnIntegration.UseVisualStyleBackColor = true;
+            this.btnIntegration.Click += new System.EventHandler(this.btnIntegration_Click);
             // 
             // SettingsForm
             // 
@@ -147,5 +160,6 @@
         private System.Windows.Forms.Button bGeneral;
         private System.Windows.Forms.Panel FormDockPanel;
         private System.Windows.Forms.Button bPaths;
+        private System.Windows.Forms.Button btnIntegration;
     }
 }
