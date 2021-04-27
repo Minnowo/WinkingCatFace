@@ -59,6 +59,10 @@ namespace WinkingCat
                         MainForm.ForceActivate();
                     }
 
+                    /*foreach(string a in args.CommandLineArgs)
+                    {
+                        Console.WriteLine(a);
+                    }*/
                     //CLIManager cli = new CLIManager(args.CommandLineArgs);
                     //cli.ParseCommands();
 

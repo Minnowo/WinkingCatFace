@@ -18,8 +18,6 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WinkingCat.Uploaders", "Upl
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WinkingCat.RegistryHelper", "RegistryHelper\WinkingCat.RegistryHelper.csproj", "{42412E60-D69E-4B3D-B716-7C613A527665}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WinkingCat.TalkToMe", "TalkToMe\WinkingCat.TalkToMe.csproj", "{EEBD9EF0-7473-4131-80B8-068C2319A80D}"
-EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -50,10 +48,6 @@ Global
 		{42412E60-D69E-4B3D-B716-7C613A527665}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{42412E60-D69E-4B3D-B716-7C613A527665}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{42412E60-D69E-4B3D-B716-7C613A527665}.Release|Any CPU.Build.0 = Release|Any CPU
-		{EEBD9EF0-7473-4131-80B8-068C2319A80D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{EEBD9EF0-7473-4131-80B8-068C2319A80D}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{EEBD9EF0-7473-4131-80B8-068C2319A80D}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{EEBD9EF0-7473-4131-80B8-068C2319A80D}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

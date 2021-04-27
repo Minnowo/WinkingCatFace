@@ -111,6 +111,7 @@ namespace WinkingCat
             GotFocus += mainForm_GotFocus;
             Resize += MainForm_Resize;
             ResizeEnd += MainForm_Resize;
+            Shown += ApplicationForm_Shown;
 
             ImageHandler.ImageSaved += ImageSaved_Event;
             ApplicationStyles.UpdateStylesEvent += ApplicationStyles_UpdateSylesEvent;
@@ -123,6 +124,15 @@ namespace WinkingCat
             lvListView.AutoResizeColumns(ColumnHeaderAutoResizeStyle.ColumnContent);
             lvListView.AutoResizeColumns(ColumnHeaderAutoResizeStyle.HeaderSize);
             this.pbPreviewBox.previewOnClick = true;
+        }
+
+        private void ApplicationForm_Shown(object sender, EventArgs e)
+        {
+            if (isHandleCreated)
+            {
+                isHandleCreated = true;
+            }
+            UpdateTheme();
         }
 
         public void ImageSaved_Event(object sender, ImageSavedEvent e)
@@ -752,16 +762,17 @@ namespace WinkingCat
         {
             base.SetVisibleCore(allowShowDisplay ? value : allowShowDisplay);
             allowShowDisplay = true;
+            UpdateTheme();
         }
         
-        protected override void WndProc(ref Message m)
+     /*   protected override void WndProc(ref Message m)
         {
             if (m.Msg == NativeMethods.WM_SHOWME) // will be posted if instance is running
             {
                 ShowMe();
             }
             base.WndProc(ref m);
-        }
+        }*/
 
         #endregion
     }
