@@ -342,7 +342,7 @@ namespace WinkingCat.ClipHelper
 
         public void Save_Click(object sender = null, EventArgs e = null)
         {
-            PathHelper.AskSaveImage((Image)image.Clone());
+            ImageHelper.SaveImageFileDialog((Image)image.Clone());
         }
 
         public void Destroy_Click(object sender = null, EventArgs e = null)

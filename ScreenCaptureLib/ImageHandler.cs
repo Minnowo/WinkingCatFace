@@ -62,37 +62,44 @@ namespace WinkingCat.ScreenCaptureLib
                 LastInfo?.Destroy();
                 LastInfo = regionCapture.GetResultImage();
 
-                if (LastInfo.Result != RegionResult.Close)
+                if (LastInfo.Result == RegionResult.Close)
+                    return;
+
+  
+                if(LastInfo.Result == RegionResult.Color)
                 {
-                    if (LastInfo.Result != RegionResult.Color)
-                    {
-                        string imgName = Save(ImageHelper.newImagePath, LastInfo.Image, ImageHelper.defaultImageFormat);
-
-                        if (RegionCaptureOptions.autoCopyImage)
-                            ClipboardHelper.CopyImageDefault(LastInfo.Image);
-
-                        if (RegionCaptureOptions.createClipAfterRegionCapture || RegionCaptureOptions.createSingleClipAfterRegionCapture)
-                        {
-                            RegionCaptureOptions.createSingleClipAfterRegionCapture = false;
-
-                            ClipOptions ops = new ClipOptions();
-                            ops.location = ScreenHelper.GetRectangle0Based(LastInfo.Region).Location;
-                            ops.date = DateTime.Now;
-                            ops.uuid = Guid.NewGuid().ToString();
-                            ops.filePath = imgName;
-
-                            using (LastInfo.Image)
-                            {
-                                ClipManager.CreateClip(LastInfo.Image, ops);
-                            }
-                        }
-                    }
-                    else
-                    {
-                        HandleRegionReturnColor(LastInfo.color);
-                    }
+                    HandleRegionReturnColor(LastInfo.color);
                     OnCaptureEvent(LastInfo);
+                    return;
                 }
+
+                string imgName = ImageHelper.newImagePath;
+
+                if (RegionCaptureOptions.autoCopyImage)
+                    ClipboardHelper.CopyImageDefault(LastInfo.Image);
+
+                if (RegionCaptureOptions.createClipAfterRegionCapture || RegionCaptureOptions.createSingleClipAfterRegionCapture)
+                {
+                    RegionCaptureOptions.createSingleClipAfterRegionCapture = false;
+
+                    ClipOptions ops = new ClipOptions();
+                    ops.location = ScreenHelper.GetRectangle0Based(LastInfo.Region).Location;
+                    ops.date = DateTime.Now;
+                    ops.uuid = Guid.NewGuid().ToString();
+                    ops.filePath = imgName;
+
+                    using (LastInfo.Image)
+                    {
+                        ClipManager.CreateClip(LastInfo.Image, ops);
+                        Save(imgName, LastInfo.Image, ImageHelper.defaultImageFormat);
+                    }
+                }
+                else
+                {
+                    Save(imgName, LastInfo.Image, ImageHelper.defaultImageFormat);
+                }
+
+                OnCaptureEvent(LastInfo);
             }
         }
 

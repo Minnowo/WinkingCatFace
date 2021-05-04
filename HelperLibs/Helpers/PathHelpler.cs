@@ -129,80 +129,29 @@ namespace WinkingCat.HelperLibs
             }
         }
 
-        public static void AskSaveImage(Image img)
+        public static string GetFilenameExtension(string filePath, bool includeDot = false)
         {
-            SaveFileDialog saveFileDialog1 = new SaveFileDialog();
-            saveFileDialog1.Filter = "All Graphic Types | *.bmp; *.jpg; *.jpeg; *.png; *.tiff|JPeg Image|*.jpg|Png Image|*.png|Bitmap Image|*.bmp|Gif Image|*.gif|Tiff Image|*.tiff";
+            string extension = "";
 
-            saveFileDialog1.FileName = ImageHelper.newImageName;
-            saveFileDialog1.Title = "Save an Image File";
-            saveFileDialog1.ShowDialog();
-
-            // If the file name is not an empty string open it for saving.
-            if (saveFileDialog1.FileName != "")
+            if (!string.IsNullOrEmpty(filePath))
             {
-                // Saves the Image via a FileStream created by the OpenFile method.
-                FileStream fs = (FileStream)saveFileDialog1.OpenFile();
-                // Saves the Image in the appropriate ImageFormat based upon the
-                // File type selected in the dialog box.
-                // NOTE that the FilterIndex property is one-based.
+                int pos = filePath.LastIndexOf('.');
 
-                Dictionary<string, int> formatIndex = new Dictionary<string, int>
+                if (pos >= 0)
                 {
-                    { "jpg", 1 },
-                    { "jpeg", 1 },
-                    { "png", 2 },
-                    { "bmp", 3 },
-                    { "gif", 4 },
-                    { "tiff", 5 }
-                };
+                    extension = filePath.Substring(pos + 1);
 
-                string fileType = saveFileDialog1.FileName.Split('.').Last().ToLower();
-
-                if (formatIndex.ContainsKey(fileType))
-                    saveFileDialog1.FilterIndex = formatIndex[fileType];
-
-                try
-                {
-                    switch (saveFileDialog1.FilterIndex)
+                    if (includeDot)
                     {
-                        default:
-                            img.Save(fs, ImageHelper.defaultImageFormat);
-                            break;
-                        case 1:
-                            img.Save(fs, ImageFormat.Jpeg);
-                            break;
-
-                        case 2:
-                            img.Save(fs, ImageFormat.Png);
-                            break;
-
-                        case 3:
-                            img.Save(fs, ImageFormat.Bmp);
-                            break;
-
-                        case 4:
-                            img.Save(fs, ImageFormat.Gif);
-                            break;
-
-                        case 5:
-                            img.Save(fs, ImageFormat.Tiff);
-                            break;
+                        extension = "." + extension;
                     }
                 }
-                catch (Exception e)
-                {
-                    Logger.WriteException(e, "failed to save image");
-                    MessageBox.Show("could not save file");
-                }
-
-
-                fs.Close();
-                fs.Dispose();
-                img.Dispose();
             }
-            saveFileDialog1.Dispose();
+
+            return extension;
         }
+
+        
 
         public static string AskChooseDirectory(string dir = "")
         {
