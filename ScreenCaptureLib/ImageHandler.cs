@@ -107,7 +107,7 @@ namespace WinkingCat.ScreenCaptureLib
         public static string Save(string imageName, Image img, ImageFormat format = null)
         {
 
-            if (ImageHelper.Save(imageName, img, format))
+            if (ImageHelper.SaveImage(imageName, img, format))
             {
                 OnImageSaved(imageName);
                 return imageName;

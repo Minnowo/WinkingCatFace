@@ -1,0 +1,80 @@
+2021-07-07 18:19:05.014 - ;3c starting...
+2021-07-07 18:19:05.015 - path settings loaded
+2021-07-07 18:19:05.015 - X:\Languages\C#\WinkingCatFace\bin\Debug
+2021-07-07 18:19:05.015 - X:\Languages\C#\WinkingCatFace\bin\Debug\AppConfig
+2021-07-07 18:19:05.016 - X:\Languages\C#\WinkingCatFace\bin\Debug\AppConfig\Resources
+2021-07-07 18:19:05.016 - X:\Languages\C#\WinkingCatFace\bin\Debug\AppConfig\Screenshots
+2021-07-07 18:19:05.016 - X:\Languages\C#\WinkingCatFace\bin\Debug\AppConfig\Logs
+2021-07-07 18:19:05.041 - Exception:
+System.Exception: Keys have been modified MiscSettings.config will be re-saved with recent values
+   at WinkingCat.HelperLibs.SettingsManager.LoadMiscSettings() in X:\Languages\C#\WinkingCatFace\HelperLibs\SettingsManager.cs:line 869
+2021-07-07 18:19:05.082 - Hotkeys not loaded using default
+2021-07-07 18:19:05.094 - Hotkey registered: Hotkey: Ctrl + Print Screen, Task: CaptureActiveMonitor
+2021-07-07 18:19:05.095 - Hotkey registered: Hotkey: Alt + Print Screen, Task: CaptureActiveWindow
+2021-07-07 18:19:05.095 - Hotkey registered: Hotkey: Print Screen, Task: CaptureFullScreen
+2021-07-07 18:19:18.846 - PathSettings Settings Saved Successfully
+2021-07-07 18:19:18.851 - MainForm Settings Saved Successfully
+2021-07-07 18:19:18.857 - RegionCapture Settings Saved Successfully
+2021-07-07 18:19:18.861 - Clipboard Settings Saved Successfully
+2021-07-07 18:19:18.865 - Misc Settings Saved Successfully
+2021-07-07 18:19:18.869 - Hotkeys Saved Successfully
+2021-07-07 18:19:21.889 - ;3c starting...
+2021-07-07 18:19:21.890 - path settings loaded
+2021-07-07 18:19:21.890 - X:\Languages\C#\WinkingCatFace\bin\Debug
+2021-07-07 18:19:21.890 - X:\Languages\C#\WinkingCatFace\bin\Debug\AppConfig
+2021-07-07 18:19:21.891 - X:\Languages\C#\WinkingCatFace\bin\Debug\AppConfig\Resources
+2021-07-07 18:19:21.891 - X:\Languages\C#\WinkingCatFace\bin\Debug\AppConfig\Screenshots
+2021-07-07 18:19:21.891 - X:\Languages\C#\WinkingCatFace\bin\Debug\AppConfig\Logs
+2021-07-07 18:19:21.894 - MainForm settings loaded successfully
+2021-07-07 18:19:21.899 - RegionCapture settings loaded successfully
+2021-07-07 18:19:21.901 - Clipboard settings loaded successfully
+2021-07-07 18:19:21.904 - Misc settings loaded successfully
+2021-07-07 18:19:21.923 - MainForm styles loaded successfully
+2021-07-07 18:19:21.926 - RegionCapture styles loaded successfully
+2021-07-07 18:19:21.929 - Clip styles loaded successfully
+2021-07-07 18:19:21.953 - Hotkey registered: Hotkey: Alt + Print Screen, Task: CaptureActiveWindow
+2021-07-07 18:19:21.954 - Hotkey registered: Hotkey: Ctrl + Print Screen, Task: CaptureActiveMonitor
+2021-07-07 18:19:21.954 - Hotkey registered: Hotkey: Print Screen, Task: CaptureFullScreen
+2021-07-07 18:19:21.955 - Hotkeys loaded successfully
+2021-07-07 18:20:43.973 - PathSettings Settings Saved Successfully
+2021-07-07 18:20:43.977 - MainForm Settings Saved Successfully
+2021-07-07 18:20:43.983 - RegionCapture Settings Saved Successfully
+2021-07-07 18:20:43.988 - Clipboard Settings Saved Successfully
+2021-07-07 18:20:43.992 - Misc Settings Saved Successfully
+2021-07-07 18:20:43.998 - Hotkeys Saved Successfully
+2021-07-07 18:33:08.941 - ;3c starting...
+2021-07-07 18:33:08.942 - path settings loaded
+2021-07-07 18:33:08.942 - X:\Languages\C#\WinkingCatFace\bin\Debug
+2021-07-07 18:33:08.942 - X:\Languages\C#\WinkingCatFace\bin\Debug\AppConfig
+2021-07-07 18:33:08.943 - X:\Languages\C#\WinkingCatFace\bin\Debug\AppConfig\Resources
+2021-07-07 18:33:08.943 - X:\Languages\C#\WinkingCatFace\bin\Debug\AppConfig\Screenshots
+2021-07-07 18:33:08.943 - X:\Languages\C#\WinkingCatFace\bin\Debug\AppConfig\Logs
+2021-07-07 18:33:08.947 - MainForm settings loaded successfully
+2021-07-07 18:33:08.951 - RegionCapture settings loaded successfully
+2021-07-07 18:33:08.953 - Clipboard settings loaded successfully
+2021-07-07 18:33:08.955 - Misc settings loaded successfully
+2021-07-07 18:33:08.977 - MainForm styles loaded successfully
+2021-07-07 18:33:08.981 - RegionCapture styles loaded successfully
+2021-07-07 18:33:08.984 - Clip styles loaded successfully
+2021-07-07 18:33:09.009 - Hotkey registered: Hotkey: Ctrl + Print Screen, Task: CaptureActiveMonitor
+2021-07-07 18:33:09.009 - Hotkey registered: Hotkey: Alt + Print Screen, Task: CaptureActiveWindow
+2021-07-07 18:33:09.010 - Hotkey registered: Hotkey: Print Screen, Task: CaptureFullScreen
+2021-07-07 18:33:09.011 - Hotkeys loaded successfully
+2021-07-07 18:33:52.184 - ;3c starting...
+2021-07-07 18:33:52.184 - path settings loaded
+2021-07-07 18:33:52.184 - X:\Languages\C#\WinkingCatFace\bin\Debug
+2021-07-07 18:33:52.185 - X:\Languages\C#\WinkingCatFace\bin\Debug\AppConfig
+2021-07-07 18:33:52.185 - X:\Languages\C#\WinkingCatFace\bin\Debug\AppConfig\Resources
+2021-07-07 18:33:52.185 - X:\Languages\C#\WinkingCatFace\bin\Debug\AppConfig\Screenshots
+2021-07-07 18:33:52.185 - X:\Languages\C#\WinkingCatFace\bin\Debug\AppConfig\Logs
+2021-07-07 18:33:52.188 - MainForm settings loaded successfully
+2021-07-07 18:33:52.191 - RegionCapture settings loaded successfully
+2021-07-07 18:33:52.194 - Clipboard settings loaded successfully
+2021-07-07 18:33:52.197 - Misc settings loaded successfully
+2021-07-07 18:33:52.218 - MainForm styles loaded successfully
+2021-07-07 18:33:52.220 - RegionCapture styles loaded successfully
+2021-07-07 18:33:52.223 - Clip styles loaded successfully
+2021-07-07 18:33:52.247 - Hotkey registered: Hotkey: Ctrl + Print Screen, Task: CaptureActiveMonitor
+2021-07-07 18:33:52.248 - Hotkey registered: Hotkey: Alt + Print Screen, Task: CaptureActiveWindow
+2021-07-07 18:33:52.248 - Hotkey registered: Hotkey: Print Screen, Task: CaptureFullScreen
+2021-07-07 18:33:52.249 - Hotkeys loaded successfully

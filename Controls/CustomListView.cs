@@ -117,6 +117,7 @@ namespace WinkingCat
                         }
                     }
                 }
+                GC.Collect();
             }
             else
             {

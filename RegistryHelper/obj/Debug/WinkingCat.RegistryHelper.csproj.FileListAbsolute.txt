@@ -1,0 +1,8 @@
+X:\Languages\C#\WinkingCatFace\bin\Debug\RegistryHelper.exe.config
+X:\Languages\C#\WinkingCatFace\bin\Debug\RegistryHelper.exe
+X:\Languages\C#\WinkingCatFace\bin\Debug\RegistryHelper.pdb
+X:\Languages\C#\WinkingCatFace\RegistryHelper\obj\Debug\WinkingCat.RegistryHelper.csprojAssemblyReference.cache
+X:\Languages\C#\WinkingCatFace\RegistryHelper\obj\Debug\WinkingCat.RegistryHelper.csproj.CoreCompileInputs.cache
+X:\Languages\C#\WinkingCatFace\RegistryHelper\obj\Debug\WinkingCat.RegistryHelper.csproj.CopyComplete
+X:\Languages\C#\WinkingCatFace\RegistryHelper\obj\Debug\RegistryHelper.exe
+X:\Languages\C#\WinkingCatFace\RegistryHelper\obj\Debug\RegistryHelper.pdb
