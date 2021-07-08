@@ -140,12 +140,13 @@
     <Compile Include="Helpers\ScreenHelpers.cs" />
     <Compile Include="Helpers\TranslatorHelper.cs" />
     <Compile Include="Helpers\WindowHelpers.cs" />
-    <Compile Include="HotkeyInfo.cs" />
-    <Compile Include="HotkeySettings.cs" />
-    <Compile Include="InstanceManager.cs" />
+    <Compile Include="Types\HotkeyInfo.cs" />
+    <Compile Include="Types\HotkeySettings.cs" />
+    <Compile Include="Types\InstanceManager.cs" />
+    <Compile Include="Interfaces\IUndoable.cs" />
     <Compile Include="Logger.cs" />
     <Compile Include="MainFormSettings.cs" />
-    <Compile Include="ApplicationStyles.cs" />
+    <Compile Include="Types\ApplicationStyles.cs" />
     <Compile Include="Native\NativeEnums.cs" />
     <Compile Include="Native\NativeConstants.cs" />
     <Compile Include="Native\NativeMethods.cs" />
@@ -169,7 +170,8 @@
     </Compile>
     <Compile Include="RegionCaptureOptions.cs" />
     <Compile Include="SettingsManager.cs" />
-    <Compile Include="WindowInfo.cs" />
+    <Compile Include="Types\BitmapUndo.cs" />
+    <Compile Include="Types\WindowInfo.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />

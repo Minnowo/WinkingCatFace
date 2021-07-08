@@ -18,7 +18,7 @@ namespace WinkingCat.ClipHelper
         Right,
         Bottom
     }
-    public partial class ClipForm : Form
+    public partial class ClipForm : Form, IUndoable
     {
         public Size imageSize { get; private set; }
         public Size imageDefaultSize { get; private set; }
@@ -36,6 +36,7 @@ namespace WinkingCat.ClipHelper
         private Stopwatch zoomRefreshRate = new Stopwatch();
 
         private double zoomLevel = 1;
+        private double aspectRatio = 0;
 
         private DragLoc drag;
 
@@ -43,8 +44,9 @@ namespace WinkingCat.ClipHelper
 
         private bool isLeftClicking = false;
         private bool isResizing = false;
-        public bool isResizable = true;
-        public bool isMoving = false;
+        private bool isResizable = true;
+        private bool isMoving = false;
+        private bool isRotated = false;
         private bool showingZoomed = false;
 
         public ClipForm(ClipOptions options, Image displayImage)
@@ -60,6 +62,7 @@ namespace WinkingCat.ClipHelper
 
             imageSize = displayImage.Size;
             imageDefaultSize = displayImage.Size;
+            aspectRatio = imageSize.Width / (double)imageSize.Height;
             image = (Bitmap)displayImage;
 
             changeTracker = new BitmapUndo(image);
@@ -99,6 +102,8 @@ namespace WinkingCat.ClipHelper
             KeyDown += FormKeyDown;
             MouseWheel += ClipForm_MouseWheel;
 
+            changeTracker.BitmapChanged += ChangeTracker_BitmapChanged;
+
             ApplicationStyles.UpdateStylesEvent += UpdateTheme;
 
             #region context menu
@@ -117,6 +122,10 @@ namespace WinkingCat.ClipHelper
             tsmiOpenInEditor.Click += OpenInEditor_Click;
             tsmiInvertColor.Click += InvertColor_Click;
             tsmiConvertToGray.Click += ConvertToGray_Click;
+            tsmiRotateLeft.Click += RotateLeft_Click;
+            tsmiRotateRight.Click += RotateRight_Click;
+            tsmiFlipHorizontal.Click += FlipHorizontal_Click;
+            tsmiFlipVertical.Click += FlipVertical_Click;
 
             if (isResizable) tsmiAllowResizeToolStripMenuItem.Checked = true;
             #endregion
@@ -133,6 +142,28 @@ namespace WinkingCat.ClipHelper
             updateMaxSizeTimer.Tick += UpdateMaxSizeTimerTick_Event;
             updateMaxSizeTimer.Start();
 
+        }
+
+        
+
+        /// <summary>
+        /// Checks if the window should adjust its size to match a newly rotated image.
+        /// </summary>
+        public void UpdateWindow()
+        {
+            double aspectR = changeTracker.CurrentBitmap.Width / (double)changeTracker.CurrentBitmap.Height;
+
+            if(aspectR.CompareTo(aspectRatio) == 0)
+                return;
+
+            // if the aspect ratio changed it means that the image has been rotated left or right
+            // so swap the width and height to rotate
+            aspectRatio = aspectR;
+
+            Size oldWindowSize = new Size(Width, Height);
+
+            MinimumSize =   new Size(MinimumSize.Height, MinimumSize.Width);
+            Size =          new Size(oldWindowSize.Height, oldWindowSize.Width);
         }
 
         /// <summary>
@@ -265,7 +296,8 @@ namespace WinkingCat.ClipHelper
         /// </summary>
         public void InvertImage()
         {
-            ImageHelper.InvertBitmap(this.image);
+            changeTracker.InvertBitmap();
+            //ImageHelper.InvertBitmap(this.image);
             Invalidate();
         }
 
@@ -274,7 +306,68 @@ namespace WinkingCat.ClipHelper
         /// </summary>
         public void ConvertImageToGray()
         {
-            ImageHelper.GrayscaleBitmap(this.image);
+            changeTracker.ConvertToGray();
+            //ImageHelper.GrayscaleBitmap(this.image);
+            Invalidate();
+        }
+
+        /// <summary>
+        /// Rotate the image 90 to the left.
+        /// </summary>
+        public void RotateLeft()
+        {
+            changeTracker.RotateLeft();
+            Invalidate();
+        }
+
+        /// <summary>
+        /// Rotate the image 90 to the right.
+        /// </summary>
+        public void RotateRight()
+        {
+            changeTracker.RotateRight();
+            Invalidate();
+        }
+
+        /// <summary>
+        /// Flip the image horizontally.
+        /// </summary>
+        public void FlipHorizontal()
+        {
+            changeTracker.FlipHorizontal();
+            Invalidate();
+        }
+
+        /// <summary>
+        /// Flip the image vertically.
+        /// </summary>
+        public void FlipVertical()
+        {
+            changeTracker.FlipVertical();
+            Invalidate();
+        }
+
+        /// <summary>
+        /// Redo the last change to the image.
+        /// </summary>
+        public void Redo()
+        {
+            if (changeTracker.RedoCount == 0)
+                return;
+
+            changeTracker.Redo();
+            Invalidate();
+        }
+
+        /// <summary>
+        /// Undo the last change to the image.
+        /// </summary>
+        public void Undo()
+        {
+            if (changeTracker.UndoCount == 0)
+                return;
+
+            changeTracker.Undo();
             Invalidate();
         }
 
@@ -343,6 +436,11 @@ namespace WinkingCat.ClipHelper
 
         #region context menu functions
 
+        private void ChangeTracker_BitmapChanged(BitmapChanges change)
+        {
+            UpdateWindow();
+        }
+
         private void CmMain_Opening(object sender, CancelEventArgs e)
         {
             if (zdbZoomedImageDisplay.image == null)
@@ -383,6 +481,26 @@ namespace WinkingCat.ClipHelper
         private void ConvertToGray_Click(object sender, EventArgs e)
         {
             ConvertImageToGray();
+        }
+
+        private void FlipVertical_Click(object sender, EventArgs e)
+        {
+            FlipVertical();
+        }
+
+        private void FlipHorizontal_Click(object sender, EventArgs e)
+        {
+            FlipHorizontal();
+        }
+
+        private void RotateRight_Click(object sender, EventArgs e)
+        {
+            RotateRight();
+        }
+
+        private void RotateLeft_Click(object sender, EventArgs e)
+        {
+            RotateLeft();
         }
 
         private void AllowResize_Click(object sender, EventArgs e)
@@ -426,18 +544,34 @@ namespace WinkingCat.ClipHelper
             e.Handled = true;
             switch (e.KeyData)
             {
+                case (Keys.Z | Keys.Shift | Keys.LControlKey):
+                case (Keys.Z | Keys.Shift | Keys.Control):
+                case (Keys.Y | Keys.LControlKey):
+                case (Keys.Y | Keys.Control):
+                    Redo();
+                    break;
+
+                case (Keys.Z | Keys.LControlKey):
+                case (Keys.Z | Keys.Control):
+                    Undo();
+                    break;
+
+                case (Keys.C | Keys.LControlKey):
                 case (Keys.C | Keys.Control):
                     CopyImage();
                     break;
 
+                case (Keys.T | Keys.LControlKey):
                 case (Keys.T | Keys.Control):
                     OCR_Image();
                     break;
 
+                case (Keys.R | Keys.LControlKey):
                 case (Keys.R | Keys.Control):
                     ToggleResize();
                     break;
 
+                case (Keys.S | Keys.LControlKey):
                 case (Keys.S | Keys.Control):
                     AskSaveImage();
                     break;

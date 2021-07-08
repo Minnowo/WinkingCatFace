@@ -34,6 +34,14 @@ namespace WinkingCat.HelperLibs
         public delegate void UpdateReferencesEvent();
         public static event UpdateReferencesEvent UpdateReferences;
 
+        /// <summary>
+        /// Fired after the current image has been modified via 
+        /// <para>{ Undo, Redo, ResizeImage, CropImage, ConvertToGray, InvertBitmap, FlipVertical, FlipHorizontal, RotateRight, RotateLeft}</para>
+        /// </summary>
+        /// <param name="change"></param>
+        public delegate void BitmapChangedEvent(BitmapChanges change);
+        public event BitmapChangedEvent BitmapChanged;
+
         public int UndoCount
         {
             get { return undos.Count; }
@@ -43,6 +51,13 @@ namespace WinkingCat.HelperLibs
         {
             get { return redos.Count; }
         }
+
+        public BitmapChanges LastChange
+        {
+            get { return lastChange; }
+            set { lastChange = value; }
+        }
+        private BitmapChanges lastChange;
 
         public Bitmap CurrentBitmap;
 
@@ -105,9 +120,9 @@ namespace WinkingCat.HelperLibs
             }
 
             OnUpdateReferences();
+            OnBitmapChanged(BitmapChanges.Resized);
         }
-
-
+        
         /// <summary>
         /// Crop the current bitmap and track the change. (will call a reference update event)
         /// </summary>
@@ -121,6 +136,8 @@ namespace WinkingCat.HelperLibs
 
             ImageHelper.CropBitmap(ref CurrentBitmap, crop);
             OnUpdateReferences(); // since CropBitmap creates a new bitmap we need to signal to update references
+
+            OnBitmapChanged(BitmapChanges.Cropped);
         }
 
         /// <summary>
@@ -134,6 +151,8 @@ namespace WinkingCat.HelperLibs
             TrackChange(BitmapChanges.FlippedVirtical);
 
             ImageHelper.FlipVertical(CurrentBitmap);
+
+            OnBitmapChanged(BitmapChanges.FlippedVirtical);
         }
 
         /// <summary>
@@ -147,6 +166,8 @@ namespace WinkingCat.HelperLibs
             TrackChange(BitmapChanges.FlippedHorizontal);
 
             ImageHelper.FlipHorizontal(CurrentBitmap);
+
+            OnBitmapChanged(BitmapChanges.FlippedHorizontal);
         }
 
         /// <summary>
@@ -160,6 +181,8 @@ namespace WinkingCat.HelperLibs
             TrackChange(BitmapChanges.RotatedRight);
 
             ImageHelper.RotateRight(CurrentBitmap);
+
+            OnBitmapChanged(BitmapChanges.RotatedRight);
         }
 
         /// <summary>
@@ -173,6 +196,8 @@ namespace WinkingCat.HelperLibs
             TrackChange(BitmapChanges.RotatedLeft);
 
             ImageHelper.RotateLeft(CurrentBitmap);
+
+            OnBitmapChanged(BitmapChanges.RotatedLeft);
         }
 
         /// <summary>
@@ -186,7 +211,11 @@ namespace WinkingCat.HelperLibs
             TrackChange(BitmapChanges.SetGray);
 
             if (!ImageHelper.GrayscaleBitmapSafe(CurrentBitmap))
+            {
                 DisposeLastUndo();
+                return;
+            }
+            OnBitmapChanged(BitmapChanges.SetGray);
         }
 
         /// <summary>
@@ -200,7 +229,11 @@ namespace WinkingCat.HelperLibs
             TrackChange(BitmapChanges.Inverted);
 
             if (!ImageHelper.InvertBitmapSafe(CurrentBitmap))
+            {
                 DisposeLastUndo();
+                return;
+            }
+            OnBitmapChanged(BitmapChanges.Inverted);
         }
 
 
@@ -231,6 +264,7 @@ namespace WinkingCat.HelperLibs
         /// <param name="change">The change that is going to take place.</param>
         public void TrackChange(BitmapChanges change)
         {
+            lastChange = change;
             ClearRedos();
             undos.Push(change);
 
@@ -304,6 +338,7 @@ namespace WinkingCat.HelperLibs
 
             BitmapChanges change = redos.Pop();
             undos.Push(change);
+            lastChange = change;
 
             PrintUndos();
             Bitmap bmp;
@@ -321,9 +356,11 @@ namespace WinkingCat.HelperLibs
 
                 case BitmapChanges.SetGray:
                 case BitmapChanges.TransparentFilled:
-                    bmp = bitmapRedoHistoryData.Pop();
-                    bitmapUndoHistoryData.Push(bmp);
-                    ImageHelper.UpdateBitmap(CurrentBitmap, bmp);
+                    using (bmp = bitmapRedoHistoryData.Pop())
+                    {
+                        bitmapUndoHistoryData.Push(CurrentBitmap.CloneSafe());
+                        ImageHelper.UpdateBitmap(CurrentBitmap, bmp);
+                    }
                     break;
 
                 // changes are easily undone and do not need to be kept in memory
@@ -344,6 +381,7 @@ namespace WinkingCat.HelperLibs
                     break;
             }
             OnRedo(change);
+            OnBitmapChanged(change);
         }
 
 
@@ -368,6 +406,8 @@ namespace WinkingCat.HelperLibs
                 return;
 
             BitmapChanges change = undos.Pop();
+
+            lastChange = undos.Peek();
 
             // if the change being removed had any bitmap data stored dispose it
             switch (change)
@@ -408,10 +448,11 @@ namespace WinkingCat.HelperLibs
                     break;
                 case BitmapChanges.SetGray:
                 case BitmapChanges.TransparentFilled:
-                    bmp = bitmapUndoHistoryData.Pop();
-                    bitmapRedoHistoryData.Push(bmp);
-
-                    ImageHelper.UpdateBitmap(CurrentBitmap, bmp);
+                    using (bmp = bitmapUndoHistoryData.Pop())
+                    {
+                        bitmapRedoHistoryData.Push(CurrentBitmap.CloneSafe());
+                        ImageHelper.UpdateBitmap(CurrentBitmap, bmp);
+                    }
                     break;
 
                 // changes are easily undone and do not need to be kept in memory
@@ -432,6 +473,7 @@ namespace WinkingCat.HelperLibs
                     break;
             }
             OnUndo(change);
+            OnBitmapChanged(change);
         }
 
 
@@ -455,6 +497,12 @@ namespace WinkingCat.HelperLibs
             CurrentBitmap = null;
         }
 
+
+        private void OnBitmapChanged(BitmapChanges change)
+        {
+            if (BitmapChanged != null)
+                BitmapChanged(change);
+        }
 
         private void OnUndo(BitmapChanges change)
         {
