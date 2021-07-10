@@ -17,86 +17,73 @@ namespace WinkingCat.ScreenCaptureLib
         public static event EventHandler<ImageSavedEvent> ImageSaved;
         public static LastRegionCaptureInfo LastInfo { get; private set; }
 
-        public static int imagesToHandle { get; private set; } = 10;
 
-        public static void OnCaptureEvent(LastRegionCaptureInfo info)
-        {
-            if (CaptureEvent != null)
-            {
-                CaptureEvent(null, info);
-            }
-        }
-        public static void OnImageSaved(string info)
-        {
-            OnImageSaved(new ImageSavedEvent(info));
-        }
-        public static void OnImageSaved(ImageSavedEvent info)
-        {
-            if (ImageSaved != null)
-            {
-                ImageSaved(null, info);
-            }
-        }
-
-        public static void Update(int maxImg)
-        {
-            imagesToHandle = maxImg;
-        }
+        
 
         public static Image GetRegionResultImage()
         {
             using (ClippingWindowForm regionCapture = new ClippingWindowForm(ScreenHelper.GetScreenBounds()))
             {
                 regionCapture.ShowDialog();
-                LastInfo?.Destroy();
+                LastInfo?.Dispose();
                 LastInfo = regionCapture.GetResultImage();
                 return LastInfo.Image.CloneSafe();
             }
         }
 
-        public static void RegionCapture()
+        public static void RegionCapture(RegionCaptureMode mode, bool creatClip = false)
+        {
+            RegionCaptureOptions.mode = mode;
+            RegionCapture(creatClip);
+        }
+
+        public static void RegionCapture(bool creatClip = false)
         {
             using (ClippingWindowForm regionCapture = new ClippingWindowForm(ScreenHelper.GetScreenBounds()))
             {
                 regionCapture.ShowDialog();
-                LastInfo?.Destroy();
+
+                LastInfo?.Dispose();
                 LastInfo = regionCapture.GetResultImage();
 
                 if (LastInfo.Result == RegionResult.Close)
                     return;
 
-  
                 if(LastInfo.Result == RegionResult.Color)
                 {
-                    HandleRegionReturnColor(LastInfo.color);
+                    HandleRegionReturnColor(LastInfo.Color);
                     OnCaptureEvent(LastInfo);
                     return;
                 }
 
-                string imgName = ImageHelper.newImagePath;
+                string path = string.Empty;
+
+                if (StaticSettings.Save_Images_To_Disk)
+                    path = ImageHelper.newImagePath;
 
                 if (RegionCaptureOptions.autoCopyImage)
                     ClipboardHelper.CopyImageDefault(LastInfo.Image);
 
-                if (RegionCaptureOptions.createClipAfterRegionCapture || RegionCaptureOptions.createSingleClipAfterRegionCapture)
+                if (creatClip || RegionCaptureOptions.createClipAfterRegionCapture)
                 {
-                    RegionCaptureOptions.createSingleClipAfterRegionCapture = false;
-
                     ClipOptions ops = new ClipOptions();
-                    ops.location = ScreenHelper.GetRectangle0Based(LastInfo.Region).Location;
-                    ops.date = DateTime.Now;
-                    ops.uuid = Guid.NewGuid().ToString();
-                    ops.filePath = imgName;
+                    ops.Location = ScreenHelper.GetRectangle0Based(LastInfo.Region).Location;
+                    ops.DateCreated = DateTime.Now;
+                    ops.Name = Guid.NewGuid().ToString();
+                    ops.FilePath = path;
 
                     using (LastInfo.Image)
                     {
                         ClipManager.CreateClip(LastInfo.Image, ops);
-                        Save(imgName, LastInfo.Image, ImageHelper.defaultImageFormat);
+
+                        if (StaticSettings.Save_Images_To_Disk)
+                            Save(path, LastInfo.Image, ImageHelper.defaultImageFormat);
                     }
                 }
                 else
                 {
-                    Save(imgName, LastInfo.Image, ImageHelper.defaultImageFormat);
+                    if (StaticSettings.Save_Images_To_Disk)
+                        Save(path, LastInfo.Image, ImageHelper.defaultImageFormat);
                 }
 
                 OnCaptureEvent(LastInfo);
@@ -106,22 +93,41 @@ namespace WinkingCat.ScreenCaptureLib
 
         public static string Save(string imageName, Image img, ImageFormat format = null)
         {
-
             if (ImageHelper.SaveImage(imageName, img, format))
             {
                 OnImageSaved(imageName);
                 return imageName;
             }
-            else
-            {
-                return string.Empty;
-            }
+
+            return string.Empty;
         }
 
-        public static void HandleRegionReturnColor(Color color)
+
+        private static void HandleRegionReturnColor(Color color)
         {
             if (RegionCaptureOptions.autoCopyColor)
                 ClipboardHelper.FormatCopyColor(ClipboardHelper.copyFormat, color);
+        }
+
+        private static void OnCaptureEvent(LastRegionCaptureInfo info)
+        {
+            if (CaptureEvent != null)
+            {
+                CaptureEvent(null, info);
+            }
+        }
+
+        private static void OnImageSaved(string info)
+        {
+            OnImageSaved(new ImageSavedEvent(info));
+        }
+
+        private static void OnImageSaved(ImageSavedEvent info)
+        {
+            if (ImageSaved != null)
+            {
+                ImageSaved(null, info);
+            }
         }
     }
 }

@@ -17,6 +17,9 @@ namespace WinkingCat.HelperLibs
 
         public static void WriteLine(string message = "")
         {
+            if (!StaticSettings.Write_Logs)
+                return;
+
             if (logFile != null)
             {
                 if (!string.IsNullOrEmpty(message))
@@ -39,6 +42,9 @@ namespace WinkingCat.HelperLibs
 
         public static void WriteException(string exception, string message = "Exception")
         {
+            if (!StaticSettings.Write_Logs)
+                return;
+
             WriteLine($"{message}:{Environment.NewLine}{exception}");
             Console.WriteLine(exception);
         }

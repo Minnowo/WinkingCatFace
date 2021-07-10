@@ -30,6 +30,7 @@
     <DefineConstants>TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
   </PropertyGroup>
   <PropertyGroup>
     <SignAssembly>false</SignAssembly>
@@ -140,12 +141,12 @@
     <Compile Include="Helpers\ScreenHelpers.cs" />
     <Compile Include="Helpers\TranslatorHelper.cs" />
     <Compile Include="Helpers\WindowHelpers.cs" />
+    <Compile Include="StaticSettings.cs" />
     <Compile Include="Types\HotkeyInfo.cs" />
     <Compile Include="Types\HotkeySettings.cs" />
     <Compile Include="Types\InstanceManager.cs" />
     <Compile Include="Interfaces\IUndoable.cs" />
     <Compile Include="Logger.cs" />
-    <Compile Include="MainFormSettings.cs" />
     <Compile Include="Types\ApplicationStyles.cs" />
     <Compile Include="Native\NativeEnums.cs" />
     <Compile Include="Native\NativeConstants.cs" />

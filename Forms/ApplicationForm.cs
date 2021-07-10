@@ -1,12 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
 using System.Drawing;
-using System.Drawing.Drawing2D;
-using System.Drawing.Imaging;
-using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.IO;
@@ -63,7 +57,6 @@ namespace WinkingCat
             tsmiToolStripMenuItem_newClip.Click += NewClip_Click;
             tsmiToolStripMenuItem_clipFromClipboard.Click += ClipFromClipboard_Click;
             tsmiToolStripMenuItem_clipFromFile.Click += ClipFromFile_Click;
-            tsmiToolStripMenuItem_createClipAfterRegionCapture.Click += CreateClipAfterRegionCapture_Click;
             #endregion
 
             #region Tools dropdown buttons event bindings
@@ -107,11 +100,11 @@ namespace WinkingCat
 #endregion
 
             HandleCreated += MainForm_HandleCreated;
-            LostFocus += mainForm_LostFocus;
-            GotFocus += mainForm_GotFocus;
+            LostFocus += MainForm_LostFocus;
+            GotFocus += MainForm_GotFocus;
             Resize += MainForm_Resize;
             ResizeEnd += MainForm_Resize;
-            Shown += ApplicationForm_Shown;
+            Shown += MainForm_Shown;
 
             ImageHandler.ImageSaved += ImageSaved_Event;
             ApplicationStyles.UpdateStylesEvent += ApplicationStyles_UpdateSylesEvent;
@@ -126,41 +119,84 @@ namespace WinkingCat
             this.pbPreviewBox.previewOnClick = true;
         }
 
-        private void ApplicationForm_Shown(object sender, EventArgs e)
+        /// <summary>
+        /// Force close all the dropdowns.
+        /// </summary>
+        public void CloseDropDowns()
         {
-            if (isHandleCreated)
-            {
-                isHandleCreated = true;
-            }
-            UpdateTheme();
+            forceDropDownClose = true;
+            tsddbToolStripDropDownButton_Capture.DropDown.Close();
+            tsddbToolStripDropDownButton_Clips.DropDown.Close();
+            tsddbToolStripDropDownButton_Tools.DropDown.Close();
         }
 
-        public void ImageSaved_Event(object sender, ImageSavedEvent e)
+        /// <summary>
+        /// Hide the main, settings, and styles form.
+        /// </summary>
+        public void HideAll()
         {
-            string[] row1 = { 
-                e.info.Extension,                                   // file type
-                $"{e.dimensions.Width}, {e.dimensions.Height}",     // dimensions
-                Helpers.SizeSuffix(e.size),                         // size
-                File.GetLastWriteTime(e.info.FullName).ToString()   // date modified
-            }; 
+            Hide();
+            settingsForm?.Hide();
+            stylesForm?.Hide();
+        }
 
-            ListViewItem item = new ListViewItem() { Text = e.info.Name, Tag = e.info.FullName};
+        /// <summary>
+        /// Show the main, settings, and styles form.
+        /// </summary>
+        public void ShowAll()
+        {
+            Show();
+            settingsForm?.Show();
+            stylesForm?.Show();
+        }
 
-            item.SubItems.AddRange(row1);
-
-            if (lvListView.Items.Count <= 0)
+        /// <summary>
+        /// Updates the isInTrayOrMinimized variable.
+        /// </summary>
+        public void CheckWindowState()
+        {
+            switch (this.WindowState)
             {
-                lvListView.AddItem(item);
+                case FormWindowState.Minimized:
+                    isInTrayOrMinimized = true;
+                    break;
+                case FormWindowState.Maximized:
+                case FormWindowState.Normal:
+                    isInTrayOrMinimized = false;
+                    break;
+            }
+        }
+
+        /// <summary>
+        /// Updates the theme.
+        /// </summary>
+        public void UpdateTheme()
+        {
+            if (ApplicationStyles.currentStyle.mainFormStyle.useImersiveDarkMode && isHandleCreated)
+            {
+                NativeMethods.UseImmersiveDarkMode(Handle, true);
+                this.Icon = ApplicationStyles.whiteIcon;
             }
             else
             {
-                lvListView.InsertItem(0, item);
+                NativeMethods.UseImmersiveDarkMode(Handle, false);
+                this.Icon = ApplicationStyles.blackIcon;
             }
+
+            this.Text = "";
+            this.BackColor = ApplicationStyles.currentStyle.mainFormStyle.backgroundColor;
+            tsMain.Renderer = new ToolStripCustomRenderer();
+
+            cmTray.Renderer = new ToolStripCustomRenderer();
+            cmTray.Opacity = ApplicationStyles.currentStyle.mainFormStyle.contextMenuOpacity;
+
+            lvListView.ForeColor = ApplicationStyles.currentStyle.mainFormStyle.textColor;
+            Refresh();
         }
 
-        #region DropDowns
 
         #region Capture dropdown buttons
+
         private async void tsmiCapture_DropDownOpening(object sender, EventArgs e)
         {
             if(sender.GetType().Name == "ToolStripDropDownButton") 
@@ -172,7 +208,7 @@ namespace WinkingCat
         private void WindowItems_Click(object sender, EventArgs e)
         {
             forceDropDownClose = true;
-            mainForm_LostFocus(null, null);
+            MainForm_LostFocus(null, null);
 
             ToolStripItem tsi = (ToolStripItem)sender;
             WindowInfo win = (WindowInfo)tsi.Tag;
@@ -198,7 +234,7 @@ namespace WinkingCat
         private void MonitorItems_Click(object sender, EventArgs e)
         {
             forceDropDownClose = true;
-            mainForm_LostFocus(null, null);
+            MainForm_LostFocus(null, null);
 
             ToolStripItem tsi = (ToolStripItem)sender;
 
@@ -318,10 +354,6 @@ namespace WinkingCat
         {
             TaskHandler.ExecuteTask(Tasks.NewClipFromFile);
         }
-        private void CreateClipAfterRegionCapture_Click(object sender, EventArgs e)
-        {
-
-        }
 #endregion
 
         #region Tools dropdown buttons
@@ -402,9 +434,8 @@ namespace WinkingCat
         }
         #endregion
 
-        #endregion
-
         #region tray icon
+
         private void TrayClickTimer_Interval(object sender, EventArgs e)
         {
             if (trayClickCount == 1)
@@ -453,9 +484,15 @@ namespace WinkingCat
             forceClose = true;
             Close();
         }
+
         #endregion
 
         #region MainForm events
+
+        private void MainForm_Shown(object sender, EventArgs e)
+        {
+            UpdateTheme();
+        }
 
         private void MainForm_HandleCreated(object sender, EventArgs e)
         {
@@ -466,28 +503,19 @@ namespace WinkingCat
 
         private void MainForm_Resize(object sender, EventArgs e)
         {
-            switch (this.WindowState)
-            {
-                case FormWindowState.Minimized:
-                    isInTrayOrMinimized = true;
-                    break;
-                case FormWindowState.Maximized:
-                case FormWindowState.Normal:
-                    isInTrayOrMinimized = false;
-                    break;
-            }
+            CheckWindowState();
             CloseDropDowns();
         }
 
-        private void mainForm_LostFocus(object sender, EventArgs e)
+        private void MainForm_LostFocus(object sender, EventArgs e)
         {
-            MainForm_Resize(null, EventArgs.Empty); // just to check the window state
+            CheckWindowState();
             CloseDropDowns();
         }
 
-        private void mainForm_GotFocus(object sender, EventArgs e)
+        private void MainForm_GotFocus(object sender, EventArgs e)
         {
-            MainForm_Resize(null, EventArgs.Empty); // just to check the window state
+            CheckWindowState();
             CloseDropDowns();
         }
 
@@ -503,7 +531,7 @@ namespace WinkingCat
 
         #endregion
 
-        #region Settings / Styles
+        #region Settings / Styles events
 
         private void UpdateSettings(object sender, EventArgs e)
         {
@@ -519,30 +547,6 @@ namespace WinkingCat
         private void ApplicationStyles_UpdateSylesEvent(object sender, EventArgs e)
         {
             UpdateTheme();
-        }
-
-        public void UpdateTheme()
-        {
-            if (ApplicationStyles.currentStyle.mainFormStyle.useImersiveDarkMode && isHandleCreated)
-            {
-                NativeMethods.UseImmersiveDarkMode(Handle, true);
-                this.Icon = ApplicationStyles.whiteIcon;//Properties.Resources._3white;
-            }
-            else
-            {
-                NativeMethods.UseImmersiveDarkMode(Handle, false);
-                this.Icon = ApplicationStyles.blackIcon;//Properties.Resources._3black;
-            }
-
-            this.Text = "";// ApplicationStyles.mainFormName;
-            this.BackColor = ApplicationStyles.currentStyle.mainFormStyle.backgroundColor;
-            tsMain.Renderer = new ToolStripCustomRenderer();
-
-            cmTray.Renderer = new ToolStripCustomRenderer();
-            cmTray.Opacity = ApplicationStyles.currentStyle.mainFormStyle.contextMenuOpacity;
-
-            lvListView.ForeColor = ApplicationStyles.currentStyle.mainFormStyle.textColor;
-            Refresh();
         }
 
         #endregion
@@ -576,7 +580,6 @@ namespace WinkingCat
                     this.scMain.Panel2.Hide();
                     this.pbPreviewBox.Reset();
                 }
-            
         }
 
         private void toolStripDropDown_Closing(object sender, ToolStripDropDownClosingEventArgs e)
@@ -596,6 +599,33 @@ namespace WinkingCat
                     else
                         forceDropDownClose = false;
                     break;
+            }
+        }
+
+        #endregion
+
+        #region other events
+
+        public void ImageSaved_Event(object sender, ImageSavedEvent e)
+        {
+            string[] row1 = {
+                e.FileInfo.Extension,                                   // file type
+                $"{e.Dimensions.Width}, {e.Dimensions.Height}",     // dimensions
+                Helpers.SizeSuffix(e.SizeInBytes),                         // size
+                File.GetLastWriteTime(e.FullName).ToString()   // date modified
+            };
+
+            ListViewItem item = new ListViewItem() { Text = e.Name, Tag = e.FullName };
+
+            item.SubItems.AddRange(row1);
+
+            if (lvListView.Items.Count <= 0)
+            {
+                lvListView.AddItem(item);
+            }
+            else
+            {
+                lvListView.InsertItem(0, item);
             }
         }
 
@@ -658,27 +688,7 @@ namespace WinkingCat
 
         #endregion
 
-        private void CloseDropDowns()
-        {
-            forceDropDownClose = true;
-            tsddbToolStripDropDownButton_Capture.DropDown.Close();
-            tsddbToolStripDropDownButton_Clips.DropDown.Close();
-            tsddbToolStripDropDownButton_Tools.DropDown.Close();
-        }
-
-        public void HideAll()
-        {
-            Hide();
-            settingsForm?.Hide();
-            stylesForm?.Hide();
-        }
-
-        public void ShowAll()
-        {
-            Show();
-            settingsForm?.Show();
-            stylesForm?.Show();
-        }
+        
 
         private async Task PrepareCaptureMenuAsync(ToolStripMenuItem tsmiWindow, EventHandler handlerWindow, ToolStripMenuItem tsmiMonitor, EventHandler handlerMonitor)
         {// taken from sharex source code
@@ -744,17 +754,6 @@ namespace WinkingCat
         }
 
 
-        
-        private void ShowMe()
-        {
-            isInTrayOrMinimized = false;
-            this.ForceActivate();
-
-            bool top = TopMost;
-            TopMost = true;
-            TopMost = top;
-        }
-
         #region overrides
 
         // this hides the window before its shown if requested 
@@ -764,15 +763,6 @@ namespace WinkingCat
             allowShowDisplay = true;
             UpdateTheme();
         }
-        
-     /*   protected override void WndProc(ref Message m)
-        {
-            if (m.Msg == NativeMethods.WM_SHOWME) // will be posted if instance is running
-            {
-                ShowMe();
-            }
-            base.WndProc(ref m);
-        }*/
 
         #endregion
     }

@@ -1,17 +1,11 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
 using System.Drawing;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.Drawing.Drawing2D;
-using WinkingCat.HelperLibs;
-using System.Diagnostics;
 using System.IO;
 using System.Drawing.Imaging;
+
+using WinkingCat.HelperLibs;
 
 namespace WinkingCat.ScreenCaptureLib
 {
@@ -22,8 +16,8 @@ namespace WinkingCat.ScreenCaptureLib
         public Bitmap image { get; private set; }
 
 
-        private Point leftClickStart = new Point();
-        private Point leftClickStop = new Point();
+        private Point leftClickStart = Point.Empty;
+        private Point leftClickStop = Point.Empty;
         private Point mousePos;
         private Rectangle activeMonitor;
         private RegionResult result;
@@ -42,6 +36,7 @@ namespace WinkingCat.ScreenCaptureLib
         public ClippingWindowForm(Rectangle region)
         {
             SetStyle(ControlStyles.OptimizedDoubleBuffer | ControlStyles.UserPaint | ControlStyles.AllPaintingInWmPaint, true);
+
             // force the client area to be at 0, 0 so that when you draw using graphics it draws in the correct location
             clientArea = new Rectangle(new Point(0, 0), new Size(region.Width, region.Height));
             mode = RegionCaptureOptions.mode;
@@ -149,14 +144,23 @@ namespace WinkingCat.ScreenCaptureLib
             if(e.Delta > 0)
             {
                 if (RegionCaptureOptions.magnifierZoomLevel + RegionCaptureOptions.magnifierZoomScale < 12)
+                {
                     RegionCaptureOptions.magnifierZoomLevel += RegionCaptureOptions.magnifierZoomScale;
+                }
                 if (RegionCaptureOptions.magnifierZoomLevel > 0)
+                {
                     RegionCaptureOptions.drawMagnifier = true;
+                }
+
+                return;
             }
-            else
+
+            if(e.Delta < 0)
             {
-                if (RegionCaptureOptions.magnifierZoomLevel - RegionCaptureOptions.magnifierZoomScale >  0)
+                if (RegionCaptureOptions.magnifierZoomLevel - RegionCaptureOptions.magnifierZoomScale > 0)
+                {
                     RegionCaptureOptions.magnifierZoomLevel -= 0.25f;
+                }
                 else
                 {
                     RegionCaptureOptions.magnifierZoomLevel = 0;
@@ -177,42 +181,46 @@ namespace WinkingCat.ScreenCaptureLib
             switch (task)
             {
                 case InRegionTasks.DoNothing:
-                    break;
+                    return;
 
                 case InRegionTasks.Cancel:
                     result = RegionResult.Close;
                     Close();
-                    break;
+                    return;
 
                 case InRegionTasks.RemoveSelectionOrCancel:
                     if (isLeftClicking)
+                    {
                         isLeftClicking = false;
+                    }
                     else
                     {
                         result = RegionResult.Close;
                         Close();
                     }
-                    break;
+                    return;
 
                 case InRegionTasks.CaptureFullScreen:
                     result = RegionResult.Fullscreen;
                     Close();
-                    break;
+                    return;
 
                 case InRegionTasks.CaptureActiveMonitor:
                     result = RegionResult.ActiveMonitor;
                     Close();
-                    break;
+                    return;
 
                 case InRegionTasks.CaptureLastRegion:
                     result = RegionResult.LastRegion;
                     Close();
-                    break;
+                    return;
 
                 case InRegionTasks.RemoveSelection:
                     if (isLeftClicking)
+                    {
                         isLeftClicking = false;
-                    break;
+                    }
+                    return;
 
                 case InRegionTasks.SwapToolType:
                     if (mode == RegionCaptureMode.ColorPicker)
@@ -223,21 +231,21 @@ namespace WinkingCat.ScreenCaptureLib
                     {
                         mode = RegionCaptureMode.ColorPicker;
                     }
-                    break;
+                    return;
 
                 case InRegionTasks.SwapCenterMagnifier:
                     RegionCaptureOptions.tryCenterMagnifier = !RegionCaptureOptions.tryCenterMagnifier;
                     Invalidate();
-                    break;
+                    return;
             }
         }
 
-        private void ClickRelease_Event(object sender, EventArgs e)
+        private void ClickRelease_Event(object sender, MouseEventArgs e)
         {
-            switch (((MouseEventArgs)e).Button)
+            switch (e.Button)
             {
                 case MouseButtons.Left:
-                    leftClickStop = ((MouseEventArgs)e).Location;
+                    leftClickStop = e.Location;
                     if(mode != RegionCaptureMode.ColorPicker)
                     {
                         if (isLeftClicking && leftClickStart != leftClickStop && ScreenHelper.IsValidCropArea(leftClickStart, leftClickStop))
@@ -275,24 +283,10 @@ namespace WinkingCat.ScreenCaptureLib
 
         private void Click_Event(object sender, MouseEventArgs e)
         {
-            switch (e.Button)
+            if(e.Button == MouseButtons.Left)
             {
-                case MouseButtons.Left:
-                    isLeftClicking = true;
-                    leftClickStart = e.Location;
-                    break;
-
-                case MouseButtons.Right:
-                    break;
-
-                case MouseButtons.Middle:
-                    break;
-
-                case MouseButtons.XButton1:
-                    break;
-
-                case MouseButtons.XButton2:
-                    break;
+                isLeftClicking = true;
+                leftClickStart = e.Location;
             }
         }
 
@@ -530,6 +524,10 @@ namespace WinkingCat.ScreenCaptureLib
             g.DrawLine(borderDotPen, verticalP1, verticalP2);
         }
 
+        /// <summary>
+        /// Gets the RegionCaptureInfo for the given region capture.
+        /// </summary>
+        /// <returns> The image/color captured and other info.</returns>
         public LastRegionCaptureInfo GetResultImage()
         {
             if (result == RegionResult.Region)
@@ -538,35 +536,46 @@ namespace WinkingCat.ScreenCaptureLib
                     leftClickStop = new Point(leftClickStop.X + 1, leftClickStop.Y);
                 else
                     leftClickStop = new Point(leftClickStop.X - 1, leftClickStop.Y);
+
                 if (leftClickStart.Y < leftClickStop.Y)
                     leftClickStop = new Point(leftClickStop.X, leftClickStop.Y + 1);
                 else
                     leftClickStop = new Point(leftClickStop.X, leftClickStop.Y - 1);
             }
+
             switch (result)
             {
                 case RegionResult.Close:
                     return new LastRegionCaptureInfo(RegionResult.Close);
 
                 case RegionResult.Region:
-                    return new LastRegionCaptureInfo(RegionResult.Region, PointToScreen(leftClickStart), PointToScreen(leftClickStop), 
-                        ScreenHelper.CreateValidCropArea(leftClickStart, leftClickStop), 
-                        ScreenShotManager.CropImage(leftClickStart, leftClickStop, image));                    //return ScreenShotManager.CropImage(leftClickStart, leftClickStop, clipWinPictureBox.Image);
+                    return new LastRegionCaptureInfo(
+                        RegionResult.Region,
+                        PointToScreen(leftClickStart),
+                        PointToScreen(leftClickStop),
+                        ScreenHelper.CreateValidCropArea(leftClickStart, leftClickStop),
+                        ScreenShotManager.CropImage(leftClickStart, leftClickStop, image));
 
                 case RegionResult.LastRegion: 
-                    return new LastRegionCaptureInfo(RegionResult.LastRegion, ImageHandler.LastInfo.StartLeftClick, 
-                        ImageHandler.LastInfo.StopLeftClick, ImageHandler.LastInfo.Region,
+                    return new LastRegionCaptureInfo(
+                        RegionResult.LastRegion, 
+                        ImageHandler.LastInfo.StartLeftClick, 
+                        ImageHandler.LastInfo.StopLeftClick, 
+                        ImageHandler.LastInfo.Region,
                         ScreenShotManager.CropImage(ImageHandler.LastInfo.Region, image));
 
                 case RegionResult.Fullscreen:
                     return new LastRegionCaptureInfo(RegionResult.Fullscreen, true, image);
 
                 case RegionResult.ActiveMonitor:
-                    return new LastRegionCaptureInfo(RegionResult.ActiveMonitor, Screen.FromPoint(ScreenHelper.GetCursorPosition()),
+                    return new LastRegionCaptureInfo(
+                        Screen.FromPoint(ScreenHelper.GetCursorPosition()),
                         ScreenShotManager.CropImage(ScreenHelper.GetActiveScreenBounds0Based(), image));
 
                 case RegionResult.Color:
-                    return new LastRegionCaptureInfo(RegionResult.Color, PointToScreen(leftClickStart), PointToScreen(leftClickStop), (image).GetPixel(leftClickStop.X, leftClickStop.Y));
+                    return new LastRegionCaptureInfo(
+                        PointToScreen(leftClickStop), 
+                        image.GetPixel(leftClickStop.X, leftClickStop.Y));
             }
             return null;
         }

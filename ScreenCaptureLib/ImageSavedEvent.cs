@@ -11,15 +11,44 @@ namespace WinkingCat.ScreenCaptureLib
 {
     public class ImageSavedEvent : EventArgs
     {
-        public FileInfo info { get; private set; }
-        public Size dimensions { get; private set; }
-        public long size { get; private set; }
+        /// <summary>
+        /// The file name.
+        /// </summary>
+        public string Name
+        {
+            get { return FileInfo.Name; }
+        }
+
+        /// <summary>
+        /// The full path of the file.
+        /// </summary>
+        public string FullName
+        {
+            get { return FileInfo.FullName; }
+        }
+
+        /// <summary>
+        /// The FileInfo of the saved image.
+        /// </summary>
+        public FileInfo FileInfo { get; private set; }
+
+        /// <summary>
+        /// The width and height of the image.
+        /// </summary>
+        public Size Dimensions { get; private set; }
+
+        /// <summary>
+        /// The size in bytes.
+        /// </summary>
+        public long SizeInBytes { get; private set; }
+
         public ImageSavedEvent(FileInfo info)
         {
-            this.info = info;
-            size = info.Length;
-            dimensions = ImageHelper.GetImageDimensionsFile(info.FullName);
+            this.FileInfo = info;
+            SizeInBytes = info.Length;
+            Dimensions = ImageHelper.GetImageDimensionsFile(info.FullName);
         }
+
         public ImageSavedEvent(string path) : this(new FileInfo(path))
         {
 

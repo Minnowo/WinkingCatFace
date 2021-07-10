@@ -29,41 +29,37 @@ namespace WinkingCat
         public static bool CaptureWindow(WindowInfo window)
         {
             OnTaskExecuted(Tasks.CaptureWindow);
-            if (ScreenHelper.IsValidCropArea(window.Rectangle))
+            if (!ScreenHelper.IsValidCropArea(window.Rectangle))
+                return false;
+            
+            using (Image img = ScreenShotManager.CaptureRectangle(window.Rectangle))
             {
-                using (Image img = ScreenShotManager.CaptureRectangle(window.Rectangle))
+                if (RegionCaptureOptions.autoCopyImage)
                 {
-                    if (RegionCaptureOptions.autoCopyImage)
-                    {
-                        ClipboardHelper.CopyImageDefault(img);
-                    }
+                    ClipboardHelper.CopyImageDefault(img);
+                }
 
-                    if (img == null || string.IsNullOrEmpty(ImageHandler.Save(ImageHelper.newImagePath, img)))
-                    {
-                        return false;
-                    }
-                    else
-                    {
-                        return true;
-                    }
-                } 
-            }
-            else
-                return false; 
+                if (img == null || string.IsNullOrEmpty(ImageHandler.Save(ImageHelper.newImagePath, img)))
+                {
+                    return false;
+                }
+                 
+                return true;
+            } 
         }
 
         public static bool ExecuteTask(Tasks task)
         {
             OnTaskExecuted(task);
+
+            Image image;
             switch (task)
             {
                 case Tasks.RegionCapture:
                     HotkeyManager.tempTgnoreHotkeyPress = true;
-                    RegionCaptureOptions.mode = RegionCaptureMode.Default;
-                    ImageHandler.RegionCapture();
-                    result = true;
+                    ImageHandler.RegionCapture(RegionCaptureMode.Default);
                     HotkeyManager.tempTgnoreHotkeyPress = false;
-                    break;
+                    return true;
 
                 case Tasks.RegionCaptureLite:
                     HotkeyManager.tempTgnoreHotkeyPress = true;
@@ -73,136 +69,90 @@ namespace WinkingCat
 
                 case Tasks.NewClipFromRegionCapture:
                     HotkeyManager.tempTgnoreHotkeyPress = true;
-                    RegionCaptureOptions.mode = RegionCaptureMode.Default;
-                    RegionCaptureOptions.createSingleClipAfterRegionCapture = true;
-                    ImageHandler.RegionCapture();
-                    result = true;
+                    ImageHandler.RegionCapture(RegionCaptureMode.Default, true);
                     HotkeyManager.tempTgnoreHotkeyPress = false;
-                    break;
+                    return true;
 
                 case Tasks.NewClipFromFile:
-
-                    result = false;
                     string path = PathHelper.AskChooseImageFile();
 
-                    if (!string.IsNullOrEmpty(path))
-                    {
-                        result = true;
-                        using (Image img = ImageHelper.LoadImage(path))
-                        {
-                            if (img == null)
-                            {
-                                result = false;
-                            }
-                            else
-                            {
-                                Point p = ScreenHelper.GetCursorPosition();
+                    if (string.IsNullOrEmpty(path))
+                        return false;
 
-                                ClipOptions ops = new ClipOptions();
-                                ops.location = new Point(p.X - img.Width / 2, p.Y - img.Height / 2);
-                                ops.date = DateTime.Now;
-                                ops.uuid = Guid.NewGuid().ToString();
-                                ops.filePath = path;
-
-                                ClipManager.CreateClip(img, ops);
-                            }
-                        }
-                    }
-
-                    break;
+                    image = ImageHelper.LoadImage(path);
+                    
+                    if (image == null)
+                        return false;
+                        
+                    ClipManager.CreateClipAtCursor(image, false);                    
+                    return true;
 
                 case Tasks.NewClipFromClipboard:
+                    image = ClipboardHelper.GetImage(true);
+                    
+                    if (image == null)
+                        return false;
 
-                    result = true;
-                    using (Image img = ClipboardHelper.GetImage(true))
-                    {
-                        if (img == null)
-                        {
-                            result = false;
-                        }
-                        else
-                        {
-                            Point p = ScreenHelper.GetCursorPosition();
-
-                            ClipOptions ops = new ClipOptions();
-                            ops.location = new Point(p.X - img.Width / 2, p.Y - img.Height / 2);
-                            ops.date = DateTime.Now;
-                            ops.uuid = Guid.NewGuid().ToString();
-                            ops.filePath = string.Empty;
-
-                            ClipManager.CreateClip(img, ops);
-                        }   
-                    }
-                        
-                    break;
+                    ClipManager.CreateClipAtCursor(image, false);
+                    return true;
 
                 case Tasks.ScreenColorPicker:
-                    
-                    RegionCaptureOptions.mode = RegionCaptureMode.ColorPicker;
-                    ImageHandler.RegionCapture();
-                    result = true;
-                    break;
+                    ImageHandler.RegionCapture(RegionCaptureMode.ColorPicker);
+                    return true;
 
                 case Tasks.CaptureLastRegion:
 
-                    result = false;
-                    if (ImageHandler.LastInfo != null && ScreenHelper.IsValidCropArea(ImageHandler.LastInfo.Region))
+                    if (ImageHandler.LastInfo == null || !ScreenHelper.IsValidCropArea(ImageHandler.LastInfo.Region))
+                        return false;
+                    
+                    using (Image img = ScreenShotManager.CaptureRectangle(ScreenHelper.GetRectangle0Based(ImageHandler.LastInfo.Region)))
                     {
-                        result = true;
-                        using (Image img = ScreenShotManager.CaptureRectangle(
-                            ScreenHelper.GetRectangle0Based(ImageHandler.LastInfo.Region)))
-                        {
-                            if (img == null || string.IsNullOrEmpty(ImageHandler.Save(ImageHelper.newImagePath, img)))
-                                result = false;
+                        if (img == null || string.IsNullOrEmpty(ImageHandler.Save(ImageHelper.newImagePath, img)))
+                            return false;
 
-                            else if (RegionCaptureOptions.autoCopyImage)
-                                ClipboardHelper.CopyImageDefault(img);
-                        }
+                        if (RegionCaptureOptions.autoCopyImage)
+                            ClipboardHelper.CopyImageDefault(img);
                     }
-
-                    break;
+                    return true;
 
                 case Tasks.CaptureFullScreen:
 
-                    result = true;
                     using (Image img = ScreenShotManager.CaptureFullscreen())
                     {
                         if (img == null || string.IsNullOrEmpty(ImageHandler.Save(ImageHelper.newImagePath, img)))
-                            result = false;
+                            return false;
 
-                        else if (RegionCaptureOptions.autoCopyImage)
+                        if (RegionCaptureOptions.autoCopyImage)
                             ClipboardHelper.CopyImageDefault(img);
                     }
-                    
-                    break;
+
+                    return true;
 
                 case Tasks.CaptureActiveMonitor:
 
-                    result = true;
                     using (Image img = ScreenShotManager.CaptureActiveMonitor())
                     {
                         if (img == null || string.IsNullOrEmpty(ImageHandler.Save(ImageHelper.newImagePath, img)))
-                            result = false;
+                            return false;
 
-                        else if (RegionCaptureOptions.autoCopyImage)
+                        if (RegionCaptureOptions.autoCopyImage)
                             ClipboardHelper.CopyImageDefault(img);
                     }
 
-                    break;
+                    return true;
 
                 case Tasks.CaptureActiveWindow:
 
-                    result = true;
                     using (Image img = ScreenShotManager.CaptureRectangle(ScreenHelper.GetWindowRectangle(NativeMethods.GetForegroundWindow())))
                     {
                         if (img == null || string.IsNullOrEmpty(ImageHandler.Save(ImageHelper.newImagePath, img)))
-                            result = false;
+                            return false;
 
-                        else if (RegionCaptureOptions.autoCopyImage)
+                        if (RegionCaptureOptions.autoCopyImage)
                             ClipboardHelper.CopyImageDefault(img);
                     }
 
-                    break;
+                    return true;
 
                 case Tasks.CaptureGif:
                     return false;
@@ -228,8 +178,7 @@ namespace WinkingCat
 
                 case Tasks.OpenMainForm:
                     Program.MainForm.ForceActivate();
-                    result = true;
-                    break;
+                    return true;
             }
             return result;
         }

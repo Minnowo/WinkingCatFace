@@ -86,20 +86,24 @@ namespace WinkingCat.HelperLibs
 
         public void PrintUndos()
         {
-            Console.Clear();
-            Console.WriteLine("UNDOS [ ");
-            foreach (BitmapChanges c in undos)
+            try
             {
-                Console.Write($"{c} ");
-            }
-            Console.WriteLine("]");
+                Console.Clear();
+                Console.WriteLine("UNDOS [ ");
+                foreach (BitmapChanges c in undos)
+                {
+                    Console.Write($"{c} ");
+                }
+                Console.WriteLine("]");
 
-            Console.WriteLine("REDOS [ ");
-            foreach (BitmapChanges c in redos)
-            {
-                Console.Write($"{c} ");
+                Console.WriteLine("REDOS [ ");
+                foreach (BitmapChanges c in redos)
+                {
+                    Console.Write($"{c} ");
+                }
+                Console.WriteLine("]");
             }
-            Console.WriteLine("]");
+            catch { }
         }
 
         /// <summary>
@@ -268,7 +272,9 @@ namespace WinkingCat.HelperLibs
             ClearRedos();
             undos.Push(change);
 
+#if DEBUG
             PrintUndos();
+#endif
 
             switch (change)
             {
@@ -340,7 +346,9 @@ namespace WinkingCat.HelperLibs
             undos.Push(change);
             lastChange = change;
 
+#if DEBUG
             PrintUndos();
+#endif
             Bitmap bmp;
 
             switch (change)
@@ -434,7 +442,9 @@ namespace WinkingCat.HelperLibs
 
             BitmapChanges change = undos.Pop();
             redos.Push(change);
+#if DEBUG
             PrintUndos();
+#endif
             Bitmap bmp;
             switch (change)
             {

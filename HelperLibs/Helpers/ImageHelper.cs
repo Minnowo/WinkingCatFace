@@ -236,7 +236,7 @@ namespace WinkingCat.HelperLibs
         {
             if (string.IsNullOrEmpty(path) || !File.Exists(path))
                 return Size.Empty;
-            
+
             try
             {
                 using (FileStream fileStream = new FileStream(path, FileMode.Open, FileAccess.Read, FileShare.Read))

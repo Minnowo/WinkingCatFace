@@ -55,8 +55,8 @@ namespace WinkingCat.ClipHelper
             InitializeComponent();
             SuspendLayout();
 
-            this.Text = options.uuid;
-            ClipName = options.uuid;
+            this.Text = options.Name;
+            ClipName = options.Name;
 
             Options = options;
 
@@ -68,8 +68,8 @@ namespace WinkingCat.ClipHelper
             changeTracker = new BitmapUndo(image);
 
             startWindowSize = new Size(
-                imageSize.Width + (Options.borderThickness << 1),
-                imageSize.Height + (Options.borderThickness << 1));
+                imageSize.Width + (Options.BorderThickness << 1),
+                imageSize.Height + (Options.BorderThickness << 1));
 
             zoomControlSize = new Size(
                 (int)Math.Round(startWindowSize.Width * ApplicationStyles.currentStyle.clipStyle.ZoomSizePercent),
@@ -79,8 +79,8 @@ namespace WinkingCat.ClipHelper
             MaximumSize = startWindowSize;
 
             // why tf can't you make the width / height of a windows form bigger than the screen width + 12 its bs
-            Bounds = new Rectangle(options.location, startWindowSize);
-            BackColor = Options.borderColor;
+            Bounds = new Rectangle(options.Location, startWindowSize);
+            BackColor = Options.Color;
 
             zdbZoomedImageDisplay.Enabled = false;
             zdbZoomedImageDisplay.borderColor = ApplicationStyles.currentStyle.clipStyle.zoomBorderColor;
@@ -211,9 +211,9 @@ namespace WinkingCat.ClipHelper
         /// </summary>
         public void OCR_Image()
         {
-            if (File.Exists(Options.filePath))
+            if (File.Exists(Options.FilePath))
             {
-                OCRForm form = new OCRForm(Options.filePath);
+                OCRForm form = new OCRForm(Options.FilePath);
                 form.Owner = this;
                 form.TopMost = true;
                 form.Show();
@@ -277,7 +277,7 @@ namespace WinkingCat.ClipHelper
         /// </summary>
         public void CopyScaledImage()
         {
-            using (Bitmap img = ImageHelper.ResizeImage(this.image, new Size(Width - Options.borderThickness, Height - Options.borderThickness)))
+            using (Bitmap img = ImageHelper.ResizeImage(this.image, new Size(Width - Options.BorderThickness, Height - Options.BorderThickness)))
             {
                 ClipboardHelper.CopyImageDefault(img);
             }
@@ -390,8 +390,8 @@ namespace WinkingCat.ClipHelper
             if (ClientSize != startWindowSize)
             {
                 Size scaledImageSize = new Size(
-                    Width - (Options.borderThickness << 1),
-                    Height - (Options.borderThickness << 1));
+                    Width - (Options.BorderThickness << 1),
+                    Height - (Options.BorderThickness << 1));
 
                 // if the zoomed image is null or not the size its supposed to be
                 // try and dispose of it, then remake it
@@ -407,7 +407,7 @@ namespace WinkingCat.ClipHelper
 
                         g.DrawImage(
                             image,
-                            new Rectangle(new Point(Options.borderThickness, Options.borderThickness), scaledImageSize),
+                            new Rectangle(new Point(Options.BorderThickness, Options.BorderThickness), scaledImageSize),
                             new Rectangle(0, 0, image.Width, image.Height), GraphicsUnit.Pixel);
                     }
                 }
@@ -666,7 +666,7 @@ namespace WinkingCat.ClipHelper
                 {
                     Point m = e.Location;
 
-                    if (m.X >= Size.Width - Options.borderThickness - ClipOptions.extendBorderGrabRange)
+                    if (m.X >= Size.Width - Options.BorderThickness - ClipOptions.ExtendBorderGrabRangePixels)
                     {
                         Cursor = Cursors.SizeWE;
                         if (isLeftClicking)
@@ -675,7 +675,7 @@ namespace WinkingCat.ClipHelper
                             isResizing = true;
                         }
                     }
-                    else if (m.Y >= Size.Height - Options.borderThickness - ClipOptions.extendBorderGrabRange)
+                    else if (m.Y >= Size.Height - Options.BorderThickness - ClipOptions.ExtendBorderGrabRangePixels)
                     {
                         Cursor = Cursors.SizeNS;
                         if (isLeftClicking)
@@ -684,7 +684,7 @@ namespace WinkingCat.ClipHelper
                             isResizing = true;
                         }
                     }
-                    else if (m.X < Options.borderThickness + ClipOptions.extendBorderGrabRange)
+                    else if (m.X < Options.BorderThickness + ClipOptions.ExtendBorderGrabRangePixels)
                     {
                         Cursor = Cursors.SizeWE;
                         if (isLeftClicking)
@@ -693,7 +693,7 @@ namespace WinkingCat.ClipHelper
                             isResizing = true;
                         }
                     }
-                    else if (m.Y < Options.borderThickness + ClipOptions.extendBorderGrabRange)
+                    else if (m.Y < Options.BorderThickness + ClipOptions.ExtendBorderGrabRangePixels)
                     {
                         Cursor = Cursors.SizeNS;
                         if (isLeftClicking)
@@ -769,8 +769,8 @@ namespace WinkingCat.ClipHelper
             g.DrawImage(
                 image,
                 new Rectangle(
-                    new Point(Options.borderThickness, Options.borderThickness),
-                    new Size(Width - Options.borderThickness * 2, Height - Options.borderThickness * 2)),
+                    new Point(Options.BorderThickness, Options.BorderThickness),
+                    new Size(Width - Options.BorderThickness * 2, Height - Options.BorderThickness * 2)),
                 new Rectangle(0, 0, image.Width, image.Height),
                 GraphicsUnit.Pixel
                 );
@@ -826,7 +826,7 @@ namespace WinkingCat.ClipHelper
         {
             ((Timer)sender)?.Stop();
             ((Timer)sender)?.Dispose();
-            MaximumSize = Options.maxClipSize;
+            MaximumSize = Options.MaxSize;
             Height = startWindowSize.Height;
             Invalidate();
         }

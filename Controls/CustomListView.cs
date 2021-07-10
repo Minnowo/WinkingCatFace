@@ -275,10 +275,10 @@ namespace WinkingCat
                         using (Bitmap img = ImageHelper.LoadImage(Items[SelectedIndex].Tag.ToString()))
                         {
                             ClipOptions ops = new ClipOptions();
-                            ops.location = Program.MainForm.Location;
-                            ops.date = DateTime.Now;
-                            ops.uuid = Guid.NewGuid().ToString();
-                            ops.filePath = Items[SelectedIndex].Tag.ToString();
+                            ops.Location = Program.MainForm.Location;
+                            ops.DateCreated = DateTime.Now;
+                            ops.Name = Guid.NewGuid().ToString();
+                            ops.FilePath = Items[SelectedIndex].Tag.ToString();
 
                             ClipManager.CreateClip(img, ops);
                         }

@@ -292,11 +292,11 @@ namespace WinkingCat
         {
             TaskHandler.ExecuteTask(Tasks.ScreenColorPicker);
 
-            Console.WriteLine(ImageHandler.LastInfo.color.ToString());
+            Console.WriteLine(ImageHandler.LastInfo.Color.ToString());
 
-            if(ImageHandler.LastInfo.color != Color.Empty && ImageHandler.LastInfo.Result == RegionResult.Color)
+            if(ImageHandler.LastInfo.Color != Color.Empty && ImageHandler.LastInfo.Result == RegionResult.Color)
             {
-                colorPicker.SelectedColor = ImageHandler.LastInfo.color;
+                colorPicker.SelectedColor = ImageHandler.LastInfo.Color;
                 tbXPosition.Text = ImageHandler.LastInfo.StopLeftClick.X.ToString();
                 tbYPosition.Text = ImageHandler.LastInfo.StopLeftClick.Y.ToString();
             }

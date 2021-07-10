@@ -6,6 +6,16 @@ using System.Threading.Tasks;
 
 namespace WinkingCat.HelperLibs
 {
+    public static class StaticSettings
+    {
+        public static bool Write_Logs = true;
+
+        public static bool Save_Images_To_Disk = true;
+
+        public static bool Garbage_Collect_After_Clip_Destroyed = false;
+        public static bool Garbage_Collect_After_All_Clips_Destroyed = true;
+    }
+
     public static class MainFormSettings
     {
         public static event EventHandler SettingsChangedEvent;
