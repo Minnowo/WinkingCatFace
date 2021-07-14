@@ -42,7 +42,7 @@ namespace WinkingCat.HelperLibs
         public ClipOptions()
         {
             DateCreated = DateTime.Now;
-            Name = new Guid().ToString();
+            Name = Guid.NewGuid().ToString();
             Color = ApplicationStyles.currentStyle.clipStyle.borderColor;
             BorderThickness = ApplicationStyles.currentStyle.clipStyle.borderThickness;
 

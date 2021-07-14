@@ -141,7 +141,7 @@
     <Compile Include="Helpers\ScreenHelpers.cs" />
     <Compile Include="Helpers\TranslatorHelper.cs" />
     <Compile Include="Helpers\WindowHelpers.cs" />
-    <Compile Include="StaticSettings.cs" />
+    <Compile Include="InternalSettings.cs" />
     <Compile Include="Types\HotkeyInfo.cs" />
     <Compile Include="Types\HotkeySettings.cs" />
     <Compile Include="Types\InstanceManager.cs" />

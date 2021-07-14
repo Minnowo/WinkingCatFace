@@ -523,8 +523,8 @@ namespace WinkingCat.HelperLibs
                 KeyValueConfigurationCollection keys = conf.AppSettings.Settings;
 
                 keys.Clear();
-                keys.Add("imageCount", ImageHelper.imageCounter.ToString());
-                keys.Add("defaultImageType", ImageHelper.defaultImageFormat.ToString());
+                keys.Add("imageCount", InternalSettings.Image_Counter.ToString());
+                keys.Add("defaultImageType", ((int)InternalSettings.Default_Image_Format).ToString());
                 keys.Add("extendBorderGrabRange", ClipOptions.ExtendBorderGrabRangePixels.ToString());
                 keys.Add("ZoomRefreshRate", ClipOptions.ZoomRefreshRate.ToString());
                 conf.Save();
@@ -850,10 +850,10 @@ namespace WinkingCat.HelperLibs
                     switch (key)
                     {
                         case "imageCount":
-                            ImageHelper.imageCounter = int.Parse(keys["imageCount"].Value);
+                            InternalSettings.Image_Counter = int.Parse(keys["imageCount"].Value);
                             break;
                         case "defaultImageType":
-                            ImageHelper.defaultImageFormat = keys["defaultImageType"].Value.ImageFormatFromString();
+                            InternalSettings.Default_Image_Format = (ImgFormat)int.Parse(keys["defaultImageType"].Value);
                             break;
                         case "extendBorderGrabRange":
                             ClipOptions.ExtendBorderGrabRangePixels = int.Parse(keys["extendBorderGrabRange"].Value);

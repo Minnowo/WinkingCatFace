@@ -110,4 +110,15 @@ namespace WinkingCat.HelperLibs
         Yxy,
         AdobeRGB
     }
+
+    public enum ImgFormat
+    {
+        png,
+        jpg,
+        tif,
+        bmp,
+        gif,
+        webp = -1,
+        nil = -1
+    }
 }

@@ -19,7 +19,7 @@ namespace WinkingCat
             InitializeComponent();
 
             comboBox1.Items.AddRange(new ImageFormat[5] { ImageFormat.Jpeg, ImageFormat.Png, ImageFormat.Bmp, ImageFormat.Gif, ImageFormat.Tiff });
-            comboBox1.SelectedItem = ImageHelper.defaultImageFormat;
+            comboBox1.SelectedItem = InternalSettings.Default_Image_Format;
 
             tbScreenshotFolder.Text = PathHelper.GetScreenshotFolder();
             checkBox1.Checked = PathHelper.UseCustomScreenshotPath;
@@ -55,7 +55,7 @@ namespace WinkingCat
 
         private void comboBox1_SelectedIndexChanged(object sender, EventArgs e)
         {
-            ImageHelper.defaultImageFormat = (System.Drawing.Imaging.ImageFormat)comboBox1.SelectedItem;
+            //ImageHelper.defaultImageFormat = (System.Drawing.Imaging.ImageFormat)comboBox1.SelectedItem;
         }
     }
 }

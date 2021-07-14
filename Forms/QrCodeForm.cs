@@ -137,7 +137,7 @@ namespace WinkingCat
         {
             if (isReady)
             {
-                using (Bitmap img = ImageHelper.LoadImage(PathHelper.AskChooseImageFile()))
+                using (Bitmap img = ImageHelper.LoadImage(ImageHelper.OpenImageFileDialog(Program.MainForm)))
                 {
                     if (img != null)
                     {

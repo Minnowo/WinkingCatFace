@@ -57,7 +57,7 @@ namespace WinkingCat.ClipHelper
                 Clips.Remove(clipName); 
             }
 
-            if(StaticSettings.Garbage_Collect_After_Clip_Destroyed)
+            if(InternalSettings.Garbage_Collect_After_Clip_Destroyed)
                 GC.Collect();
         }
 
@@ -73,7 +73,7 @@ namespace WinkingCat.ClipHelper
                 Clips.Remove(clipName);
             }
 
-            if(StaticSettings.Garbage_Collect_After_All_Clips_Destroyed)
+            if(InternalSettings.Garbage_Collect_After_All_Clips_Destroyed)
                 GC.Collect();
         }
     }

@@ -104,9 +104,21 @@ namespace WinkingCat.HelperLibs
             return CreateScreenshotSubFolder();
         }
 
+        public static bool ValidDirectory(string path)
+        {
+            try
+            {
+                Path.GetFullPath(path);
+                return true;
+            }
+            catch { }
+            return false;
+        }
+
         public static string CreateScreenshotSubFolder()
         {
-            String directoryName = screenshotDefaultPath + "\\" + DateTime.Today.ToString("yyy MM") + "\\";
+            string directoryName = screenshotDefaultPath + "\\" + DateTime.Today.ToString("yyy MM") + "\\";
+
             if (!Directory.Exists(screenshotDefaultPath))
             {
                 CreateDirectory(screenshotDefaultPath);
@@ -120,6 +132,74 @@ namespace WinkingCat.HelperLibs
             return directoryName;
         }
 
+        public static string GetNewImageFileName(ImgFormat fmt)
+        {
+            while (true)
+            {
+                InternalSettings.Image_Counter++;
+                string pathh = Path.Combine(
+                    GetScreenshotFolder(),
+                    InternalSettings.Image_Counter.ToString().PadLeft(20, '0') +
+                    "." + fmt.ToString());
+
+                if (!File.Exists(pathh))
+                    return pathh;
+            }
+        }
+
+        public static string GetNewImageFileName()
+        {
+            while (true)
+            {
+                InternalSettings.Image_Counter++;
+                string pathh = Path.Combine(
+                    GetScreenshotFolder(),
+                    InternalSettings.Image_Counter.ToString().PadLeft(20, '0') +
+                    "." + InternalSettings.Default_Image_Format.ToString());
+
+                if (!File.Exists(pathh))
+                    return pathh;
+            }
+        }
+
+        /// <summary>
+        /// Returns a file name that does not exist.
+        /// </summary>
+        /// <param name="dir">The directory of the file.</param>
+        /// <returns></returns>
+        public static string GetNewFileName(string dir = "", string ext = "")
+        {
+            if (string.IsNullOrEmpty(dir))
+                dir = Directory.GetCurrentDirectory();
+
+            string fileName;
+
+            // try 10 times 
+            for (int x = 0; x < 10; x++)
+            {
+                if(string.IsNullOrEmpty(ext))
+                    fileName = Path.Combine(dir, DateTime.Now.Ticks.GetHashCode().ToString("x").ToUpper()); 
+                else 
+                    fileName = Path.Combine(dir, DateTime.Now.Ticks.GetHashCode().ToString("x").ToUpper() + "." + ext);
+
+                if (!File.Exists(fileName))
+                    return fileName;
+            }
+
+            // start using guid after 10 tries at the other method
+            // would be really surprised if this code ever runs tbh
+            while (true)
+            {
+                if(string.IsNullOrEmpty(ext))
+                    fileName = Path.Combine(dir, Guid.NewGuid().ToString());
+                else
+                    fileName = Path.Combine(dir, Guid.NewGuid().ToString() + "." + ext);
+
+                if (!File.Exists(fileName))
+                    return fileName;
+            }
+        }
+
         public static void CreateDirectoryFromFilePath(string filePath)
         {
             if (!string.IsNullOrEmpty(filePath))
@@ -131,24 +211,18 @@ namespace WinkingCat.HelperLibs
 
         public static string GetFilenameExtension(string filePath, bool includeDot = false)
         {
-            string extension = "";
+            if (string.IsNullOrEmpty(filePath))
+                return string.Empty;
+            
+            int pos = filePath.LastIndexOf('.');
 
-            if (!string.IsNullOrEmpty(filePath))
-            {
-                int pos = filePath.LastIndexOf('.');
+            if (pos < 0)
+                return string.Empty;
+            
+            if (includeDot)
+                return "." + filePath.Substring(pos + 1).ToLower();
 
-                if (pos >= 0)
-                {
-                    extension = filePath.Substring(pos + 1);
-
-                    if (includeDot)
-                    {
-                        extension = "." + extension;
-                    }
-                }
-            }
-
-            return extension;
+            return filePath.Substring(pos + 1).ToLower();
         }
 
         
@@ -172,32 +246,6 @@ namespace WinkingCat.HelperLibs
                     return string.Empty;
                 }
             } 
-        }
-
-        public static string AskChooseImageFile(string dir = "")
-        {
-            using (CommonOpenFileDialog dialog = new CommonOpenFileDialog())
-            {
-                dialog.EnsurePathExists = true;
-                dialog.Multiselect = false;
-                dialog.EnsureValidNames = true;
-
-                CommonFileDialogFilter filter = new CommonFileDialogFilter() { DisplayName = "All Grphic Types", ShowExtensions = true };
-                filter.Extensions.Add("*.bmp; *.jpg; *.jpeg; *.png; *.tiff; *.gif;");
-                dialog.Filters.Add(filter);
-
-                if (!string.IsNullOrEmpty(dir))
-                    dialog.InitialDirectory = dir;
-                
-                if (dialog.ShowDialog() == CommonFileDialogResult.Ok)
-                {
-                    return dialog.FileName;
-                }
-                else
-                {
-                    return string.Empty;
-                }
-            }
         }
 
         public static string AskChooseFile(string dir = "")
@@ -224,15 +272,14 @@ namespace WinkingCat.HelperLibs
 
         public static bool OpenWithDefaultProgram(string path)
         {
-            if (File.Exists(path))
-            {
-                Process fileopener = new Process();
-                fileopener.StartInfo.FileName = "explorer";
-                fileopener.StartInfo.Arguments = "\"" + path + "\"";
-                fileopener.Start();
-                return true;
-            }
-            return false;
+            if (!File.Exists(path))
+                return false;
+            
+            Process fileopener = new Process();
+            fileopener.StartInfo.FileName = "explorer";
+            fileopener.StartInfo.Arguments = "\"" + path + "\"";
+            fileopener.Start();
+            return true;
         }
 
         public static bool OpenExplorerAtLocation(string path)
@@ -258,16 +305,15 @@ namespace WinkingCat.HelperLibs
 
         public static bool DeleteFile(string path)
         {
-            if (File.Exists(path))
-            {
-                File.Delete(path);
-                if (File.Exists(path))
-                    return false;
-                else
-                    return true;
-            }
-            else
+            if (!File.Exists(path))
                 return false;
+            
+            File.Delete(path);
+
+            if (File.Exists(path))
+                return false;
+            
+            return true;
         }
 
         public static long GetFileSizeBytes(string path)

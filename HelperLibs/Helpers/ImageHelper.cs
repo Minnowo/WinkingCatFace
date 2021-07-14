@@ -13,14 +13,11 @@ namespace WinkingCat.HelperLibs
 {
     public static class ImageHelper
     {
-        public static int imageCounter { get; set; } = -1;
-        public static string newImageName
+/*        public static string newImageName
         {
             get
             {
-                // i just hate hoe jpeg looks in the file system cause i'm used to jpg
-                string fileFormat = defaultImageFormat.ToString().ToLower();
-                if (fileFormat == "jpeg") fileFormat = "jpg";
+                string fileFormat = InternalSettings.Default_Image_Format.ToString().ToLower();
 
                 for (int x = 0; x < 10; x++)
                 {
@@ -46,9 +43,7 @@ namespace WinkingCat.HelperLibs
                 imageCounter++;
                 return PathHelper.GetScreenshotFolder() + ImageHelper.imageCounter.ToString() + "." + ImageHelper.newImageName;
             }
-        }
-
-        public static ImageFormat defaultImageFormat = ImageFormat.Jpeg;
+        }*/
 
 
         /// <summary>
@@ -88,38 +83,36 @@ namespace WinkingCat.HelperLibs
         private static double gsbm = 0.11; // 0.071
 
 
-        public static bool SaveImage(string imageName, Image img, ImageFormat format = null)
-        {
-            if (img == null || string.IsNullOrEmpty(imageName))
-                return false;
-
-            if (format == null)
-                format = defaultImageFormat;
-
-            try
-            {
-                img.Save(imageName, format);
-                return true;
-            }
-            catch (Exception e)
-            {
-                Logger.WriteException(e);
-                return false;
-            }
-        }
-
         public static bool SaveImage(Image img, string filePath)
         {
-            PathHelper.CreateDirectoryFromFilePath(filePath);
-            ImageFormat imageFormat = GetImageFormat(filePath);
-
-            if (img == null)
+            if (img == null || string.IsNullOrEmpty(filePath))
                 return false;
+
+            PathHelper.CreateDirectoryFromFilePath(filePath);
 
             try
             {
-                img.Save(filePath, imageFormat);
-                return true;
+                switch (GetImageFormat(filePath))
+                {
+                    default:
+                    case ImgFormat.png:
+                        img.Save(filePath, ImageFormat.Png);
+                        return true;
+                    case ImgFormat.jpg:
+                        img.Save(filePath, ImageFormat.Jpeg);
+                        return true;
+                    case ImgFormat.bmp:
+                        img.Save(filePath, ImageFormat.Bmp);
+                        return true;
+                    case ImgFormat.gif:
+                        img.Save(filePath, ImageFormat.Gif);
+                        return true;
+                    case ImgFormat.tif:
+                        img.Save(filePath, ImageFormat.Tiff);
+                        return true;
+                    //case ImgFormat.webp:
+                    //    return SaveWebp(img, filePath, InternalSettings.WebpQuality_Default);
+                }
             }
             catch (Exception e)
             {
@@ -134,39 +127,44 @@ namespace WinkingCat.HelperLibs
         {
             using (SaveFileDialog sfd = new SaveFileDialog())
             {
-                sfd.Filter = "PNG (*.png)|*.png|JPEG (*.jpg, *.jpeg, *.jpe, *.jfif)|*.jpg;*.jpeg;*.jpe;*.jfif|GIF (*.gif)|*.gif|BMP (*.bmp)|*.bmp|TIFF (*.tif, *.tiff)|*.tif;*.tiff";
-                sfd.DefaultExt = "png";
+                sfd.Filter = InternalSettings.Image_Dialog_Default;
+                sfd.DefaultExt = InternalSettings.Default_Image_Format.ToString();
+
+                if (InternalSettings.WebP_Plugin_Exists)
+                    sfd.Filter += "|" + InternalSettings.WebP_File_Dialog;
 
                 if (!string.IsNullOrEmpty(filePath))
                 {
                     sfd.FileName = Path.GetFileName(filePath);
 
-                    string ext = PathHelper.GetFilenameExtension(filePath);
+                    ImgFormat fmt = GetImageFormat(filePath);
 
-                    if (!string.IsNullOrEmpty(ext))
+                    if (fmt != ImgFormat.nil)
                     {
-                        ext = ext.ToLowerInvariant();
-
-                        switch (ext)
+                        switch (fmt)
                         {
-                            case "png":
+                            case ImgFormat.png:
                                 sfd.FilterIndex = 1;
                                 break;
-                            case "jpg":
-                            case "jpeg":
-                            case "jpe":
-                            case "jfif":
+                            case ImgFormat.jpg:
                                 sfd.FilterIndex = 2;
                                 break;
-                            case "gif":
+                            case ImgFormat.gif:
                                 sfd.FilterIndex = 3;
                                 break;
-                            case "bmp":
+                            case ImgFormat.bmp:
                                 sfd.FilterIndex = 4;
                                 break;
-                            case "tif":
-                            case "tiff":
+                            case ImgFormat.tif:
                                 sfd.FilterIndex = 5;
+                                break;
+                            case ImgFormat.webp:
+                                if (InternalSettings.WebP_Plugin_Exists)
+                                {
+                                    sfd.FilterIndex = 6;
+                                    break;
+                                }
+                                sfd.FilterIndex = 2;
                                 break;
                         }
                     }
@@ -182,39 +180,70 @@ namespace WinkingCat.HelperLibs
             return null;
         }
 
-        public static ImageFormat GetImageFormat(string filePath)
-        {
-            ImageFormat imageFormat = ImageFormat.Png;
-            string ext = PathHelper.GetFilenameExtension(filePath);
 
-            if (!string.IsNullOrEmpty(ext))
+        public static string OpenImageFileDialog(Form form = null, string initialDirectory = null)
+        {
+            string[] result = OpenImageFileDialog(false, form, initialDirectory);
+            if (result == null || result.Length < 1)
+                return string.Empty;
+            return result[0];
+        }
+
+        public static string[] OpenImageFileDialog(bool multiselect, Form form = null, string initialDirectory = null)
+        {
+            using (OpenFileDialog ofd = new OpenFileDialog())
             {
-                switch (ext.Trim().ToLower())
+                ofd.Filter = InternalSettings.Image_Select_Dialog_Title + " (" + 
+                    string.Join(", ", InternalSettings.Readable_Image_Formats_Dialog_Options) + ")|" + 
+                    string.Join(";", InternalSettings.Readable_Image_Formats_Dialog_Options);
+
+                if (InternalSettings.WebP_Plugin_Exists)
+                    ofd.Filter += "|" + InternalSettings.WebP_File_Dialog;
+
+                ofd.Multiselect = multiselect;
+
+                if (!string.IsNullOrEmpty(initialDirectory))
                 {
-                    case "png":
-                        imageFormat = ImageFormat.Png;
-                        break;
-                    case "jpg":
-                    case "jpeg":
-                    case "jpe":
-                    case "jfif":
-                        imageFormat = ImageFormat.Jpeg;
-                        break;
-                    case "gif":
-                        imageFormat = ImageFormat.Gif;
-                        break;
-                    case "bmp":
-                        imageFormat = ImageFormat.Bmp;
-                        break;
-                    case "tif":
-                    case "tiff":
-                        imageFormat = ImageFormat.Tiff;
-                        break;
+                    ofd.InitialDirectory = initialDirectory;
+                }
+
+                if (ofd.ShowDialog(form) == DialogResult.OK)
+                {
+                    return ofd.FileNames;
                 }
             }
 
-            return imageFormat;
+            return null;
         }
+
+        public static ImgFormat GetImageFormat(string filePath)
+        {
+            string ext = PathHelper.GetFilenameExtension(filePath);
+
+            if (string.IsNullOrEmpty(ext))
+                return InternalSettings.Default_Image_Format;
+
+            switch (ext)
+            {
+                case "png":
+                    return ImgFormat.png;
+                case "jpg":
+                case "jpeg":
+                case "jpe":
+                case "jfif":
+                    return ImgFormat.jpg;
+                case "gif":
+                    return ImgFormat.gif;
+                case "bmp":
+                    return ImgFormat.bmp;
+                case "tif":
+                case "tiff":
+                    return ImgFormat.tif;
+                case "webp":
+                    return ImgFormat.webp;
+            }
+            return ImgFormat.nil;
+        } 
 
         public static Bitmap LoadImage(string path)
         {

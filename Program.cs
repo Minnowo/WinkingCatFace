@@ -29,7 +29,7 @@ namespace WinkingCat
         [STAThread]
         static void Main(string[] args)
         {
-
+            //InternalSettings.EnableWebPIfPossible();
             using (InstanceManager instanceManager = new InstanceManager(true, args, SingleInstanceCallback))
             {
                 Run();
@@ -58,15 +58,6 @@ namespace WinkingCat
                     {
                         MainForm.ForceActivate();
                     }
-
-                    /*foreach(string a in args.CommandLineArgs)
-                    {
-                        Console.WriteLine(a);
-                    }*/
-                    //CLIManager cli = new CLIManager(args.CommandLineArgs);
-                    //cli.ParseCommands();
-
-                    //CLI.UseCommandLineArgs(cli.Commands);
                 };
 
                 MainForm.InvokeSafe(d);

@@ -220,9 +220,9 @@ namespace WinkingCat.ClipHelper
                 return;
             }
             
-            string fileName = ImageHelper.newImagePath;
+            string fileName = PathHelper.GetNewImageFileName();
 
-            if (ImageHelper.SaveImage(fileName, this.image))
+            if (ImageHelper.SaveImage(this.image, fileName))
             {
                 OCRForm form = new OCRForm(fileName);
                 form.Owner = this;

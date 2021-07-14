@@ -58,8 +58,8 @@ namespace WinkingCat.ScreenCaptureLib
 
                 string path = string.Empty;
 
-                if (StaticSettings.Save_Images_To_Disk)
-                    path = ImageHelper.newImagePath;
+                if (InternalSettings.Save_Images_To_Disk)
+                    path = PathHelper.GetNewImageFileName();
 
                 if (RegionCaptureOptions.autoCopyImage)
                     ClipboardHelper.CopyImageDefault(LastInfo.Image);
@@ -76,14 +76,14 @@ namespace WinkingCat.ScreenCaptureLib
                     {
                         ClipManager.CreateClip(LastInfo.Image, ops);
 
-                        if (StaticSettings.Save_Images_To_Disk)
-                            Save(path, LastInfo.Image, ImageHelper.defaultImageFormat);
+                        if (InternalSettings.Save_Images_To_Disk)
+                            Save(path, LastInfo.Image);
                     }
                 }
                 else
                 {
-                    if (StaticSettings.Save_Images_To_Disk)
-                        Save(path, LastInfo.Image, ImageHelper.defaultImageFormat);
+                    if (InternalSettings.Save_Images_To_Disk)
+                        Save(path, LastInfo.Image);
                 }
 
                 OnCaptureEvent(LastInfo);
@@ -91,9 +91,9 @@ namespace WinkingCat.ScreenCaptureLib
         }
 
 
-        public static string Save(string imageName, Image img, ImageFormat format = null)
+        public static string Save(string imageName, Image img)
         {
-            if (ImageHelper.SaveImage(imageName, img, format))
+            if (ImageHelper.SaveImage(img, imageName))
             {
                 OnImageSaved(imageName);
                 return imageName;
