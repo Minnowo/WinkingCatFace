@@ -135,11 +135,13 @@
     <Compile Include="Helpers.cs" />
     <Compile Include="Helpers\ClipboardHelper.cs" />
     <Compile Include="Helpers\CursorData.cs" />
+    <Compile Include="Helpers\Gif.cs" />
     <Compile Include="Helpers\ImageHelper.cs" />
     <Compile Include="Helpers\PathHelpler.cs" />
     <Compile Include="Helpers\MathHelper.cs" />
     <Compile Include="Helpers\ScreenHelpers.cs" />
     <Compile Include="Helpers\TranslatorHelper.cs" />
+    <Compile Include="Helpers\WebPHelper.cs" />
     <Compile Include="Helpers\WindowHelpers.cs" />
     <Compile Include="InternalSettings.cs" />
     <Compile Include="Types\HotkeyInfo.cs" />
@@ -172,6 +174,7 @@
     <Compile Include="RegionCaptureOptions.cs" />
     <Compile Include="SettingsManager.cs" />
     <Compile Include="Types\BitmapUndo.cs" />
+    <Compile Include="Types\WebpQuality.cs" />
     <Compile Include="Types\WindowInfo.cs" />
   </ItemGroup>
   <ItemGroup>

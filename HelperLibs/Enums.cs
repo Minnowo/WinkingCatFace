@@ -118,7 +118,7 @@ namespace WinkingCat.HelperLibs
         tif,
         bmp,
         gif,
-        webp = -1,
+        webp,
         nil = -1
     }
 }

@@ -39,7 +39,7 @@ namespace WinkingCat.ScreenCaptureLib
 
             // force the client area to be at 0, 0 so that when you draw using graphics it draws in the correct location
             clientArea = new Rectangle(new Point(0, 0), new Size(region.Width, region.Height));
-            mode = RegionCaptureOptions.mode;
+            mode = RegionCaptureOptions.Mode;
 
             // borderDotPen draws the dashed lines for the screenwide corsshair and selection box
             // magnifierBorderPen draws the border around the magnifier
@@ -60,9 +60,11 @@ namespace WinkingCat.ScreenCaptureLib
             // infoFont is used to specify the font / size of the info text
             infoFont = new Font("Verdana", 12); // 10
 
-            if (!RegionCaptureOptions.useSolidCrossHair)
+            
+            if (RegionCaptureOptions.DrawMarchingAnts)
+            {
                 borderDotPen.DashPattern = new float[] { 5, 5 };
-
+            }
             InitializeComponent();
 
             // this has to be done after InitializeComponent 
@@ -101,80 +103,74 @@ namespace WinkingCat.ScreenCaptureLib
             using (Graphics g = Graphics.FromImage(DimmedCanvas))
             using (Brush brush = new SolidBrush(Color.FromArgb(ApplicationStyles.currentStyle.regionCaptureStyle.BackgroundOverlayOpacity, ApplicationStyles.currentStyle.regionCaptureStyle.BackgroundOverlayColor)))
             {
-                if(RegionCaptureOptions.dimBackground)
+                if(RegionCaptureOptions.DrawBackgroundOverlay)
                     g.FillRectangle(brush, 0, 0, DimmedCanvas.Width, DimmedCanvas.Height);
 
                 backgroundBrush = new TextureBrush(DimmedCanvas) { WrapMode = WrapMode.Clamp };
             }
 
             // used to make the selection box fill with the same color as background
-            backgroundHighlightBrush = new TextureBrush(image) { WrapMode = WrapMode.Clamp }; 
+            backgroundHighlightBrush = new TextureBrush(image) { WrapMode = WrapMode.Clamp };
 
         }
 
-        // pretty sure this makes it look like everything is drawn at once?
-        // i forget but i think it is smoother with this 
-        protected override CreateParams CreateParams
+
+        /// <summary>
+        /// Gets the RegionCaptureInfo for the given region capture.
+        /// </summary>
+        /// <returns> The image/color captured and other info.</returns>
+        public LastRegionCaptureInfo GetResultImage()
         {
-            get
+            if (result == RegionResult.Region)
             {
-                var cp = base.CreateParams;
-                cp.ExStyle |= 0x02000000;    // Turn on WS_EX_COMPOSITED
-                return cp;
-            }
-        }
-
-        private void KeyDown_Event(object sender, KeyEventArgs e)
-        {
-            e.Handled = true;
-            switch (e.KeyData)
-            {
-                case Keys.Z:
-                    InRegionTaskHandler(RegionCaptureOptions.onZPress);
-                    break;
-
-                case Keys.Escape:
-                    InRegionTaskHandler(RegionCaptureOptions.onEscapePress);
-                    break;
-            }
-        }
-
-        private void MouseWheel_Event(object sender, MouseEventArgs e)
-        {
-            if(e.Delta > 0)
-            {
-                if (RegionCaptureOptions.magnifierZoomLevel + RegionCaptureOptions.magnifierZoomScale < 12)
-                {
-                    RegionCaptureOptions.magnifierZoomLevel += RegionCaptureOptions.magnifierZoomScale;
-                }
-                if (RegionCaptureOptions.magnifierZoomLevel > 0)
-                {
-                    RegionCaptureOptions.drawMagnifier = true;
-                }
-
-                return;
-            }
-
-            if(e.Delta < 0)
-            {
-                if (RegionCaptureOptions.magnifierZoomLevel - RegionCaptureOptions.magnifierZoomScale > 0)
-                {
-                    RegionCaptureOptions.magnifierZoomLevel -= 0.25f;
-                }
+                if (leftClickStart.X < leftClickStop.X)
+                    leftClickStop = new Point(leftClickStop.X + 1, leftClickStop.Y);
                 else
-                {
-                    RegionCaptureOptions.magnifierZoomLevel = 0;
-                    RegionCaptureOptions.drawMagnifier = false;
-                }                
+                    leftClickStop = new Point(leftClickStop.X - 1, leftClickStop.Y);
+
+                if (leftClickStart.Y < leftClickStop.Y)
+                    leftClickStop = new Point(leftClickStop.X, leftClickStop.Y + 1);
+                else
+                    leftClickStop = new Point(leftClickStop.X, leftClickStop.Y - 1);
             }
-            Invalidate();
+
+            switch (result)
+            {
+                case RegionResult.Close:
+                    return new LastRegionCaptureInfo(RegionResult.Close);
+
+                case RegionResult.Region:
+                    return new LastRegionCaptureInfo(
+                        RegionResult.Region,
+                        PointToScreen(leftClickStart),
+                        PointToScreen(leftClickStop),
+                        ScreenHelper.CreateValidCropArea(leftClickStart, leftClickStop),
+                        ScreenShotManager.CropImage(leftClickStart, leftClickStop, image));
+
+                case RegionResult.LastRegion:
+                    return new LastRegionCaptureInfo(
+                        RegionResult.LastRegion,
+                        ImageHandler.LastInfo.StartLeftClick,
+                        ImageHandler.LastInfo.StopLeftClick,
+                        ImageHandler.LastInfo.Region,
+                        ScreenShotManager.CropImage(ImageHandler.LastInfo.Region, image));
+
+                case RegionResult.Fullscreen:
+                    return new LastRegionCaptureInfo(RegionResult.Fullscreen, true, image);
+
+                case RegionResult.ActiveMonitor:
+                    return new LastRegionCaptureInfo(
+                        Screen.FromPoint(ScreenHelper.GetCursorPosition()),
+                        ScreenShotManager.CropImage(ScreenHelper.GetActiveScreenBounds0Based(), image));
+
+                case RegionResult.Color:
+                    return new LastRegionCaptureInfo(
+                        PointToScreen(leftClickStop),
+                        image.GetPixel(leftClickStop.X, leftClickStop.Y));
+            }
+            return null;
         }
 
-        private void MouseMove_Event(object sender, MouseEventArgs e)
-        {
-            if(RegionCaptureOptions.updateOnMouseMove)
-                Invalidate();
-        }
 
         private void InRegionTaskHandler(InRegionTasks task)
         {
@@ -234,93 +230,11 @@ namespace WinkingCat.ScreenCaptureLib
                     return;
 
                 case InRegionTasks.SwapCenterMagnifier:
-                    RegionCaptureOptions.tryCenterMagnifier = !RegionCaptureOptions.tryCenterMagnifier;
+                    RegionCaptureOptions.CenterMagnifierOnMouse = !RegionCaptureOptions.CenterMagnifierOnMouse;
                     Invalidate();
                     return;
             }
         }
-
-        private void ClickRelease_Event(object sender, MouseEventArgs e)
-        {
-            switch (e.Button)
-            {
-                case MouseButtons.Left:
-                    leftClickStop = e.Location;
-                    if(mode != RegionCaptureMode.ColorPicker)
-                    {
-                        if (isLeftClicking && leftClickStart != leftClickStop && ScreenHelper.IsValidCropArea(leftClickStart, leftClickStop))
-                        {                          
-                            result = RegionResult.Region;
-                            Close();
-                        }
-                    }
-                    else
-                    {
-                        result = RegionResult.Color;
-                        Close();
-                    }
-
-                    isLeftClicking = false;
-                    break;
-
-                case MouseButtons.Right:
-                    InRegionTaskHandler(RegionCaptureOptions.onMouseRightClick);
-                    break;
-
-                case MouseButtons.Middle:
-                    InRegionTaskHandler(RegionCaptureOptions.onMouseMiddleClick);
-                    break;
-
-                case MouseButtons.XButton1:
-                    InRegionTaskHandler(RegionCaptureOptions.onXButton1Click);
-                    break;
-
-                case MouseButtons.XButton2:
-                    InRegionTaskHandler(RegionCaptureOptions.onXButton2Click);
-                    break;
-            }
-        }
-
-        private void Click_Event(object sender, MouseEventArgs e)
-        {
-            if(e.Button == MouseButtons.Left)
-            {
-                isLeftClicking = true;
-                leftClickStart = e.Location;
-            }
-        }
-
-        protected override void OnPaint(PaintEventArgs e)
-        {
-
-            mousePos = ScreenHelper.ScreenToClient(ScreenHelper.GetCursorPosition());
-            activeMonitor = ScreenHelper.GetActiveScreenBounds0Based();
-
-            Graphics g = e.Graphics;
-
-            g.PixelOffsetMode = PixelOffsetMode.HighSpeed;
-            g.InterpolationMode = InterpolationMode.NearestNeighbor;
-            g.SmoothingMode = SmoothingMode.HighQuality; // for some reason highspeed crashes the window
-            g.CompositingQuality = CompositingQuality.HighSpeed;
-
-            if (RegionCaptureOptions.marchingAnts)
-            {
-                borderDotPen.DashOffset += 0.33f;
-                if (borderDotPen.DashOffset > 10) borderDotPen.DashOffset = 0;
-            }
-
-            g.CompositingMode = CompositingMode.SourceCopy;
-            g.FillRectangle(backgroundBrush, clientArea);
-            g.CompositingMode = CompositingMode.SourceOver;
-
-            DrawMouseGraphics(g);
-
-            // if you want to update as often as possible for the smoothest graphics 
-            // otherwise if you want to use less cpu disable this 
-            if (!RegionCaptureOptions.updateOnMouseMove)
-                Invalidate();
-        }
-
 
         private void DrawMouseGraphics(Graphics g)
         {
@@ -337,7 +251,7 @@ namespace WinkingCat.ScreenCaptureLib
 
                 DrawMouseInfo(g);
 
-                if (RegionCaptureOptions.drawCrossHair)
+                if (RegionCaptureOptions.DrawScreenWideCrosshair)
                 {
                     DrawCrosshair(g, mousePos);
                 }
@@ -350,12 +264,12 @@ namespace WinkingCat.ScreenCaptureLib
             Point pointToScreen = PointToScreen(mousePos);
             int magX = mousePos.X;
             int magY = mousePos.Y;
-            int totalWidth = RegionCaptureOptions.cursorInfoOffset;
-            int totalHeight = RegionCaptureOptions.cursorInfoOffset;
+            int totalWidth = RegionCaptureOptions.CursorInfoOffset;
+            int totalHeight = RegionCaptureOptions.CursorInfoOffset;
             string infoText = $"X: {pointToScreen.X} Y: {pointToScreen.Y}";
             Size infoTextSize = g.MeasureString(infoText, infoFont).ToSize();
 
-            if (RegionCaptureOptions.tryCenterMagnifier && RegionCaptureOptions.drawMagnifier)
+            if (RegionCaptureOptions.CenterMagnifierOnMouse && RegionCaptureOptions.DrawMagnifier)
             {
                 magnifier = DrawMagnifier(mousePos);
                 totalWidth = magnifier.Width;
@@ -367,7 +281,7 @@ namespace WinkingCat.ScreenCaptureLib
             }
             else
             {
-                if (RegionCaptureOptions.drawMagnifier)
+                if (RegionCaptureOptions.DrawMagnifier)
                 {
                     magnifier = DrawMagnifier(mousePos);
 
@@ -376,13 +290,13 @@ namespace WinkingCat.ScreenCaptureLib
                 }
 
 
-                if (RegionCaptureOptions.drawInfoText)
+                if (RegionCaptureOptions.DrawInfoText)
                 {
                     totalHeight += infoTextSize.Height;
-                    totalHeight += RegionCaptureOptions.cursorInfoOffset;
+                    totalHeight += RegionCaptureOptions.CursorInfoOffset;
 
                     // if the width of the info text is greater than the magnifier width use that for totalWidth
-                    if (RegionCaptureOptions.drawMagnifier)
+                    if (RegionCaptureOptions.DrawMagnifier)
                     {
                         if (magnifier.Width < infoTextSize.Width)
                         {
@@ -396,7 +310,7 @@ namespace WinkingCat.ScreenCaptureLib
 
                         // to cancel the increase to totalHeight below otherwise the info text will apear 
                         // farther down than its supposed to
-                        totalHeight -= RegionCaptureOptions.cursorInfoOffset;
+                        totalHeight -= RegionCaptureOptions.CursorInfoOffset;
                     }
                 }
 
@@ -407,7 +321,7 @@ namespace WinkingCat.ScreenCaptureLib
                 }
                 else
                 {
-                    magX += RegionCaptureOptions.cursorInfoOffset;
+                    magX += RegionCaptureOptions.CursorInfoOffset;
                 }
 
                 if (magY + totalHeight > activeMonitor.Height + activeMonitor.Y)
@@ -417,19 +331,19 @@ namespace WinkingCat.ScreenCaptureLib
                 }
                 else
                 {
-                    magY += RegionCaptureOptions.cursorInfoOffset;
+                    magY += RegionCaptureOptions.CursorInfoOffset;
                 }
 
-                if (RegionCaptureOptions.drawInfoText)
+                if (RegionCaptureOptions.DrawInfoText)
                 {
                     DrawInfoText(g, infoText, 
                         new Rectangle(new Point(magX, magY + Math.Abs(totalHeight)), infoTextSize), 
                         infoFont, textFontBrush, textBackgroundBrush, borderPen);
                 }
 
-                if (RegionCaptureOptions.drawMagnifier)
+                if (RegionCaptureOptions.DrawMagnifier)
                 {
-                    if (RegionCaptureOptions.drawMagnifierBorder)
+                    if (RegionCaptureOptions.DrawBorderOnMagnifier)
                         g.DrawRectangle(magnifierBorderPen, magX - 1, magY - 1, magnifier.Width + 1, magnifier.Height + 1);
 
                     g.DrawImage(magnifier, new Point(magX, magY));  
@@ -440,8 +354,8 @@ namespace WinkingCat.ScreenCaptureLib
 
         private Bitmap DrawMagnifier(Point mousePos)
         {
-            int pixelCount = MathHelper.MakeOdd(((int)(RegionCaptureOptions.magnifierPixelCount * RegionCaptureOptions.magnifierZoomLevel)).Clamp(1, 500));
-            int pixelSize = MathHelper.MakeOdd(RegionCaptureOptions.magnifierPixelSize.Clamp(1, 50));
+            int pixelCount = MathHelper.MakeOdd(((int)(RegionCaptureOptions.MagnifierPixelCount * RegionCaptureOptions.MagnifierZoomLevel)).Clamp(1, 500));
+            int pixelSize = MathHelper.MakeOdd(RegionCaptureOptions.MagnifierPixelSize.Clamp(1, 50));
 
             int width = pixelCount * pixelSize;
             int height = pixelCount * pixelSize;
@@ -460,7 +374,7 @@ namespace WinkingCat.ScreenCaptureLib
 
                 gr.PixelOffsetMode = PixelOffsetMode.None;
 
-                if (RegionCaptureOptions.drawMagnifierGrid)
+                if (RegionCaptureOptions.DrawPixelGridInMagnifier)
                 {
                     for (int x = 1; x < pixelCount; x++)
                     {
@@ -473,7 +387,7 @@ namespace WinkingCat.ScreenCaptureLib
                     }
                 }
 
-                if (RegionCaptureOptions.drawMagnifierCrosshair)
+                if (RegionCaptureOptions.DrawCrosshairInMagnifier)
                 {
                     gr.FillRectangle(magnifierCrosshairBrush, new Rectangle(0, (height - pixelSize) / 2, (width - pixelSize) / 2, pixelSize)); // Left
                     gr.FillRectangle(magnifierCrosshairBrush, new Rectangle((width + pixelSize) / 2, (height - pixelSize) / 2, (width - pixelSize) / 2, pixelSize)); // Right
@@ -483,6 +397,7 @@ namespace WinkingCat.ScreenCaptureLib
             }
             return bmp;
         }
+
         private void DrawSelectionBox(Graphics g, Point mousePos)
         {
             g.FillRectangle(backgroundHighlightBrush, ScreenHelper.CreateValidCropArea(leftClickStart, mousePos));
@@ -490,7 +405,7 @@ namespace WinkingCat.ScreenCaptureLib
             g.DrawLine(borderDotPen, leftClickStart, new Point(mousePos.X, leftClickStart.Y));
             g.DrawLine(borderDotPen, leftClickStart, new Point(leftClickStart.X, mousePos.Y));
 
-            if (!RegionCaptureOptions.drawCrossHair)
+            if (!RegionCaptureOptions.DrawScreenWideCrosshair)
             {
                 g.DrawLine(borderDotPen, new Point(mousePos.X, leftClickStart.Y), mousePos);
                 g.DrawLine(borderDotPen, new Point(leftClickStart.X, mousePos.Y), mousePos);
@@ -500,7 +415,7 @@ namespace WinkingCat.ScreenCaptureLib
         private void DrawInfoText(Graphics g, string text, Rectangle rec, Font font, Brush textFontBrush ,Brush backgroundBrush, Pen outerBorderPen)
         {
             int mX = rec.X;
-            int mY = rec.Y - RegionCaptureOptions.cursorInfoOffset - rec.Height;
+            int mY = rec.Y - RegionCaptureOptions.CursorInfoOffset - rec.Height;
 
             Rectangle rect = new Rectangle(
                 new Point(mX, mY), 
@@ -524,60 +439,178 @@ namespace WinkingCat.ScreenCaptureLib
             g.DrawLine(borderDotPen, verticalP1, verticalP2);
         }
 
-        /// <summary>
-        /// Gets the RegionCaptureInfo for the given region capture.
-        /// </summary>
-        /// <returns> The image/color captured and other info.</returns>
-        public LastRegionCaptureInfo GetResultImage()
+        #region events
+
+        private void KeyDown_Event(object sender, KeyEventArgs e)
         {
-            if (result == RegionResult.Region)
+            e.Handled = true;
+            switch (e.KeyData)
             {
-                if (leftClickStart.X < leftClickStop.X)
-                    leftClickStop = new Point(leftClickStop.X + 1, leftClickStop.Y);
-                else
-                    leftClickStop = new Point(leftClickStop.X - 1, leftClickStop.Y);
+                case Keys.Z:
+                    InRegionTaskHandler(RegionCaptureOptions.OnZPress);
+                    break;
 
-                if (leftClickStart.Y < leftClickStop.Y)
-                    leftClickStop = new Point(leftClickStop.X, leftClickStop.Y + 1);
-                else
-                    leftClickStop = new Point(leftClickStop.X, leftClickStop.Y - 1);
+                case Keys.Escape:
+                    InRegionTaskHandler(RegionCaptureOptions.OnEscapePress);
+                    break;
             }
-
-            switch (result)
-            {
-                case RegionResult.Close:
-                    return new LastRegionCaptureInfo(RegionResult.Close);
-
-                case RegionResult.Region:
-                    return new LastRegionCaptureInfo(
-                        RegionResult.Region,
-                        PointToScreen(leftClickStart),
-                        PointToScreen(leftClickStop),
-                        ScreenHelper.CreateValidCropArea(leftClickStart, leftClickStop),
-                        ScreenShotManager.CropImage(leftClickStart, leftClickStop, image));
-
-                case RegionResult.LastRegion: 
-                    return new LastRegionCaptureInfo(
-                        RegionResult.LastRegion, 
-                        ImageHandler.LastInfo.StartLeftClick, 
-                        ImageHandler.LastInfo.StopLeftClick, 
-                        ImageHandler.LastInfo.Region,
-                        ScreenShotManager.CropImage(ImageHandler.LastInfo.Region, image));
-
-                case RegionResult.Fullscreen:
-                    return new LastRegionCaptureInfo(RegionResult.Fullscreen, true, image);
-
-                case RegionResult.ActiveMonitor:
-                    return new LastRegionCaptureInfo(
-                        Screen.FromPoint(ScreenHelper.GetCursorPosition()),
-                        ScreenShotManager.CropImage(ScreenHelper.GetActiveScreenBounds0Based(), image));
-
-                case RegionResult.Color:
-                    return new LastRegionCaptureInfo(
-                        PointToScreen(leftClickStop), 
-                        image.GetPixel(leftClickStop.X, leftClickStop.Y));
-            }
-            return null;
         }
+
+        private void MouseWheel_Event(object sender, MouseEventArgs e)
+        {
+            if (e.Delta > 0)
+            {
+                if (RegionCaptureOptions.MagnifierZoomLevel + RegionCaptureOptions.MagnifierZoomScale < 12)
+                {
+                    RegionCaptureOptions.MagnifierZoomLevel += RegionCaptureOptions.MagnifierZoomScale;
+                }
+                if (RegionCaptureOptions.MagnifierZoomLevel > 0)
+                {
+                    RegionCaptureOptions.DrawMagnifier = true;
+                }
+            }
+            else
+            if (e.Delta < 0)
+            {
+                if (RegionCaptureOptions.MagnifierZoomLevel - RegionCaptureOptions.MagnifierZoomScale > 0)
+                {
+                    RegionCaptureOptions.MagnifierZoomLevel -= 0.25f;
+                }
+                else
+                {
+                    RegionCaptureOptions.MagnifierZoomLevel = 0;
+                    RegionCaptureOptions.DrawMagnifier = false;
+                }
+            }
+            Invalidate();
+        }
+
+        private void MouseMove_Event(object sender, MouseEventArgs e)
+        {
+            if (!RegionCaptureOptions.DrawMarchingAnts)
+                Invalidate();
+        }
+
+        private void ClickRelease_Event(object sender, MouseEventArgs e)
+        {
+            switch (e.Button)
+            {
+                case MouseButtons.Left:
+                    leftClickStop = e.Location;
+                    if (mode != RegionCaptureMode.ColorPicker)
+                    {
+                        if (isLeftClicking && leftClickStart != leftClickStop && ScreenHelper.IsValidCropArea(leftClickStart, leftClickStop))
+                        {
+                            result = RegionResult.Region;
+                            Close();
+                        }
+                    }
+                    else
+                    {
+                        result = RegionResult.Color;
+                        Close();
+                    }
+
+                    isLeftClicking = false;
+                    break;
+
+                case MouseButtons.Right:
+                    InRegionTaskHandler(RegionCaptureOptions.OnMouseRightClick);
+                    break;
+
+                case MouseButtons.Middle:
+                    InRegionTaskHandler(RegionCaptureOptions.OnMouseMiddleClick);
+                    break;
+
+                case MouseButtons.XButton1:
+                    InRegionTaskHandler(RegionCaptureOptions.OnXButton1Click);
+                    break;
+
+                case MouseButtons.XButton2:
+                    InRegionTaskHandler(RegionCaptureOptions.OnXButton2Click);
+                    break;
+            }
+        }
+
+        private void Click_Event(object sender, MouseEventArgs e)
+        {
+            if (e.Button == MouseButtons.Left)
+            {
+                isLeftClicking = true;
+                leftClickStart = e.Location;
+            }
+        }
+
+        #endregion
+
+        #region overrides
+
+        protected override void OnPaint(PaintEventArgs e)
+        {
+
+            mousePos = ScreenHelper.ScreenToClient(ScreenHelper.GetCursorPosition());
+            activeMonitor = ScreenHelper.GetActiveScreenBounds0Based();
+
+            Graphics g = e.Graphics;
+
+            g.PixelOffsetMode = PixelOffsetMode.HighSpeed;
+            g.InterpolationMode = InterpolationMode.NearestNeighbor;
+            g.SmoothingMode = SmoothingMode.HighQuality; // for some reason highspeed crashes the window
+            g.CompositingQuality = CompositingQuality.HighSpeed;
+
+            g.CompositingMode = CompositingMode.SourceCopy;
+            g.FillRectangle(backgroundBrush, clientArea);
+            g.CompositingMode = CompositingMode.SourceOver;
+
+            DrawMouseGraphics(g);
+
+            if (RegionCaptureOptions.DrawMarchingAnts)
+            {
+                borderDotPen.DashOffset += 0.25f;
+                if (borderDotPen.DashOffset > 10) borderDotPen.DashOffset = 0;
+                Invalidate();
+            }
+        }
+
+        /// <summary>
+        /// Clean up any resources being used.
+        /// </summary>
+        /// <param name="disposing">true if managed resources should be disposed; otherwise, false.</param>
+        protected override void Dispose(bool disposing)
+        {
+            if (disposing && (components != null))
+            {
+                components.Dispose();
+            }
+
+            borderDotPen?.Dispose();
+            borderPen?.Dispose();
+            infoFont?.Dispose();
+            magnifierBorderPen?.Dispose();
+            magnifierBorderPen?.Dispose();
+            magnifierCrosshairBrush?.Dispose();
+            textBackgroundBrush?.Dispose();
+            textFontBrush?.Dispose();
+
+            image?.Dispose();
+            backgroundBrush?.Dispose();
+            backgroundHighlightBrush?.Dispose();
+
+            base.Dispose(disposing);
+        }
+
+        // pretty sure this makes it look like everything is drawn at once?
+        // i forget but i think it is smoother with this 
+        protected override CreateParams CreateParams
+        {
+            get
+            {
+                var cp = base.CreateParams;
+                cp.ExStyle |= 0x02000000;    // Turn on WS_EX_COMPOSITED
+                return cp;
+            }
+        }
+
+        #endregion
     }
 }

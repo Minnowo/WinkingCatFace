@@ -15,6 +15,12 @@ namespace WinkingCat.HelperLibs
 {
     public static class Extensions
     {
+
+        public static void ShowError(this Exception e)
+        {
+            MessageBox.Show(null, e.Message, "", MessageBoxButtons.OK, MessageBoxIcon.Error);
+        }
+
         public static byte[] ToByteArray(this Image x)
         {
             ImageConverter _imageConverter = new ImageConverter();

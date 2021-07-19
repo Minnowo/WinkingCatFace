@@ -35,8 +35,8 @@ namespace WinkingCat.HelperLibs
         #region plugins
 
         // webp support
-        public const string libwebP_x64 = "plugins\\libwebp_x64.dll";
-        public const string libwebP_x86 = "plugins\\libwebp_x86.dll";
+        public const string libwebP_x64 = "AppConfig\\plugins\\libwebp_x64.dll";
+        public const string libwebP_x86 = "AppConfig\\plugins\\libwebp_x86.dll";
 
         public static bool WebP_Plugin_Exists = false;
         #endregion
@@ -47,7 +47,6 @@ namespace WinkingCat.HelperLibs
 
         public static int Image_Counter = -1;
 
-
         public static bool Write_Logs = true;
 
         public static bool Save_Images_To_Disk = true;
@@ -55,11 +54,26 @@ namespace WinkingCat.HelperLibs
         public static bool Garbage_Collect_After_Clip_Destroyed = false;
         public static bool Garbage_Collect_After_All_Clips_Destroyed = true;
 
-        public static ImgFormat Default_Image_Format = ImgFormat.jpg;
+        public static ImgFormat Default_Image_Format 
+        {
+            get { return _Default_Image_Format; }
+            set 
+            { 
+                if(value == ImgFormat.webp && !WebP_Plugin_Exists)
+                {
+                    _Default_Image_Format = ImgFormat.jpg;
+                    return;
+                }
+                _Default_Image_Format = value; 
+            } 
+        }
+        private static ImgFormat _Default_Image_Format = ImgFormat.jpg;
+
+        public static WebPQuality WebpQuality_Default = new WebPQuality(WebpEncodingFormat.EncodeLossy, 74, 6);
 
         public static bool CPU_Type_x64 = IntPtr.Size == 8;
 
-        public static void EnableWebPIfPossible()
+        public static bool EnableWebPIfPossible()
         {
             if (CPU_Type_x64)
             {
@@ -68,6 +82,7 @@ namespace WinkingCat.HelperLibs
                     WebP_Plugin_Exists = true;
                     Readable_Image_Formats_Dialog_Options.Add("*.webp");
                     Readable_Image_Formats.Add("webp");
+                    return true;
                 }
             }
             else
@@ -77,8 +92,10 @@ namespace WinkingCat.HelperLibs
                     WebP_Plugin_Exists = true;
                     Readable_Image_Formats_Dialog_Options.Add("*.webp");
                     Readable_Image_Formats.Add("webp");
+                    return true;
                 }
             }
+            return false;
         }
     }
 

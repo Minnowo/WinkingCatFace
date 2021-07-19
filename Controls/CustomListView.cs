@@ -225,77 +225,74 @@ namespace WinkingCat
         #region cmsOpen
         private void ToolStripMenuItemOpenFile_Click(object sender, EventArgs e)
         {
-            if (SelectedIndex != -1)
+            if (SelectedIndex == -1)
+                return;
+
+            string path = Items[SelectedIndex].Tag.ToString();
+
+            if (File.Exists(path))
             {
-                if (File.Exists(Items[SelectedIndex].Tag.ToString()))
-                {
-                    PathHelper.OpenWithDefaultProgram(Items[SelectedIndex].Tag.ToString());
-                }
-                else
-                {
-                    MessageBox.Show("The file path has changed or the file has been deleted");
-                    Items.Remove(Items[SelectedIndex]);
-                    SelectedIndex = -1;
-                }
+                PathHelper.OpenWithDefaultProgram(path);
+            }
+            else
+            {
+                MessageBox.Show("The file path has changed or the file has been deleted");
+                Items.Remove(Items[SelectedIndex]);
+                SelectedIndex = -1;
             }
         }
 
         private void ToolStripMenuItemOpenFolder_Click(object sender, EventArgs e)
         {
-            if (SelectedIndex != -1)
+            if (SelectedIndex == -1)
+                return;
+
+            string path = Items[SelectedIndex].Tag.ToString();
+
+            if (File.Exists(path))
             {
-                if (File.Exists(Items[SelectedIndex].Tag.ToString()))
-                {
-                    PathHelper.OpenExplorerAtLocation(Items[SelectedIndex].Tag.ToString());
-                }
-                else if (Directory.Exists(Path.GetDirectoryName(Items[SelectedIndex].Tag.ToString())))
-                {
-                    PathHelper.OpenExplorerAtLocation(Path.GetDirectoryName(Items[SelectedIndex].Tag.ToString()));
-                    MessageBox.Show("The file path has changed or the file has been deleted");
-                    Items.Remove(Items[SelectedIndex]);
-                    SelectedIndex = -1;
-                }
-                else 
-                {
-                    MessageBox.Show("The file path has changed or the file has been deleted");
-                    Items.Remove(Items[SelectedIndex]);
-                    SelectedIndex = -1;
-                }
+                PathHelper.OpenExplorerAtLocation(path);
+            }
+            else if (Directory.Exists(Path.GetDirectoryName(path)))
+            {
+                PathHelper.OpenExplorerAtLocation(Path.GetDirectoryName(path));
+                MessageBox.Show("The file path has changed or the file has been deleted");
+                Items.Remove(Items[SelectedIndex]);
+                SelectedIndex = -1;
+            }
+            else 
+            {
+                MessageBox.Show("The file path has changed or the file has been deleted");
+                Items.Remove(Items[SelectedIndex]);
+                SelectedIndex = -1;
             }
         }
 
         private void ToolStripMenuItemOpenAsClip_Click(object sender, EventArgs e)
         {
-            if (SelectedIndex != -1)
-            {
-                if (File.Exists(Items[SelectedIndex].Tag.ToString()))
-                {
-                    try
-                    {
-                        using (Bitmap img = ImageHelper.LoadImage(Items[SelectedIndex].Tag.ToString()))
-                        {
-                            ClipOptions ops = new ClipOptions();
-                            ops.Location = Program.MainForm.Location;
-                            ops.DateCreated = DateTime.Now;
-                            ops.Name = Guid.NewGuid().ToString();
-                            ops.FilePath = Items[SelectedIndex].Tag.ToString();
+            if (SelectedIndex == -1)
+                return;
+            
+            string path = Items[SelectedIndex].Tag.ToString();
 
-                            ClipManager.CreateClip(img, ops);
-                        }
-                        GC.Collect(); // free memory from the stream of LoadImage
-                    }
-                    catch (Exception ex)
-                    {
-                        Logger.WriteException(ex);
-                        MessageBox.Show("The file is either not an image file or is corrupt");
-                    }
-                }
-                else
+            if (!File.Exists(path))
+            {
+                MessageBox.Show("The file path has changed or the file has been deleted");
+                Items.Remove(Items[SelectedIndex]);
+                SelectedIndex = -1;
+            }
+            
+            try
+            {                        
+                using (Bitmap image = ImageHelper.LoadImage(path))
                 {
-                    MessageBox.Show("The file path has changed or the file has been deleted");
-                    Items.Remove(Items[SelectedIndex]);
-                    SelectedIndex = -1;
+                    ClipManager.Clips[ClipManager.CreateClipAtCursor(image)].Options.FilePath = path;
                 }
+            }
+            catch (Exception ex)
+            {
+                Logger.WriteException(ex);
+                MessageBox.Show("The file is either not an image or is corrupt");
             }
         }
         #endregion
@@ -303,106 +300,117 @@ namespace WinkingCat
         #region cmsCopy
         private void ToolStripMenuItemCopyImage_Click(object sender, EventArgs e)
         {
-            if (SelectedIndex != -1)
+            if (SelectedIndex == -1)
+                return;
+            
+            string path = Items[SelectedIndex].Tag.ToString();
+
+            if (File.Exists(path))
             {
-                string path = Items[SelectedIndex].Tag.ToString();
-                if (File.Exists(path))
-                {
-                    ClipboardHelper.CopyImageFromFile(path, false, false);
-                }
-                else
-                {
-                    MessageBox.Show("The file path has changed or the file has been deleted");
-                    Items.Remove(Items[SelectedIndex]);
-                    SelectedIndex = -1;
-                }
+                ClipboardHelper.CopyImageFromFile(path);
+            }
+            else
+            {
+                MessageBox.Show("The file path has changed or the file has been deleted");
+                Items.Remove(Items[SelectedIndex]);
+                SelectedIndex = -1;
             }
         }
 
         private void ToolStripMenuItemCopyDimensions_Click(object sender, EventArgs e)
         {
-            if (SelectedIndex != -1)
+            if (SelectedIndex == -1)
+                return;
+
+            string path = Items[SelectedIndex].Tag.ToString();
+
+            if (File.Exists(path))
             {
-                if (File.Exists(Items[SelectedIndex].Tag.ToString()))
-                {
-                    Size dims = ImageHelper.GetImageDimensionsFile(Items[SelectedIndex].Tag.ToString());
-                    ClipboardHelper.CopyStringDefault(
-                        string.Format("{0} x {1}", dims.Width, dims.Height));
-                }
-                else
-                {
-                    MessageBox.Show("The file path has changed or the file has been deleted");
-                    Items.Remove(Items[SelectedIndex]);
-                    SelectedIndex = -1;
-                }
+                Size dims = ImageHelper.GetImageDimensionsFile(path);
+                ClipboardHelper.CopyStringDefault(
+                    string.Format("{0}, {1}", dims.Width, dims.Height));
+            }
+            else
+            {
+                MessageBox.Show("The file path has changed or the file has been deleted");
+                Items.Remove(Items[SelectedIndex]);
+                SelectedIndex = -1;
             }
         }
 
         private void ToolStripMenuItemCopyFile_Click(object sender, EventArgs e)
         {
-            if (SelectedIndex != -1)
+            if (SelectedIndex == -1)
+                return;
+            
+            string path = Items[SelectedIndex].Tag.ToString();
+
+            if (File.Exists(path))
             {
-                if (File.Exists(Items[SelectedIndex].Tag.ToString()))
-                {
-                    ClipboardHelper.CopyFile(Items[SelectedIndex].Tag.ToString());
-                }
-                else
-                {
-                    MessageBox.Show("The file path has changed or the file has been deleted");
-                    Items.Remove(Items[SelectedIndex]);
-                    SelectedIndex = -1;
-                }
+                ClipboardHelper.CopyFile(path);
+            }
+            else
+            {
+                MessageBox.Show("The file path has changed or the file has been deleted");
+                Items.Remove(Items[SelectedIndex]);
+                SelectedIndex = -1;
             }
         }
 
         private void ToolStripMenuItemCopyFileName_Click(object sender, EventArgs e)
         {
-            if (SelectedIndex != -1)
+            if (SelectedIndex == -1)
+                return;
+
+            string path = Items[SelectedIndex].Tag.ToString();
+
+            if (File.Exists(path))
             {
-                if (File.Exists(Items[SelectedIndex].Tag.ToString()))
-                {
-                    ClipboardHelper.CopyStringDefault(Items[SelectedIndex].Text.ToString());
-                }
-                else
-                {
-                    MessageBox.Show("The file path has changed or the file has been deleted");
-                    Items.Remove(Items[SelectedIndex]);
-                    SelectedIndex = -1;
-                }
+                ClipboardHelper.CopyStringDefault(Path.GetFileName(path));
+            }
+            else
+            {
+                MessageBox.Show("The file path has changed or the file has been deleted");
+                Items.Remove(Items[SelectedIndex]);
+                SelectedIndex = -1;
             }
         }
 
         private void ToolStripMenuItemCopyPath_Click(object sender, EventArgs e)
         {
-            if (SelectedIndex != -1)
+            if (SelectedIndex == -1)
+                return;
+
+            string path = Items[SelectedIndex].Tag.ToString();
+
+            if (File.Exists(path))
             {
-                if (File.Exists(Items[SelectedIndex].Tag.ToString()))
-                {
-                    ClipboardHelper.CopyStringDefault(Items[SelectedIndex].Tag.ToString());
-                }
-                else
-                {
-                    MessageBox.Show("The file path has changed or the file has been deleted");
-                    Items.Remove(Items[SelectedIndex]);
-                    SelectedIndex = -1;
-                }
+                ClipboardHelper.CopyStringDefault(path);
+            }
+            else
+            {
+                MessageBox.Show("The file path has changed or the file has been deleted");
+                Items.Remove(Items[SelectedIndex]);
+                SelectedIndex = -1;
             }
         }
 
         private void ToolStripMenuItemCopyDirectory_Click(object sender, EventArgs e)
         {
-            if (SelectedIndex != -1)
+            if (SelectedIndex == -1)
+                return;
+
+            string path = Path.GetDirectoryName(Items[SelectedIndex].Tag.ToString());
+
+            if (Directory.Exists(path))
             {
-                if (Directory.Exists(Path.GetDirectoryName(Items[SelectedIndex].Tag.ToString())))
-                {
-                    ClipboardHelper.CopyStringDefault(Path.GetDirectoryName(Items[SelectedIndex].Tag.ToString()));
-                }
-                else
-                {
-                    MessageBox.Show("The file path has changed or the file has been deleted");
-                    Items.Remove(Items[SelectedIndex]);
-                    SelectedIndex = -1;
-                }
+                ClipboardHelper.CopyStringDefault(path);
+            }
+            else
+            {
+                MessageBox.Show("The file path has changed or the file has been deleted");
+                Items.Remove(Items[SelectedIndex]);
+                SelectedIndex = -1;
             }
         }
         #endregion
@@ -413,24 +421,23 @@ namespace WinkingCat
             form.Owner = Program.MainForm;
             form.TopMost = MainFormSettings.alwaysOnTop;
             form.Show();
-            
         }
         
 
         private async void ToolStripMenuItemDelete_Click(object sender, EventArgs e)
         {
-            if (SelectedIndex != -1)
+            if (SelectedIndex == -1)
+                return;
+            
+            foreach (ListViewItem item in SelectedItems)
             {
-                foreach (ListViewItem item in SelectedItems)
+                if (PathHelper.DeleteFile(item.Tag.ToString()))
                 {
-                    if (PathHelper.DeleteFile(item.Tag.ToString()))
-                    {
-                        Items.Remove(item);
-                        SelectedIndex = -1;
-                    }
+                    Items.Remove(item);
+                    SelectedIndex = -1;
                 }
-                await ListViewDumpAsync((ListViewItem[])this.Items.OfType<ListViewItem>().ToArray().Clone());
             }
+            await ListViewDumpAsync((ListViewItem[])this.Items.OfType<ListViewItem>().ToArray().Clone());
         }
 
         private void ToolStripMenuItemAlwaysOnTop_Click(object sender, EventArgs e)
@@ -502,19 +509,21 @@ namespace WinkingCat
 
         private void MouseDoubleClick_Event(object sender, MouseEventArgs e)
         {
-            if (SelectedIndex != -1)
+            if (SelectedIndex == -1)
+                return;
+
+            string path = Items[SelectedIndex].Tag.ToString();
+
+            if (File.Exists(path))
             {
-                if (File.Exists(Items[SelectedIndex].Tag.ToString()))
-                {
-                    PathHelper.OpenWithDefaultProgram(Items[SelectedIndex].Tag.ToString());
-                }
-                else 
-                {
-                    MessageBox.Show("The file path has changed or the file has been deleted");
-                    Items.Remove(Items[SelectedIndex]);
-                    SelectedIndex = -1;
-                }                    
+                PathHelper.OpenWithDefaultProgram(path);
             }
+            else 
+            {
+                MessageBox.Show("The file path has changed or the file has been deleted");
+                Items.Remove(Items[SelectedIndex]);
+                SelectedIndex = -1;
+            }                    
         }
 
         private void ContextMenuStrip_Opening(object sender, CancelEventArgs e)

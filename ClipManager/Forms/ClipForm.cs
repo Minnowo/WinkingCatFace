@@ -46,7 +46,6 @@ namespace WinkingCat.ClipHelper
         private bool isResizing = false;
         private bool isResizable = true;
         private bool isMoving = false;
-        private bool isRotated = false;
         private bool showingZoomed = false;
 
         public ClipForm(ClipOptions options, Image displayImage)

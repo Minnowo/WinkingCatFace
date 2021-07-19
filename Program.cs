@@ -17,24 +17,16 @@ namespace WinkingCat
         /// The main entry point for the application.
         /// </summary>
         public static ApplicationForm MainForm;
-        public static string CurrentEXEPath
-        {
-            get
-            {
-                string p = System.Reflection.Assembly.GetExecutingAssembly().GetName().CodeBase;
-                return p.Substring(8, p.Length - 8);
-            }
-        }
+
 
         [STAThread]
         static void Main(string[] args)
         {
-            //InternalSettings.EnableWebPIfPossible();
+            Directory.SetCurrentDirectory(AppContext.BaseDirectory);
             using (InstanceManager instanceManager = new InstanceManager(true, args, SingleInstanceCallback))
             {
                 Run();
             }
-
         }
 
         private static void SingleInstanceCallback(object sender, InstanceCallbackEventArgs args)
@@ -98,6 +90,11 @@ namespace WinkingCat
             Logger.WriteLine(PathHelper.screenshotDefaultPath);
             Logger.WriteLine(PathHelper.logPath);
 
+            if (InternalSettings.EnableWebPIfPossible())
+            {
+                Logger.WriteLine("WebP plugin found");
+            }
+
             if (SettingsManager.LoadMainFormSettings())
             {
                 Logger.WriteLine("MainForm settings loaded successfully");
@@ -137,13 +134,13 @@ namespace WinkingCat
 
             if (SettingsManager.LoadHotkeySettings() != null)
             {
-                HotkeyManager.UpdateHotkeys(SettingsManager.LoadHotkeySettings(), true);
+                HotkeyManager.UpdateHotkeys(SettingsManager.LoadHotkeySettings(), false);
                 Logger.WriteLine("Hotkeys loaded successfully");
             }
             else
             {
                 Logger.WriteLine("Hotkeys not loaded using default");
-                HotkeyManager.UpdateHotkeys(HotkeyManager.GetDefaultHotkeyList(), true);
+                HotkeyManager.UpdateHotkeys(HotkeyManager.GetDefaultHotkeyList(), false);
             }
 
             MainForm = new ApplicationForm();

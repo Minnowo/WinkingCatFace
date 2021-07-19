@@ -20,8 +20,8 @@ namespace WinkingCat
             foreach (ColorFormat colorformat in Enum.GetValues(typeof(ColorFormat)))
                 comboBox3.Items.Add(colorformat);
 
-            checkBox1.Checked = RegionCaptureOptions.autoCopyImage;
-            checkBox2.Checked = RegionCaptureOptions.autoCopyColor;
+            checkBox1.Checked = RegionCaptureOptions.AutoCopyImage;
+            checkBox2.Checked = RegionCaptureOptions.AutoCopyColor;
 
             UpdateComboBox();
             UpdateTheme();
@@ -40,13 +40,13 @@ namespace WinkingCat
         // autocopy image checkbox
         private void checkBox1_CheckedChanged(object sender, EventArgs e)
         {
-            RegionCaptureOptions.autoCopyImage = checkBox1.Checked;
+            RegionCaptureOptions.AutoCopyImage = checkBox1.Checked;
         }
 
         // autocopy color checkbox
         private void checkBox2_CheckedChanged(object sender, EventArgs e)
         {
-            RegionCaptureOptions.autoCopyColor = checkBox2.Checked;
+            RegionCaptureOptions.AutoCopyColor = checkBox2.Checked;
         }
 
         // color format combobox

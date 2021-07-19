@@ -452,32 +452,32 @@ namespace WinkingCat.HelperLibs
                 KeyValueConfigurationCollection keys = conf.AppSettings.Settings;
 
                 keys.Clear();
-                keys.Add("drawMagnifier", RegionCaptureOptions.drawMagnifier.ToString());  // bool
-                keys.Add("drawCrossHair", RegionCaptureOptions.drawCrossHair.ToString());  // bool
-                keys.Add("drawInfoText", RegionCaptureOptions.drawInfoText.ToString());    // bool
-                keys.Add("marchingAnts", RegionCaptureOptions.marchingAnts.ToString());    // bool
-                keys.Add("createClipAfterRegionCapture", RegionCaptureOptions.createClipAfterRegionCapture.ToString());// bool
-                keys.Add("autoCopyImage", RegionCaptureOptions.autoCopyImage.ToString());  // bool
-                keys.Add("autoCopyColor", RegionCaptureOptions.autoCopyColor.ToString());  // bool
-                keys.Add("tryCenterMagnifier", RegionCaptureOptions.tryCenterMagnifier.ToString());         // bool
-                keys.Add("drawMagnifierCrosshair", RegionCaptureOptions.drawMagnifierCrosshair.ToString()); // bool
-                keys.Add("drawMagnifierGrid", RegionCaptureOptions.drawMagnifierGrid.ToString());       // bool
-                keys.Add("dimBackground", RegionCaptureOptions.dimBackground.ToString());               // bool
-                keys.Add("drawMagnifierBorder", RegionCaptureOptions.drawMagnifierBorder.ToString());   // bool
+                keys.Add("drawMagnifier", RegionCaptureOptions.DrawMagnifier.ToString());  // bool
+                keys.Add("drawCrossHair", RegionCaptureOptions.DrawScreenWideCrosshair.ToString());  // bool
+                keys.Add("drawInfoText", RegionCaptureOptions.DrawInfoText.ToString());    // bool
+                keys.Add("marchingAnts", RegionCaptureOptions.DrawMarchingAnts.ToString());    // bool
+                keys.Add("createClipAfterRegionCapture", RegionCaptureOptions.CreateClipAfterRegionCapture.ToString());// bool
+                keys.Add("autoCopyImage", RegionCaptureOptions.AutoCopyImage.ToString());  // bool
+                keys.Add("autoCopyColor", RegionCaptureOptions.AutoCopyColor.ToString());  // bool
+                keys.Add("tryCenterMagnifier", RegionCaptureOptions.CenterMagnifierOnMouse.ToString());         // bool
+                keys.Add("drawMagnifierCrosshair", RegionCaptureOptions.DrawCrosshairInMagnifier.ToString()); // bool
+                keys.Add("drawMagnifierGrid", RegionCaptureOptions.DrawPixelGridInMagnifier.ToString());       // bool
+                keys.Add("dimBackground", RegionCaptureOptions.DrawBackgroundOverlay.ToString());               // bool
+                keys.Add("drawMagnifierBorder", RegionCaptureOptions.DrawBorderOnMagnifier.ToString());   // bool
                 keys.Add("updateOnMouseMove", RegionCaptureOptions.updateOnMouseMove.ToString());       // bool
-                keys.Add("useSolidCrossHair", RegionCaptureOptions.useSolidCrossHair.ToString());       // bool
-                keys.Add("magnifierZoomLevel", RegionCaptureOptions.magnifierZoomLevel.ToString());     // float
-                keys.Add("magnifierZoomScale", RegionCaptureOptions.magnifierZoomScale.ToString());     // float
-                keys.Add("cursorInfoOffset", RegionCaptureOptions.cursorInfoOffset.ToString());         // int
-                keys.Add("MagnifierPixelCount", RegionCaptureOptions.magnifierPixelCount.ToString());   // int
-                keys.Add("MagnifierPixelSize", RegionCaptureOptions.magnifierPixelSize.ToString());     // int
-                keys.Add("mode", RegionCaptureOptions.mode.ToString("D"));                              // enum
-                keys.Add("onMouseMiddleClick", RegionCaptureOptions.onMouseMiddleClick.ToString("D"));  // enum
-                keys.Add("onMouseRightClick", RegionCaptureOptions.onMouseRightClick.ToString("D"));    // enum
-                keys.Add("onXButton1Click", RegionCaptureOptions.onXButton1Click.ToString("D"));        // enum
-                keys.Add("onXButton2Click", RegionCaptureOptions.onXButton2Click.ToString("D"));        // enum
-                keys.Add("onEscapePress", RegionCaptureOptions.onEscapePress.ToString("D"));            // enum
-                keys.Add("onZPress", RegionCaptureOptions.onZPress.ToString("D"));                      // enum
+                //keys.Add("useSolidCrossHair", RegionCaptureOptions.useSolidCrossHair.ToString());       // bool
+                keys.Add("magnifierZoomLevel", RegionCaptureOptions.MagnifierZoomLevel.ToString());     // float
+                keys.Add("magnifierZoomScale", RegionCaptureOptions.MagnifierZoomScale.ToString());     // float
+                keys.Add("cursorInfoOffset", RegionCaptureOptions.CursorInfoOffset.ToString());         // int
+                keys.Add("MagnifierPixelCount", RegionCaptureOptions.MagnifierPixelCount.ToString());   // int
+                keys.Add("MagnifierPixelSize", RegionCaptureOptions.MagnifierPixelSize.ToString());     // int
+                keys.Add("mode", RegionCaptureOptions.Mode.ToString("D"));                              // enum
+                keys.Add("onMouseMiddleClick", RegionCaptureOptions.OnMouseMiddleClick.ToString("D"));  // enum
+                keys.Add("onMouseRightClick", RegionCaptureOptions.OnMouseRightClick.ToString("D"));    // enum
+                keys.Add("onXButton1Click", RegionCaptureOptions.OnXButton1Click.ToString("D"));        // enum
+                keys.Add("onXButton2Click", RegionCaptureOptions.OnXButton2Click.ToString("D"));        // enum
+                keys.Add("onEscapePress", RegionCaptureOptions.OnEscapePress.ToString("D"));            // enum
+                keys.Add("onZPress", RegionCaptureOptions.OnZPress.ToString("D"));                      // enum
                 conf.Save();
                 return true;
             }
@@ -701,87 +701,87 @@ namespace WinkingCat.HelperLibs
                         switch (key)
                         {
                             case "drawMagnifier":
-                                RegionCaptureOptions.drawMagnifier = bool.Parse(keys["drawMagnifier"].Value);
+                                RegionCaptureOptions.DrawMagnifier = bool.Parse(keys["drawMagnifier"].Value);
                                 break;
                             case "drawCrossHair":
-                                RegionCaptureOptions.drawCrossHair = bool.Parse(keys["drawCrossHair"].Value);
+                                RegionCaptureOptions.DrawScreenWideCrosshair = bool.Parse(keys["drawCrossHair"].Value);
                                 break;
                             case "drawInfoText":
-                                RegionCaptureOptions.drawInfoText = bool.Parse(keys["drawInfoText"].Value);
+                                RegionCaptureOptions.DrawInfoText = bool.Parse(keys["drawInfoText"].Value);
                                 break;
                             case "marchingAnts":
-                                RegionCaptureOptions.marchingAnts = bool.Parse(keys["marchingAnts"].Value);
+                                RegionCaptureOptions.DrawMarchingAnts = bool.Parse(keys["marchingAnts"].Value);
                                 break;
                             case "createClipAfterRegionCapture":
-                                RegionCaptureOptions.createClipAfterRegionCapture = bool.Parse(keys["createClipAfterRegionCapture"].Value);
+                                RegionCaptureOptions.CreateClipAfterRegionCapture = bool.Parse(keys["createClipAfterRegionCapture"].Value);
                                 break;
                             case "autoCopyImage":
-                                RegionCaptureOptions.autoCopyImage = bool.Parse(keys["autoCopyImage"].Value);
+                                RegionCaptureOptions.AutoCopyImage = bool.Parse(keys["autoCopyImage"].Value);
                                 break;
                             case "autoCopyColor":
-                                RegionCaptureOptions.autoCopyColor = bool.Parse(keys["autoCopyColor"].Value);
+                                RegionCaptureOptions.AutoCopyColor = bool.Parse(keys["autoCopyColor"].Value);
                                 break;
                             case "tryCenterMagnifier":
-                                RegionCaptureOptions.tryCenterMagnifier = bool.Parse(keys["tryCenterMagnifier"].Value);
+                                RegionCaptureOptions.CenterMagnifierOnMouse = bool.Parse(keys["tryCenterMagnifier"].Value);
                                 break;
                             case "drawMagnifierCrosshair":
-                                RegionCaptureOptions.drawMagnifierCrosshair = bool.Parse(keys["drawMagnifierCrosshair"].Value);
+                                RegionCaptureOptions.DrawCrosshairInMagnifier = bool.Parse(keys["drawMagnifierCrosshair"].Value);
                                 break;
                             case "drawMagnifierGrid":
-                                RegionCaptureOptions.drawMagnifierGrid = bool.Parse(keys["drawMagnifierGrid"].Value);
+                                RegionCaptureOptions.DrawPixelGridInMagnifier = bool.Parse(keys["drawMagnifierGrid"].Value);
                                 break;
                             case "dimBackground":
-                                RegionCaptureOptions.dimBackground = bool.Parse(keys["dimBackground"].Value);
+                                RegionCaptureOptions.DrawBackgroundOverlay = bool.Parse(keys["dimBackground"].Value);
                                 break;
                             case "drawMagnifierBorder":
-                                RegionCaptureOptions.drawMagnifierBorder = bool.Parse(keys["drawMagnifierBorder"].Value);
+                                RegionCaptureOptions.DrawBorderOnMagnifier = bool.Parse(keys["drawMagnifierBorder"].Value);
                                 break;
                             case "updateOnMouseMove":
                                 RegionCaptureOptions.updateOnMouseMove = bool.Parse(keys["updateOnMouseMove"].Value);
                                 break;
-                            case "useSolidCrossHair":
+                            /*case "useSolidCrossHair":
                                 RegionCaptureOptions.useSolidCrossHair = bool.Parse(keys["useSolidCrossHair"].Value);
-                                break;
+                                break;*/
                             case "magnifierZoomLevel":
-                                RegionCaptureOptions.magnifierZoomLevel = float.Parse(keys["magnifierZoomLevel"].Value);
+                                RegionCaptureOptions.MagnifierZoomLevel = float.Parse(keys["magnifierZoomLevel"].Value);
                                 break;
                             case "magnifierZoomScale":
-                                RegionCaptureOptions.magnifierZoomScale = float.Parse(keys["magnifierZoomScale"].Value);
+                                RegionCaptureOptions.MagnifierZoomScale = float.Parse(keys["magnifierZoomScale"].Value);
                                 break;
                             case "cursorInfoOffset":
-                                RegionCaptureOptions.cursorInfoOffset = int.Parse(keys["cursorInfoOffset"].Value);
+                                RegionCaptureOptions.CursorInfoOffset = int.Parse(keys["cursorInfoOffset"].Value);
                                 break;
                             case "MagnifierPixelCount":
-                                RegionCaptureOptions.magnifierPixelCount = int.Parse(keys["MagnifierPixelCount"].Value);
+                                RegionCaptureOptions.MagnifierPixelCount = int.Parse(keys["MagnifierPixelCount"].Value);
                                 break;
                             case "MagnifierPixelSize":
-                                RegionCaptureOptions.magnifierPixelSize = int.Parse(keys["MagnifierPixelSize"].Value);
+                                RegionCaptureOptions.MagnifierPixelSize = int.Parse(keys["MagnifierPixelSize"].Value);
                                 break;
                             case "mode":
-                                RegionCaptureOptions.mode = (RegionCaptureMode)int.Parse(keys["mode"].Value);
+                                RegionCaptureOptions.Mode = (RegionCaptureMode)int.Parse(keys["mode"].Value);
                                 break;
                             case "onMouseMiddleClick":
-                                RegionCaptureOptions.onMouseMiddleClick = (InRegionTasks)int.Parse(keys["onMouseMiddleClick"].Value);
+                                RegionCaptureOptions.OnMouseMiddleClick = (InRegionTasks)int.Parse(keys["onMouseMiddleClick"].Value);
                                 break;
                             case "onMouseRightClick":
-                                RegionCaptureOptions.onMouseRightClick = (InRegionTasks)int.Parse(keys["onMouseRightClick"].Value);
+                                RegionCaptureOptions.OnMouseRightClick = (InRegionTasks)int.Parse(keys["onMouseRightClick"].Value);
                                 break;
                             case "onXButton1Click":
-                                RegionCaptureOptions.onXButton1Click = (InRegionTasks)int.Parse(keys["onXButton1Click"].Value);
+                                RegionCaptureOptions.OnXButton1Click = (InRegionTasks)int.Parse(keys["onXButton1Click"].Value);
                                 break;
                             case "onXButton2Click":
-                                RegionCaptureOptions.onXButton2Click = (InRegionTasks)int.Parse(keys["onXButton2Click"].Value);
+                                RegionCaptureOptions.OnXButton2Click = (InRegionTasks)int.Parse(keys["onXButton2Click"].Value);
                                 break;
                             case "onEscapePress":
-                                RegionCaptureOptions.onEscapePress = (InRegionTasks)int.Parse(keys["onEscapePress"].Value);
+                                RegionCaptureOptions.OnEscapePress = (InRegionTasks)int.Parse(keys["onEscapePress"].Value);
                                 break;
                             case "onZPress":
-                                RegionCaptureOptions.onZPress = (InRegionTasks)int.Parse(keys["onZPress"].Value);
+                                RegionCaptureOptions.OnZPress = (InRegionTasks)int.Parse(keys["onZPress"].Value);
                                 break;
                             default:
                                 throw new Exception("Keys have been modified RegionCapture.config will be reset with default values");
                         }
-                    if (keys.AllKeys.Length != 26)
+                    if (keys.AllKeys.Length != 25)
                         throw new Exception("Keys have been modified RegionCapture.config will be re-saved with recent values");
                     return true;
                 }

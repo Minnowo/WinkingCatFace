@@ -33,7 +33,7 @@ namespace WinkingCat.ScreenCaptureLib
 
         public static void RegionCapture(RegionCaptureMode mode, bool creatClip = false)
         {
-            RegionCaptureOptions.mode = mode;
+            RegionCaptureOptions.Mode = mode;
             RegionCapture(creatClip);
         }
 
@@ -61,10 +61,10 @@ namespace WinkingCat.ScreenCaptureLib
                 if (InternalSettings.Save_Images_To_Disk)
                     path = PathHelper.GetNewImageFileName();
 
-                if (RegionCaptureOptions.autoCopyImage)
+                if (RegionCaptureOptions.AutoCopyImage)
                     ClipboardHelper.CopyImageDefault(LastInfo.Image);
 
-                if (creatClip || RegionCaptureOptions.createClipAfterRegionCapture)
+                if (creatClip || RegionCaptureOptions.CreateClipAfterRegionCapture)
                 {
                     ClipOptions ops = new ClipOptions();
                     ops.Location = ScreenHelper.GetRectangle0Based(LastInfo.Region).Location;
@@ -105,7 +105,7 @@ namespace WinkingCat.ScreenCaptureLib
 
         private static void HandleRegionReturnColor(Color color)
         {
-            if (RegionCaptureOptions.autoCopyColor)
+            if (RegionCaptureOptions.AutoCopyColor)
                 ClipboardHelper.FormatCopyColor(ClipboardHelper.copyFormat, color);
         }
 

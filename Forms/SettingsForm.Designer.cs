@@ -30,6 +30,8 @@
         {
             this.tcMain = new System.Windows.Forms.TabControl();
             this.tpMain = new System.Windows.Forms.TabPage();
+            this.cbDefaultImageFormat = new System.Windows.Forms.ComboBox();
+            this.label14 = new System.Windows.Forms.Label();
             this.label3 = new System.Windows.Forms.Label();
             this.label2 = new System.Windows.Forms.Label();
             this.label1 = new System.Windows.Forms.Label();
@@ -64,28 +66,25 @@
             this.cbRightClickAction = new System.Windows.Forms.ComboBox();
             this.label5 = new System.Windows.Forms.Label();
             this.label4 = new System.Windows.Forms.Label();
-            this.cbSolidScreenWideCrosshair = new System.Windows.Forms.CheckBox();
             this.cbShowInfoText = new System.Windows.Forms.CheckBox();
             this.cbMarchingAnts = new System.Windows.Forms.CheckBox();
             this.cbDimBackground = new System.Windows.Forms.CheckBox();
             this.cbDrawScreenWideCrosshair = new System.Windows.Forms.CheckBox();
             this.tpUpload = new System.Windows.Forms.TabPage();
             this.tpClipboard = new System.Windows.Forms.TabPage();
-            this.tbHotkeys = new System.Windows.Forms.TabPage();
-            this.tabPage6 = new System.Windows.Forms.TabPage();
-            this.cbAutoCopyImage = new System.Windows.Forms.CheckBox();
-            this.cbAutoCopyColor = new System.Windows.Forms.CheckBox();
-            this.label13 = new System.Windows.Forms.Label();
             this.cbDefaultColorFormat = new System.Windows.Forms.ComboBox();
-            this.btnAddHotkey = new System.Windows.Forms.Button();
-            this.btnRemoveHotkey = new System.Windows.Forms.Button();
-            this.btnRestoreDefaultHotkeys = new System.Windows.Forms.Button();
+            this.label13 = new System.Windows.Forms.Label();
+            this.cbAutoCopyColor = new System.Windows.Forms.CheckBox();
+            this.cbAutoCopyImage = new System.Windows.Forms.CheckBox();
+            this.tbHotkeys = new System.Windows.Forms.TabPage();
             this.flpHotkeyDisplayPanel = new System.Windows.Forms.FlowLayoutPanel();
-            this.cbUseCustomScreenshotPath = new System.Windows.Forms.CheckBox();
-            this.tbCustomScreenshotPath = new System.Windows.Forms.TextBox();
+            this.btnRestoreDefaultHotkeys = new System.Windows.Forms.Button();
+            this.btnRemoveHotkey = new System.Windows.Forms.Button();
+            this.btnAddHotkey = new System.Windows.Forms.Button();
+            this.tabPage6 = new System.Windows.Forms.TabPage();
             this.btnBrowseFolders = new System.Windows.Forms.Button();
-            this.label14 = new System.Windows.Forms.Label();
-            this.cbDefaultImageFormat = new System.Windows.Forms.ComboBox();
+            this.tbCustomScreenshotPath = new System.Windows.Forms.TextBox();
+            this.cbUseCustomScreenshotPath = new System.Windows.Forms.CheckBox();
             this.tcMain.SuspendLayout();
             this.tpMain.SuspendLayout();
             this.tbRegionCapture.SuspendLayout();
@@ -135,6 +134,25 @@
             this.tpMain.TabIndex = 0;
             this.tpMain.Text = "General";
             this.tpMain.UseVisualStyleBackColor = true;
+            // 
+            // cbDefaultImageFormat
+            // 
+            this.cbDefaultImageFormat.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.cbDefaultImageFormat.FormattingEnabled = true;
+            this.cbDefaultImageFormat.Location = new System.Drawing.Point(11, 209);
+            this.cbDefaultImageFormat.Name = "cbDefaultImageFormat";
+            this.cbDefaultImageFormat.Size = new System.Drawing.Size(108, 21);
+            this.cbDefaultImageFormat.TabIndex = 11;
+            this.cbDefaultImageFormat.SelectedIndexChanged += new System.EventHandler(this.DefaultImageFormat_SelectedIndexChanged);
+            // 
+            // label14
+            // 
+            this.label14.AutoSize = true;
+            this.label14.Location = new System.Drawing.Point(8, 193);
+            this.label14.Name = "label14";
+            this.label14.Size = new System.Drawing.Size(111, 13);
+            this.label14.TabIndex = 10;
+            this.label14.Text = "Default Image Format:";
             // 
             // label3
             // 
@@ -251,7 +269,6 @@
             this.tbRegionCapture.Controls.Add(this.cbRightClickAction);
             this.tbRegionCapture.Controls.Add(this.label5);
             this.tbRegionCapture.Controls.Add(this.label4);
-            this.tbRegionCapture.Controls.Add(this.cbSolidScreenWideCrosshair);
             this.tbRegionCapture.Controls.Add(this.cbShowInfoText);
             this.tbRegionCapture.Controls.Add(this.cbMarchingAnts);
             this.tbRegionCapture.Controls.Add(this.cbDimBackground);
@@ -547,17 +564,6 @@
             this.label4.TabIndex = 6;
             this.label4.Text = "Mouse Buttons";
             // 
-            // cbSolidScreenWideCrosshair
-            // 
-            this.cbSolidScreenWideCrosshair.AutoSize = true;
-            this.cbSolidScreenWideCrosshair.Location = new System.Drawing.Point(8, 27);
-            this.cbSolidScreenWideCrosshair.Name = "cbSolidScreenWideCrosshair";
-            this.cbSolidScreenWideCrosshair.Size = new System.Drawing.Size(160, 17);
-            this.cbSolidScreenWideCrosshair.TabIndex = 4;
-            this.cbSolidScreenWideCrosshair.Text = "Solid Screen Wide Crosshair";
-            this.cbSolidScreenWideCrosshair.UseVisualStyleBackColor = true;
-            this.cbSolidScreenWideCrosshair.CheckedChanged += new System.EventHandler(this.SolidScreenWideCrosshair_CheckChanged);
-            // 
             // cbShowInfoText
             // 
             this.cbShowInfoText.AutoSize = true;
@@ -572,7 +578,7 @@
             // cbMarchingAnts
             // 
             this.cbMarchingAnts.AutoSize = true;
-            this.cbMarchingAnts.Location = new System.Drawing.Point(8, 48);
+            this.cbMarchingAnts.Location = new System.Drawing.Point(8, 27);
             this.cbMarchingAnts.Name = "cbMarchingAnts";
             this.cbMarchingAnts.Size = new System.Drawing.Size(94, 17);
             this.cbMarchingAnts.TabIndex = 2;
@@ -626,6 +632,47 @@
             this.tpClipboard.Text = "Clipboard";
             this.tpClipboard.UseVisualStyleBackColor = true;
             // 
+            // cbDefaultColorFormat
+            // 
+            this.cbDefaultColorFormat.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.cbDefaultColorFormat.FormattingEnabled = true;
+            this.cbDefaultColorFormat.Location = new System.Drawing.Point(8, 69);
+            this.cbDefaultColorFormat.Name = "cbDefaultColorFormat";
+            this.cbDefaultColorFormat.Size = new System.Drawing.Size(200, 21);
+            this.cbDefaultColorFormat.TabIndex = 3;
+            this.cbDefaultColorFormat.SelectedIndexChanged += new System.EventHandler(this.DefaultColorFormat_SelectedIndexChanged);
+            // 
+            // label13
+            // 
+            this.label13.AutoSize = true;
+            this.label13.Location = new System.Drawing.Point(5, 53);
+            this.label13.Name = "label13";
+            this.label13.Size = new System.Drawing.Size(106, 13);
+            this.label13.TabIndex = 2;
+            this.label13.Text = "Default Color Format:";
+            // 
+            // cbAutoCopyColor
+            // 
+            this.cbAutoCopyColor.AutoSize = true;
+            this.cbAutoCopyColor.Location = new System.Drawing.Point(8, 25);
+            this.cbAutoCopyColor.Name = "cbAutoCopyColor";
+            this.cbAutoCopyColor.Size = new System.Drawing.Size(102, 17);
+            this.cbAutoCopyColor.TabIndex = 1;
+            this.cbAutoCopyColor.Text = "Auto Copy Color";
+            this.cbAutoCopyColor.UseVisualStyleBackColor = true;
+            this.cbAutoCopyColor.CheckedChanged += new System.EventHandler(this.AutoCopyColor_CheckChanged);
+            // 
+            // cbAutoCopyImage
+            // 
+            this.cbAutoCopyImage.AutoSize = true;
+            this.cbAutoCopyImage.Location = new System.Drawing.Point(8, 6);
+            this.cbAutoCopyImage.Name = "cbAutoCopyImage";
+            this.cbAutoCopyImage.Size = new System.Drawing.Size(107, 17);
+            this.cbAutoCopyImage.TabIndex = 0;
+            this.cbAutoCopyImage.Text = "Auto Copy Image";
+            this.cbAutoCopyImage.UseVisualStyleBackColor = true;
+            this.cbAutoCopyImage.CheckedChanged += new System.EventHandler(this.AutoCopyImage_CheckChanged);
+            // 
             // tbHotkeys
             // 
             this.tbHotkeys.Controls.Add(this.flpHotkeyDisplayPanel);
@@ -640,6 +687,47 @@
             this.tbHotkeys.Text = "Hotkeys";
             this.tbHotkeys.UseVisualStyleBackColor = true;
             // 
+            // flpHotkeyDisplayPanel
+            // 
+            this.flpHotkeyDisplayPanel.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.flpHotkeyDisplayPanel.AutoScroll = true;
+            this.flpHotkeyDisplayPanel.Location = new System.Drawing.Point(8, 35);
+            this.flpHotkeyDisplayPanel.Name = "flpHotkeyDisplayPanel";
+            this.flpHotkeyDisplayPanel.Size = new System.Drawing.Size(436, 370);
+            this.flpHotkeyDisplayPanel.TabIndex = 3;
+            // 
+            // btnRestoreDefaultHotkeys
+            // 
+            this.btnRestoreDefaultHotkeys.Location = new System.Drawing.Point(244, 6);
+            this.btnRestoreDefaultHotkeys.Name = "btnRestoreDefaultHotkeys";
+            this.btnRestoreDefaultHotkeys.Size = new System.Drawing.Size(200, 23);
+            this.btnRestoreDefaultHotkeys.TabIndex = 2;
+            this.btnRestoreDefaultHotkeys.Text = "Restore Default Hotkeys";
+            this.btnRestoreDefaultHotkeys.UseVisualStyleBackColor = true;
+            this.btnRestoreDefaultHotkeys.Click += new System.EventHandler(this.RestoreDefaultHotkeys_Click);
+            // 
+            // btnRemoveHotkey
+            // 
+            this.btnRemoveHotkey.Location = new System.Drawing.Point(126, 6);
+            this.btnRemoveHotkey.Name = "btnRemoveHotkey";
+            this.btnRemoveHotkey.Size = new System.Drawing.Size(112, 23);
+            this.btnRemoveHotkey.TabIndex = 1;
+            this.btnRemoveHotkey.Text = "Remove Hotkey";
+            this.btnRemoveHotkey.UseVisualStyleBackColor = true;
+            this.btnRemoveHotkey.Click += new System.EventHandler(this.RemoveHotkey_Click);
+            // 
+            // btnAddHotkey
+            // 
+            this.btnAddHotkey.Location = new System.Drawing.Point(8, 6);
+            this.btnAddHotkey.Name = "btnAddHotkey";
+            this.btnAddHotkey.Size = new System.Drawing.Size(112, 23);
+            this.btnAddHotkey.TabIndex = 0;
+            this.btnAddHotkey.Text = "Add Hotkey";
+            this.btnAddHotkey.UseVisualStyleBackColor = true;
+            this.btnAddHotkey.Click += new System.EventHandler(this.AddHotkey_Click);
+            // 
             // tabPage6
             // 
             this.tabPage6.Controls.Add(this.btnBrowseFolders);
@@ -653,108 +741,6 @@
             this.tabPage6.Text = "Paths";
             this.tabPage6.UseVisualStyleBackColor = true;
             // 
-            // cbAutoCopyImage
-            // 
-            this.cbAutoCopyImage.AutoSize = true;
-            this.cbAutoCopyImage.Location = new System.Drawing.Point(8, 6);
-            this.cbAutoCopyImage.Name = "cbAutoCopyImage";
-            this.cbAutoCopyImage.Size = new System.Drawing.Size(107, 17);
-            this.cbAutoCopyImage.TabIndex = 0;
-            this.cbAutoCopyImage.Text = "Auto Copy Image";
-            this.cbAutoCopyImage.UseVisualStyleBackColor = true;
-            this.cbAutoCopyImage.CheckedChanged += new System.EventHandler(this.AutoCopyImage_CheckChanged);
-            // 
-            // cbAutoCopyColor
-            // 
-            this.cbAutoCopyColor.AutoSize = true;
-            this.cbAutoCopyColor.Location = new System.Drawing.Point(8, 25);
-            this.cbAutoCopyColor.Name = "cbAutoCopyColor";
-            this.cbAutoCopyColor.Size = new System.Drawing.Size(102, 17);
-            this.cbAutoCopyColor.TabIndex = 1;
-            this.cbAutoCopyColor.Text = "Auto Copy Color";
-            this.cbAutoCopyColor.UseVisualStyleBackColor = true;
-            this.cbAutoCopyColor.CheckedChanged += new System.EventHandler(this.AutoCopyColor_CheckChanged);
-            // 
-            // label13
-            // 
-            this.label13.AutoSize = true;
-            this.label13.Location = new System.Drawing.Point(5, 53);
-            this.label13.Name = "label13";
-            this.label13.Size = new System.Drawing.Size(106, 13);
-            this.label13.TabIndex = 2;
-            this.label13.Text = "Default Color Format:";
-            // 
-            // cbDefaultColorFormat
-            // 
-            this.cbDefaultColorFormat.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            this.cbDefaultColorFormat.FormattingEnabled = true;
-            this.cbDefaultColorFormat.Location = new System.Drawing.Point(8, 69);
-            this.cbDefaultColorFormat.Name = "cbDefaultColorFormat";
-            this.cbDefaultColorFormat.Size = new System.Drawing.Size(200, 21);
-            this.cbDefaultColorFormat.TabIndex = 3;
-            this.cbDefaultColorFormat.SelectedIndexChanged += new System.EventHandler(this.DefaultColorFormat_SelectedIndexChanged);
-            // 
-            // btnAddHotkey
-            // 
-            this.btnAddHotkey.Location = new System.Drawing.Point(8, 6);
-            this.btnAddHotkey.Name = "btnAddHotkey";
-            this.btnAddHotkey.Size = new System.Drawing.Size(112, 23);
-            this.btnAddHotkey.TabIndex = 0;
-            this.btnAddHotkey.Text = "Add Hotkey";
-            this.btnAddHotkey.UseVisualStyleBackColor = true;
-            this.btnAddHotkey.Click += new System.EventHandler(this.AddHotkey_Click);
-            // 
-            // btnRemoveHotkey
-            // 
-            this.btnRemoveHotkey.Location = new System.Drawing.Point(126, 6);
-            this.btnRemoveHotkey.Name = "btnRemoveHotkey";
-            this.btnRemoveHotkey.Size = new System.Drawing.Size(112, 23);
-            this.btnRemoveHotkey.TabIndex = 1;
-            this.btnRemoveHotkey.Text = "Remove Hotkey";
-            this.btnRemoveHotkey.UseVisualStyleBackColor = true;
-            this.btnRemoveHotkey.Click += new System.EventHandler(this.RemoveHotkey_Click);
-            // 
-            // btnRestoreDefaultHotkeys
-            // 
-            this.btnRestoreDefaultHotkeys.Location = new System.Drawing.Point(244, 6);
-            this.btnRestoreDefaultHotkeys.Name = "btnRestoreDefaultHotkeys";
-            this.btnRestoreDefaultHotkeys.Size = new System.Drawing.Size(200, 23);
-            this.btnRestoreDefaultHotkeys.TabIndex = 2;
-            this.btnRestoreDefaultHotkeys.Text = "Restore Default Hotkeys";
-            this.btnRestoreDefaultHotkeys.UseVisualStyleBackColor = true;
-            this.btnRestoreDefaultHotkeys.Click += new System.EventHandler(this.RestoreDefaultHotkeys_Click);
-            // 
-            // flpHotkeyDisplayPanel
-            // 
-            this.flpHotkeyDisplayPanel.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.flpHotkeyDisplayPanel.AutoScroll = true;
-            this.flpHotkeyDisplayPanel.Location = new System.Drawing.Point(8, 35);
-            this.flpHotkeyDisplayPanel.Name = "flpHotkeyDisplayPanel";
-            this.flpHotkeyDisplayPanel.Size = new System.Drawing.Size(436, 370);
-            this.flpHotkeyDisplayPanel.TabIndex = 3;
-            // 
-            // cbUseCustomScreenshotPath
-            // 
-            this.cbUseCustomScreenshotPath.AutoSize = true;
-            this.cbUseCustomScreenshotPath.Location = new System.Drawing.Point(8, 6);
-            this.cbUseCustomScreenshotPath.Name = "cbUseCustomScreenshotPath";
-            this.cbUseCustomScreenshotPath.Size = new System.Drawing.Size(180, 17);
-            this.cbUseCustomScreenshotPath.TabIndex = 0;
-            this.cbUseCustomScreenshotPath.Text = "Use Custom Screenshots Folder:";
-            this.cbUseCustomScreenshotPath.UseVisualStyleBackColor = true;
-            this.cbUseCustomScreenshotPath.CheckedChanged += new System.EventHandler(this.UseCustomScreenshotFolder_CheckChanged);
-            // 
-            // tbCustomScreenshotPath
-            // 
-            this.tbCustomScreenshotPath.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.tbCustomScreenshotPath.Location = new System.Drawing.Point(8, 29);
-            this.tbCustomScreenshotPath.Name = "tbCustomScreenshotPath";
-            this.tbCustomScreenshotPath.Size = new System.Drawing.Size(405, 20);
-            this.tbCustomScreenshotPath.TabIndex = 1;
-            // 
             // btnBrowseFolders
             // 
             this.btnBrowseFolders.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
@@ -766,24 +752,25 @@
             this.btnBrowseFolders.UseVisualStyleBackColor = true;
             this.btnBrowseFolders.Click += new System.EventHandler(this.BrowseFolders_Click);
             // 
-            // label14
+            // tbCustomScreenshotPath
             // 
-            this.label14.AutoSize = true;
-            this.label14.Location = new System.Drawing.Point(8, 193);
-            this.label14.Name = "label14";
-            this.label14.Size = new System.Drawing.Size(111, 13);
-            this.label14.TabIndex = 10;
-            this.label14.Text = "Default Image Format:";
+            this.tbCustomScreenshotPath.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.tbCustomScreenshotPath.Location = new System.Drawing.Point(8, 29);
+            this.tbCustomScreenshotPath.Name = "tbCustomScreenshotPath";
+            this.tbCustomScreenshotPath.Size = new System.Drawing.Size(405, 20);
+            this.tbCustomScreenshotPath.TabIndex = 1;
             // 
-            // cbDefaultImageFormat
+            // cbUseCustomScreenshotPath
             // 
-            this.cbDefaultImageFormat.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            this.cbDefaultImageFormat.FormattingEnabled = true;
-            this.cbDefaultImageFormat.Location = new System.Drawing.Point(11, 209);
-            this.cbDefaultImageFormat.Name = "cbDefaultImageFormat";
-            this.cbDefaultImageFormat.Size = new System.Drawing.Size(108, 21);
-            this.cbDefaultImageFormat.TabIndex = 11;
-            this.cbDefaultImageFormat.SelectedIndexChanged += new System.EventHandler(this.DefaultImageFormat_SelectedIndexChanged);
+            this.cbUseCustomScreenshotPath.AutoSize = true;
+            this.cbUseCustomScreenshotPath.Location = new System.Drawing.Point(8, 6);
+            this.cbUseCustomScreenshotPath.Name = "cbUseCustomScreenshotPath";
+            this.cbUseCustomScreenshotPath.Size = new System.Drawing.Size(180, 17);
+            this.cbUseCustomScreenshotPath.TabIndex = 0;
+            this.cbUseCustomScreenshotPath.Text = "Use Custom Screenshots Folder:";
+            this.cbUseCustomScreenshotPath.UseVisualStyleBackColor = true;
+            this.cbUseCustomScreenshotPath.CheckedChanged += new System.EventHandler(this.UseCustomScreenshotFolder_CheckChanged);
             // 
             // SettingsForm
             // 
@@ -842,7 +829,6 @@
         private System.Windows.Forms.ComboBox cbRightClickAction;
         private System.Windows.Forms.Label label5;
         private System.Windows.Forms.Label label4;
-        private System.Windows.Forms.CheckBox cbSolidScreenWideCrosshair;
         private System.Windows.Forms.CheckBox cbShowInfoText;
         private System.Windows.Forms.CheckBox cbMarchingAnts;
         private System.Windows.Forms.CheckBox cbDimBackground;

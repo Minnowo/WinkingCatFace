@@ -130,12 +130,6 @@
     <Compile Include="Forms\ColorPickerForm.Designer.cs">
       <DependentUpon>ColorPickerForm.cs</DependentUpon>
     </Compile>
-    <Compile Include="Forms\GeneralSettingsForm.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="Forms\GeneralSettingsForm.Designer.cs">
-      <DependentUpon>GeneralSettingsForm.cs</DependentUpon>
-    </Compile>
     <Compile Include="Forms\HashCheckForm.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -150,12 +144,6 @@
     </Compile>
     <Compile Include="Forms\HotkeySettingsForm.Designer.cs">
       <DependentUpon>HotkeySettingsForm.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Forms\PathSettingsForm.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="Forms\PathSettingsForm.Designer.cs">
-      <DependentUpon>PathSettingsForm.cs</DependentUpon>
     </Compile>
     <Compile Include="Forms\QrCodeForm.cs">
       <SubType>Form</SubType>
@@ -197,12 +185,6 @@
       <DependentUpon>UploadSettingsForm.cs</DependentUpon>
     </Compile>
     <Compile Include="Events\TaskExecutedEvent.cs" />
-    <Compile Include="Forms\RegionCaptureSettingsForm.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="Forms\RegionCaptureSettingsForm.Designer.cs">
-      <DependentUpon>RegionCaptureSettingsForm.cs</DependentUpon>
-    </Compile>
     <Compile Include="Forms\StylesForm.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -234,9 +216,6 @@
     <EmbeddedResource Include="Forms\ColorPickerForm.resx">
       <DependentUpon>ColorPickerForm.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Forms\GeneralSettingsForm.resx">
-      <DependentUpon>GeneralSettingsForm.cs</DependentUpon>
-    </EmbeddedResource>
     <EmbeddedResource Include="Forms\HashCheckForm.resx">
       <DependentUpon>HashCheckForm.cs</DependentUpon>
     </EmbeddedResource>
@@ -249,17 +228,11 @@
     <EmbeddedResource Include="Forms\MainWindowStylesForm.resx">
       <DependentUpon>MainWindowStylesForm.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Forms\PathSettingsForm.resx">
-      <DependentUpon>PathSettingsForm.cs</DependentUpon>
-    </EmbeddedResource>
     <EmbeddedResource Include="Forms\QrCodeForm.resx">
       <DependentUpon>QrCodeForm.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\RegexForm.resx">
       <DependentUpon>RegexForm.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Forms\RegionCaptureSettingsForm.resx">
-      <DependentUpon>RegionCaptureSettingsForm.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\RegionCaptureStylesForm.resx">
       <DependentUpon>RegionCaptureStylesForm.cs</DependentUpon>

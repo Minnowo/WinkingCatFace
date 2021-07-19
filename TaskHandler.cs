@@ -34,7 +34,7 @@ namespace WinkingCat
             
             using (Image img = ScreenShotManager.CaptureRectangle(window.Rectangle))
             {
-                if (RegionCaptureOptions.autoCopyImage)
+                if (RegionCaptureOptions.AutoCopyImage)
                 {
                     ClipboardHelper.CopyImageDefault(img);
                 }
@@ -83,8 +83,8 @@ namespace WinkingCat
                     
                     if (image == null)
                         return false;
-                        
-                    ClipManager.CreateClipAtCursor(image, false);                    
+
+                    ClipManager.Clips[ClipManager.CreateClipAtCursor(image, false)].Options.FilePath = path;
                     return true;
 
                 case Tasks.NewClipFromClipboard:
@@ -110,7 +110,7 @@ namespace WinkingCat
                         if (img == null || string.IsNullOrEmpty(ImageHandler.Save(PathHelper.GetNewImageFileName(), img)))
                             return false;
 
-                        if (RegionCaptureOptions.autoCopyImage)
+                        if (RegionCaptureOptions.AutoCopyImage)
                             ClipboardHelper.CopyImageDefault(img);
                     }
                     return true;
@@ -122,7 +122,7 @@ namespace WinkingCat
                         if (img == null || string.IsNullOrEmpty(ImageHandler.Save(PathHelper.GetNewImageFileName(), img)))
                             return false;
 
-                        if (RegionCaptureOptions.autoCopyImage)
+                        if (RegionCaptureOptions.AutoCopyImage)
                             ClipboardHelper.CopyImageDefault(img);
                     }
 
@@ -135,7 +135,7 @@ namespace WinkingCat
                         if (img == null || string.IsNullOrEmpty(ImageHandler.Save(PathHelper.GetNewImageFileName(), img)))
                             return false;
 
-                        if (RegionCaptureOptions.autoCopyImage)
+                        if (RegionCaptureOptions.AutoCopyImage)
                             ClipboardHelper.CopyImageDefault(img);
                     }
 
@@ -148,7 +148,7 @@ namespace WinkingCat
                         if (img == null || string.IsNullOrEmpty(ImageHandler.Save(PathHelper.GetNewImageFileName(), img)))
                             return false;
 
-                        if (RegionCaptureOptions.autoCopyImage)
+                        if (RegionCaptureOptions.AutoCopyImage)
                             ClipboardHelper.CopyImageDefault(img);
                     }
 

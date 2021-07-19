@@ -13,39 +13,6 @@ namespace WinkingCat.HelperLibs
 {
     public static class ImageHelper
     {
-/*        public static string newImageName
-        {
-            get
-            {
-                string fileFormat = InternalSettings.Default_Image_Format.ToString().ToLower();
-
-                for (int x = 0; x < 10; x++)
-                {
-                    string fileName = DateTime.Now.Ticks.GetHashCode().ToString("x").ToUpper() + "." + fileFormat;
-
-                    if (!File.Exists(fileName))
-                        return fileName;
-                }
-
-                while (true)
-                {
-                    string fileName = string.Format(@"{0}", Guid.NewGuid()) + "." + fileFormat;
-
-                    if (!File.Exists(fileName))
-                        return fileName;
-                }
-            }
-        }
-        public static string newImagePath
-        {
-            get
-            {
-                imageCounter++;
-                return PathHelper.GetScreenshotFolder() + ImageHelper.imageCounter.ToString() + "." + ImageHelper.newImageName;
-            }
-        }*/
-
-
         /// <summary>
 		/// A value from 0-1 which is used to convert a color to grayscale.
 		/// <para>Default: 0.3</para>
@@ -83,7 +50,14 @@ namespace WinkingCat.HelperLibs
         private static double gsbm = 0.11; // 0.071
 
 
-        public static bool SaveImage(Image img, string filePath)
+        /// <summary>
+        /// Saves an image.
+        /// </summary>
+        /// <param name="img"> The image to save. </param>
+        /// <param name="filePath"> The path to save the image. </param>
+        /// <param name="collectGarbage"> A bool indicating if GC.Collect should be called after saving. </param>
+        /// <returns> true if the image was saved successfully, else false </returns>
+        public static bool SaveImage(Image img, string filePath, bool collectGarbage = true)
         {
             if (img == null || string.IsNullOrEmpty(filePath))
                 return false;
@@ -110,25 +84,118 @@ namespace WinkingCat.HelperLibs
                     case ImgFormat.tif:
                         img.Save(filePath, ImageFormat.Tiff);
                         return true;
-                    //case ImgFormat.webp:
-                    //    return SaveWebp(img, filePath, InternalSettings.WebpQuality_Default);
+                    case ImgFormat.webp:
+                        return SaveWebp(img, filePath, InternalSettings.WebpQuality_Default);
                 }
             }
             catch (Exception e)
             {
                 Logger.WriteException(e);
-                //e.ShowError();
+                e.ShowError();
+                return false;
             }
-
-            return false;
+            finally
+            {
+                if (collectGarbage)
+                {
+                    GC.Collect();
+                }
+            }
         }
 
-        public static string SaveImageFileDialog(Image img, string filePath = "")
+        /// <summary>
+        /// Saves an image.
+        /// </summary>
+        /// <param name="img"> The image to save. </param>
+        /// <param name="filePath"> The path to save the image. </param>
+        /// <param name="collectGarbage"> A bool indicating if GC.Collect should be called after saving. </param>
+        /// <returns> true if the image was saved successfully, else false </returns>
+        public static bool SaveImage(Bitmap img, string filePath, bool collectGarbage = true)
+        {
+            return SaveImage((Image)img, filePath, collectGarbage);
+        }
+
+        /// <summary>
+        /// Save a bitmap as a webp file. (Requires the libwebp_x64.dll or libwebp_x86.dll)
+        /// </summary>
+        /// <param name="img"> The bitmap to encode. </param>
+        /// <param name="filePath"> The path to save the bitmap. </param>
+        /// <param name="q"> The webp quality args. </param>
+        /// <param name="collectGarbage"> A bool indicating if GC.Collect should be called after saving. </param>
+        /// <returns> true if the bitmap was saved successfully, else false </returns>
+        public static bool SaveWebp(Bitmap img, string filePath, WebPQuality q, bool collectGarbage = true)
+        {
+            if (!InternalSettings.WebP_Plugin_Exists || string.IsNullOrEmpty(filePath) || img == null)
+                return false;
+
+            if (q == WebPQuality.empty)
+                q = InternalSettings.WebpQuality_Default;
+
+            try
+            {
+                using (WebP webp = new WebP())
+                {
+                    byte[] rawWebP;
+
+                    switch (q.Format)
+                    {
+                        default:
+                        case WebpEncodingFormat.EncodeLossless:
+                            rawWebP = webp.EncodeLossless(img, q.Speed);
+                            break;
+                        case WebpEncodingFormat.EncodeNearLossless:
+                            rawWebP = webp.EncodeNearLossless(img, q.Quality, q.Speed);
+                            break;
+                        case WebpEncodingFormat.EncodeLossy:
+                            rawWebP = webp.EncodeLossy(img, q.Quality, q.Speed);
+                            break;
+                    }
+
+                    File.WriteAllBytes(filePath, rawWebP);
+                }
+                return true;
+            }
+            catch (Exception e)
+            {
+                Logger.WriteException(e);
+                e.ShowError();
+                return false;
+            }
+            finally
+            {
+                if (collectGarbage)
+                {
+                    GC.Collect();
+                }
+            }
+        }
+
+        /// <summary>
+        /// Save an image as a webp file. (Requires the libwebp_x64.dll or libwebp_x86.dll)
+        /// </summary>
+        /// <param name="img"> The image to encode. </param>
+        /// <param name="filePath"> The path to save the image. </param>
+        /// <param name="q"> The webp quality args. </param>
+        /// <param name="collectGarbage"> A bool indicating if GC.Collect should be called after saving. </param>
+        /// <returns> true if the image was saved successfully, else false </returns>
+        public static bool SaveWebp(Image img, string filePath, WebPQuality q, bool collectGarbage = true)
+        {
+            return SaveWebp((Bitmap)img, filePath, q, collectGarbage);
+        }
+
+        /// <summary>
+        /// Opens a save file dialog asking where to save an image.
+        /// </summary>
+        /// <param name="img"> The image to save. </param>
+        /// <param name="filePath"> The path to open. </param>
+        /// <param name="collectGarbage"> A bool indicating if GC.Collect should be called after saving. </param>
+        /// <returns> The filename of the saved image, null if failed to save or canceled. </returns>
+        public static string SaveImageFileDialog(Image img, string filePath = "", bool collectGarbage = true)
         {
             using (SaveFileDialog sfd = new SaveFileDialog())
             {
                 sfd.Filter = InternalSettings.Image_Dialog_Default;
-                sfd.DefaultExt = InternalSettings.Default_Image_Format.ToString();
+                sfd.DefaultExt = "png";
 
                 if (InternalSettings.WebP_Plugin_Exists)
                     sfd.Filter += "|" + InternalSettings.WebP_File_Dialog;
@@ -172,7 +239,7 @@ namespace WinkingCat.HelperLibs
 
                 if (sfd.ShowDialog() == DialogResult.OK && !string.IsNullOrEmpty(sfd.FileName))
                 {
-                    SaveImage(img, sfd.FileName);
+                    SaveImage(img, sfd.FileName, collectGarbage);
                     return sfd.FileName;
                 }
             }
@@ -216,6 +283,11 @@ namespace WinkingCat.HelperLibs
             return null;
         }
 
+        /// <summary>
+        /// Returns the image format based off the extension of the filepath.
+        /// </summary>
+        /// <param name="filePath">The filepath to check the extension of.</param>
+        /// <returns></returns>
         public static ImgFormat GetImageFormat(string filePath)
         {
             string ext = PathHelper.GetFilenameExtension(filePath);
@@ -243,8 +315,39 @@ namespace WinkingCat.HelperLibs
                     return ImgFormat.webp;
             }
             return ImgFormat.nil;
-        } 
+        }
 
+        /// <summary>
+        /// Load a wemp image. (Requires the libwebp_x64.dll or libwebp_x86.dll)
+        /// </summary>
+        /// <param name="path"> The path to the image. </param>
+        /// <returns> A bitmap object if the image is loaded, otherwise null. </returns>
+        public static Bitmap LoadWebP(string path, bool supressError = false)
+        {
+            if (!InternalSettings.WebP_Plugin_Exists || string.IsNullOrEmpty(path) || !File.Exists(path))
+                return null;
+
+            try
+            {
+                using (WebP webp = new WebP())
+                    return webp.Load(path);
+            }
+            catch (Exception e)
+            {
+                if (supressError)
+                    return null;
+
+                Logger.WriteException(e);
+                e.ShowError();
+            }
+            return null;
+        }
+
+        /// <summary>
+        /// Loads an image.
+        /// </summary>
+        /// <param name="path"> The path to the image. </param>
+        /// <returns> A bitmap object if the image is loaded, otherwise null. </returns>
         public static Bitmap LoadImage(string path)
         {
             if (string.IsNullOrEmpty(path) || !File.Exists(path))
@@ -252,19 +355,40 @@ namespace WinkingCat.HelperLibs
 
             try
             {
+                if(InternalSettings.WebP_Plugin_Exists)
+                    if(GetImageFormat(path) == ImgFormat.webp)
+                    {
+                        return LoadWebP(path);
+                    }
                 return (Bitmap)Image.FromStream(new MemoryStream(File.ReadAllBytes(path)));
             }
             catch (Exception e)
             {
+                // in case the file doesn't have proper extension there is no harm in trying to load as webp
+                Bitmap tryLoadWebP;
+                if ((tryLoadWebP = LoadWebP(path, true)) != null)
+                    return tryLoadWebP;
+
                 Logger.WriteException(e);
+                e.ShowError();
             }
             return null;
         }
 
+
+        /// <summary>
+        /// Gets the size of an image from a file.
+        /// </summary>
+        /// <param name="imagePath"> Path to the image. </param>
+        /// <returns> The Size of the image, or Size.Empty if failed to load / not valid image. </returns>
         public static Size GetImageDimensionsFile(string path)
         {
             if (string.IsNullOrEmpty(path) || !File.Exists(path))
                 return Size.Empty;
+
+            Size s = ImageDimensionReader.GetDimensions(path);
+            if (s != Size.Empty)
+                return s;
 
             try
             {
@@ -274,12 +398,13 @@ namespace WinkingCat.HelperLibs
                     return new Size(image.Width, image.Height);
                 }
             }
-            catch (Exception e)
+            catch(Exception e)
             {
                 Logger.WriteException(e);
                 return Size.Empty;
             }
         }
+
 
         /// <summary>
         /// Resize the given image.
@@ -643,6 +768,327 @@ namespace WinkingCat.HelperLibs
                 //pDst++;
             }
             srcImg.UnlockBits(dstBD);
+        }
+
+
+        /// <summary>
+        /// A class used for reading the width and height of an image file using their headers.
+        /// </summary>
+        // Mod of https://stackoverflow.com/a/60667939
+        public static class ImageDimensionReader
+        {
+            const byte MAX_MAGIC_BYTE_LENGTH = 8;
+
+            readonly static Dictionary<byte[], Func<BinaryReader, Size>> imageFormatDecoders = new Dictionary<byte[], Func<BinaryReader, Size>>()
+        {
+            { new byte[] { 0x42, 0x4D }, DecodeBitmap },
+            { new byte[] { 0x47, 0x49, 0x46, 0x38, 0x37, 0x61 }, DecodeGif },
+            { new byte[] { 0x47, 0x49, 0x46, 0x38, 0x39, 0x61 }, DecodeGif },
+            { new byte[] { 0x89, 0x50, 0x4E, 0x47, 0x0D, 0x0A, 0x1A, 0x0A }, DecodePng },
+            { new byte[] { 0xff, 0xd8 }, DecodeJfif },
+            { new byte[] { 0x52, 0x49, 0x46, 0x46 }, DecodeWebP },
+            { new byte[] { 0x49, 0x49, 0x2A },  DecodeTiffLE }, // little endian
+            { new byte[] { 0x4D, 0x4D, 0x00, 0x2A },  DecodeTiffBE }  // big endian
+        };
+
+            /// <summary>        
+            /// Gets the dimensions of an image.        
+            /// </summary>        
+            /// <param name="path">The path of the image to get the dimensions of.</param>        
+            /// <returns>The dimensions of the specified image.</returns>        
+            /// <exception cref="ArgumentException">The image was of an unrecognised format.</exception>            
+            public static Size GetDimensions(BinaryReader binaryReader)
+            {
+                byte[] magicBytes = new byte[MAX_MAGIC_BYTE_LENGTH];
+
+                for (int i = 0; i < MAX_MAGIC_BYTE_LENGTH; i += 1)
+                {
+                    magicBytes[i] = binaryReader.ReadByte();
+
+                    foreach (KeyValuePair<byte[], Func<BinaryReader, Size>> kvPair in imageFormatDecoders)
+                    {
+                        if (StartsWith(magicBytes, kvPair.Key))
+                        {
+                            return kvPair.Value(binaryReader);
+                        }
+                    }
+                }
+
+                return Size.Empty;
+            }
+
+            /// <summary>
+            /// Gets the dimensions of an image.
+            /// </summary>
+            /// <param name="path">The path of the image to get the dimensions of.</param>
+            /// <returns>The dimensions of the specified image.</returns>
+            /// <exception cref="ArgumentException">The image was of an unrecognized format.</exception>
+            public static Size GetDimensions(string path)
+            {
+                using (FileStream fileStream = new FileStream(path, FileMode.Open, FileAccess.Read, FileShare.Read))
+                using (BinaryReader binaryReader = new BinaryReader(fileStream))
+                {
+                    try
+                    {
+                        return GetDimensions(binaryReader);
+                    }
+                    catch
+                    {
+                        return Size.Empty;
+                    }
+                }
+            }
+
+
+            private static Size DecodeTiffLE(BinaryReader binaryReader)
+            {
+                if (binaryReader.ReadByte() != 0)
+                    return Size.Empty;
+
+                int idfStart = ReadInt32LE(binaryReader);
+
+                binaryReader.BaseStream.Seek(idfStart, SeekOrigin.Begin);
+
+                int numberOfIDF = ReadInt16LE(binaryReader);
+
+                int width = -1;
+                int height = -1;
+                for (int i = 0; i < numberOfIDF; i++)
+                {
+                    short field = ReadInt16LE(binaryReader);
+
+                    switch (field)
+                    {
+                        // https://www.awaresystems.be/imaging/tiff/tifftags/baseline.html
+                        default:
+                            binaryReader.ReadBytes(10);
+                            break;
+                        case 256: // image width
+                            binaryReader.ReadBytes(6);
+                            width = ReadInt32LE(binaryReader);
+                            break;
+                        case 257: // image length
+                            binaryReader.ReadBytes(6);
+                            height = ReadInt32LE(binaryReader);
+                            break;
+                    }
+                    if (width != -1 && height != -1)
+                        return new Size(width, height);
+                }
+                return Size.Empty;
+            }
+
+            private static Size DecodeTiffBE(BinaryReader binaryReader)
+            {
+                int idfStart = ReadInt32BE(binaryReader);
+
+                binaryReader.BaseStream.Seek(idfStart, SeekOrigin.Begin);
+
+                int numberOfIDF = ReadInt16BE(binaryReader);
+
+                int width = -1;
+                int height = -1;
+                for (int i = 0; i < numberOfIDF; i++)
+                {
+                    short field = ReadInt16BE(binaryReader);
+
+                    switch (field)
+                    {
+                        // https://www.awaresystems.be/imaging/tiff/tifftags/baseline.html
+                        default:
+                            binaryReader.ReadBytes(10);
+                            break;
+                        case 256: // image width
+                            binaryReader.ReadBytes(6);
+                            width = ReadInt32BE(binaryReader);
+                            break;
+                        case 257: // image length
+                            binaryReader.ReadBytes(6);
+                            height = ReadInt32BE(binaryReader);
+                            break;
+                    }
+                    if (width != -1 && height != -1)
+                        return new Size(width, height);
+                }
+                return Size.Empty;
+            }
+
+            private static Size DecodeBitmap(BinaryReader binaryReader)
+            {
+                binaryReader.ReadBytes(16);
+                int width = binaryReader.ReadInt32();
+                int height = binaryReader.ReadInt32();
+                return new Size(width, height);
+            }
+
+            private static Size DecodeGif(BinaryReader binaryReader)
+            {
+                int width = binaryReader.ReadInt16();
+                int height = binaryReader.ReadInt16();
+                return new Size(width, height);
+            }
+
+            private static Size DecodePng(BinaryReader binaryReader)
+            {
+                binaryReader.ReadBytes(8);
+                int width = ReadInt32BE(binaryReader);
+                int height = ReadInt32BE(binaryReader);
+                return new Size(width, height);
+            }
+
+            private static Size DecodeJfif(BinaryReader binaryReader)
+            {
+                while (binaryReader.ReadByte() == 0xff)
+                {
+                    byte marker = binaryReader.ReadByte();
+                    short chunkLength = ReadInt16BE(binaryReader);
+                    if (marker == 0xc0 || marker == 0xc2) // c2: progressive
+                    {
+                        binaryReader.ReadByte();
+                        int height = ReadInt16BE(binaryReader);
+                        int width = ReadInt16BE(binaryReader);
+                        return new Size(width, height);
+                    }
+
+                    if (chunkLength < 0)
+                    {
+                        ushort uchunkLength = (ushort)chunkLength;
+                        binaryReader.ReadBytes(uchunkLength - 2);
+                    }
+                    else
+                    {
+                        binaryReader.ReadBytes(chunkLength - 2);
+                    }
+                }
+
+                return Size.Empty;
+            }
+
+            private static Size DecodeWebP(BinaryReader binaryReader)
+            {
+                // 'RIFF' already read   
+
+                binaryReader.ReadBytes(4);
+
+                if (ReadInt32LE(binaryReader) != 1346520407)// 1346520407 : 'WEBP'
+                    return Size.Empty;
+
+                switch (ReadInt32LE(binaryReader))
+                {
+                    case 540561494: // 'VP8 ' : lossy
+                                    // skip stuff we don't need
+                        binaryReader.ReadBytes(7);
+
+                        if (ReadInt24LE(binaryReader) != 2752925) // invalid webp file
+                            return Size.Empty;
+
+                        return new Size(ReadInt16LE(binaryReader), ReadInt16LE(binaryReader));
+
+                    case 1278758998:// 'VP8L' : lossless
+                                    // skip stuff we don't need
+                        binaryReader.ReadBytes(4);
+
+                        if (binaryReader.ReadByte() != 47)// 0x2f : 47 1 byte signature
+                            return Size.Empty;
+
+                        byte[] b = binaryReader.ReadBytes(4);
+
+                        return new Size(
+                            1 + (((b[1] & 0x3F) << 8) | b[0]),
+                            1 + ((b[3] << 10) | (b[2] << 2) | ((b[1] & 0xC0) >> 6)));
+                    // if something breaks put in the '& 0xF' but & oxf should do nothing in theory
+                    // because inclusive & with 1111 will leave the binary untouched
+                    //  1 + (((wh[3] & 0xF) << 10) | (wh[2] << 2) | ((wh[1] & 0xC0) >> 6))
+
+                    case 1480085590:// 'VP8X' : extended
+                                    // skip stuff we don't need
+                        binaryReader.ReadBytes(8);
+                        return new Size(1 + ReadInt24LE(binaryReader), 1 + ReadInt24LE(binaryReader));
+                }
+
+                return Size.Empty;
+            }
+
+            private static bool StartsWith(byte[] thisBytes, byte[] thatBytes)
+            {
+                for (int i = 0; i < thatBytes.Length; i += 1)
+                    if (thisBytes[i] != thatBytes[i])
+                        return false;
+
+                return true;
+            }
+
+            #region Endians
+
+            /// <summary>
+            /// Reads a 16 bit int from the stream in the Little Endian format.
+            /// </summary>
+            /// <param name="binaryReader">The binary reader to read</param>
+            /// <returns></returns>
+            private static short ReadInt16LE(BinaryReader binaryReader)
+            {
+                byte[] bytes = binaryReader.ReadBytes(2);
+                return (short)((bytes[0]) | (bytes[1] << 8));
+            }
+
+            /// <summary>
+            /// Reads a 24 bit int from the stream in the Little Endian format.
+            /// </summary>
+            /// <param name="binaryReader">The binary reader to read</param>
+            /// <returns></returns>
+            private static int ReadInt24LE(BinaryReader binaryReader)
+            {
+                byte[] bytes = binaryReader.ReadBytes(3);
+                return ((bytes[0]) | (bytes[1] << 8) | (bytes[2] << 16));
+            }
+
+            /// <summary>
+            /// Reads a 32 bit int from the stream in the Little Endian format.
+            /// </summary>
+            /// <param name="binaryReader">The binary reader to read</param>
+            /// <returns></returns>
+            private static int ReadInt32LE(BinaryReader binaryReader)
+            {
+                byte[] bytes = binaryReader.ReadBytes(4);
+                return ((bytes[0]) | (bytes[1] << 8) | (bytes[2] << 16) | (bytes[3] << 24));
+            }
+
+
+
+            /// <summary>
+            /// Reads a 32 bit int from the stream in the Big Endian format.
+            /// </summary>
+            /// <param name="binaryReader">The binary reader to read</param>
+            /// <returns></returns>
+            private static int ReadInt32BE(BinaryReader binaryReader)
+            {
+                byte[] bytes = binaryReader.ReadBytes(4);
+                return ((bytes[3]) | (bytes[2] << 8) | (bytes[1] << 16) | (bytes[0] << 24));
+            }
+
+            /// <summary>
+            /// Reads a 24 bit int from the stream in the Big Endian format.
+            /// </summary>
+            /// <param name="binaryReader">The binary reader to read</param>
+            /// <returns></returns>
+            private static int ReadInt24BE(BinaryReader binaryReader)
+            {
+                byte[] bytes = binaryReader.ReadBytes(3);
+                return ((bytes[2]) | (bytes[1] << 8) | (bytes[0] << 16));
+            }
+
+            /// <summary>
+            /// Reads a 16 bit int from the stream in the Big Endian format.
+            /// </summary>
+            /// <param name="binaryReader">The binary reader to read</param>
+            /// <returns></returns>
+            private static short ReadInt16BE(BinaryReader binaryReader)
+            {
+                byte[] bytes = binaryReader.ReadBytes(2);
+                return (short)((bytes[1]) | (bytes[0] << 8));
+            }
+
+            #endregion
         }
     }
 }
