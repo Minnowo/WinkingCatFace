@@ -91,6 +91,9 @@ namespace WinkingCat
             cbUseCustomScreenshotPath.Checked = PathHelper.UseCustomScreenshotPath;
             tbCustomScreenshotPath.Text = PathHelper.screenshotCustomPath;
 
+            // hotkey settings
+            UpdateHotkeyControls();
+
             preventUpdate = false;
 
             this.HandleCreated += HandleCreated_Event;

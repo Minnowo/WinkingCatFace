@@ -342,8 +342,11 @@ namespace WinkingCat.HelperLibs
                 throw new ArgumentException("Bitmap contains no data.", "bmp");
             if (bmp.Width > WEBP_MAX_DIMENSION || bmp.Height > WEBP_MAX_DIMENSION)
                 throw new NotSupportedException("Bitmap's dimension is too large. Max is " + WEBP_MAX_DIMENSION + "x" + WEBP_MAX_DIMENSION + " pixels.");
+            PixelFormat pf = bmp.PixelFormat;
             if (bmp.PixelFormat != PixelFormat.Format24bppRgb && bmp.PixelFormat != PixelFormat.Format32bppArgb)
-                throw new NotSupportedException("Only support Format24bppRgb and Format32bppArgb pixelFormat.");
+                pf = PixelFormat.Format24bppRgb;
+            //if (bmp.PixelFormat != PixelFormat.Format24bppRgb && bmp.PixelFormat != PixelFormat.Format32bppArgb)
+                //throw new NotSupportedException("Only support Format24bppRgb and Format32bppArgb pixelFormat.");
 
             BitmapData bmpData = null;
             IntPtr unmanagedData = IntPtr.Zero;
@@ -352,7 +355,7 @@ namespace WinkingCat.HelperLibs
             try
             {
                 //Get bmp data
-                bmpData = bmp.LockBits(new Rectangle(0, 0, bmp.Width, bmp.Height), ImageLockMode.ReadOnly, bmp.PixelFormat);
+                bmpData = bmp.LockBits(new Rectangle(0, 0, bmp.Width, bmp.Height), ImageLockMode.ReadOnly, pf);
 
                 //Compress the bmp data
                 if (bmp.PixelFormat == PixelFormat.Format24bppRgb)
@@ -430,15 +433,19 @@ namespace WinkingCat.HelperLibs
                 throw new ArgumentException("Bitmap contains no data.", "bmp");
             if (bmp.Width > WEBP_MAX_DIMENSION || bmp.Height > WEBP_MAX_DIMENSION)
                 throw new NotSupportedException("Bitmap's dimension is too large. Max is " + WEBP_MAX_DIMENSION + "x" + WEBP_MAX_DIMENSION + " pixels.");
+
+            PixelFormat pf = bmp.PixelFormat;
             if (bmp.PixelFormat != PixelFormat.Format24bppRgb && bmp.PixelFormat != PixelFormat.Format32bppArgb)
-                throw new NotSupportedException("Only support Format24bppRgb and Format32bppArgb pixelFormat.");
+                pf = PixelFormat.Format24bppRgb;
+            //if (bmp.PixelFormat != PixelFormat.Format24bppRgb && bmp.PixelFormat != PixelFormat.Format32bppArgb)
+                //throw new NotSupportedException("Only support Format24bppRgb and Format32bppArgb pixelFormat.");
 
             BitmapData bmpData = null;
             IntPtr unmanagedData = IntPtr.Zero;
             try
             {
                 //Get bmp data
-                bmpData = bmp.LockBits(new Rectangle(0, 0, bmp.Width, bmp.Height), ImageLockMode.ReadOnly, bmp.PixelFormat);
+                bmpData = bmp.LockBits(new Rectangle(0, 0, bmp.Width, bmp.Height), ImageLockMode.ReadOnly, pf);
 
                 //Compress the bmp data
                 int size;
@@ -720,11 +727,14 @@ namespace WinkingCat.HelperLibs
                     throw new ArgumentException("Bitmap contains no data.", "bmp");
                 if (bmp.Width > WEBP_MAX_DIMENSION || bmp.Height > WEBP_MAX_DIMENSION)
                     throw new NotSupportedException("Bitmap's dimension is too large. Max is " + WEBP_MAX_DIMENSION + "x" + WEBP_MAX_DIMENSION + " pixels.");
+                PixelFormat pf = bmp.PixelFormat;
                 if (bmp.PixelFormat != PixelFormat.Format24bppRgb && bmp.PixelFormat != PixelFormat.Format32bppArgb)
-                    throw new NotSupportedException("Only support Format24bppRgb and Format32bppArgb pixelFormat.");
+                    pf = PixelFormat.Format24bppRgb;
+                //if (bmp.PixelFormat != PixelFormat.Format24bppRgb && bmp.PixelFormat != PixelFormat.Format32bppArgb)
+                    //throw new NotSupportedException("Only support Format24bppRgb and Format32bppArgb pixelFormat.");
 
                 // Setup the input data, allocating a the bitmap, width and height
-                bmpData = bmp.LockBits(new Rectangle(0, 0, bmp.Width, bmp.Height), ImageLockMode.ReadOnly, bmp.PixelFormat);
+                bmpData = bmp.LockBits(new Rectangle(0, 0, bmp.Width, bmp.Height), ImageLockMode.ReadOnly, pf);
                 if (UnsafeNativeMethods.WebPPictureInitInternal(ref wpic) != 1)
                     throw new Exception("Can´t init WebPPictureInit");
                 wpic.width = (int)bmp.Width;

@@ -1,4 +1,29 @@
-﻿using System;
+﻿#region License Information (GPL v3)
+
+/*
+    Nyan.Imaging - A library with a bunch of helpers and other stuff
+    Copyright (c) 2007-2020 ShareX Team
+
+    This program is free software; you can redistribute it and/or
+    modify it under the terms of the GNU General Public License
+    as published by the Free Software Foundation; either version 2
+    of the License, or (at your option) any later version.
+
+    This program is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
+
+    You should have received a copy of the GNU General Public License
+    along with this program; if not, write to the Free Software
+    Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
+
+    Optionally you can also view the license at <http://www.gnu.org/licenses/>.
+*/
+
+#endregion License Information (GPL v3)
+
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -10,14 +35,26 @@ namespace WinkingCat.HelperLibs
     public static class InternalSettings
     {
         public static string Folder_Select_Dialog_Title = "Select a folder";
-        public static string Image_Select_Dialog_Title = "Select a folder";
+        public static string Image_Select_Dialog_Title = "Select an image";
 
         public const string All_Files_File_Dialog = "All Files (*.*)|*.";
 
-        public static string Image_Dialog_Default = "PNG (*.png)|*.png|JPEG (*.jpg, *.jpeg, *.jpe, *.jfif)|*.jpg;*.jpeg;*.jpe;*.jfif|GIF (*.gif)|*.gif|BMP (*.bmp)|*.bmp|TIFF (*.tif, *.tiff)|*.tif;*.tiff";
-
+        public static string Png_File_Dialog =  "PNG (*.png)|*.png";
+        public static string Bmp_File_Dialog =  "BMP (*.bmp)|*.bmp";
+        public static string Gif_File_Dialog =  "GIF (*.gif)|*.gif";
         public static string WebP_File_Dialog = "WebP (*.webp)|*.webp";
+        public static string Tiff_File_Dialog = "TIFF (*.tif, *.tiff)|*.tif;*.tiff";
+        public static string Jpeg_File_Dialog = "JPEG (*.jpg, *.jpeg, *.jpe, *.jfif)|*.jpg;*.jpeg;*.jpe;*.jfif";
 
+        public static string Image_Dialog_Filter = string.Join("|",
+            new string[]
+            {
+                Png_File_Dialog,
+                Jpeg_File_Dialog,
+                Bmp_File_Dialog,
+                Tiff_File_Dialog,
+                Gif_File_Dialog
+            });
 
         public static List<string> Readable_Image_Formats_Dialog_Options = new List<string>
         { "*.png", "*.jpg", "*.jpeg", "*.jpe", "*.jfif", "*.gif", "*.bmp", "*.tif", "*.tiff" };
@@ -82,6 +119,7 @@ namespace WinkingCat.HelperLibs
                     WebP_Plugin_Exists = true;
                     Readable_Image_Formats_Dialog_Options.Add("*.webp");
                     Readable_Image_Formats.Add("webp");
+                    Image_Dialog_Filter += "|" + WebP_File_Dialog;
                     return true;
                 }
             }
@@ -92,6 +130,7 @@ namespace WinkingCat.HelperLibs
                     WebP_Plugin_Exists = true;
                     Readable_Image_Formats_Dialog_Options.Add("*.webp");
                     Readable_Image_Formats.Add("webp");
+                    Image_Dialog_Filter += "|" + WebP_File_Dialog;
                     return true;
                 }
             }

@@ -6,3 +6,11 @@ X:\Languages\C#\WinkingCatFace\RegistryHelper\obj\Debug\WinkingCat.RegistryHelpe
 X:\Languages\C#\WinkingCatFace\RegistryHelper\obj\Debug\WinkingCat.RegistryHelper.csproj.CopyComplete
 X:\Languages\C#\WinkingCatFace\RegistryHelper\obj\Debug\RegistryHelper.exe
 X:\Languages\C#\WinkingCatFace\RegistryHelper\obj\Debug\RegistryHelper.pdb
+D:\Programming\C#\WinkingCatFace\bin\Debug\RegistryHelper.exe.config
+D:\Programming\C#\WinkingCatFace\bin\Debug\RegistryHelper.exe
+D:\Programming\C#\WinkingCatFace\bin\Debug\RegistryHelper.pdb
+D:\Programming\C#\WinkingCatFace\RegistryHelper\obj\Debug\WinkingCat.RegistryHelper.csproj.AssemblyReference.cache
+D:\Programming\C#\WinkingCatFace\RegistryHelper\obj\Debug\WinkingCat.RegistryHelper.csproj.CoreCompileInputs.cache
+D:\Programming\C#\WinkingCatFace\RegistryHelper\obj\Debug\WinkingCat.RegistryHelper.csproj.CopyComplete
+D:\Programming\C#\WinkingCatFace\RegistryHelper\obj\Debug\RegistryHelper.exe
+D:\Programming\C#\WinkingCatFace\RegistryHelper\obj\Debug\RegistryHelper.pdb

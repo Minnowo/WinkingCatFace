@@ -276,7 +276,7 @@ namespace WinkingCat.ClipHelper
         /// </summary>
         public void CopyScaledImage()
         {
-            using (Bitmap img = ImageHelper.ResizeImage(this.image, new Size(Width - Options.BorderThickness, Height - Options.BorderThickness)))
+            using (Bitmap img = ImageHelper.GetResizedBitmap(this.image, new Size(Width - Options.BorderThickness, Height - Options.BorderThickness)))
             {
                 ClipboardHelper.CopyImageDefault(img);
             }

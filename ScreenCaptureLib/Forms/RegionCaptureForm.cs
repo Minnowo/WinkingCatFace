@@ -89,13 +89,14 @@ namespace WinkingCat.ScreenCaptureLib
                 Cursor = new Cursor(m);
             }
 
+            image = ScreenShotManager.CaptureRectangle(region);
             // set the image wanted to play around with PixelFormat of the image
-            image = new Bitmap(region.Width, region.Height, PixelFormat.Format24bppRgb);
+            /*image = new Bitmap(region.Width, region.Height, PixelFormat.Format24bppRgb);
             using (Graphics g = Graphics.FromImage(image))
             using (Bitmap tmp = ScreenShotManager.CaptureRectangle(region))
             {
                 g.DrawImage(tmp, new Point(0, 0));
-            }
+            }*/
 
             // create the texture brush that will draw the background image to the canvas
             // if the user wants an overlay it will be added to the texture brush
@@ -145,7 +146,7 @@ namespace WinkingCat.ScreenCaptureLib
                         PointToScreen(leftClickStart),
                         PointToScreen(leftClickStop),
                         ScreenHelper.CreateValidCropArea(leftClickStart, leftClickStop),
-                        ScreenShotManager.CropImage(leftClickStart, leftClickStop, image));
+                        ImageHelper.GetCroppedBitmap(leftClickStart, leftClickStop, image, PixelFormat.Format24bppRgb));
 
                 case RegionResult.LastRegion:
                     return new LastRegionCaptureInfo(
@@ -153,7 +154,7 @@ namespace WinkingCat.ScreenCaptureLib
                         ImageHandler.LastInfo.StartLeftClick,
                         ImageHandler.LastInfo.StopLeftClick,
                         ImageHandler.LastInfo.Region,
-                        ScreenShotManager.CropImage(ImageHandler.LastInfo.Region, image));
+                        ImageHelper.GetCroppedBitmap(ImageHandler.LastInfo.Region, image, PixelFormat.Format24bppRgb));
 
                 case RegionResult.Fullscreen:
                     return new LastRegionCaptureInfo(RegionResult.Fullscreen, true, image);
@@ -161,7 +162,7 @@ namespace WinkingCat.ScreenCaptureLib
                 case RegionResult.ActiveMonitor:
                     return new LastRegionCaptureInfo(
                         Screen.FromPoint(ScreenHelper.GetCursorPosition()),
-                        ScreenShotManager.CropImage(ScreenHelper.GetActiveScreenBounds0Based(), image));
+                        ImageHelper.GetCroppedBitmap(ScreenHelper.GetActiveScreenBounds0Based(), image, PixelFormat.Format24bppRgb));
 
                 case RegionResult.Color:
                     return new LastRegionCaptureInfo(

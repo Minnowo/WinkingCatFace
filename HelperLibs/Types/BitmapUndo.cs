@@ -84,27 +84,6 @@ namespace WinkingCat.HelperLibs
             CurrentBitmap = bmp;
         }
 
-        public void PrintUndos()
-        {
-            try
-            {
-                Console.Clear();
-                Console.WriteLine("UNDOS [ ");
-                foreach (BitmapChanges c in undos)
-                {
-                    Console.Write($"{c} ");
-                }
-                Console.WriteLine("]");
-
-                Console.WriteLine("REDOS [ ");
-                foreach (BitmapChanges c in redos)
-                {
-                    Console.Write($"{c} ");
-                }
-                Console.WriteLine("]");
-            }
-            catch { }
-        }
 
         /// <summary>
         /// Resize the current image and track the change. (will call a reference update event)
@@ -120,7 +99,7 @@ namespace WinkingCat.HelperLibs
 
             using (Bitmap tmp = CurrentBitmap) 
             {
-                CurrentBitmap = ImageHelper.ResizeImage(tmp, newSize, interp);
+                CurrentBitmap = ImageHelper.GetResizedBitmap(tmp, newSize, interp);
             }
 
             OnUpdateReferences();
@@ -138,7 +117,7 @@ namespace WinkingCat.HelperLibs
 
             TrackChange(BitmapChanges.Cropped);
 
-            ImageHelper.CropBitmap(ref CurrentBitmap, crop);
+            ImageHelper.CropBitmapByRef(ref CurrentBitmap, crop);
             OnUpdateReferences(); // since CropBitmap creates a new bitmap we need to signal to update references
 
             OnBitmapChanged(BitmapChanges.Cropped);
@@ -272,10 +251,6 @@ namespace WinkingCat.HelperLibs
             ClearRedos();
             undos.Push(change);
 
-#if DEBUG
-            PrintUndos();
-#endif
-
             switch (change)
             {
                 // need to track history data
@@ -346,9 +321,6 @@ namespace WinkingCat.HelperLibs
             undos.Push(change);
             lastChange = change;
 
-#if DEBUG
-            PrintUndos();
-#endif
             Bitmap bmp;
 
             switch (change)
@@ -442,9 +414,7 @@ namespace WinkingCat.HelperLibs
 
             BitmapChanges change = undos.Pop();
             redos.Push(change);
-#if DEBUG
-            PrintUndos();
-#endif
+
             Bitmap bmp;
             switch (change)
             {

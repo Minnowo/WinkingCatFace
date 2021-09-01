@@ -46,7 +46,7 @@ namespace WinkingCat.ScreenCaptureLib
         {
             this.FileInfo = info;
             SizeInBytes = info.Length;
-            Dimensions = ImageHelper.GetImageDimensionsFile(info.FullName);
+            Dimensions = ImageHelper.GetImageDimensionsFromFile(info.FullName);
         }
 
         public ImageSavedEvent(string path) : this(new FileInfo(path))

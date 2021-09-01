@@ -40,26 +40,6 @@ namespace WinkingCat.ScreenCaptureLib
             return CaptureRectangle(bounds);
         }
 
-        public static Bitmap CropImage(Rectangle cropArea, Image img)
-        {
-            Bitmap clip = new Bitmap(cropArea.Width, cropArea.Height);
-            Image image = img;
-
-            using (Graphics g = Graphics.FromImage(clip))
-            {
-                g.DrawImage(image, new Rectangle(0, 0, cropArea.Width, cropArea.Height), cropArea, GraphicsUnit.Pixel);
-            }
-            return clip;
-        }
-        public static Bitmap CropImage(Point a, Point b, Image img)
-        {
-            int x = Math.Min(a.X, b.X);
-            int y = Math.Min(a.Y, b.Y);
-            int width = Math.Abs(a.X - b.X);
-            int height = Math.Abs(a.Y - b.Y);
-
-            return CropImage(new Rectangle(new Point(x, y), new Size(width, height)), img);
-        }
 
         public static Bitmap ResizeImage(Image image, int width, int height)
         {

@@ -51,6 +51,53 @@ namespace WinkingCat.HelperLibs
 
 
         /// <summary>
+		/// Locks the given bitmap and return bitmap data with a pixel format of 32bppArgb.
+		/// </summary>
+		/// <param name="srcImg">The image to lock.</param>
+		/// <returns>32bppArgb bitmap data.</returns>
+		public static BitmapData Get32bppArgbBitmapData(Bitmap srcImg)
+        {
+            return srcImg.LockBits(
+                new Rectangle(0, 0, srcImg.Width, srcImg.Height), ImageLockMode.ReadWrite, PixelFormat.Format32bppArgb);
+        }
+
+
+        /// <summary>
+        /// Returns the image format based off the extension of the filepath.
+        /// </summary>
+        /// <param name="filePath">The filepath to check the extension of.</param>
+        /// <returns></returns>
+        public static ImgFormat GetImageFormat(string filePath)
+        {
+            string ext = PathHelper.GetFilenameExtension(filePath);
+
+            if (string.IsNullOrEmpty(ext))
+                return InternalSettings.Default_Image_Format;
+
+            switch (ext)
+            {
+                case "png":
+                    return ImgFormat.png;
+                case "jpg":
+                case "jpeg":
+                case "jpe":
+                case "jfif":
+                    return ImgFormat.jpg;
+                case "gif":
+                    return ImgFormat.gif;
+                case "bmp":
+                    return ImgFormat.bmp;
+                case "tif":
+                case "tiff":
+                    return ImgFormat.tif;
+                case "webp":
+                    return ImgFormat.webp;
+            }
+            return ImgFormat.nil;
+        }
+
+
+        /// <summary>
         /// Saves an image.
         /// </summary>
         /// <param name="img"> The image to save. </param>
@@ -194,11 +241,8 @@ namespace WinkingCat.HelperLibs
         {
             using (SaveFileDialog sfd = new SaveFileDialog())
             {
-                sfd.Filter = InternalSettings.Image_Dialog_Default;
+                sfd.Filter = InternalSettings.Image_Dialog_Filter;
                 sfd.DefaultExt = "png";
-
-                if (InternalSettings.WebP_Plugin_Exists)
-                    sfd.Filter += "|" + InternalSettings.WebP_File_Dialog;
 
                 if (!string.IsNullOrEmpty(filePath))
                 {
@@ -248,6 +292,12 @@ namespace WinkingCat.HelperLibs
         }
 
 
+        /// <summary>
+        /// Opens a select file dialog for readable image types.
+        /// </summary>
+        /// <param name="form">The parent form of the dialog.</param>
+        /// <param name="initialDirectory">The initial directory to open the dialog in.</param>
+        /// <returns>The path to the selected file.</returns>
         public static string OpenImageFileDialog(Form form = null, string initialDirectory = null)
         {
             string[] result = OpenImageFileDialog(false, form, initialDirectory);
@@ -256,16 +306,20 @@ namespace WinkingCat.HelperLibs
             return result[0];
         }
 
+        /// <summary>
+        /// Opens a select file dialog for readable image types.
+        /// </summary>
+        /// <param name="multiselect">Allow the user to select multiple files.</param>
+        /// <param name="form">The parent form of the dialog.</param>
+        /// <param name="initialDirectory">The initial directory to open the dialog in.</param>
+        /// <returns>A string[] of image paths to the selected files.</returns>
         public static string[] OpenImageFileDialog(bool multiselect, Form form = null, string initialDirectory = null)
         {
             using (OpenFileDialog ofd = new OpenFileDialog())
             {
-                ofd.Filter = InternalSettings.Image_Select_Dialog_Title + " (" + 
-                    string.Join(", ", InternalSettings.Readable_Image_Formats_Dialog_Options) + ")|" + 
+                ofd.Filter = InternalSettings.Image_Select_Dialog_Title + " (" +
+                    string.Join(", ", InternalSettings.Readable_Image_Formats_Dialog_Options) + ")|" +
                     string.Join(";", InternalSettings.Readable_Image_Formats_Dialog_Options);
-
-                if (InternalSettings.WebP_Plugin_Exists)
-                    ofd.Filter += "|" + InternalSettings.WebP_File_Dialog;
 
                 ofd.Multiselect = multiselect;
 
@@ -281,40 +335,6 @@ namespace WinkingCat.HelperLibs
             }
 
             return null;
-        }
-
-        /// <summary>
-        /// Returns the image format based off the extension of the filepath.
-        /// </summary>
-        /// <param name="filePath">The filepath to check the extension of.</param>
-        /// <returns></returns>
-        public static ImgFormat GetImageFormat(string filePath)
-        {
-            string ext = PathHelper.GetFilenameExtension(filePath);
-
-            if (string.IsNullOrEmpty(ext))
-                return InternalSettings.Default_Image_Format;
-
-            switch (ext)
-            {
-                case "png":
-                    return ImgFormat.png;
-                case "jpg":
-                case "jpeg":
-                case "jpe":
-                case "jfif":
-                    return ImgFormat.jpg;
-                case "gif":
-                    return ImgFormat.gif;
-                case "bmp":
-                    return ImgFormat.bmp;
-                case "tif":
-                case "tiff":
-                    return ImgFormat.tif;
-                case "webp":
-                    return ImgFormat.webp;
-            }
-            return ImgFormat.nil;
         }
 
         /// <summary>
@@ -355,8 +375,8 @@ namespace WinkingCat.HelperLibs
 
             try
             {
-                if(InternalSettings.WebP_Plugin_Exists)
-                    if(GetImageFormat(path) == ImgFormat.webp)
+                if (InternalSettings.WebP_Plugin_Exists)
+                    if (GetImageFormat(path) == ImgFormat.webp)
                     {
                         return LoadWebP(path);
                     }
@@ -376,12 +396,13 @@ namespace WinkingCat.HelperLibs
         }
 
 
+
         /// <summary>
         /// Gets the size of an image from a file.
         /// </summary>
         /// <param name="imagePath"> Path to the image. </param>
         /// <returns> The Size of the image, or Size.Empty if failed to load / not valid image. </returns>
-        public static Size GetImageDimensionsFile(string path)
+        public static Size GetImageDimensionsFromFile(string path)
         {
             if (string.IsNullOrEmpty(path) || !File.Exists(path))
                 return Size.Empty;
@@ -398,12 +419,13 @@ namespace WinkingCat.HelperLibs
                     return new Size(image.Width, image.Height);
                 }
             }
-            catch(Exception e)
+            catch (Exception e)
             {
                 Logger.WriteException(e);
                 return Size.Empty;
             }
         }
+
 
 
         /// <summary>
@@ -414,9 +436,11 @@ namespace WinkingCat.HelperLibs
         /// <param name="newSize">The new size of the image.</param>
         /// <param name="intr">The interpolationmode to use when resizing.</param>
         /// <returns></returns>
-        public static Bitmap ResizeImage(Bitmap image, Size newSize, InterpolationMode intr = InterpolationMode.NearestNeighbor)
+        public static Bitmap GetResizedBitmap(Bitmap image, Size newSize, InterpolationMode intr = InterpolationMode.NearestNeighbor)
         {
-            Bitmap bmp = new Bitmap(newSize.Width, newSize.Height);
+            Bitmap bmp = new Bitmap(newSize.Width, newSize.Height, image.PixelFormat);
+            bmp.SetResolution(image.HorizontalResolution, image.VerticalResolution);
+
             using (Graphics gr = Graphics.FromImage(bmp))
             {
                 gr.InterpolationMode = intr;
@@ -430,15 +454,16 @@ namespace WinkingCat.HelperLibs
         }
 
 
+
         /// <summary>
         /// Crop the given image to the given rectange.
         /// <para>The given bitmap will be disposed and replaced with the cropped bitmap.</para>
         /// </summary>
         /// <param name="srcImage">The image to crop.</param>
         /// <param name="crop">The crop area.</param>
-        public static void CropBitmap(ref Bitmap srcImage, Rectangle crop)
+        public static void CropBitmapByRef(ref Bitmap srcImage, Rectangle crop)
         {
-            Bitmap newImage = new Bitmap(crop.Width, crop.Height, PixelFormat.Format32bppArgb);
+            Bitmap newImage = new Bitmap(crop.Width, crop.Height, srcImage.PixelFormat);
             newImage.SetResolution(srcImage.HorizontalResolution, srcImage.VerticalResolution);
 
             using (Graphics g = Graphics.FromImage(newImage))
@@ -449,6 +474,42 @@ namespace WinkingCat.HelperLibs
             srcImage.Dispose();
             srcImage = newImage;
         }
+
+        /// <summary>
+        /// Gets a cropped out area from point A to Point B from the given bitmap as the given pixelformat.
+        /// </summary>
+        /// <param name="a">Point A.</param>
+        /// <param name="b">Point B.</param>
+        /// <param name="srcImage">The image to crop from.</param>
+        /// <param name="pf">The pixel format of the resultant image.</param>
+        /// <returns>A new image cropped from the srcImage of the given pixelformat.</returns>
+        public static Bitmap GetCroppedBitmap(Point a, Point b, Image srcImage, PixelFormat pf)
+        {
+            return GetCroppedBitmap(
+                new Rectangle(
+                    new Point(Math.Min(a.X, b.X), Math.Min(a.Y, b.Y)),
+                    new Size(Math.Abs(a.X - b.X), Math.Abs(a.Y - b.Y))), srcImage, pf);
+        }
+
+        /// <summary>
+        /// Gets a cropped out area from the given rectangle from the given bitmap as the given pixelformat.
+        /// </summary>
+        /// <param name="cropArea">The rectangle to crop.</param>
+        /// <param name="srcImage">The image to crop from.</param>
+        /// <param name="pf">The pixel format of the resultant image.</param>
+        /// <returns>A new image cropped from the srcImage of the given pixelformat.</returns>
+        public static Bitmap GetCroppedBitmap(Rectangle cropArea, Image srcImage, PixelFormat pf)
+        {
+            Bitmap newImage = new Bitmap(cropArea.Width, cropArea.Height, pf);
+            newImage.SetResolution(srcImage.HorizontalResolution, srcImage.VerticalResolution);
+
+            using (Graphics g = Graphics.FromImage(newImage))
+            {
+                g.DrawImage(srcImage, new Rectangle(0, 0, cropArea.Width, cropArea.Height), cropArea, GraphicsUnit.Pixel);
+            }
+            return newImage;
+        }
+
 
 
         /// <summary>
@@ -488,6 +549,7 @@ namespace WinkingCat.HelperLibs
         {
             srcImg.RotateFlip(RotateFlipType.Rotate270FlipNone);
         }
+
 
 
         /// <summary>
@@ -622,6 +684,36 @@ namespace WinkingCat.HelperLibs
         /// </summary>
         /// <param name="toUpdate"> The bitmap that is going to be written on. </param>
         /// <param name="dataBitmap"> The bitmap that the data comes from. </param>
+        public static unsafe void UpdateBitmap(Bitmap toUpdate, Image dataBitmap)
+        {
+            UpdateBitmap(toUpdate, (Bitmap)dataBitmap);
+        }
+
+        /// <summary>
+        /// Updates a bitmap pixel data using pointers.
+        /// </summary>
+        /// <param name="toUpdate"> The bitmap that is going to be written on. </param>
+        /// <param name="dataBitmap"> The bitmap that the data comes from. </param>
+        public static unsafe void UpdateBitmap(Image toUpdate, Image dataBitmap)
+        {
+            UpdateBitmap((Bitmap)toUpdate, (Bitmap)dataBitmap);
+        }
+
+        /// <summary>
+        /// Updates a bitmap pixel data using pointers.
+        /// </summary>
+        /// <param name="toUpdate"> The bitmap that is going to be written on. </param>
+        /// <param name="dataBitmap"> The bitmap that the data comes from. </param>
+        public static unsafe void UpdateBitmap(Image toUpdate, Bitmap dataBitmap)
+        {
+            UpdateBitmap((Bitmap)toUpdate, dataBitmap);
+        }
+
+        /// <summary>
+        /// Updates a bitmap pixel data using pointers.
+        /// </summary>
+        /// <param name="toUpdate"> The bitmap that is going to be written on. </param>
+        /// <param name="dataBitmap"> The bitmap that the data comes from. </param>
         public static unsafe void UpdateBitmap(Bitmap toUpdate, Bitmap dataBitmap)
         {
             Color[] data = GetBitmapColors(dataBitmap);
@@ -641,17 +733,6 @@ namespace WinkingCat.HelperLibs
         }
 
 
-
-        /// <summary>
-		/// Locks the given bitmap and return bitmap data with a pixel format of 32bppArgb.
-		/// </summary>
-		/// <param name="srcImg">The image to lock.</param>
-		/// <returns>32bppArgb bitmap data.</returns>
-		public static BitmapData Get32bppArgbBitmapData(Bitmap srcImg)
-        {
-            return srcImg.LockBits(
-                new Rectangle(0, 0, srcImg.Width, srcImg.Height), ImageLockMode.ReadWrite, PixelFormat.Format32bppArgb);
-        }
 
         /// <summary>
         /// Inverts the colors of a bitmap.
