@@ -11,7 +11,7 @@ using System.Windows.Forms;
 
 namespace WinkingCat.HelperLibs
 {
-    public static class ImageHelper
+    /*public static class ImageHelper
     {
         /// <summary>
 		/// A value from 0-1 which is used to convert a color to grayscale.
@@ -241,7 +241,7 @@ namespace WinkingCat.HelperLibs
         {
             using (SaveFileDialog sfd = new SaveFileDialog())
             {
-                sfd.Filter = InternalSettings.Image_Dialog_Filter;
+                sfd.Filter = InternalSettings.Image_Dialog_Filters;
                 sfd.DefaultExt = "png";
 
                 if (!string.IsNullOrEmpty(filePath))
@@ -1171,5 +1171,5 @@ namespace WinkingCat.HelperLibs
 
             #endregion
         }
-    }
+}*/
 }

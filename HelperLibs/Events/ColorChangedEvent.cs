@@ -10,28 +10,28 @@ namespace WinkingCat.HelperLibs
 
     public class ColorEventArgs : EventArgs
     {
-        public ColorEventArgs(_Color color, ColorFormat format)
+        public ColorEventArgs(COLOR color, ColorFormat format)
         {
             Color = color;
             AbsoluteColor = color;
             ColorType = format;
         }
-        public ColorEventArgs(_Color color, _Color absoluteColor, ColorFormat format)
+        public ColorEventArgs(COLOR color, COLOR absoluteColor, ColorFormat format)
         {
             Color = color;
             AbsoluteColor = absoluteColor;
             ColorType = format;
         }
 
-        public ColorEventArgs(_Color color, _Color absoluteColor, DrawStyles drawStyle)
+        public ColorEventArgs(COLOR color, COLOR absoluteColor, DrawStyles drawStyle)
         {
             Color = color;
             AbsoluteColor = absoluteColor;
             DrawStyle = drawStyle;
         }
 
-        public _Color Color;
-        public _Color AbsoluteColor;
+        public COLOR Color;
+        public COLOR AbsoluteColor;
         public ColorFormat ColorType;
         public DrawStyles DrawStyle;
     }

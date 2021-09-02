@@ -15,7 +15,7 @@ namespace WinkingCat.HelperLibs
         SetGray,
         Cropped,
         Resized,
-        //Dithered,
+        Dithered,
         TransparentFilled,
         RotatedLeft,
         RotatedRight,
@@ -31,17 +31,6 @@ namespace WinkingCat.HelperLibs
         public delegate void RedoEvent(BitmapChanges change);
         public static event RedoEvent RedoHappened;
 
-        public delegate void UpdateReferencesEvent();
-        public static event UpdateReferencesEvent UpdateReferences;
-
-        /// <summary>
-        /// Fired after the current image has been modified via 
-        /// <para>{ Undo, Redo, ResizeImage, CropImage, ConvertToGray, InvertBitmap, FlipVertical, FlipHorizontal, RotateRight, RotateLeft}</para>
-        /// </summary>
-        /// <param name="change"></param>
-        public delegate void BitmapChangedEvent(BitmapChanges change);
-        public event BitmapChangedEvent BitmapChanged;
-
         public int UndoCount
         {
             get { return undos.Count; }
@@ -52,14 +41,29 @@ namespace WinkingCat.HelperLibs
             get { return redos.Count; }
         }
 
-        public BitmapChanges LastChange
+        public ImageBase CurrentBitmap
         {
-            get { return lastChange; }
-            set { lastChange = value; }
-        }
-        private BitmapChanges lastChange;
+            get
+            {
+                return currentBitmap;
+            }
+            set
+            {
+                currentBitmap = value;
 
-        public Bitmap CurrentBitmap;
+                if (currentBitmap != null)
+                {
+                    Format = value.GetImageFormat();
+                }
+                else
+                {
+                    Format = ImgFormat.nil;
+                }
+            }
+        }
+        private ImageBase currentBitmap;
+
+        public ImgFormat Format;
 
         private Stack<BitmapChanges> undos;
         private Stack<BitmapChanges> redos;
@@ -74,7 +78,7 @@ namespace WinkingCat.HelperLibs
             bitmapRedoHistoryData = new Stack<Bitmap>();
         }
 
-        public BitmapUndo(Bitmap bmp)
+        public BitmapUndo(ImageBase bmp)
         {
             undos = new Stack<BitmapChanges>();
             redos = new Stack<BitmapChanges>();
@@ -84,11 +88,6 @@ namespace WinkingCat.HelperLibs
             CurrentBitmap = bmp;
         }
 
-
-        /// <summary>
-        /// Resize the current image and track the change. (will call a reference update event)
-        /// </summary>
-        /// <param name="newSize">The new size.</param>
         /// <param name="interp">The interpolation mode to use when resizing.</param>
         public void ResizeImage(Size newSize, InterpolationMode interp)
         {
@@ -97,15 +96,10 @@ namespace WinkingCat.HelperLibs
 
             TrackChange(BitmapChanges.Resized);
 
-            using (Bitmap tmp = CurrentBitmap) 
-            {
-                CurrentBitmap = ImageHelper.GetResizedBitmap(tmp, newSize, interp);
-            }
-
-            OnUpdateReferences();
-            OnBitmapChanged(BitmapChanges.Resized);
+            Image i = ImageProcessor.GetResizedBitmap(CurrentBitmap, newSize, interp);
+            CurrentBitmap.UpdateImage(i);
         }
-        
+
         /// <summary>
         /// Crop the current bitmap and track the change. (will call a reference update event)
         /// </summary>
@@ -117,10 +111,8 @@ namespace WinkingCat.HelperLibs
 
             TrackChange(BitmapChanges.Cropped);
 
-            ImageHelper.CropBitmapByRef(ref CurrentBitmap, crop);
-            OnUpdateReferences(); // since CropBitmap creates a new bitmap we need to signal to update references
-
-            OnBitmapChanged(BitmapChanges.Cropped);
+            Image i = ImageProcessor.GetCroppedBitmap(crop, CurrentBitmap, CurrentBitmap.Image.PixelFormat);
+            CurrentBitmap.UpdateImage(i);
         }
 
         /// <summary>
@@ -133,9 +125,7 @@ namespace WinkingCat.HelperLibs
 
             TrackChange(BitmapChanges.FlippedVirtical);
 
-            ImageHelper.FlipVertical(CurrentBitmap);
-
-            OnBitmapChanged(BitmapChanges.FlippedVirtical);
+            ImageProcessor.FlipVertical(CurrentBitmap);
         }
 
         /// <summary>
@@ -148,9 +138,7 @@ namespace WinkingCat.HelperLibs
 
             TrackChange(BitmapChanges.FlippedHorizontal);
 
-            ImageHelper.FlipHorizontal(CurrentBitmap);
-
-            OnBitmapChanged(BitmapChanges.FlippedHorizontal);
+            ImageProcessor.FlipHorizontal(CurrentBitmap);
         }
 
         /// <summary>
@@ -163,9 +151,7 @@ namespace WinkingCat.HelperLibs
 
             TrackChange(BitmapChanges.RotatedRight);
 
-            ImageHelper.RotateRight(CurrentBitmap);
-
-            OnBitmapChanged(BitmapChanges.RotatedRight);
+            ImageProcessor.RotateRight(CurrentBitmap);
         }
 
         /// <summary>
@@ -178,9 +164,7 @@ namespace WinkingCat.HelperLibs
 
             TrackChange(BitmapChanges.RotatedLeft);
 
-            ImageHelper.RotateLeft(CurrentBitmap);
-
-            OnBitmapChanged(BitmapChanges.RotatedLeft);
+            ImageProcessor.RotateLeft(CurrentBitmap);
         }
 
         /// <summary>
@@ -193,12 +177,11 @@ namespace WinkingCat.HelperLibs
 
             TrackChange(BitmapChanges.SetGray);
 
-            if (!ImageHelper.GrayscaleBitmapSafe(CurrentBitmap))
+            if (!ImageProcessor.GrayscaleBitmapSafe(CurrentBitmap))
             {
                 DisposeLastUndo();
                 return;
             }
-            OnBitmapChanged(BitmapChanges.SetGray);
         }
 
         /// <summary>
@@ -210,18 +193,17 @@ namespace WinkingCat.HelperLibs
                 return;
 
             TrackChange(BitmapChanges.Inverted);
-
-            if (!ImageHelper.InvertBitmapSafe(CurrentBitmap))
+            
+            if (!ImageProcessor.InvertBitmapSafe(CurrentBitmap))
             {
                 DisposeLastUndo();
                 return;
             }
-            OnBitmapChanged(BitmapChanges.Inverted);
         }
 
 
         /// <summary>
-        /// Disposes the current bitmap and replaces it with the nes bitmap.
+        /// Dispose of the CurrentBitmap and replace it with the given bitmap.
         /// </summary>
         /// <param name="bmp">The new bitmap.</param>
         public void ReplaceBitmap(Bitmap bmp)
@@ -229,25 +211,25 @@ namespace WinkingCat.HelperLibs
             if (CurrentBitmap != null)
                 CurrentBitmap.Dispose();
 
-            CurrentBitmap = bmp;
+            CurrentBitmap = ImageBase.ProperCast(bmp, this.Format);
         }
 
         /// <summary>
-        /// Sets the CurrentBitmap to the given bitmap.
+        /// Sets the CurrentBitmap and does not dispose of the last bitmap.
         /// </summary>
-        /// <param name="bmp"></param>
+        /// <param name="bmp">The new bitmap.</param>
         public void UpdateBitmapReferance(Bitmap bmp)
         {
-            CurrentBitmap = bmp;
+            CurrentBitmap = ImageBase.ProperCast(bmp, this.Format);
         }
 
         /// <summary>
-        /// Keeps track of the change that is about to take place.
+        /// Tracks a change done to the bitmap. Depending on the change the CurrentBitmap will be copied and saved in the history.
+        /// <para>This should be called BEFORE the change is applied to the bitmap. If the change has been tracked but not be applied the DisposeLastUndo or DisposeLastRedo should be called.</para>
         /// </summary>
-        /// <param name="change">The change that is going to take place.</param>
+        /// <param name="change">The change that is going to occure to the bitmap.</param>
         public void TrackChange(BitmapChanges change)
         {
-            lastChange = change;
             ClearRedos();
             undos.Push(change);
 
@@ -255,10 +237,11 @@ namespace WinkingCat.HelperLibs
             {
                 // need to track history data
                 case BitmapChanges.Cropped:
+                case BitmapChanges.Dithered:
                 case BitmapChanges.Resized:
                 case BitmapChanges.SetGray:
                 case BitmapChanges.TransparentFilled:
-                    bitmapUndoHistoryData.Push(CurrentBitmap.CloneSafe());
+                    bitmapUndoHistoryData.Push(CloneProper());
                     break;
 
                 // changes are easily undone and do not need to be kept in memory
@@ -271,9 +254,8 @@ namespace WinkingCat.HelperLibs
             }
         }
 
-
         /// <summary>
-        /// Clears all the redos and disposes of any bitmap history kept.
+        /// Removes all history of Redos and disposes any bitmap history used for redos.
         /// </summary>
         public void ClearRedos()
         {
@@ -285,7 +267,7 @@ namespace WinkingCat.HelperLibs
         }
 
         /// <summary>
-        /// Removes and disposes the last redo.
+        /// Removes the last redo and disposes of any data with it.
         /// </summary>
         public void DisposeLastRedo()
         {
@@ -319,51 +301,38 @@ namespace WinkingCat.HelperLibs
 
             BitmapChanges change = redos.Pop();
             undos.Push(change);
-            lastChange = change;
-
-            Bitmap bmp;
 
             switch (change)
             {
                 // need to track history data
                 case BitmapChanges.Cropped:
                 case BitmapChanges.Resized:
-                    bmp = bitmapRedoHistoryData.Pop();
-                    bitmapUndoHistoryData.Push(CurrentBitmap.CloneSafe());
-                    ReplaceBitmap(bmp);
-                    OnUpdateReferences();
-                    break;
-
+                case BitmapChanges.Dithered:
                 case BitmapChanges.SetGray:
                 case BitmapChanges.TransparentFilled:
-                    using (bmp = bitmapRedoHistoryData.Pop())
-                    {
-                        bitmapUndoHistoryData.Push(CurrentBitmap.CloneSafe());
-                        ImageHelper.UpdateBitmap(CurrentBitmap, bmp);
-                    }
+                    bitmapUndoHistoryData.Push(CloneProper());
+                    CurrentBitmap.UpdateImage(bitmapRedoHistoryData.Pop());
                     break;
 
                 // changes are easily undone and do not need to be kept in memory
                 case BitmapChanges.Inverted:
-                    ImageHelper.InvertBitmapSafe(CurrentBitmap);
+                    CurrentBitmap.InvertColor();
                     break;
                 case BitmapChanges.RotatedLeft:
-                    ImageHelper.RotateLeft(CurrentBitmap);
+                    CurrentBitmap.RotateLeft90();
                     break;
                 case BitmapChanges.RotatedRight:
-                    ImageHelper.RotateRight(CurrentBitmap);
+                    CurrentBitmap.RotateRight90();
                     break;
                 case BitmapChanges.FlippedHorizontal:
-                    ImageHelper.FlipHorizontal(CurrentBitmap);
+                    CurrentBitmap.FlipHorizontal();
                     break;
                 case BitmapChanges.FlippedVirtical:
-                    ImageHelper.FlipVertical(CurrentBitmap);
+                    CurrentBitmap.FlipVertical();
                     break;
             }
             OnRedo(change);
-            OnBitmapChanged(change);
         }
-
 
         /// <summary>
         /// Clears all the undos and disposes of any bitmap history kept.
@@ -386,8 +355,6 @@ namespace WinkingCat.HelperLibs
                 return;
 
             BitmapChanges change = undos.Pop();
-
-            lastChange = undos.Peek();
 
             // if the change being removed had any bitmap data stored dispose it
             switch (change)
@@ -415,47 +382,37 @@ namespace WinkingCat.HelperLibs
             BitmapChanges change = undos.Pop();
             redos.Push(change);
 
-            Bitmap bmp;
             switch (change)
             {
                 // need to track history data
                 case BitmapChanges.Cropped:
                 case BitmapChanges.Resized:
-                    bmp = bitmapUndoHistoryData.Pop();
-                    bitmapRedoHistoryData.Push(CurrentBitmap.CloneSafe());
-                    ReplaceBitmap(bmp);
-                    OnUpdateReferences();
-                    break;
+                case BitmapChanges.Dithered:
                 case BitmapChanges.SetGray:
                 case BitmapChanges.TransparentFilled:
-                    using (bmp = bitmapUndoHistoryData.Pop())
-                    {
-                        bitmapRedoHistoryData.Push(CurrentBitmap.CloneSafe());
-                        ImageHelper.UpdateBitmap(CurrentBitmap, bmp);
-                    }
+                    bitmapRedoHistoryData.Push(CloneProper());
+                    CurrentBitmap.UpdateImage(bitmapUndoHistoryData.Pop());
                     break;
 
                 // changes are easily undone and do not need to be kept in memory
                 case BitmapChanges.Inverted:
-                    ImageHelper.InvertBitmapSafe(CurrentBitmap);
+                    CurrentBitmap.InvertColor();
                     break;
                 case BitmapChanges.RotatedLeft:
-                    ImageHelper.RotateRight(CurrentBitmap);
+                    CurrentBitmap.RotateRight90();
                     break;
                 case BitmapChanges.RotatedRight:
-                    ImageHelper.RotateLeft(CurrentBitmap);
+                    CurrentBitmap.RotateLeft90();
                     break;
                 case BitmapChanges.FlippedHorizontal:
-                    ImageHelper.FlipHorizontal(CurrentBitmap);
+                    CurrentBitmap.FlipHorizontal();
                     break;
                 case BitmapChanges.FlippedVirtical:
-                    ImageHelper.FlipVertical(CurrentBitmap);
+                    CurrentBitmap.FlipVertical();
                     break;
             }
             OnUndo(change);
-            OnBitmapChanged(change);
         }
-
 
         /// <summary>
         /// Clears and disposes of both the undos and redos.
@@ -466,10 +423,7 @@ namespace WinkingCat.HelperLibs
             ClearRedos();
         }
 
-        /// <summary>
-        /// Dispose of the undos, redos, and the current bitmap.
-        /// </summary>
-        public void Dispose()
+        public void Clear()
         {
             ClearHistory();
             if (CurrentBitmap != null)
@@ -477,11 +431,22 @@ namespace WinkingCat.HelperLibs
             CurrentBitmap = null;
         }
 
-
-        private void OnBitmapChanged(BitmapChanges change)
+        /// <summary>
+        /// Dispose of the undos, redos, and the current bitmap.
+        /// </summary>
+        public void Dispose()
         {
-            if (BitmapChanged != null)
-                BitmapChanged(change);
+            Clear();
+            GC.SuppressFinalize(this);
+        }
+
+        private Bitmap CloneProper()
+        {
+            if (this.Format == ImgFormat.gif)
+            {
+                return currentBitmap.CloneSafe(); // this avoid re-encoding the gif, don't know if it keeps meta or not
+            }
+            return CurrentBitmap.DeepClone();
         }
 
         private void OnUndo(BitmapChanges change)
@@ -494,12 +459,6 @@ namespace WinkingCat.HelperLibs
         {
             if (RedoHappened != null)
                 RedoHappened(change);
-        }
-
-        private void OnUpdateReferences()
-        {
-            if (UpdateReferences != null)
-                UpdateReferences();
         }
     }
 }

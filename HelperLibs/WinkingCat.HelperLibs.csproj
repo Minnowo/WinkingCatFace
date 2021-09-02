@@ -71,6 +71,14 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="ClipOptions.cs" />
+    <Compile Include="Colors\ColorConverter.cs" />
+    <Compile Include="Colors\ColorEditor.cs" />
+    <Compile Include="Colors\ColorHelper.cs" />
+    <Compile Include="Colors\Formats\ARGB.cs" />
+    <Compile Include="Colors\Formats\CMYK.cs" />
+    <Compile Include="Colors\Formats\COLOR.cs" />
+    <Compile Include="Colors\Formats\HSB.cs" />
+    <Compile Include="Colors\Formats\HSL.cs" />
     <Compile Include="Controls\ColorComboBox.cs">
       <SubType>UserControl</SubType>
     </Compile>
@@ -129,20 +137,42 @@
     <Compile Include="Forms\ImageViewerForm.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Helpers\ColorHelper.cs" />
     <Compile Include="Enums.cs" />
     <Compile Include="Extensions\Extensions.cs" />
     <Compile Include="Helpers.cs" />
     <Compile Include="Helpers\ClipboardHelper.cs" />
     <Compile Include="Helpers\CursorData.cs" />
-    <Compile Include="Helpers\Gif.cs" />
     <Compile Include="Helpers\ImageHelper.cs" />
     <Compile Include="Helpers\PathHelpler.cs" />
     <Compile Include="Helpers\MathHelper.cs" />
     <Compile Include="Helpers\ScreenHelpers.cs" />
     <Compile Include="Helpers\TranslatorHelper.cs" />
-    <Compile Include="Helpers\WebPHelper.cs" />
     <Compile Include="Helpers\WindowHelpers.cs" />
+    <Compile Include="ImageHelper\ByteHelper.cs" />
+    <Compile Include="ImageHelper\Enums\BitDepth.cs" />
+    <Compile Include="ImageHelper\Enums\ExifPropertyTag.cs" />
+    <Compile Include="ImageHelper\Enums\ImgFormat.cs" />
+    <Compile Include="ImageHelper\GraphicsExtensions.cs" />
+    <Compile Include="ImageHelper\ImageBinaryReader.cs" />
+    <Compile Include="ImageHelper\ImageFormats\BMP.cs" />
+    <Compile Include="ImageHelper\ImageFormats\Gif\Gif.cs" />
+    <Compile Include="ImageHelper\ImageFormats\Gif\GifDecoder.cs" />
+    <Compile Include="ImageHelper\ImageFormats\Gif\GifEncoder.cs" />
+    <Compile Include="ImageHelper\ImageFormats\Gif\GifFrame.cs" />
+    <Compile Include="ImageHelper\ImageFormats\ICO.cs" />
+    <Compile Include="ImageHelper\ImageFormats\ImageBase.cs" />
+    <Compile Include="ImageHelper\ImageFormats\JPEG.cs" />
+    <Compile Include="ImageHelper\ImageFormats\PNG.cs" />
+    <Compile Include="ImageHelper\ImageFormats\TIFF.cs" />
+    <Compile Include="ImageHelper\ImageFormats\Webp\Enums.cs" />
+    <Compile Include="ImageHelper\ImageFormats\Webp\LibWebpStructs.cs" />
+    <Compile Include="ImageHelper\ImageFormats\Webp\UnsafeNativeMethods.cs" />
+    <Compile Include="ImageHelper\ImageFormats\Webp\Webp.cs" />
+    <Compile Include="ImageHelper\ImageFormats\Webp\WebpQuality.cs" />
+    <Compile Include="ImageHelper\ImageFormats\WORM.cs" />
+    <Compile Include="ImageHelper\ImageHelper.cs" />
+    <Compile Include="ImageHelper\ImageProcessor.cs" />
+    <Compile Include="ImageHelper\Structs\ResizeImage.cs" />
     <Compile Include="InternalSettings.cs" />
     <Compile Include="Types\HotkeyInfo.cs" />
     <Compile Include="Types\HotkeySettings.cs" />
@@ -174,8 +204,8 @@
     <Compile Include="RegionCaptureOptions.cs" />
     <Compile Include="SettingsManager.cs" />
     <Compile Include="Types\BitmapUndo.cs" />
-    <Compile Include="Types\WebpQuality.cs" />
     <Compile Include="Types\WindowInfo.cs" />
+    <Compile Include="ValueTypeTypeConverter.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
@@ -206,5 +236,6 @@
   <ItemGroup>
     <None Include="Resources\%3b3white.ico" />
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

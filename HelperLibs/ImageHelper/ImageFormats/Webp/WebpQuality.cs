@@ -1,25 +1,17 @@
 ﻿using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
-using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
 
 namespace WinkingCat.HelperLibs
 {
-    public enum WebpEncodingFormat
-    {
-        EncodeLossless,
-        EncodeNearLossless,
-        EncodeLossy
-    }
-
-
+    [TypeConverter(typeof(ValueTypeTypeConverter))]
     public struct WebPQuality
     {
-        public static readonly WebPQuality empty;
+        public static readonly WebPQuality Empty;
+        public static readonly WebPQuality Default = new WebPQuality(WebpEncodingFormat.EncodeLossy, 74, 6);
 
         /// <summary>
         /// The encoding format of the webp.

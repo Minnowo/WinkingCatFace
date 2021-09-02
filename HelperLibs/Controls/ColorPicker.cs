@@ -15,7 +15,7 @@ namespace WinkingCat.HelperLibs
     {
         public event ColorEventHandler ColorChanged;
 
-        public _Color SelectedColor
+        public COLOR SelectedColor
         {
             get
             {
@@ -33,7 +33,7 @@ namespace WinkingCat.HelperLibs
             }
         }
 
-        public _Color AbsoluteColor
+        public COLOR AbsoluteColor
         {
             get
             {
@@ -68,8 +68,8 @@ namespace WinkingCat.HelperLibs
 
         [DefaultValue(DrawStyles.HSBHue)]
         private DrawStyles drawStyle = DrawStyles.HSBHue;
-        private _Color selectedColor;
-        private _Color absoluteColor;
+        private COLOR selectedColor;
+        private COLOR absoluteColor;
         private ColorPickerBox colorBox;
         private ColorPickerSlider colorSlider;
         public ColorPicker()

@@ -53,65 +53,52 @@ namespace WinkingCat.HelperLibs
     public class RegionCaptureStyle
     {
         #region Region Capture Themes
+
+
         public Color BackgroundOverlayColor
         {
-            get
-            {
-                return backgroundOverlayColor;
-            }
-            set
-            {
-                backgroundOverlayColor = Color.FromArgb(backgroundOverlayOpacity, value);
-            }
+            get { return backgroundOverlayColor; }
+            set { backgroundOverlayColor = Color.FromArgb(backgroundOverlayOpacity, value); }
         }
         private Color backgroundOverlayColor = Color.Black;
-        public ushort BackgroundOverlayOpacity
+
+        public int BackgroundOverlayOpacity
         {
-            get
-            {
-                return backgroundOverlayOpacity;
-            }
+            get { return backgroundOverlayOpacity; }
             set
             {
-                if (value != backgroundOverlayOpacity)
-                {
-                    ushort newVal = (ushort)ColorHelper.ValidColor(value);
-                    backgroundOverlayOpacity = newVal;
-                    backgroundOverlayColor = Color.FromArgb(newVal, BackgroundOverlayColor);
-                }
+                if (value == backgroundOverlayOpacity)
+                    return;
+
+                int newVal = value.Clamp(0, 255);
+                backgroundOverlayOpacity = newVal;
+                backgroundOverlayColor = Color.FromArgb(newVal, BackgroundOverlayColor);
             }
         }
-        private ushort backgroundOverlayOpacity;
+        private int backgroundOverlayOpacity;
 
         public Color ScreenWideCrosshairColor
         {
-            get
-            {
-                return screenWideCrosshairColor;
-            }
-            set
-            {
-                screenWideCrosshairColor = Color.FromArgb(screenWideCrosshairOpacity, value);
-            }
+            get { return screenWideCrosshairColor; }
+            set { screenWideCrosshairColor = Color.FromArgb(screenWideCrosshairOpacity, value); }
         }
         private Color screenWideCrosshairColor = Color.FromArgb(249, 0, 187);
-        public ushort ScreenWideCrosshairOpacity
+
+
+        public int ScreenWideCrosshairOpacity
         {
-            get
-            {
-                return screenWideCrosshairOpacity;
-            }
+            get { return screenWideCrosshairOpacity; }
             set
             {
                 if (value != screenWideCrosshairOpacity)
                 {
-                    ushort newVal = (ushort)ColorHelper.ValidColor(value);
+                    int newVal = value.Clamp(0, 255);
                     screenWideCrosshairOpacity = newVal;
                     screenWideCrosshairColor = Color.FromArgb(newVal, ScreenWideCrosshairColor);
                 }
             }
         }
-        private ushort screenWideCrosshairOpacity;
+        private int screenWideCrosshairOpacity;
 
         public Color MagnifierCrosshairColor
         {
@@ -125,7 +112,9 @@ namespace WinkingCat.HelperLibs
             }
         }
         private Color magnifierCrosshairColor = Color.LightBlue;
-        public ushort MagnifierCrosshairOpacity
+
+
+        public int MagnifierCrosshairOpacity
         {
             get
             {
@@ -135,13 +124,13 @@ namespace WinkingCat.HelperLibs
             {
                 if (value != magnifierCrosshairOpacity)
                 {
-                    ushort newVal = (ushort)ColorHelper.ValidColor(value);
+                    int newVal = value.Clamp(0, 255);
                     magnifierCrosshairOpacity = newVal;
                     magnifierCrosshairColor = Color.FromArgb(newVal, MagnifierCrosshairColor);
                 }
             }
         }
-        private ushort magnifierCrosshairOpacity;
+        private int magnifierCrosshairOpacity;
 
         public Color MagnifierGridColor
         {
@@ -155,7 +144,8 @@ namespace WinkingCat.HelperLibs
             }
         }
         private Color magnifierGridColor = Color.Black;
-        public ushort MagnifierGridOpacity
+
+        public int MagnifierGridOpacity
         {
             get
             {
@@ -165,13 +155,13 @@ namespace WinkingCat.HelperLibs
             {
                 if (value != magnifierGridOpacity)
                 {
-                    ushort newVal = (ushort)ColorHelper.ValidColor(value);
+                    int newVal = value.Clamp(0, 255);
                     magnifierGridOpacity = newVal;
                     magnifierGridColor = Color.FromArgb(newVal, MagnifierGridColor);
                 }
             }
         }
-        private ushort magnifierGridOpacity;
+        private int magnifierGridOpacity;
 
         public Color MagnifierBorderColor
         {
@@ -185,7 +175,7 @@ namespace WinkingCat.HelperLibs
             }
         }
         private Color magnifierBorderColor = Color.White;
-        public ushort MagnifierBorderOpacity
+        public int MagnifierBorderOpacity
         {
             get
             {
@@ -195,13 +185,13 @@ namespace WinkingCat.HelperLibs
             {
                 if (value != magnifierBorderOpacity)
                 {
-                    ushort newVal = (ushort)ColorHelper.ValidColor(value);
+                    int newVal = value.Clamp(0, 255);
                     magnifierBorderOpacity = newVal;
                     magnifierBorderColor = Color.FromArgb(newVal, MagnifierBorderColor);
                 }
             }
         }
-        private ushort magnifierBorderOpacity;
+        private int magnifierBorderOpacity;
 
         public Color infoTextBackgroundColor { get; set; } = Color.FromArgb(39, 43, 50);
         public Color infoTextBorderColor { get; set; } = Color.Black;

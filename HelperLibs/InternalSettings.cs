@@ -34,34 +34,45 @@ namespace WinkingCat.HelperLibs
 {
     public static class InternalSettings
     {
-        public static string Folder_Select_Dialog_Title = "Select a folder";
-        public static string Image_Select_Dialog_Title = "Select an image";
+        public const string Folder_Select_Dialog_Title = "Select a folder";
+        public const string Image_Select_Dialog_Title = "Select an image";
+        public const string Save_File_Dialog_Title = "Save Item";
+        public const string Move_File_Dialog_Title = "Move Item";
 
         public const string All_Files_File_Dialog = "All Files (*.*)|*.";
 
-        public static string Png_File_Dialog =  "PNG (*.png)|*.png";
-        public static string Bmp_File_Dialog =  "BMP (*.bmp)|*.bmp";
-        public static string Gif_File_Dialog =  "GIF (*.gif)|*.gif";
-        public static string WebP_File_Dialog = "WebP (*.webp)|*.webp";
-        public static string Tiff_File_Dialog = "TIFF (*.tif, *.tiff)|*.tif;*.tiff";
-        public static string Jpeg_File_Dialog = "JPEG (*.jpg, *.jpeg, *.jpe, *.jfif)|*.jpg;*.jpeg;*.jpe;*.jfif";
+        public static string PNG_File_Dialog =  "PNG (*.png)|*.png";
+        public static string BMP_File_Dialog =  "BMP (*.bmp)|*.bmp";
+        public static string GIF_File_Dialog =  "GIF (*.gif)|*.gif";
+        public static string WEBP_File_Dialog = "WebP (*.webp)|*.webp";
+        public static string TIFF_File_Dialog = "TIFF (*.tif, *.tiff)|*.tif;*.tiff";
+        public static string JPEG_File_Dialog = "JPEG (*.jpg, *.jpeg, *.jpe, *.jfif)|*.jpg;*.jpeg;*.jpe;*.jfif";
+        public const string WRM_File_Dialog = "WRM (*.wrm, *.dwrm)|*.wrm;*.dwrm";
+        public const string ICO_File_Dialog = "ICO (*.ico)|*.ico";
 
-        public static string Image_Dialog_Filter = string.Join("|",
+        public static string Image_Dialog_Filters = string.Join("|",
             new string[]
             {
-                Png_File_Dialog,
-                Jpeg_File_Dialog,
-                Bmp_File_Dialog,
-                Tiff_File_Dialog,
-                Gif_File_Dialog
+                PNG_File_Dialog,
+                JPEG_File_Dialog,
+                BMP_File_Dialog,
+                TIFF_File_Dialog,
+                GIF_File_Dialog,
+                WRM_File_Dialog,
+                ICO_File_Dialog
             });
 
+
         public static List<string> Readable_Image_Formats_Dialog_Options = new List<string>
-        { "*.png", "*.jpg", "*.jpeg", "*.jpe", "*.jfif", "*.gif", "*.bmp", "*.tif", "*.tiff" };
+        { "*.png", "*.jpg", "*.jpeg", "*.jpe", "*.jfif", "*.gif", "*.bmp", "*.tif", "*.tiff", "*.ico", "*.wrm", "*.dwrm" };
 
         public static List<string> Readable_Image_Formats = new List<string>()
-        { "png", "jpg", "jpeg", "jpe", "jfif", "gif", "bmp", "tif", "tiff" };
+        { "png", "jpg", "jpeg", "jpe", "jfif", "gif", "bmp", "tif", "tiff", "ico", "wrm", "dwrm" };
 
+        public static string All_Image_Files_File_Dialog = string.Format(
+            "Graphic Types ({0})|{1}",
+            string.Join(", ", Readable_Image_Formats_Dialog_Options),
+            string.Join(";", Readable_Image_Formats_Dialog_Options));
 
         #region paths
 
@@ -82,6 +93,8 @@ namespace WinkingCat.HelperLibs
 
         #endregion
 
+        public static long Jpeg_Quality = 75;
+
         public static int Image_Counter = -1;
 
         public static bool Write_Logs = true;
@@ -90,6 +103,7 @@ namespace WinkingCat.HelperLibs
 
         public static bool Garbage_Collect_After_Clip_Destroyed = false;
         public static bool Garbage_Collect_After_All_Clips_Destroyed = true;
+        public static bool Garbage_Collect_After_Gif_Encode = true;
 
         public static ImgFormat Default_Image_Format 
         {
@@ -119,7 +133,7 @@ namespace WinkingCat.HelperLibs
                     WebP_Plugin_Exists = true;
                     Readable_Image_Formats_Dialog_Options.Add("*.webp");
                     Readable_Image_Formats.Add("webp");
-                    Image_Dialog_Filter += "|" + WebP_File_Dialog;
+                    Image_Dialog_Filters += "|" + WEBP_File_Dialog;
                     return true;
                 }
             }
@@ -130,7 +144,7 @@ namespace WinkingCat.HelperLibs
                     WebP_Plugin_Exists = true;
                     Readable_Image_Formats_Dialog_Options.Add("*.webp");
                     Readable_Image_Formats.Add("webp");
-                    Image_Dialog_Filter += "|" + WebP_File_Dialog;
+                    Image_Dialog_Filters += "|" + WEBP_File_Dialog;
                     return true;
                 }
             }

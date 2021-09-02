@@ -107,17 +107,14 @@ namespace WinkingCat.HelperLibs
         }
         public void OnColorChanged()
         {
-            _Color mycolor = Color.White;
+            COLOR mycolor = Color.White;
             switch (this.colorFormat)
             {
-                case ColorFormat.AdobeRGB:
-                    mycolor = (new AdobeRGB((ushort)Math.Round(values[0]), (ushort)Math.Round(values[1]), (ushort)Math.Round(values[2]))).ToColor();
-                    break;
                 case ColorFormat.RGB:
-                    mycolor = new _Color((short)values[0], (short)values[1], (short)values[2]);
+                    mycolor = new COLOR((short)values[0], (short)values[1], (short)values[2]);
                     break;
                 case ColorFormat.ARGB:
-                    mycolor = new _Color((short)values[1], (short)values[2], (short)values[3], (short)values[0]);
+                    mycolor = new COLOR((short)values[1], (short)values[2], (short)values[3], (short)values[0]);
                     break;
                 case ColorFormat.CMYK:
                     Console.WriteLine($"{values[0]}, {values[1]}, {values[2]}, {values[3]}");
@@ -130,16 +127,10 @@ namespace WinkingCat.HelperLibs
                 case ColorFormat.HSL:
                     mycolor = (new HSL((int)Math.Round(values[0]), (int)Math.Round(values[1]), (int)Math.Round(values[2]))).ToColor();
                     break;
-                case ColorFormat.XYZ:
-                    mycolor = (new XYZ((float)values[0], (float)values[1], (float)values[2])).ToColor();
-                    break;
-                case ColorFormat.Yxy:
-                    mycolor = (new Yxy((float)values[0], (float)values[1], (float)values[2])).ToColor();
-                    break;
             }
             OnColorChanged(mycolor);
         }
-        public void OnColorChanged(_Color color)
+        public void OnColorChanged(COLOR color)
         {
             if(ColorChanged != null)
             {
@@ -147,57 +138,40 @@ namespace WinkingCat.HelperLibs
             }
         }
 
-        public void UpdateColor(_Color newColor)
+        public void UpdateColor(COLOR newColor)
         {
             if (preventOverflow)
                 return;
             preventOverflow = true;
             switch (ColorFormat)
             {
-                case ColorFormat.AdobeRGB:
-                    AdobeRGB a = newColor.ToAdobeRGB();
-                    values[0] = (decimal)a.R;
-                    values[1] = (decimal)a.G;
-                    values[2] = (decimal)a.B;
-                    break;
                 case ColorFormat.RGB:
-                    values[0] = newColor.argb.R;
-                    values[1] = newColor.argb.G;
-                    values[2] = newColor.argb.B;
+                    values[0] = newColor.ARGB.R;
+                    values[1] = newColor.ARGB.G;
+                    values[2] = newColor.ARGB.B;
                     break;
                 case ColorFormat.ARGB:
-                    values[0] = newColor.argb.A;
-                    values[1] = newColor.argb.R;
-                    values[2] = newColor.argb.G;
-                    values[3] = newColor.argb.B;
+                    values[0] = newColor.ARGB.A;
+                    values[1] = newColor.ARGB.R;
+                    values[2] = newColor.ARGB.G;
+                    values[3] = newColor.ARGB.B;
                     break;
                 case ColorFormat.CMYK:
-                    values[0] = (decimal)newColor.cmyk.C100;
-                    values[1] = (decimal)newColor.cmyk.M100;
-                    values[2] = (decimal)newColor.cmyk.Y100;
-                    values[3] = (decimal)newColor.cmyk.K100;
+                    values[0] = (decimal)newColor.CMYK.C100;
+                    values[1] = (decimal)newColor.CMYK.M100;
+                    values[2] = (decimal)newColor.CMYK.Y100;
+                    values[3] = (decimal)newColor.CMYK.K100;
                     break;
                 case ColorFormat.HSB:
                 case ColorFormat.HSV:
-                    values[0] = (decimal)newColor.hsb.Hue360;
-                    values[1] = (decimal)newColor.hsb.Saturation100;
-                    values[2] = (decimal)newColor.hsb.Brightness100;
+                    values[0] = (decimal)newColor.HSB.Hue360;
+                    values[1] = (decimal)newColor.HSB.Saturation100;
+                    values[2] = (decimal)newColor.HSB.Brightness100;
                     break;
                 case ColorFormat.HSL:
-                    values[0] = (decimal)newColor.hsl.Hue360;
-                    values[1] = (decimal)newColor.hsl.Saturation100;
-                    values[2] = (decimal)newColor.hsl.Lightness100;
-                    break;
-                case ColorFormat.XYZ:
-                    values[0] = (decimal)newColor.xyz.X;
-                    values[1] = (decimal)newColor.xyz.Y;
-                    values[2] = (decimal)newColor.xyz.Z;
-                    break;
-                case ColorFormat.Yxy:
-                    Yxy tmp = newColor.ToYxy();
-                    values[0] = (decimal)tmp.YY;
-                    values[1] = (decimal)tmp.X;
-                    values[2] = (decimal)tmp.Y;
+                    values[0] = (decimal)newColor.HSL.Hue360;
+                    values[1] = (decimal)newColor.HSL.Saturation100;
+                    values[2] = (decimal)newColor.HSL.Lightness100;
                     break;
             }
             UpdateValues();

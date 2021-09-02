@@ -51,22 +51,22 @@ namespace WinkingCat.HelperLibs
         }
         public static bool FormatCopyColor(ColorFormat format, Color color)
         {
-            return FormatCopyColor(format, new _Color(color));
+            return FormatCopyColor(format, new COLOR(color));
         }
 
-        public static bool FormatCopyColor(ColorFormat format, _Color color)
+        public static bool FormatCopyColor(ColorFormat format, COLOR color)
         {
             string formatedColor = "";
 
             switch (format)
             {
                 case ColorFormat.ARGB:
-                    formatedColor += color.argb.ToString(ColorFormat.ARGB);
+                    formatedColor += color.ARGB.ToString(ColorFormat.ARGB);
                     Logger.WriteLine("ARGB Format Color Copied: " + formatedColor);
                     break;
 
                 case ColorFormat.RGB:
-                    formatedColor += color.argb.ToString();
+                    formatedColor += color.ARGB.ToString();
                     Logger.WriteLine("RGB Format Color Copied: " + formatedColor);
                     break;
 
@@ -81,40 +81,24 @@ namespace WinkingCat.HelperLibs
                     break;
 
                 case ColorFormat.CMYK:
-                    formatedColor += color.cmyk.ToString();
+                    formatedColor += color.CMYK.ToString();
                     Logger.WriteLine("CMYK Format Color Copied: " + formatedColor);
                     break;
 
                 case ColorFormat.HSL:
-                    formatedColor += color.hsl.ToString();
+                    formatedColor += color.HSL.ToString();
                     Logger.WriteLine("HSL Format Color Copied: " + formatedColor);
                     break;
 
                 case ColorFormat.HSV:
-                    formatedColor += color.hsb.ToString();
+                    formatedColor += color.HSB.ToString();
                     Logger.WriteLine("HSV Format Color Copied: " + formatedColor);
                     break;
 
                 case ColorFormat.HSB:
-                    formatedColor += color.hsb.ToString();
+                    formatedColor += color.HSB.ToString();
                     Logger.WriteLine("HSB Format Color Copied: " + formatedColor);
                     break;
-
-                case ColorFormat.XYZ:
-                    formatedColor += color.ToXYZ().ToString();
-                    Logger.WriteLine("XYZ Format Color Copied: " + formatedColor);
-                    break;
-
-                case ColorFormat.Yxy:
-                    formatedColor += color.ToYxy().ToString();
-                    Logger.WriteLine("Yxy Format Color Copied: " + formatedColor);
-                    break;
-
-                case ColorFormat.AdobeRGB:
-                    formatedColor += color.ToAdobeRGB().ToString();
-                    Logger.WriteLine("AdobeRGB Format Color Copied: " + formatedColor);
-                    break;
-
             }
             return CopyStringDefault(formatedColor);
         }

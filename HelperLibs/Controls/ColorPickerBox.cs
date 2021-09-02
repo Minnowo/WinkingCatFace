@@ -37,8 +37,8 @@ namespace WinkingCat.HelperLibs
         {
             using (Graphics g = Graphics.FromImage(bmp))
             {
-                HSB start = new HSB((int)selectedColor.hsb.Hue360, 0, 0, selectedColor.argb.A);
-                HSB end = new HSB((int)selectedColor.hsb.Hue360, 100, 0, selectedColor.argb.A);
+                HSB start = HSB.FromHSB360(selectedColor.HSB.Hue360, 0, 0, selectedColor.ARGB.A);
+                HSB end = HSB.FromHSB360(selectedColor.HSB.Hue360, 100, 0, selectedColor.ARGB.A);
 
                 for (int y = 0; y < clientHeight; y++)
                 {
@@ -59,8 +59,8 @@ namespace WinkingCat.HelperLibs
         {
             using (Graphics g = Graphics.FromImage(bmp))
             {
-                HSB start = new HSB(0, (int)selectedColor.hsb.Saturation100, 100, selectedColor.argb.A);
-                HSB end = new HSB(0, (int)selectedColor.hsb.Saturation100, 0, selectedColor.argb.A);
+                HSB start = HSB.FromHSB360(0, selectedColor.HSB.Saturation100, 100, selectedColor.ARGB.A);
+                HSB end = HSB.FromHSB360(0, selectedColor.HSB.Saturation100, 0, selectedColor.ARGB.A);
 
                 for (int x = 0; x < clientWidth; x++)
                 {
@@ -81,8 +81,8 @@ namespace WinkingCat.HelperLibs
         {
             using (Graphics g = Graphics.FromImage(bmp))
             {
-                HSB start = new HSB(0, 100, (int)selectedColor.hsb.Brightness100, selectedColor.argb.A);
-                HSB end = new HSB(0, 0, (int)selectedColor.hsb.Brightness100, selectedColor.argb.A);
+                HSB start = HSB.FromHSB360(0, 100, selectedColor.HSB.Brightness100, selectedColor.ARGB.A);
+                HSB end = HSB.FromHSB360(0, 0, selectedColor.HSB.Brightness100, selectedColor.ARGB.A);
 
                 for (int x = 0; x < clientWidth; x++)
                 {
@@ -103,12 +103,12 @@ namespace WinkingCat.HelperLibs
         {
             using (Graphics g = Graphics.FromImage(bmp))
             {
-                ARGB start = new ARGB(selectedColor.argb.A, (int)selectedColor.argb.R, 0, 0);
-                ARGB end = new ARGB(selectedColor.argb.A, (int)selectedColor.argb.R, 0, 255);
+                ARGB start = new ARGB(selectedColor.ARGB.A, selectedColor.ARGB.R, 0, 0);
+                ARGB end = new ARGB(selectedColor.ARGB.A, selectedColor.ARGB.R, 0, 255);
 
                 for (int y = 0; y < clientHeight; y++)
                 {
-                    start.G = end.G = (int)Math.Round(255 - ((double)y / (clientHeight)) * 255);
+                    start.G = end.G = (byte)Math.Round(255 - ((double)y / (clientHeight)) * 255);
 
                     using (LinearGradientBrush brush = new LinearGradientBrush(new Rectangle(0, 0, clientWidth, 1), start, end, LinearGradientMode.Horizontal))
                     {
@@ -125,12 +125,12 @@ namespace WinkingCat.HelperLibs
         {
             using (Graphics g = Graphics.FromImage(bmp))
             {
-                ARGB start = new ARGB(selectedColor.argb.A, 0, (int)selectedColor.argb.G, 0);
-                ARGB end = new ARGB(selectedColor.argb.A, 0, (int)selectedColor.argb.G, 255);
+                ARGB start = new ARGB(selectedColor.ARGB.A, 0, selectedColor.ARGB.G, 0);
+                ARGB end = new ARGB(selectedColor.ARGB.A, 0, selectedColor.ARGB.G, 255);
 
                 for (int y = 0; y < clientHeight; y++)
                 {
-                    start.R = end.R = (int)Math.Round(255 - ((double)y / (clientHeight)) * 255);
+                    start.R = end.R = (byte)Math.Round(255 - ((double)y / (clientHeight)) * 255);
 
                     using (LinearGradientBrush brush = new LinearGradientBrush(new Rectangle(0, 0, clientWidth, 1), start, end, LinearGradientMode.Horizontal))
                     {
@@ -147,12 +147,12 @@ namespace WinkingCat.HelperLibs
         {
             using (Graphics g = Graphics.FromImage(bmp))
             {
-                ARGB start = new ARGB(selectedColor.argb.A, 0, 0, (int)selectedColor.argb.B);
-                ARGB end = new ARGB(selectedColor.argb.A, 255, 0, (int)selectedColor.argb.B);
+                ARGB start = new ARGB(selectedColor.ARGB.A, 0, 0, selectedColor.ARGB.B);
+                ARGB end = new ARGB(selectedColor.ARGB.A, 255, 0, selectedColor.ARGB.B);
 
                 for (int y = 0; y < clientHeight; y++)
                 {
-                    start.G = end.G = (int)Math.Round(255 - ((double)y / (clientHeight)) * 255);
+                    start.G = end.G = (byte)Math.Round(255 - ((double)y / (clientHeight)) * 255);
 
                     using (LinearGradientBrush brush = new LinearGradientBrush(new Rectangle(0, 0, clientWidth, 1), start, end, LinearGradientMode.Horizontal))
                     {
@@ -169,8 +169,8 @@ namespace WinkingCat.HelperLibs
         {
             using (Graphics g = Graphics.FromImage(bmp))
             {
-                HSL start = new HSL((int)selectedColor.hsl.Hue360, 0, 0, selectedColor.argb.A);
-                HSL end = new HSL((int)selectedColor.hsl.Hue360, 100, 0, selectedColor.argb.A);
+                HSL start = HSL.FromHSL360(selectedColor.HSL.Hue360, 0, 0, selectedColor.ARGB.A);
+                HSL end = HSL.FromHSL360(selectedColor.HSL.Hue360, 100, 0, selectedColor.ARGB.A);
 
                 for (int y = 0; y < clientHeight; y++)
                 {
@@ -191,8 +191,8 @@ namespace WinkingCat.HelperLibs
         {
             using (Graphics g = Graphics.FromImage(bmp))
             {
-                HSL start = new HSL(0, (int)selectedColor.hsl.Saturation100, 50, selectedColor.argb.A);
-                HSL end = new HSL(360, (int)selectedColor.hsl.Saturation100, 50, selectedColor.argb.A);
+                HSL start = HSL.FromHSL360(0, selectedColor.HSL.Saturation100, 50, selectedColor.ARGB.A);
+                HSL end = HSL.FromHSL360(360, selectedColor.HSL.Saturation100, 50, selectedColor.ARGB.A);
 
                 for (int x = 0; x < clientWidth; x++)
                 {
@@ -224,8 +224,8 @@ namespace WinkingCat.HelperLibs
         {
             using (Graphics g = Graphics.FromImage(bmp))
             {
-                HSL start = new HSL(0, 100, (int)selectedColor.hsl.Lightness100, selectedColor.argb.A);
-                HSL end = new HSL(0, 0, (int)selectedColor.hsl.Lightness100, selectedColor.argb.A);
+                HSL start = HSL.FromHSL360(0, 100, selectedColor.HSL.Lightness100, selectedColor.ARGB.A);
+                HSL end = HSL.FromHSL360(0, 0, selectedColor.HSL.Lightness100, selectedColor.ARGB.A);
 
                 for (int x = 0; x < clientWidth; x++)
                 {
@@ -234,27 +234,6 @@ namespace WinkingCat.HelperLibs
                     using (LinearGradientBrush brush = new LinearGradientBrush(new Rectangle(0, 0, 1, clientHeight), start, end, LinearGradientMode.Vertical))
                     {
                         g.FillRectangle(brush, new Rectangle(x, 0, 1, clientHeight));
-                    }
-                }
-            }
-        }
-
-        protected override void DrawXYZ()
-        {
-            using (Graphics g = Graphics.FromImage(bmp))
-            {
-                XYZ start = new XYZ(selectedColor.xyz.X, 0f, 0f, selectedColor.argb.A);
-                XYZ end = new XYZ(selectedColor.xyz.X, 100f, 0f, selectedColor.argb.A);
-
-                for (int y = 0; y < clientHeight; y++)
-                {
-                    //start.Z = end.Z = (float)(150 * (1.0 - ((double)y / clientHeight)));
-                    start.Z = end.Z = (float)(150 * (1.0 - ((double)y / clientHeight)));
-                    //start.Z = end.Z = (float)(150 - (150.0 * ((double)y / clientHeight)));
-
-                    using (LinearGradientBrush brush = new LinearGradientBrush(new Rectangle(0, 0, clientWidth, 1), start, end, LinearGradientMode.Horizontal))
-                    {
-                        g.FillRectangle(brush, new Rectangle(0, y, clientWidth, 1));
                     }
                 }
             }

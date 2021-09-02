@@ -26,12 +26,15 @@ namespace WinkingCat.ClipHelper
         public Point lastLocation { get; private set; }
 
         public ClipOptions Options { get; private set; }
-        public Bitmap image { get; private set; }
+        public Bitmap image 
+        { 
+            get { return ChangeTracker.CurrentBitmap; } 
+        }
         public Bitmap zoomedImage { get; private set; }
 
         public string ClipName { get; private set; }
 
-        private BitmapUndo changeTracker;
+        private BitmapUndo ChangeTracker;
 
         private Stopwatch zoomRefreshRate = new Stopwatch();
 
@@ -62,9 +65,8 @@ namespace WinkingCat.ClipHelper
             imageSize = displayImage.Size;
             imageDefaultSize = displayImage.Size;
             aspectRatio = imageSize.Width / (double)imageSize.Height;
-            image = (Bitmap)displayImage;
-
-            changeTracker = new BitmapUndo(image);
+            
+            ChangeTracker = new BitmapUndo(ImageBase.ProperCast(image, InternalSettings.Default_Image_Format));
 
             startWindowSize = new Size(
                 imageSize.Width + (Options.BorderThickness << 1),
@@ -100,8 +102,6 @@ namespace WinkingCat.ClipHelper
             ResizeEnd += ResizeEnded;
             KeyDown += FormKeyDown;
             MouseWheel += ClipForm_MouseWheel;
-
-            changeTracker.BitmapChanged += ChangeTracker_BitmapChanged;
 
             ApplicationStyles.UpdateStylesEvent += UpdateTheme;
 
@@ -150,7 +150,7 @@ namespace WinkingCat.ClipHelper
         /// </summary>
         public void UpdateWindow()
         {
-            double aspectR = changeTracker.CurrentBitmap.Width / (double)changeTracker.CurrentBitmap.Height;
+            double aspectR = ChangeTracker.CurrentBitmap.Width / (double)ChangeTracker.CurrentBitmap.Height;
 
             if(aspectR.CompareTo(aspectRatio) == 0)
                 return;
@@ -276,7 +276,7 @@ namespace WinkingCat.ClipHelper
         /// </summary>
         public void CopyScaledImage()
         {
-            using (Bitmap img = ImageHelper.GetResizedBitmap(this.image, new Size(Width - Options.BorderThickness, Height - Options.BorderThickness)))
+            using (Bitmap img = ImageProcessor.GetResizedBitmap(this.image, new Size(Width - Options.BorderThickness, Height - Options.BorderThickness)))
             {
                 ClipboardHelper.CopyImageDefault(img);
             }
@@ -295,7 +295,7 @@ namespace WinkingCat.ClipHelper
         /// </summary>
         public void InvertImage()
         {
-            changeTracker.InvertBitmap();
+            ChangeTracker.CurrentBitmap.InvertColor();
             //ImageHelper.InvertBitmap(this.image);
             Invalidate();
         }
@@ -305,7 +305,7 @@ namespace WinkingCat.ClipHelper
         /// </summary>
         public void ConvertImageToGray()
         {
-            changeTracker.ConvertToGray();
+            ChangeTracker.ConvertToGray();
             //ImageHelper.GrayscaleBitmap(this.image);
             Invalidate();
         }
@@ -315,7 +315,7 @@ namespace WinkingCat.ClipHelper
         /// </summary>
         public void RotateLeft()
         {
-            changeTracker.RotateLeft();
+            ChangeTracker.RotateLeft();
             Invalidate();
         }
 
@@ -324,7 +324,7 @@ namespace WinkingCat.ClipHelper
         /// </summary>
         public void RotateRight()
         {
-            changeTracker.RotateRight();
+            ChangeTracker.RotateRight();
             Invalidate();
         }
 
@@ -333,7 +333,7 @@ namespace WinkingCat.ClipHelper
         /// </summary>
         public void FlipHorizontal()
         {
-            changeTracker.FlipHorizontal();
+            ChangeTracker.FlipHorizontal();
             Invalidate();
         }
 
@@ -342,7 +342,7 @@ namespace WinkingCat.ClipHelper
         /// </summary>
         public void FlipVertical()
         {
-            changeTracker.FlipVertical();
+            ChangeTracker.FlipVertical();
             Invalidate();
         }
 
@@ -351,10 +351,10 @@ namespace WinkingCat.ClipHelper
         /// </summary>
         public void Redo()
         {
-            if (changeTracker.RedoCount == 0)
+            if (ChangeTracker.RedoCount == 0)
                 return;
 
-            changeTracker.Redo();
+            ChangeTracker.Redo();
             Invalidate();
         }
 
@@ -363,10 +363,10 @@ namespace WinkingCat.ClipHelper
         /// </summary>
         public void Undo()
         {
-            if (changeTracker.UndoCount == 0)
+            if (ChangeTracker.UndoCount == 0)
                 return;
 
-            changeTracker.Undo();
+            ChangeTracker.Undo();
             Invalidate();
         }
 
@@ -793,9 +793,8 @@ namespace WinkingCat.ClipHelper
         /// <param name="disposing">true if managed resources should be disposed; otherwise, false.</param>
         protected override void Dispose(bool disposing)
         {
-            changeTracker?.Dispose();
+            ChangeTracker?.Dispose();
             cmMain?.Dispose();
-            image?.Dispose();
             zoomedImage?.Dispose();
             zdbZoomedImageDisplay?.Dispose();
 
