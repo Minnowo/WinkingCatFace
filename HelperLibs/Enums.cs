@@ -60,7 +60,7 @@ namespace WinkingCat.HelperLibs
         Failed,
         NotSet
     }
-    public enum Tasks
+    public enum Function
     {
         None,
         RegionCapture,

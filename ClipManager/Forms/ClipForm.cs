@@ -1,13 +1,12 @@
 ﻿using System;
 using System.ComponentModel;
-using System.Drawing;
-using System.Windows.Forms;
-using System.Drawing.Drawing2D;
 using System.Diagnostics;
+using System.Drawing;
+using System.Drawing.Drawing2D;
 using System.IO;
-
-using WinkingCat.Uploaders;
+using System.Windows.Forms;
 using WinkingCat.HelperLibs;
+using WinkingCat.Uploaders;
 
 namespace WinkingCat.ClipHelper
 {
@@ -20,67 +19,81 @@ namespace WinkingCat.ClipHelper
     }
     public partial class ClipForm : Form, IUndoable
     {
-        public Size imageSize { get; private set; }
-        public Size imageDefaultSize { get; private set; }
-        public Size startWindowSize { get; private set; }
-        public Point lastLocation { get; private set; }
-
-        public ClipOptions Options { get; private set; }
-        public Bitmap image 
-        { 
-            get { return ChangeTracker.CurrentBitmap; } 
-        }
-        public Bitmap zoomedImage { get; private set; }
-
+        /// <summary>
+        /// The name of the clip.
+        /// </summary>
         public string ClipName { get; private set; }
 
-        private BitmapUndo ChangeTracker;
+        /// <summary>
+        /// The options given to the clip.
+        /// </summary>
+        public ClipOptions Options { get; private set; }
 
-        private Stopwatch zoomRefreshRate = new Stopwatch();
+        /// <summary>
+        /// The image.
+        /// </summary>
+        public Bitmap Image 
+        { 
+            get { return _ChangeTracker.CurrentBitmap; } 
+        }
 
-        private double zoomLevel = 1;
-        private double aspectRatio = 0;
+        /// <summary>
+        /// The image the scaled to the size of the form.
+        /// </summary>
+        public Bitmap ScaledImage { get; private set; }
 
-        private DragLoc drag;
+        /// <summary>
+        /// The window size of the clip when it was first created.
+        /// </summary>
+        public Size StartWindowSize { get; private set; }
 
-        private Size zoomControlSize;
 
-        private bool isLeftClicking = false;
-        private bool isResizing = false;
-        private bool isResizable = true;
-        private bool isMoving = false;
-        private bool showingZoomed = false;
+        private BitmapUndo _ChangeTracker;
 
-        public ClipForm(ClipOptions options, Image displayImage)
+        private Stopwatch _ZoomRefreshLimiter = new Stopwatch();        
+
+        private DragLoc _DragLocation;
+
+        private Size _ZoomControlSize;
+
+        private Point _LastClickLocation;
+
+        private double _ZoomLevel = 1;
+        private double _AspectRatio = 0;
+
+        private bool _IsLeftClicking = false;
+        private bool _IsResizing = false;
+        private bool _IsResizable = true;
+        private bool _IsMoving = false;
+        private bool _MagnifierShown = false;
+
+        public ClipForm(ClipOptions options, Image image)
         {
             SetStyle(ControlStyles.OptimizedDoubleBuffer | ControlStyles.UserPaint | ControlStyles.AllPaintingInWmPaint, true);
             InitializeComponent();
             SuspendLayout();
 
-            this.Text = options.Name;
-            ClipName = options.Name;
-
             Options = options;
 
-            imageSize = displayImage.Size;
-            imageDefaultSize = displayImage.Size;
-            aspectRatio = imageSize.Width / (double)imageSize.Height;
+            ClipName = Options.Name;
+
+            _ChangeTracker = new BitmapUndo(IMAGE.ProperCast(image, InternalSettings.Default_Image_Format));
+
+            _AspectRatio = image.Width / (double)image.Height;
+
+            StartWindowSize = new Size(
+                image.Width + (Options.BorderThickness << 1),
+                image.Height + (Options.BorderThickness << 1));
+
+            _ZoomControlSize = new Size(
+                (int)Math.Round(StartWindowSize.Width * ApplicationStyles.currentStyle.clipStyle.ZoomSizePercent),
+                (int)Math.Round(StartWindowSize.Height * ApplicationStyles.currentStyle.clipStyle.ZoomSizePercent));
+
+            MinimumSize = StartWindowSize;
+            MaximumSize = StartWindowSize;
+
             
-            ChangeTracker = new BitmapUndo(ImageBase.ProperCast(image, InternalSettings.Default_Image_Format));
-
-            startWindowSize = new Size(
-                imageSize.Width + (Options.BorderThickness << 1),
-                imageSize.Height + (Options.BorderThickness << 1));
-
-            zoomControlSize = new Size(
-                (int)Math.Round(startWindowSize.Width * ApplicationStyles.currentStyle.clipStyle.ZoomSizePercent),
-                (int)Math.Round(startWindowSize.Height * ApplicationStyles.currentStyle.clipStyle.ZoomSizePercent));
-
-            MinimumSize = startWindowSize;
-            MaximumSize = startWindowSize;
-
-            // why tf can't you make the width / height of a windows form bigger than the screen width + 12 its bs
-            Bounds = new Rectangle(options.Location, startWindowSize);
+            Bounds = new Rectangle(options.Location, StartWindowSize);
             BackColor = Options.Color;
 
             zdbZoomedImageDisplay.Enabled = false;
@@ -126,14 +139,17 @@ namespace WinkingCat.ClipHelper
             tsmiFlipHorizontal.Click += FlipHorizontal_Click;
             tsmiFlipVertical.Click += FlipVertical_Click;
 
-            if (isResizable) tsmiAllowResizeToolStripMenuItem.Checked = true;
+            if (_IsResizable) tsmiAllowResizeToolStripMenuItem.Checked = true;
             #endregion
 
             TopMost = true;
+            Text = ClipName;
+
             ResumeLayout(true);
+
             Show();
 
-            UpdateTheme(null, EventArgs.Empty);
+            UpdateTheme();
 
             //for some reason if the clip is on a display that is scaled it makes it bigger than its supposed to be
             //so only allow it to be resized after 1000 ms
@@ -148,16 +164,16 @@ namespace WinkingCat.ClipHelper
         /// <summary>
         /// Checks if the window should adjust its size to match a newly rotated image.
         /// </summary>
-        public void UpdateWindow()
+        public void UpdateRotation()
         {
-            double aspectR = ChangeTracker.CurrentBitmap.Width / (double)ChangeTracker.CurrentBitmap.Height;
+            double aspectR = _ChangeTracker.CurrentBitmap.Width / (double)_ChangeTracker.CurrentBitmap.Height;
 
-            if(aspectR.CompareTo(aspectRatio) == 0)
+            if(aspectR.CompareTo(_AspectRatio) == 0)
                 return;
 
             // if the aspect ratio changed it means that the image has been rotated left or right
             // so swap the width and height to rotate
-            aspectRatio = aspectR;
+            _AspectRatio = aspectR;
 
             Size oldWindowSize = new Size(Width, Height);
 
@@ -187,7 +203,7 @@ namespace WinkingCat.ClipHelper
             zdbZoomedImageDisplay.borderColor = ApplicationStyles.currentStyle.clipStyle.zoomBorderColor;
             zdbZoomedImageDisplay.replaceTransparent = ApplicationStyles.currentStyle.clipStyle.zoomReplaceTransparentColor;
 
-            zoomControlSize = new Size(
+            _ZoomControlSize = new Size(
                 (int)Math.Round(ClientSize.Width * ApplicationStyles.currentStyle.clipStyle.ZoomSizePercent),
                 (int)Math.Round(ClientSize.Height * ApplicationStyles.currentStyle.clipStyle.ZoomSizePercent));
 
@@ -199,7 +215,7 @@ namespace WinkingCat.ClipHelper
         /// </summary>
         public void AskSaveImage()
         {
-            using (Image img = (Image)image.CloneSafe())
+            using (Image img = (Image)Image.CloneSafe())
             {
                 ImageHelper.SaveImageFileDialog(img);
             }
@@ -221,7 +237,7 @@ namespace WinkingCat.ClipHelper
             
             string fileName = PathHelper.GetNewImageFileName();
 
-            if (ImageHelper.SaveImage(this.image, fileName))
+            if (ImageHelper.SaveImage(this.Image, fileName))
             {
                 OCRForm form = new OCRForm(fileName);
                 form.Owner = this;
@@ -238,14 +254,14 @@ namespace WinkingCat.ClipHelper
         /// </summary>
         public void ToggleResize()
         {
-            if (isResizable)
+            if (_IsResizable)
             {
-                isResizable = false;
+                _IsResizable = false;
                 tsmiAllowResizeToolStripMenuItem.Checked = false;
             }
             else
             {
-                isResizable = true;
+                _IsResizable = true;
                 tsmiAllowResizeToolStripMenuItem.Checked = true;
             }
             Invalidate();
@@ -256,7 +272,7 @@ namespace WinkingCat.ClipHelper
         /// </summary>
         public void CopyImage()
         {
-            ClipboardHelper.CopyImageDefault(image);
+            ClipboardHelper.CopyImage(Image);
             cmMain.Close();
         }
 
@@ -267,7 +283,7 @@ namespace WinkingCat.ClipHelper
         {
             if (zdbZoomedImageDisplay.image != null)
             {
-                ClipboardHelper.CopyImageDefault(zdbZoomedImageDisplay.image);
+                ClipboardHelper.CopyImage(zdbZoomedImageDisplay.image);
             }
         }
 
@@ -276,9 +292,9 @@ namespace WinkingCat.ClipHelper
         /// </summary>
         public void CopyScaledImage()
         {
-            using (Bitmap img = ImageProcessor.GetResizedBitmap(this.image, new Size(Width - Options.BorderThickness, Height - Options.BorderThickness)))
+            using (Bitmap img = ImageProcessor.GetResizedBitmap(this.Image, new Size(Width - Options.BorderThickness, Height - Options.BorderThickness)))
             {
-                ClipboardHelper.CopyImageDefault(img);
+                ClipboardHelper.CopyImage(img);
             }
         }
 
@@ -295,8 +311,7 @@ namespace WinkingCat.ClipHelper
         /// </summary>
         public void InvertImage()
         {
-            ChangeTracker.CurrentBitmap.InvertColor();
-            //ImageHelper.InvertBitmap(this.image);
+            _ChangeTracker.CurrentBitmap.InvertColor();
             Invalidate();
         }
 
@@ -305,8 +320,7 @@ namespace WinkingCat.ClipHelper
         /// </summary>
         public void ConvertImageToGray()
         {
-            ChangeTracker.ConvertToGray();
-            //ImageHelper.GrayscaleBitmap(this.image);
+            _ChangeTracker.ConvertToGray();
             Invalidate();
         }
 
@@ -315,7 +329,7 @@ namespace WinkingCat.ClipHelper
         /// </summary>
         public void RotateLeft()
         {
-            ChangeTracker.RotateLeft();
+            _ChangeTracker.RotateLeft();
             Invalidate();
         }
 
@@ -324,7 +338,7 @@ namespace WinkingCat.ClipHelper
         /// </summary>
         public void RotateRight()
         {
-            ChangeTracker.RotateRight();
+            _ChangeTracker.RotateRight();
             Invalidate();
         }
 
@@ -333,7 +347,7 @@ namespace WinkingCat.ClipHelper
         /// </summary>
         public void FlipHorizontal()
         {
-            ChangeTracker.FlipHorizontal();
+            _ChangeTracker.FlipHorizontal();
             Invalidate();
         }
 
@@ -342,7 +356,7 @@ namespace WinkingCat.ClipHelper
         /// </summary>
         public void FlipVertical()
         {
-            ChangeTracker.FlipVertical();
+            _ChangeTracker.FlipVertical();
             Invalidate();
         }
 
@@ -351,10 +365,10 @@ namespace WinkingCat.ClipHelper
         /// </summary>
         public void Redo()
         {
-            if (ChangeTracker.RedoCount == 0)
+            if (_ChangeTracker.RedoCount == 0)
                 return;
 
-            ChangeTracker.Redo();
+            _ChangeTracker.Redo();
             Invalidate();
         }
 
@@ -363,19 +377,18 @@ namespace WinkingCat.ClipHelper
         /// </summary>
         public void Undo()
         {
-            if (ChangeTracker.UndoCount == 0)
+            if (_ChangeTracker.UndoCount == 0)
                 return;
 
-            ChangeTracker.Undo();
+            _ChangeTracker.Undo();
             Invalidate();
         }
 
         private void DrawZoomedImage(Point mousePos)
         {
-
             zdbZoomedImageDisplay.Size = new Size(
-                zoomControlSize.Width + (zdbZoomedImageDisplay.BorderThickness << 1),
-                zoomControlSize.Height + (zdbZoomedImageDisplay.BorderThickness << 1));
+                _ZoomControlSize.Width + (zdbZoomedImageDisplay.BorderThickness << 1),
+                _ZoomControlSize.Height + (zdbZoomedImageDisplay.BorderThickness << 1));
 
             if (ApplicationStyles.currentStyle.clipStyle.zoomFollowMouse)
             {
@@ -386,7 +399,7 @@ namespace WinkingCat.ClipHelper
 
             // if the clip has been dragged larger then we need 
             // to resize the image before trying to zoom in on it
-            if (ClientSize != startWindowSize)
+            if (ClientSize != StartWindowSize)
             {
                 Size scaledImageSize = new Size(
                     Width - (Options.BorderThickness << 1),
@@ -394,51 +407,46 @@ namespace WinkingCat.ClipHelper
 
                 // if the zoomed image is null or not the size its supposed to be
                 // try and dispose of it, then remake it
-                if (zoomedImage == null || zoomedImage.Size != scaledImageSize)
+                if (ScaledImage == null || ScaledImage.Size != scaledImageSize)
                 {
-                    zoomedImage?.Dispose();
-                    zoomedImage = new Bitmap(scaledImageSize.Width, scaledImageSize.Height);
+                    ScaledImage?.Dispose();
+                    ScaledImage = new Bitmap(scaledImageSize.Width, scaledImageSize.Height);
 
-                    using (Graphics g = Graphics.FromImage(zoomedImage))
+                    using (Graphics g = Graphics.FromImage(ScaledImage))
                     {
                         g.InterpolationMode = InterpolationMode.NearestNeighbor;
                         g.PixelOffsetMode = PixelOffsetMode.Half;
 
                         g.DrawImage(
-                            image,
+                            Image,
                             new Rectangle(new Point(Options.BorderThickness, Options.BorderThickness), scaledImageSize),
-                            new Rectangle(0, 0, image.Width, image.Height), GraphicsUnit.Pixel);
+                            new Rectangle(0, 0, Image.Width, Image.Height), GraphicsUnit.Pixel);
                     }
                 }
+            
 
-                zdbZoomedImageDisplay.DrawImage(zoomedImage,
-                    new Rectangle(0, 0, zoomControlSize.Width, zoomControlSize.Height),
-                    new Rectangle(
-                        mousePos.X - (int)Math.Round(zdbZoomedImageDisplay.Size.Width / zoomLevel / 2),
-                        mousePos.Y - (int)Math.Round(zdbZoomedImageDisplay.Size.Height / zoomLevel / 2),
-                        (int)Math.Round(zoomControlSize.Width / zoomLevel),
-                        (int)Math.Round(zoomControlSize.Height / zoomLevel)));
+                zdbZoomedImageDisplay.DrawImage(ScaledImage,
+                        new Rectangle(0, 0, _ZoomControlSize.Width, _ZoomControlSize.Height),
+                        new Rectangle(
+                            mousePos.X - (int)Math.Round(zdbZoomedImageDisplay.Size.Width / _ZoomLevel / 2),
+                            mousePos.Y - (int)Math.Round(zdbZoomedImageDisplay.Size.Height / _ZoomLevel / 2),
+                            (int)Math.Round(_ZoomControlSize.Width / _ZoomLevel),
+                            (int)Math.Round(_ZoomControlSize.Height / _ZoomLevel)));
             }
             else
             {
-                zdbZoomedImageDisplay.DrawImage(this.image,
-                    new Rectangle(0, 0, zoomControlSize.Width, zoomControlSize.Height),
+                zdbZoomedImageDisplay.DrawImage(Image,
+                    new Rectangle(0, 0, _ZoomControlSize.Width, _ZoomControlSize.Height),
                     new Rectangle(
-                        mousePos.X - (int)Math.Round(zdbZoomedImageDisplay.Size.Width / zoomLevel / 2),
-                        mousePos.Y - (int)Math.Round(zdbZoomedImageDisplay.Size.Height / zoomLevel / 2),
-                        (int)Math.Round(zoomControlSize.Width / zoomLevel),
-                        (int)Math.Round(zoomControlSize.Height / zoomLevel)));
+                        mousePos.X - (int) Math.Round(zdbZoomedImageDisplay.Size.Width / _ZoomLevel / 2),
+                        mousePos.Y - (int) Math.Round(zdbZoomedImageDisplay.Size.Height / _ZoomLevel / 2),
+                        (int) Math.Round(_ZoomControlSize.Width / _ZoomLevel),
+                        (int) Math.Round(_ZoomControlSize.Height / _ZoomLevel)));
             }
-
-        }
+}
 
 
         #region context menu functions
-
-        private void ChangeTracker_BitmapChanged(BitmapChanges change)
-        {
-            UpdateWindow();
-        }
 
         private void CmMain_Opening(object sender, CancelEventArgs e)
         {
@@ -543,34 +551,27 @@ namespace WinkingCat.ClipHelper
             e.Handled = true;
             switch (e.KeyData)
             {
-                case (Keys.Z | Keys.Shift | Keys.LControlKey):
                 case (Keys.Z | Keys.Shift | Keys.Control):
-                case (Keys.Y | Keys.LControlKey):
                 case (Keys.Y | Keys.Control):
                     Redo();
                     break;
 
-                case (Keys.Z | Keys.LControlKey):
                 case (Keys.Z | Keys.Control):
                     Undo();
                     break;
 
-                case (Keys.C | Keys.LControlKey):
                 case (Keys.C | Keys.Control):
                     CopyImage();
                     break;
 
-                case (Keys.T | Keys.LControlKey):
                 case (Keys.T | Keys.Control):
                     OCR_Image();
                     break;
 
-                case (Keys.R | Keys.LControlKey):
                 case (Keys.R | Keys.Control):
                     ToggleResize();
                     break;
 
-                case (Keys.S | Keys.LControlKey):
                 case (Keys.S | Keys.Control):
                     AskSaveImage();
                     break;
@@ -594,25 +595,25 @@ namespace WinkingCat.ClipHelper
         {
             if (e.Delta > 0)
             {
-                zoomRefreshRate.Restart();
-                zoomLevel = Math.Round(zoomLevel * 1.1d, 2);
-                showingZoomed = true;
+                _ZoomRefreshLimiter.Restart();
+                _ZoomLevel = Math.Round(_ZoomLevel * 1.1d, 2);
+                _MagnifierShown = true;
                 zdbZoomedImageDisplay._Show();
                 DrawZoomedImage(e.Location);
             }
             else
             {
-                zoomLevel = Math.Round(zoomLevel * 0.9d, 2);
-                if (zoomLevel <= 1)
+                _ZoomLevel = Math.Round(_ZoomLevel * 0.9d, 2);
+                if (_ZoomLevel <= 1)
                 {
-                    zoomRefreshRate.Reset();
+                    _ZoomRefreshLimiter.Reset();
 
-                    showingZoomed = false;
-                    zoomLevel = 1;
+                    _MagnifierShown = false;
+                    _ZoomLevel = 1;
 
                     zdbZoomedImageDisplay._Hide();
-                    zoomedImage?.Dispose();
-                    zoomedImage = null;
+                    ScaledImage?.Dispose();
+                    ScaledImage = null;
                     //GC.Collect();
                 }
                 else
@@ -624,20 +625,20 @@ namespace WinkingCat.ClipHelper
 
         private void MouseMove_Event(object sender, MouseEventArgs e)
         {
-            if (showingZoomed)
+            if (_MagnifierShown)
             {
-                if (zoomRefreshRate.ElapsedMilliseconds > ClipOptions.ZoomRefreshRate)
+                if (_ZoomRefreshLimiter.ElapsedMilliseconds > Options.ZoomRefreshRate)
                 {
                     DrawZoomedImage(e.Location);
-                    zoomRefreshRate.Restart();
+                    _ZoomRefreshLimiter.Restart();
                 }
             }
-            else if (isResizable && !isMoving)
+            else if (_IsResizable && !_IsMoving)
             {
-                if (isResizing)
+                if (_IsResizing)
                 {
                     Point mousepos = ScreenHelper.GetCursorPosition();
-                    switch (drag)
+                    switch (_DragLocation)
                     {
                         case DragLoc.Top:
                             ResizeHeight(Height + Location.Y - mousepos.Y);
@@ -657,7 +658,7 @@ namespace WinkingCat.ClipHelper
 
                     Invalidate();
 
-                    zoomControlSize = new Size(
+                    _ZoomControlSize = new Size(
                         (int)Math.Round(ClientSize.Width * ApplicationStyles.currentStyle.clipStyle.ZoomSizePercent),
                         (int)Math.Round(ClientSize.Height * ApplicationStyles.currentStyle.clipStyle.ZoomSizePercent));
                 }
@@ -665,40 +666,40 @@ namespace WinkingCat.ClipHelper
                 {
                     Point m = e.Location;
 
-                    if (m.X >= Size.Width - Options.BorderThickness - ClipOptions.ExtendBorderGrabRangePixels)
+                    if (m.X >= Size.Width - Options.BorderThickness - Options.BorderGrabSize)
                     {
                         Cursor = Cursors.SizeWE;
-                        if (isLeftClicking)
+                        if (_IsLeftClicking)
                         {
-                            drag = DragLoc.Right;
-                            isResizing = true;
+                            _DragLocation = DragLoc.Right;
+                            _IsResizing = true;
                         }
                     }
-                    else if (m.Y >= Size.Height - Options.BorderThickness - ClipOptions.ExtendBorderGrabRangePixels)
+                    else if (m.Y >= Size.Height - Options.BorderThickness - Options.BorderGrabSize)
                     {
                         Cursor = Cursors.SizeNS;
-                        if (isLeftClicking)
+                        if (_IsLeftClicking)
                         {
-                            drag = DragLoc.Bottom;
-                            isResizing = true;
+                            _DragLocation = DragLoc.Bottom;
+                            _IsResizing = true;
                         }
                     }
-                    else if (m.X < Options.BorderThickness + ClipOptions.ExtendBorderGrabRangePixels)
+                    else if (m.X < Options.BorderThickness + Options.BorderGrabSize)
                     {
                         Cursor = Cursors.SizeWE;
-                        if (isLeftClicking)
+                        if (_IsLeftClicking)
                         {
-                            drag = DragLoc.Left;
-                            isResizing = true;
+                            _DragLocation = DragLoc.Left;
+                            _IsResizing = true;
                         }
                     }
-                    else if (m.Y < Options.BorderThickness + ClipOptions.ExtendBorderGrabRangePixels)
+                    else if (m.Y < Options.BorderThickness + Options.BorderGrabSize)
                     {
                         Cursor = Cursors.SizeNS;
-                        if (isLeftClicking)
+                        if (_IsLeftClicking)
                         {
-                            drag = DragLoc.Top;
-                            isResizing = true;
+                            _DragLocation = DragLoc.Top;
+                            _IsResizing = true;
                         }
                     }
                     else
@@ -707,11 +708,11 @@ namespace WinkingCat.ClipHelper
                     }
                 }
             }
-            if (isLeftClicking && !isResizing)
+            if (_IsLeftClicking && !_IsResizing)
             {
                 Point p = PointToScreen(e.Location);
-                Location = new Point(p.X - lastLocation.X, p.Y - lastLocation.Y);
-                isMoving = true;
+                Location = new Point(p.X - _LastClickLocation.X, p.Y - _LastClickLocation.Y);
+                _IsMoving = true;
             }
         }
 
@@ -720,8 +721,8 @@ namespace WinkingCat.ClipHelper
             switch (e.Button)
             {
                 case MouseButtons.Left:
-                    isLeftClicking = true;
-                    lastLocation = new Point(e.X, e.Y);
+                    _IsLeftClicking = true;
+                    _LastClickLocation = new Point(e.X, e.Y);
                     break;
 
                 case MouseButtons.Right:
@@ -737,9 +738,9 @@ namespace WinkingCat.ClipHelper
             switch (e.Button)
             {
                 case MouseButtons.Left:
-                    isLeftClicking = false;
-                    isResizing = false;
-                    isMoving = false;
+                    _IsLeftClicking = false;
+                    _IsResizing = false;
+                    _IsMoving = false;
                     break;
 
                 case MouseButtons.Right:
@@ -766,11 +767,11 @@ namespace WinkingCat.ClipHelper
             g.CompositingMode = CompositingMode.SourceOver;
 
             g.DrawImage(
-                image,
+                Image,
                 new Rectangle(
                     new Point(Options.BorderThickness, Options.BorderThickness),
                     new Size(Width - Options.BorderThickness * 2, Height - Options.BorderThickness * 2)),
-                new Rectangle(0, 0, image.Width, image.Height),
+                new Rectangle(0, 0, Image.Width, Image.Height),
                 GraphicsUnit.Pixel
                 );
 
@@ -793,9 +794,9 @@ namespace WinkingCat.ClipHelper
         /// <param name="disposing">true if managed resources should be disposed; otherwise, false.</param>
         protected override void Dispose(bool disposing)
         {
-            ChangeTracker?.Dispose();
+            _ChangeTracker?.Dispose();
             cmMain?.Dispose();
-            zoomedImage?.Dispose();
+            ScaledImage?.Dispose();
             zdbZoomedImageDisplay?.Dispose();
 
             if (disposing && (components != null))
@@ -824,8 +825,8 @@ namespace WinkingCat.ClipHelper
         {
             ((Timer)sender)?.Stop();
             ((Timer)sender)?.Dispose();
-            MaximumSize = Options.MaxSize;
-            Height = startWindowSize.Height;
+            MaximumSize = InternalSettings.Max_Clip_Size;
+            Height = StartWindowSize.Height;
             Invalidate();
         }
 
@@ -835,7 +836,7 @@ namespace WinkingCat.ClipHelper
         /// <param name="newWidth"></param>
         private void ResizeWidth(int newWidth)
         {
-            Height = (int)(newWidth * (startWindowSize.Height / (float)startWindowSize.Width));
+            Height = (int)(newWidth * (StartWindowSize.Height / (float)StartWindowSize.Width));
             Width = newWidth;
         }
 
@@ -845,7 +846,7 @@ namespace WinkingCat.ClipHelper
         /// <param name="newHeight"></param>
         private void ResizeHeight(int newHeight)
         {
-            Width = (int)(newHeight * (startWindowSize.Width / (float)startWindowSize.Height));
+            Width = (int)(newHeight * (StartWindowSize.Width / (float)StartWindowSize.Height));
             Height = newHeight;
         }
 

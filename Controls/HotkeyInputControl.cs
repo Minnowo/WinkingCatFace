@@ -17,19 +17,19 @@ namespace WinkingCat
         public event EventHandler HotkeyChanged;
         public event EventHandler TaskChanged;
         public event EventHandler SelectionChanged;
-        public HotkeySettings setting { get; private set; }
+        public Hotkey Hotkey { get; private set; }
 
         public bool editingHotkey { get; private set; } = false;
         private bool supressCheckboxEvent { get; set; } = false;
-        public Tasks currentSelectedItem { get; private set; }
+        public Function currentSelectedItem { get; private set; }
         
-        public HotkeyInputControl(HotkeySettings hotkey)
+        public HotkeyInputControl(Hotkey hotkey)
         {
             InitializeComponent();
-            setting = hotkey;
-            currentSelectedItem = hotkey.Task;
+            Hotkey = hotkey;
+            currentSelectedItem = hotkey.Callback;
 
-            foreach (Tasks task in Enum.GetValues(typeof(Tasks)))
+            foreach (Function task in Enum.GetValues(typeof(Function)))
                 HotkeyTask.Items.Add(task);
 
             UpdateDescription();
@@ -55,9 +55,9 @@ namespace WinkingCat
 
         private void HotkeyTask_MouseWheel(object sender, EventArgs e)
         {
-            if (currentSelectedItem != (Tasks)HotkeyTask.SelectedItem)
+            if (currentSelectedItem != (Function)HotkeyTask.SelectedItem)
             {
-                setting.Task = (Tasks)HotkeyTask.SelectedItem;
+                Hotkey.Callback = (Function)HotkeyTask.SelectedItem;
                 OnTaskChanged();
             }
         }
@@ -91,17 +91,17 @@ namespace WinkingCat
 
         private void UpdateDescription()
         {
-            HotkeyTask.SelectedItem = setting.Task;
+            HotkeyTask.SelectedItem = Hotkey.Callback;
         }
 
         private void UpdateHotkeyText()
         {
-            buttonHotkey.Text = setting.HotkeyInfo.ToString();
+            buttonHotkey.Text = Hotkey.ToString();
         }
 
         private void UpdateHotkeyStatus()
         {
-            switch (setting.HotkeyInfo.Status)
+            switch (Hotkey.Status)
             {
                 default:
                 case HotkeyStatus.NotSet:
@@ -122,11 +122,11 @@ namespace WinkingCat
 
             HotkeyManager.ignoreHotkeyPress = true;
 
-            buttonHotkey.BackColor = ColorHelper.BackgroundColorBasedOffTextColor(ApplicationStyles.currentStyle.mainFormStyle.textColor);//Color.FromArgb(225, 255, 225);
+            buttonHotkey.BackColor = ColorHelper.Invert(ApplicationStyles.currentStyle.mainFormStyle.textColor);
             buttonHotkey.Text = "Select a hotkey";
 
-            setting.HotkeyInfo.Hotkey = Keys.None;
-            setting.HotkeyInfo.Win = false;
+            Hotkey.Keys = Keys.None;
+            Hotkey.Win = false;
             OnHotkeyChanged();
             UpdateHotkeyStatus();
         }
@@ -137,9 +137,9 @@ namespace WinkingCat
 
             HotkeyManager.ignoreHotkeyPress = false;
 
-            if (setting.HotkeyInfo.IsOnlyModifiers)
+            if (Hotkey.IsOnlyModifiers)
             {
-                setting.HotkeyInfo.Hotkey = Keys.None;
+                Hotkey.Keys = Keys.None;
             }
 
             buttonHotkey.BackColor = ApplicationStyles.currentStyle.mainFormStyle.lightBackgroundColor;
@@ -173,22 +173,22 @@ namespace WinkingCat
             {
                 if (e.KeyData == Keys.Escape)
                 {
-                    setting.HotkeyInfo.Hotkey = Keys.None;
+                    Hotkey.Keys = Keys.None;
                     StopEditing();
                 }
                 else if (e.KeyCode == Keys.LWin || e.KeyCode == Keys.RWin)
                 {
-                    setting.HotkeyInfo.Win = !setting.HotkeyInfo.Win;
+                    Hotkey.Win = !Hotkey.Win;
                     UpdateHotkeyText();
                 }
-                else if (new HotkeyInfo(e.KeyData).IsValidHotkey)
+                else if (new Hotkey(e.KeyData).IsValidHotkey)
                 {
-                    setting.HotkeyInfo.Hotkey = e.KeyData;
+                    Hotkey.Keys = e.KeyData;
                     StopEditing();
                 }
                 else
                 {
-                    setting.HotkeyInfo.Hotkey = e.KeyData;
+                    Hotkey.Keys = e.KeyData;
                     UpdateHotkeyText();
                 }
             }
@@ -203,7 +203,7 @@ namespace WinkingCat
                 // PrintScreen not trigger KeyDown event
                 if (e.KeyCode == Keys.PrintScreen)
                 {
-                    setting.HotkeyInfo.Hotkey = e.KeyData;
+                    Hotkey.Keys = e.KeyData;
                     StopEditing();
                 }
             }

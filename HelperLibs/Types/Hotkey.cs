@@ -1,31 +1,64 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using System.Xml.Serialization;
 
 namespace WinkingCat.HelperLibs
 {
-    public class HotkeyInfo
+    [TypeConverter(typeof(ExpandableObjectConverter))]
+    public class Hotkey
     {
-        public Keys Hotkey { get; set; }
+        [Browsable(false)]
+        [XmlElement("Keybind_Callback")]
+        public int Function_As_Int
+        {
+            get { return (int)Callback; }
+            set { Callback = (Function)value; }
+        }
 
+        [Browsable(false)]
+        [XmlElement("Keys")]
+        public int Keys_As_Int
+        {
+            get { return (int)Keys; }
+            set { Keys = (Keys)value; }
+        }
+
+        [XmlIgnore]
+        public Function Callback { get; set; }
+
+        [XmlIgnore]
+        public Keys Keys { get; set; }
+
+        [XmlIgnore]
         public ushort ID { get; set; }
+
+        [XmlIgnore]
         public HotkeyStatus Status { get; set; }
 
-        public Keys KeyCode => Hotkey & Keys.KeyCode;
+        [XmlIgnore]
+        public Keys KeyCode => Keys & Keys.KeyCode;
 
-        public Keys ModifiersKeys => Hotkey & Keys.Modifiers;
+        [XmlIgnore]
+        public Keys ModifiersKeys => Keys & Keys.Modifiers;
 
-        public bool Control => Hotkey.HasFlag(Keys.Control);
+        [XmlIgnore]
+        public bool Control => Keys.HasFlag(Keys.Control);
 
-        public bool Shift => Hotkey.HasFlag(Keys.Shift);
+        [XmlIgnore]
+        public bool Shift => Keys.HasFlag(Keys.Shift);
 
-        public bool Alt => Hotkey.HasFlag(Keys.Alt);
+        [XmlIgnore]
+        public bool Alt => Keys.HasFlag(Keys.Alt);
 
+        [XmlIgnore]
         public bool Win { get; set; }
 
+        [XmlIgnore]
         public Modifiers ModifiersEnum
         {
             get
@@ -41,23 +74,26 @@ namespace WinkingCat.HelperLibs
             }
         }
 
+        [XmlIgnore]
         public bool IsOnlyModifiers => KeyCode == Keys.ControlKey || KeyCode == Keys.ShiftKey || KeyCode == Keys.Menu || (KeyCode == Keys.None && Win);
 
+        [XmlIgnore]
         public bool IsValidHotkey => KeyCode != Keys.None && !IsOnlyModifiers;
 
-        public HotkeyInfo()
+        public Hotkey()
         {
             Status = HotkeyStatus.NotSet;
+            Callback = Function.None;
         }
 
-        public HotkeyInfo(Keys hotkey) : this()
+        public Hotkey(Keys hotkey) : this()
         {
-            Hotkey = hotkey;
+            Keys = hotkey;
         }
 
-        public HotkeyInfo(Keys hotkey, ushort id) : this(hotkey)
+        public Hotkey(Keys hotkey, Function function) : this(hotkey)
         {
-            ID = id;
+            Callback = function;
         }
 
         public override string ToString()

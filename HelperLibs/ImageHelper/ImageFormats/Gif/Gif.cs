@@ -12,7 +12,7 @@ namespace WinkingCat.HelperLibs
     /// <summary>
     /// Provides the necessary information to support gif images.
     /// </summary>
-    public class Gif : ImageBase
+    public class Gif : IMAGE
     {
         #region Readonly / Const / Static 
 
@@ -127,7 +127,7 @@ namespace WinkingCat.HelperLibs
         {
             try
             {
-                return ImageBase.StandardLoad(path);
+                return IMAGE.StandardLoad(path);
             }
             catch (Exception ex)
             {

@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace WinkingCat.HelperLibs
 {
-    public class BMP : ImageBase
+    public class BMP : IMAGE
     {
         #region Readonly / Const / Static 
 
@@ -112,7 +112,7 @@ namespace WinkingCat.HelperLibs
         {
             try
             {
-                return ImageBase.StandardLoad(path);
+                return IMAGE.StandardLoad(path);
             }
             catch (Exception ex)
             {

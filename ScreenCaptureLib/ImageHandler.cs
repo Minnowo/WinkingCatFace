@@ -62,7 +62,7 @@ namespace WinkingCat.ScreenCaptureLib
                     path = PathHelper.GetNewImageFileName();
 
                 if (RegionCaptureOptions.AutoCopyImage)
-                    ClipboardHelper.CopyImageDefault(LastInfo.Image);
+                    ClipboardHelper.CopyImage(LastInfo.Image);
 
                 if (creatClip || RegionCaptureOptions.CreateClipAfterRegionCapture)
                 {
@@ -106,7 +106,7 @@ namespace WinkingCat.ScreenCaptureLib
         private static void HandleRegionReturnColor(Color color)
         {
             if (RegionCaptureOptions.AutoCopyColor)
-                ClipboardHelper.FormatCopyColor(ClipboardHelper.copyFormat, color);
+                ClipboardHelper.FormatCopyColor(SettingsManager.MiscSettings.Default_Color_Format, color);
         }
 
         private static void OnCaptureEvent(LastRegionCaptureInfo info)

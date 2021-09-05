@@ -15,7 +15,6 @@ namespace WinkingCat.HelperLibs
         SetGray,
         Cropped,
         Resized,
-        Dithered,
         TransparentFilled,
         RotatedLeft,
         RotatedRight,
@@ -41,7 +40,7 @@ namespace WinkingCat.HelperLibs
             get { return redos.Count; }
         }
 
-        public ImageBase CurrentBitmap
+        public IMAGE CurrentBitmap
         {
             get
             {
@@ -61,7 +60,7 @@ namespace WinkingCat.HelperLibs
                 }
             }
         }
-        private ImageBase currentBitmap;
+        private IMAGE currentBitmap;
 
         public ImgFormat Format;
 
@@ -78,7 +77,7 @@ namespace WinkingCat.HelperLibs
             bitmapRedoHistoryData = new Stack<Bitmap>();
         }
 
-        public BitmapUndo(ImageBase bmp)
+        public BitmapUndo(IMAGE bmp)
         {
             undos = new Stack<BitmapChanges>();
             redos = new Stack<BitmapChanges>();
@@ -211,7 +210,7 @@ namespace WinkingCat.HelperLibs
             if (CurrentBitmap != null)
                 CurrentBitmap.Dispose();
 
-            CurrentBitmap = ImageBase.ProperCast(bmp, this.Format);
+            CurrentBitmap = IMAGE.ProperCast(bmp, this.Format);
         }
 
         /// <summary>
@@ -220,7 +219,7 @@ namespace WinkingCat.HelperLibs
         /// <param name="bmp">The new bitmap.</param>
         public void UpdateBitmapReferance(Bitmap bmp)
         {
-            CurrentBitmap = ImageBase.ProperCast(bmp, this.Format);
+            CurrentBitmap = IMAGE.ProperCast(bmp, this.Format);
         }
 
         /// <summary>
@@ -237,7 +236,6 @@ namespace WinkingCat.HelperLibs
             {
                 // need to track history data
                 case BitmapChanges.Cropped:
-                case BitmapChanges.Dithered:
                 case BitmapChanges.Resized:
                 case BitmapChanges.SetGray:
                 case BitmapChanges.TransparentFilled:
@@ -307,7 +305,6 @@ namespace WinkingCat.HelperLibs
                 // need to track history data
                 case BitmapChanges.Cropped:
                 case BitmapChanges.Resized:
-                case BitmapChanges.Dithered:
                 case BitmapChanges.SetGray:
                 case BitmapChanges.TransparentFilled:
                     bitmapUndoHistoryData.Push(CloneProper());
@@ -387,7 +384,6 @@ namespace WinkingCat.HelperLibs
                 // need to track history data
                 case BitmapChanges.Cropped:
                 case BitmapChanges.Resized:
-                case BitmapChanges.Dithered:
                 case BitmapChanges.SetGray:
                 case BitmapChanges.TransparentFilled:
                     bitmapRedoHistoryData.Push(CloneProper());

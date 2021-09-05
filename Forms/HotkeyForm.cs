@@ -24,60 +24,60 @@ namespace WinkingCat
             repeatLimitTimer = Stopwatch.StartNew();
         }
 
-        public void RegisterHotkey(HotkeyInfo hotkeyInfo)
+        public void RegisterHotkey(Hotkey hotkeyInfo)
         {
-            if (hotkeyInfo != null && hotkeyInfo.Status != HotkeyStatus.Registered)
+            if (hotkeyInfo == null || hotkeyInfo.Status == HotkeyStatus.Registered)
+                return;
+            
+            if (!hotkeyInfo.IsValidHotkey)
             {
-                if (!hotkeyInfo.IsValidHotkey)
-                {
-                    hotkeyInfo.Status = HotkeyStatus.NotSet;
-                    return;
-                }
+                hotkeyInfo.Status = HotkeyStatus.NotSet;
+                return;
+            }
+
+            if (hotkeyInfo.ID == 0)
+            {
+                string uniqueID = Helpers.GetUniqueID();
+                hotkeyInfo.ID = NativeMethods.GlobalAddAtom(uniqueID);
 
                 if (hotkeyInfo.ID == 0)
                 {
-                    string uniqueID = Helpers.GetUniqueID();
-                    hotkeyInfo.ID = NativeMethods.GlobalAddAtom(uniqueID);
-
-                    if (hotkeyInfo.ID == 0)
-                    {
-                        hotkeyInfo.Status = HotkeyStatus.Failed;
-                        return;
-                    }
-                }
-
-                if (!NativeMethods.RegisterHotKey(Handle, hotkeyInfo.ID, (uint)hotkeyInfo.ModifiersEnum, (uint)hotkeyInfo.KeyCode))
-                {
-                    NativeMethods.GlobalDeleteAtom(hotkeyInfo.ID);
-                    hotkeyInfo.ID = 0;
                     hotkeyInfo.Status = HotkeyStatus.Failed;
                     return;
                 }
-
-                hotkeyInfo.Status = HotkeyStatus.Registered;
             }
+
+            if (!NativeMethods.RegisterHotKey(Handle, hotkeyInfo.ID, (uint)hotkeyInfo.ModifiersEnum, (uint)hotkeyInfo.KeyCode))
+            {
+                NativeMethods.GlobalDeleteAtom(hotkeyInfo.ID);
+                hotkeyInfo.ID = 0;
+                hotkeyInfo.Status = HotkeyStatus.Failed;
+                return;
+            }
+
+            hotkeyInfo.Status = HotkeyStatus.Registered;
         }
 
-        public bool UnRegisterHotkey(HotkeyInfo hotkeyInfo)
+        public bool UnRegisterHotkey(Hotkey hotkeyInfo)
         {
-            if (hotkeyInfo != null)
+            if (hotkeyInfo == null)
+                return false;
+            
+            if (hotkeyInfo.ID > 0)
             {
-                if (hotkeyInfo.ID > 0)
+                bool result = NativeMethods.UnregisterHotKey(Handle, hotkeyInfo.ID);
+
+                if (result)
                 {
-                    bool result = NativeMethods.UnregisterHotKey(Handle, hotkeyInfo.ID);
-
-                    if (result)
-                    {
-                        NativeMethods.GlobalDeleteAtom(hotkeyInfo.ID);
-                        hotkeyInfo.ID = 0;
-                        hotkeyInfo.Status = HotkeyStatus.NotSet;
-                        return true;
-                    }
+                    NativeMethods.GlobalDeleteAtom(hotkeyInfo.ID);
+                    hotkeyInfo.ID = 0;
+                    hotkeyInfo.Status = HotkeyStatus.NotSet;
+                    return true;
                 }
-
-                hotkeyInfo.Status = HotkeyStatus.Failed;
             }
 
+            hotkeyInfo.Status = HotkeyStatus.Failed;
+            
             return false;
         }
 

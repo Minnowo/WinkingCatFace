@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace WinkingCat.HelperLibs
 {
-    public class JPEG : ImageBase
+    public class JPEG : IMAGE
     {
         #region Readonly / Const / Static 
 
@@ -121,7 +121,7 @@ namespace WinkingCat.HelperLibs
         {
             try
             {
-                return ImageBase.StandardLoad(path);
+                return IMAGE.StandardLoad(path);
             }
             catch (Exception ex)
             {

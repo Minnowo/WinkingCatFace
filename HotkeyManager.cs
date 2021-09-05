@@ -11,7 +11,7 @@ namespace WinkingCat
     public static class HotkeyManager
     {
         public static HotkeyForm hotkeyForm { get; private set; }
-        public static List<HotkeySettings> hotKeys { get; private set; }
+        public static List<Hotkey> hotKeys { get; private set; }
         public static bool ignoreHotkeyPress { get; set; } = false;
         public static bool tempTgnoreHotkeyPress { get; set; } = false;
 
@@ -23,16 +23,16 @@ namespace WinkingCat
 
         public static void Nyah(ushort id, Keys key, Modifiers modifier)
         {
-            HotkeySettings hotkeySetting = hotKeys.Find(x => x.HotkeyInfo.ID == id);
+            Hotkey hotkey = hotKeys.Find(x => x.ID == id);
 
-            if (hotkeySetting != null && !ignoreHotkeyPress && !tempTgnoreHotkeyPress)
+            if (hotkey != null && !ignoreHotkeyPress && !tempTgnoreHotkeyPress)
             {
-                TaskHandler.ExecuteTask(hotkeySetting.Task);
+                TaskHandler.ExecuteTask(hotkey.Callback);
             }
         }
 
 
-        public static void UpdateHotkeys(List<HotkeySettings> hotkeys, bool showFailedHotkeys)
+        public static void UpdateHotkeys(List<Hotkey> hotkeys, bool showFailedHotkeys)
         {
             if (hotKeys != null)
             {
@@ -49,45 +49,26 @@ namespace WinkingCat
             }
         }
 
-        public static void RegisterHotkey(HotkeySettings hotkeySetting)
+        public static void RegisterHotkey(Hotkey hotkey)
         {
-            UnRegisterHotkey(hotkeySetting, false);
+            UnRegisterHotkey(hotkey, false);
 
-            if (hotkeySetting.HotkeyInfo.Status != HotkeyStatus.Registered && hotkeySetting.HotkeyInfo.IsValidHotkey)
+            if (hotkey.Status != HotkeyStatus.Registered && hotkey.IsValidHotkey)
             {
-                hotkeyForm.RegisterHotkey(hotkeySetting.HotkeyInfo);
-
-                if (hotkeySetting.HotkeyInfo.Status == HotkeyStatus.Registered)
-                {
-                    Logger.WriteLine("Hotkey registered: " + hotkeySetting);
-                }
-                else if (hotkeySetting.HotkeyInfo.Status == HotkeyStatus.Failed)
-                {
-                    Logger.WriteLine("Hotkey register failed: " + hotkeySetting);
-                }
+                hotkeyForm.RegisterHotkey(hotkey);
             }
-            
 
-            if (!hotKeys.Contains(hotkeySetting))
+            if (!hotKeys.Contains(hotkey))
             {
-                hotKeys.Add(hotkeySetting);
+                hotKeys.Add(hotkey);
             }
         }
 
-        public static void UnRegisterHotkey(HotkeySettings hotkeySetting, bool removeFromList)
+        public static void UnRegisterHotkey(Hotkey hotkeySetting, bool removeFromList)
         {
-            if (hotkeySetting.HotkeyInfo.Status == HotkeyStatus.Registered)
+            if (hotkeySetting.Status == HotkeyStatus.Registered)
             {
-                hotkeyForm.UnRegisterHotkey(hotkeySetting.HotkeyInfo);
-
-                if (hotkeySetting.HotkeyInfo.Status == HotkeyStatus.NotSet)
-                {
-                    Logger.WriteLine("Hotkey unregistered: " + hotkeySetting);
-                }
-                else if (hotkeySetting.HotkeyInfo.Status == HotkeyStatus.Failed)
-                {
-                    Logger.WriteLine("Hotkey unregister failed: " + hotkeySetting);
-                }
+                hotkeyForm.UnRegisterHotkey(hotkeySetting);
             }
 
             if (removeFromList)
@@ -98,43 +79,43 @@ namespace WinkingCat
 
         public static void RegisterAllHotkeys()
         {
-            foreach (HotkeySettings hotkeySetting in hotKeys.ToArray())
+            foreach (Hotkey hotkey in hotKeys.ToArray())
             {
-                RegisterHotkey(hotkeySetting);
+                RegisterHotkey(hotkey);
             }
         }
 
         public static void UnRegisterAllHotkeys(bool removeFromList = true, bool temporary = false)
         {
-            if (hotKeys != null)
+            if (hotKeys == null)
+                return;
+            
+            foreach (Hotkey hotkey in hotKeys.ToArray())
             {
-                foreach (HotkeySettings hotkeySetting in hotKeys.ToArray())
-                {
-                    UnRegisterHotkey(hotkeySetting, removeFromList);
-                }
+                UnRegisterHotkey(hotkey, removeFromList);
             }
         }
 
         public static void ShowFailedHotkeys()
         {
-            List<HotkeySettings> failedHotkeysList = hotKeys.Where(x => x.HotkeyInfo.Status == HotkeyStatus.Failed).ToList();
+            List<Hotkey> failedHotkeysList = hotKeys.Where(x => x.Status == HotkeyStatus.Failed).ToList();
 
             if (failedHotkeysList.Count > 0)
             {
-                foreach(HotkeySettings hotkey in failedHotkeysList)
+                foreach(Hotkey hotkey in failedHotkeysList)
                 {
                     MessageBox.Show(hotkey.ToString());
                 }
             }
         }
 
-        public static List<HotkeySettings> GetDefaultHotkeyList()
+        public static List<Hotkey> GetDefaultHotkeyList()
         {
-            return new List<HotkeySettings>
+            return new List<Hotkey>
             {
-                new HotkeySettings(Tasks.CaptureActiveMonitor, Keys.Control | Keys.PrintScreen),
-                new HotkeySettings(Tasks.CaptureActiveWindow, Keys.Alt | Keys.PrintScreen),
-                new HotkeySettings(Tasks.CaptureFullScreen, Keys.PrintScreen),
+                new Hotkey(Keys.Control | Keys.PrintScreen, Function.CaptureActiveMonitor),
+                new Hotkey(Keys.Alt | Keys.PrintScreen, Function.CaptureActiveWindow),
+                new Hotkey(Keys.PrintScreen, Function.CaptureFullScreen),
             };
         }
     }

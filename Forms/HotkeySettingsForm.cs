@@ -27,7 +27,7 @@ namespace WinkingCat
         public void UpdateHotkeyControls()
         {
             if (HotkeyManager.hotKeys != null)
-                foreach(HotkeySettings hotkey in HotkeyManager.hotKeys)
+                foreach(Hotkey hotkey in HotkeyManager.hotKeys)
                 {
                     AddControl(new HotkeyInputControl(hotkey));
                 }
@@ -45,14 +45,12 @@ namespace WinkingCat
 
         private void control_HotkeyChanged(object sender, EventArgs e)
         {
-            HotkeyManager.RegisterHotkey(((HotkeyInputControl)sender).setting);
-            Logger.WriteLine(string.Format("Hotkey changed: {0}", ((HotkeyInputControl)sender).setting));
+            HotkeyManager.RegisterHotkey(((HotkeyInputControl)sender).Hotkey);
         }
 
         private void control_SelectedChanged(object sender, EventArgs e)
         {
-            HotkeyManager.RegisterHotkey(((HotkeyInputControl)sender).setting);
-            Logger.WriteLine(string.Format("Hotkey changed: {0}", ((HotkeyInputControl)sender).setting));
+            HotkeyManager.RegisterHotkey(((HotkeyInputControl)sender).Hotkey);
         }
 
         private void control_CheckboxChanged(object sender, EventArgs e)
@@ -65,7 +63,7 @@ namespace WinkingCat
         // add button clicked
         private void button1_Click(object sender, EventArgs e)
         {
-            HotkeySettings newHotkey = new HotkeySettings(Tasks.RegionCapture, Keys.None);
+            Hotkey newHotkey = new Hotkey(Keys.None, Function.None);
             HotkeyManager.RegisterHotkey(newHotkey);
 
             AddControl(new HotkeyInputControl(newHotkey));
@@ -76,7 +74,7 @@ namespace WinkingCat
         {
             if (selectedHotkey != null)
             {
-                HotkeyManager.UnRegisterHotkey(selectedHotkey.setting, true);
+                HotkeyManager.UnRegisterHotkey(selectedHotkey.Hotkey, true);
                 flowLayoutPanel1.Controls.Remove(selectedHotkey);
                 selectedHotkey.Dispose();
                 selectedHotkey = null;
@@ -133,7 +131,7 @@ namespace WinkingCat
         private void button6_Click(object sender, EventArgs e)
         {
             foreach(HotkeyInputControl control in flowLayoutPanel1.Controls)
-                HotkeyManager.UnRegisterHotkey(control.setting, true);
+                HotkeyManager.UnRegisterHotkey(control.Hotkey, true);
             
             flowLayoutPanel1.Controls.Clear();
             HotkeyManager.UpdateHotkeys(HotkeyManager.GetDefaultHotkeyList(), true);

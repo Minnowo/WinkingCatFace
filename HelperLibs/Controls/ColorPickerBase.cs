@@ -261,10 +261,6 @@ namespace WinkingCat.HelperLibs
                 case DrawStyles.Blue:
                     DrawBlue();
                     break;
-
-                case DrawStyles.xyz:
-                    DrawXYZ();
-                    break;
             }
         }
         protected abstract void DrawCrosshair(Graphics g);
@@ -280,9 +276,6 @@ namespace WinkingCat.HelperLibs
         protected abstract void DrawRed();
         protected abstract void DrawGreen();
         protected abstract void DrawBlue();
-
-        protected abstract void DrawXYZ();
-
 
 
         protected void GetBoxColor()

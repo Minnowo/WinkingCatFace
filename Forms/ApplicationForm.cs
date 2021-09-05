@@ -26,8 +26,8 @@ namespace WinkingCat
         private int trayClickCount = 0;
 
         private bool forceClose = false;
-        private bool allowShowDisplay = !MainFormSettings.startInTray;
-        private bool isInTrayOrMinimized = MainFormSettings.startInTray;
+        private bool allowShowDisplay = !SettingsManager.MainFormSettings.Start_In_Tray;
+        private bool isInTrayOrMinimized = SettingsManager.MainFormSettings.Start_In_Tray;
         private bool forceDropDownClose = false;
         private bool isHandleCreated = false;
 
@@ -108,7 +108,7 @@ namespace WinkingCat
 
             ImageHandler.ImageSaved += ImageSaved_Event;
             ApplicationStyles.UpdateStylesEvent += ApplicationStyles_UpdateSylesEvent;
-            MainFormSettings.SettingsChangedEvent += UpdateSettings;
+            //MainFormSettings.SettingsChangedEvent += UpdateSettings;
             lvListView.ItemSelectionChanged += LvListView_ItemSelectionChanged;
             pbPreviewBox.pbMain.MouseClick += PbPreviewBox_MouseClick;
 
@@ -219,13 +219,13 @@ namespace WinkingCat
                 if(win.IsMinimized)
                     win.Restore();
 
-                if (MainFormSettings.hideMainFormOnCapture && !isInTrayOrMinimized)
+                if (SettingsManager.MainFormSettings.Hide_Form_On_Captrue && !isInTrayOrMinimized)
                 {
                     HideAll();
                 }
             }
 
-            Thread.Sleep(MainFormSettings.waitHideTime);
+            Thread.Sleep(SettingsManager.MainFormSettings.Wait_Hide_Time);
             TaskHandler.CaptureWindow(win);
 
             ShowAll();
@@ -238,18 +238,18 @@ namespace WinkingCat
 
             ToolStripItem tsi = (ToolStripItem)sender;
 
-            if (MainFormSettings.hideMainFormOnCapture && !isInTrayOrMinimized)
+            if (SettingsManager.MainFormSettings.Hide_Form_On_Captrue && !isInTrayOrMinimized)
             {
                 HideAll();
             }
-            Thread.Sleep(MainFormSettings.waitHideTime);
+            Thread.Sleep(SettingsManager.MainFormSettings.Wait_Hide_Time);
 
             using (Bitmap img = ScreenShotManager.CaptureRectangle((Rectangle)tsi.Tag))
             {
                 ImageHandler.Save(PathHelper.GetNewImageFileName(), img);
                 if (RegionCaptureOptions.AutoCopyImage)
                 {
-                    ClipboardHelper.CopyImageDefault(img);
+                    ClipboardHelper.CopyImage(img);
                 }
             }
 
@@ -258,58 +258,57 @@ namespace WinkingCat
 
         private void RegionCapture_Click(object sender, EventArgs e)
         {
-            if (MainFormSettings.hideMainFormOnCapture && !isInTrayOrMinimized)
+            if (SettingsManager.MainFormSettings.Hide_Form_On_Captrue && !isInTrayOrMinimized)
             {
                 HideAll();
-                Thread.Sleep(MainFormSettings.waitHideTime);
+                Thread.Sleep(SettingsManager.MainFormSettings.Wait_Hide_Time);
             }
-            TaskHandler.ExecuteTask(Tasks.RegionCapture);
+            TaskHandler.ExecuteTask(Function.RegionCapture);
 
-            if (MainFormSettings.hideMainFormOnCapture && !isInTrayOrMinimized)
+            if (SettingsManager.MainFormSettings.Hide_Form_On_Captrue && !isInTrayOrMinimized)
             {
                 ShowAll();
             }
         }
         private void MonitorCapture_Click(object sender, EventArgs e)
         {
-            if (MainFormSettings.hideMainFormOnCapture && !isInTrayOrMinimized)
+            if (SettingsManager.MainFormSettings.Hide_Form_On_Captrue && !isInTrayOrMinimized)
             {
                 HideAll();
-                Thread.Sleep(MainFormSettings.waitHideTime);
+                Thread.Sleep(SettingsManager.MainFormSettings.Wait_Hide_Time);
             }
-            TaskHandler.ExecuteTask(Tasks.CaptureActiveMonitor);
+            TaskHandler.ExecuteTask(Function.CaptureActiveMonitor);
 
-            if (MainFormSettings.hideMainFormOnCapture && !isInTrayOrMinimized)
+            if (SettingsManager.MainFormSettings.Hide_Form_On_Captrue && !isInTrayOrMinimized)
             {
                 ShowAll();
             }
         }
         private void FullscreenCapture_Click(object sender, EventArgs e)
         {
-            if (MainFormSettings.hideMainFormOnCapture && !isInTrayOrMinimized)
+            if (SettingsManager.MainFormSettings.Hide_Form_On_Captrue && !isInTrayOrMinimized)
             {
                 HideAll();
-                Thread.Sleep(MainFormSettings.waitHideTime);
+                Thread.Sleep(SettingsManager.MainFormSettings.Wait_Hide_Time);
             }
-            TaskHandler.ExecuteTask(Tasks.CaptureFullScreen);
+            TaskHandler.ExecuteTask(Function.CaptureFullScreen);
 
-            if (MainFormSettings.hideMainFormOnCapture && !isInTrayOrMinimized)
+            if (SettingsManager.MainFormSettings.Hide_Form_On_Captrue && !isInTrayOrMinimized)
             {
                 ShowAll();
             }
         }
         private void LastRegionCapture_Click(object sender, EventArgs e)
         {
-            if (MainFormSettings.hideMainFormOnCapture)
+            if (SettingsManager.MainFormSettings.Hide_Form_On_Captrue)
             {
                 HideAll();
-                Thread.Sleep(MainFormSettings.waitHideTime);
+                Thread.Sleep(SettingsManager.MainFormSettings.Wait_Hide_Time);
             }
-            TaskHandler.ExecuteTask(Tasks.CaptureLastRegion);
+            TaskHandler.ExecuteTask(Function.CaptureLastRegion);
 
-            if (MainFormSettings.hideMainFormOnCapture)
+            if (SettingsManager.MainFormSettings.Hide_Form_On_Captrue)
             {
-
                 ShowAll();
             }
         }
@@ -334,41 +333,41 @@ namespace WinkingCat
         #region Clips dropdown buttons
         private void NewClip_Click(object sender, EventArgs e)
         {
-            if (MainFormSettings.hideMainFormOnCapture && !isInTrayOrMinimized)
+            if (SettingsManager.MainFormSettings.Hide_Form_On_Captrue && !isInTrayOrMinimized)
             {
                 HideAll();
-                Thread.Sleep(MainFormSettings.waitHideTime);
+                Thread.Sleep(SettingsManager.MainFormSettings.Wait_Hide_Time);
             }
-            TaskHandler.ExecuteTask(Tasks.NewClipFromRegionCapture);
+            TaskHandler.ExecuteTask(Function.NewClipFromRegionCapture);
 
-            if (MainFormSettings.hideMainFormOnCapture && !isInTrayOrMinimized)
+            if (SettingsManager.MainFormSettings.Hide_Form_On_Captrue && !isInTrayOrMinimized)
             {
                 ShowAll();
             }
         }
         private void ClipFromClipboard_Click(object sender, EventArgs e)
         {
-            TaskHandler.ExecuteTask(Tasks.NewClipFromClipboard);
+            TaskHandler.ExecuteTask(Function.NewClipFromClipboard);
         }
         private void ClipFromFile_Click(object sender, EventArgs e)
         {
-            TaskHandler.ExecuteTask(Tasks.NewClipFromFile);
+            TaskHandler.ExecuteTask(Function.NewClipFromFile);
         }
 #endregion
 
         #region Tools dropdown buttons
         private void ScreenColorPicker_Click(object sender, EventArgs e)
         {
-            if (MainFormSettings.hideMainFormOnCapture && !isInTrayOrMinimized)
+            if (SettingsManager.MainFormSettings.Hide_Form_On_Captrue && !isInTrayOrMinimized)
             {
                 Hide();
-                Thread.Sleep(MainFormSettings.waitHideTime);
+                Thread.Sleep(SettingsManager.MainFormSettings.Wait_Hide_Time);
             }
-            TaskHandler.ExecuteTask(Tasks.ScreenColorPicker);
+            TaskHandler.ExecuteTask(Function.ScreenColorPicker);
 
-            if (MainFormSettings.hideMainFormOnCapture && !isInTrayOrMinimized)
+            if (SettingsManager.MainFormSettings.Hide_Form_On_Captrue && !isInTrayOrMinimized)
             {
-                Thread.Sleep(MainFormSettings.waitHideTime);
+                Thread.Sleep(SettingsManager.MainFormSettings.Wait_Hide_Time);
                 Show();
             }
         }
@@ -382,7 +381,7 @@ namespace WinkingCat
             else
             {
                 colorPickerForm = new ColorPickerForm();
-                colorPickerForm.TopMost = MainFormSettings.alwaysOnTop;
+                colorPickerForm.TopMost = SettingsManager.MainFormSettings.Always_On_Top;
                 colorPickerForm.FormClosing += ChildFormClosing;
                 colorPickerForm.Show();
             }
@@ -397,7 +396,7 @@ namespace WinkingCat
             else
             {
                 qrCodeForm = new BarcodeForm();
-                qrCodeForm.TopMost = MainFormSettings.alwaysOnTop;
+                qrCodeForm.TopMost = SettingsManager.MainFormSettings.Always_On_Top;
                 qrCodeForm.FormClosing += ChildFormClosing;
                 qrCodeForm.Show();
             }
@@ -412,7 +411,7 @@ namespace WinkingCat
             else
             {
                 hashCheckForm = new HashCheckForm();
-                hashCheckForm.TopMost = MainFormSettings.alwaysOnTop;
+                hashCheckForm.TopMost = SettingsManager.MainFormSettings.Always_On_Top;
                 hashCheckForm.FormClosing += ChildFormClosing;
                 hashCheckForm.Show();
             }
@@ -427,7 +426,7 @@ namespace WinkingCat
             else
             {
                 regexForm = new RegexForm();
-                regexForm.TopMost = MainFormSettings.alwaysOnTop;
+                regexForm.TopMost = SettingsManager.MainFormSettings.Always_On_Top;
                 regexForm.FormClosing += ChildFormClosing;
                 regexForm.Show();
             }
@@ -443,7 +442,7 @@ namespace WinkingCat
                 trayClickCount = 0;
                 trayClickTimer.Stop();
 
-                TaskHandler.ExecuteTask(MainFormSettings.onTrayLeftClick);
+                TaskHandler.ExecuteTask(SettingsManager.MainFormSettings.On_Tray_Left_Click);
             }
         }
 
@@ -464,11 +463,11 @@ namespace WinkingCat
                         trayClickCount = 0;
                         trayClickTimer.Stop();
 
-                        TaskHandler.ExecuteTask(MainFormSettings.onTrayDoubleLeftClick);
+                        TaskHandler.ExecuteTask(SettingsManager.MainFormSettings.On_Tray_Double_Click);
                     }
                     break;
                 case MouseButtons.Middle:
-                    TaskHandler.ExecuteTask(MainFormSettings.onTrayMiddleClick);
+                    TaskHandler.ExecuteTask(SettingsManager.MainFormSettings.On_Tray_Middle_Click);
                     break;
             }
         }
@@ -521,7 +520,7 @@ namespace WinkingCat
 
         private void MainForm_FormClosing(object sender, FormClosingEventArgs e)
         {
-            if (e.CloseReason == CloseReason.UserClosing && MainFormSettings.minimizeToTray && !forceClose)
+            if (e.CloseReason == CloseReason.UserClosing && SettingsManager.MainFormSettings.Hide_In_Tray_On_Close && !forceClose)
             {
                 isInTrayOrMinimized = true;
                 e.Cancel = true;
@@ -535,12 +534,12 @@ namespace WinkingCat
 
         private void UpdateSettings(object sender, EventArgs e)
         {
-            TopMost = MainFormSettings.alwaysOnTop;
-            niTrayIcon.Visible = MainFormSettings.showInTray;
+            TopMost = SettingsManager.MainFormSettings.Always_On_Top;
+            niTrayIcon.Visible = SettingsManager.MainFormSettings.Show_In_Tray;
             
             foreach(Form a in Application.OpenForms)
             {
-                a.TopMost = MainFormSettings.alwaysOnTop;
+                a.TopMost = SettingsManager.MainFormSettings.Always_On_Top;
             }
         }
 
@@ -670,7 +669,7 @@ namespace WinkingCat
             settingsForm?.Dispose();
             settingsForm = new SettingsForm();
             settingsForm.Owner = this;
-            settingsForm.TopMost = MainFormSettings.alwaysOnTop;
+            settingsForm.TopMost = SettingsManager.MainFormSettings.Always_On_Top;
             settingsForm.FormClosing += ChildFormClosing;
             settingsForm.Show();
         }
@@ -681,7 +680,7 @@ namespace WinkingCat
             stylesForm?.Dispose();
             stylesForm = new StylesForm();
             stylesForm.Owner = this;
-            stylesForm.TopMost = MainFormSettings.alwaysOnTop;
+            stylesForm.TopMost = SettingsManager.MainFormSettings.Always_On_Top;
             stylesForm.FormClosing += ChildFormClosing;
             stylesForm.Show();
         }
@@ -721,17 +720,15 @@ namespace WinkingCat
                                     tsmi.Image = icon.ToBitmap();
                                 }
                             }
-                        }catch(Exception e)
+                        }catch
                         {
-                            Logger.WriteException(e, "Exception failed to load window icon");
                         }
                         
 
                         tsmiWindow.DropDownItems.Add(tsmi);
                     }
-                    catch (Exception e)
+                    catch
                     {
-                        Logger.WriteException(e);
                     }
                 }
             }

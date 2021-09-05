@@ -159,8 +159,7 @@
     <Compile Include="ImageHelper\ImageFormats\Gif\GifDecoder.cs" />
     <Compile Include="ImageHelper\ImageFormats\Gif\GifEncoder.cs" />
     <Compile Include="ImageHelper\ImageFormats\Gif\GifFrame.cs" />
-    <Compile Include="ImageHelper\ImageFormats\ICO.cs" />
-    <Compile Include="ImageHelper\ImageFormats\ImageBase.cs" />
+    <Compile Include="ImageHelper\ImageFormats\IMAGE.cs" />
     <Compile Include="ImageHelper\ImageFormats\JPEG.cs" />
     <Compile Include="ImageHelper\ImageFormats\PNG.cs" />
     <Compile Include="ImageHelper\ImageFormats\TIFF.cs" />
@@ -173,12 +172,15 @@
     <Compile Include="ImageHelper\ImageHelper.cs" />
     <Compile Include="ImageHelper\ImageProcessor.cs" />
     <Compile Include="ImageHelper\Structs\ResizeImage.cs" />
-    <Compile Include="InternalSettings.cs" />
-    <Compile Include="Types\HotkeyInfo.cs" />
+    <Compile Include="Settings\ClipSettings.cs" />
+    <Compile Include="Settings\InternalSettings.cs" />
+    <Compile Include="Settings\MainFormSettings.cs" />
+    <Compile Include="Settings\MiscSettings.cs" />
+    <Compile Include="Settings\RegionCaptureSettings.cs" />
+    <Compile Include="Types\Hotkey.cs" />
     <Compile Include="Types\HotkeySettings.cs" />
     <Compile Include="Types\InstanceManager.cs" />
     <Compile Include="Interfaces\IUndoable.cs" />
-    <Compile Include="Logger.cs" />
     <Compile Include="Types\ApplicationStyles.cs" />
     <Compile Include="Native\NativeEnums.cs" />
     <Compile Include="Native\NativeConstants.cs" />
@@ -202,7 +204,7 @@
       <DependentUpon>Settings.settings</DependentUpon>
     </Compile>
     <Compile Include="RegionCaptureOptions.cs" />
-    <Compile Include="SettingsManager.cs" />
+    <Compile Include="Settings\SettingsManager.cs" />
     <Compile Include="Types\BitmapUndo.cs" />
     <Compile Include="Types\WindowInfo.cs" />
     <Compile Include="ValueTypeTypeConverter.cs" />

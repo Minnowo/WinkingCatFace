@@ -119,7 +119,7 @@ namespace WinkingCat
                 if (Visible)
                 {
                     Hide();
-                    Thread.Sleep(MainFormSettings.waitHideTime);
+                    Thread.Sleep(SettingsManager.MainFormSettings.Wait_Hide_Time);
                 }
 
                 using(Bitmap img = (Bitmap)ImageHandler.GetRegionResultImage())
@@ -137,7 +137,11 @@ namespace WinkingCat
         {
             if (isReady)
             {
-                using (Bitmap img = ImageHelper.LoadImage(ImageHelper.OpenImageFileDialog(Program.MainForm)))
+                string[] res = ImageHelper.OpenImageFileDialog(false, Program.MainForm);
+                if (res == null | res.Length < 1)
+                    return;
+
+                using (Bitmap img = ImageHelper.LoadImage(res[0]))
                 {
                     if (img != null)
                     {
@@ -169,7 +173,7 @@ namespace WinkingCat
         {
             if (pbQRDisplay.Image != null)
             {
-                ClipboardHelper.CopyImageDefault(pbQRDisplay.Image);
+                ClipboardHelper.CopyImage(pbQRDisplay.Image);
             }
         }
     }

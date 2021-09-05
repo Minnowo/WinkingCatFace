@@ -48,12 +48,9 @@ namespace WinkingCat
 
         private void SaveSettingsToDisk()
         {
-            if (SettingsManager.SaveMainFormStyles())
-                Logger.WriteLine("MainForm Styles Saved Successfully");
-            if (SettingsManager.SaveRegionCaptureStyles())
-                Logger.WriteLine("RegionCapture Styles Saved Successfully");
-            if (SettingsManager.SaveClipStyles())
-                Logger.WriteLine("Clip Styles Saved Successfully");
+            SettingsManager.SaveMainFormStyles();
+            SettingsManager.SaveRegionCaptureStyles();
+            SettingsManager.SaveClipStyles();
         }
 
         public void UpdateTheme()
@@ -75,9 +72,8 @@ namespace WinkingCat
                 ApplicationStyles.ApplyCustomThemeToControl(this);
                 Refresh();
             }
-            catch(Exception e)
+            catch
             {
-                Logger.WriteException(e);
             }
         }
 

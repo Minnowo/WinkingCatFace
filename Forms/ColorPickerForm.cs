@@ -27,7 +27,7 @@ namespace WinkingCat
 
             foreach(ColorFormat format in Enum.GetValues(typeof(ColorFormat)))
                 cbCopyFormat.Items.Add(format);
-            cbCopyFormat.SelectedItem = ClipboardHelper.copyFormat;
+            cbCopyFormat.SelectedItem = InternalSettings.Clipboard_Color_Format;
 
 
 
@@ -250,10 +250,10 @@ namespace WinkingCat
             if (preventUpdate)
                 return;
 
-            Color a;
+            /*Color a;
             ColorHelper.ParseDecimal(textBox2.Text, out a);
             if (a != Color.Empty)
-                colorPicker.SelectedColor = a;
+                colorPicker.SelectedColor = a;*/
         }
 
         private void button4_Click(object sender, EventArgs e)
@@ -273,11 +273,11 @@ namespace WinkingCat
                     colorPicker.SelectedColor = c;
                     return;
                 }
-                if (ColorHelper.ParseDecimal(clipBoardContent, out c))
+                /*if (ColorHelper.ParseDecimal(clipBoardContent, out c))
                 {
                     colorPicker.SelectedColor = c;
                     return;
-                }
+                }*/
 
                 HSB c2;
                 if (ColorHelper.ParseHSB(clipBoardContent, out c2))
@@ -290,7 +290,7 @@ namespace WinkingCat
 
         private void button1_Click(object sender, EventArgs e)
         {
-            TaskHandler.ExecuteTask(Tasks.ScreenColorPicker);
+            TaskHandler.ExecuteTask(Function.ScreenColorPicker);
 
             Console.WriteLine(ImageHandler.LastInfo.Color.ToString());
 

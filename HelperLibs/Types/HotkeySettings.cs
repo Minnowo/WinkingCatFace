@@ -5,12 +5,12 @@ namespace WinkingCat.HelperLibs
 {
     public class HotkeySettings
     {
-        public HotkeyInfo HotkeyInfo { get; set; }
-        public Tasks Task { get; set; }
-        public HotkeySettings(Tasks task, Keys hotkey = Keys.None)
+        public Hotkey HotkeyInfo { get; set; }
+        public Function Task { get; set; }
+        public HotkeySettings(Function task, Keys hotkey = Keys.None)
         {
             Task = task;
-            HotkeyInfo = new HotkeyInfo(hotkey);
+            HotkeyInfo = new Hotkey(hotkey);
         }
 
         public override string ToString()

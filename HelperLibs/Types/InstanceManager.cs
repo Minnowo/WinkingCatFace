@@ -40,7 +40,6 @@ namespace WinkingCat.HelperLibs
             catch (AbandonedMutexException)
             {
                 // Log the mutex was abandoned in another process, it will still get acquired
-                Logger.WriteLine("Single instance mutex found abandoned from another process.");
                 IsFirstInstance = true;
             }
 
@@ -90,9 +89,8 @@ namespace WinkingCat.HelperLibs
                     RegisterRemoteType(AppName);
                 }
             }
-            catch (Exception e)
+            catch
             {
-                Logger.WriteException(e);
             }
         }
 
@@ -114,9 +112,8 @@ namespace WinkingCat.HelperLibs
                     }
                 }
             }
-            catch (Exception e)
+            catch
             {
-                Logger.WriteException(e);
             }
 
             Environment.Exit(0);

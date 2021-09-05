@@ -18,7 +18,7 @@ namespace WinkingCat
         public static event EventHandler TaskExecuted;
         private static bool result = false;
 
-        public static void OnTaskExecuted(Tasks t)
+        public static void OnTaskExecuted(Function t)
         {
             if (TaskExecuted != null)
             {
@@ -28,7 +28,7 @@ namespace WinkingCat
 
         public static bool CaptureWindow(WindowInfo window)
         {
-            OnTaskExecuted(Tasks.CaptureWindow);
+            OnTaskExecuted(Function.CaptureWindow);
             if (!ScreenHelper.IsValidCropArea(window.Rectangle))
                 return false;
             
@@ -36,7 +36,7 @@ namespace WinkingCat
             {
                 if (RegionCaptureOptions.AutoCopyImage)
                 {
-                    ClipboardHelper.CopyImageDefault(img);
+                    ClipboardHelper.CopyImage(img);
                 }
 
                 if (img == null || string.IsNullOrEmpty(ImageHandler.Save(PathHelper.GetNewImageFileName(), img)))
@@ -48,47 +48,47 @@ namespace WinkingCat
             } 
         }
 
-        public static bool ExecuteTask(Tasks task)
+        public static bool ExecuteTask(Function task)
         {
             OnTaskExecuted(task);
 
             Image image;
             switch (task)
             {
-                case Tasks.RegionCapture:
+                case Function.RegionCapture:
                     HotkeyManager.tempTgnoreHotkeyPress = true;
                     ImageHandler.RegionCapture(RegionCaptureMode.Default);
                     HotkeyManager.tempTgnoreHotkeyPress = false;
                     return true;
 
-                case Tasks.RegionCaptureLite:
+                case Function.RegionCaptureLite:
                     HotkeyManager.tempTgnoreHotkeyPress = true;
 
                     HotkeyManager.tempTgnoreHotkeyPress = false;
                     return false;
 
-                case Tasks.NewClipFromRegionCapture:
+                case Function.NewClipFromRegionCapture:
                     HotkeyManager.tempTgnoreHotkeyPress = true;
                     ImageHandler.RegionCapture(RegionCaptureMode.Default, true);
                     HotkeyManager.tempTgnoreHotkeyPress = false;
                     return true;
 
-                case Tasks.NewClipFromFile:
-                    string path = ImageHelper.OpenImageFileDialog(Program.MainForm);
+                case Function.NewClipFromFile:
+                    string[] path = ImageHelper.OpenImageFileDialog(false, Program.MainForm);
 
-                    if (string.IsNullOrEmpty(path))
+                    if (path == null || path.Length < 1)
                         return false;
 
-                    image = ImageHelper.LoadImage(path);
+                    image = ImageHelper.LoadImage(path[0]);
                     
                     if (image == null)
                         return false;
 
-                    ClipManager.Clips[ClipManager.CreateClipAtCursor(image, false)].Options.FilePath = path;
+                    ClipManager.Clips[ClipManager.CreateClipAtCursor(image, false)].Options.FilePath = path[0];
                     return true;
 
-                case Tasks.NewClipFromClipboard:
-                    image = ClipboardHelper.GetImage(true);
+                case Function.NewClipFromClipboard:
+                    image = ClipboardHelper.GetImage();
                     
                     if (image == null)
                         return false;
@@ -96,11 +96,11 @@ namespace WinkingCat
                     ClipManager.CreateClipAtCursor(image, false);
                     return true;
 
-                case Tasks.ScreenColorPicker:
+                case Function.ScreenColorPicker:
                     ImageHandler.RegionCapture(RegionCaptureMode.ColorPicker);
                     return true;
 
-                case Tasks.CaptureLastRegion:
+                case Function.CaptureLastRegion:
 
                     if (ImageHandler.LastInfo == null || !ScreenHelper.IsValidCropArea(ImageHandler.LastInfo.Region))
                         return false;
@@ -111,11 +111,11 @@ namespace WinkingCat
                             return false;
 
                         if (RegionCaptureOptions.AutoCopyImage)
-                            ClipboardHelper.CopyImageDefault(img);
+                            ClipboardHelper.CopyImage(img);
                     }
                     return true;
 
-                case Tasks.CaptureFullScreen:
+                case Function.CaptureFullScreen:
 
                     using (Image img = ScreenShotManager.CaptureFullscreen())
                     {
@@ -123,12 +123,12 @@ namespace WinkingCat
                             return false;
 
                         if (RegionCaptureOptions.AutoCopyImage)
-                            ClipboardHelper.CopyImageDefault(img);
+                            ClipboardHelper.CopyImage(img);
                     }
 
                     return true;
 
-                case Tasks.CaptureActiveMonitor:
+                case Function.CaptureActiveMonitor:
 
                     using (Image img = ScreenShotManager.CaptureActiveMonitor())
                     {
@@ -136,12 +136,12 @@ namespace WinkingCat
                             return false;
 
                         if (RegionCaptureOptions.AutoCopyImage)
-                            ClipboardHelper.CopyImageDefault(img);
+                            ClipboardHelper.CopyImage(img);
                     }
 
                     return true;
 
-                case Tasks.CaptureActiveWindow:
+                case Function.CaptureActiveWindow:
 
                     using (Image img = ScreenShotManager.CaptureRectangle(ScreenHelper.GetWindowRectangle(NativeMethods.GetForegroundWindow())))
                     {
@@ -149,34 +149,34 @@ namespace WinkingCat
                             return false;
 
                         if (RegionCaptureOptions.AutoCopyImage)
-                            ClipboardHelper.CopyImageDefault(img);
+                            ClipboardHelper.CopyImage(img);
                     }
 
                     return true;
 
-                case Tasks.CaptureGif:
+                case Function.CaptureGif:
                     return false;
 
-                case Tasks.NewOCRCapture:
+                case Function.NewOCRCapture:
                     return false;
 
-                case Tasks.ColorWheelPicker:
+                case Function.ColorWheelPicker:
                     Program.MainForm.ColorPicker_Click(null, EventArgs.Empty);
                     return true;
 
-                case Tasks.HashCheck:
+                case Function.HashCheck:
                     Program.MainForm.HashCheck_Click(null, EventArgs.Empty);
                     return true;
 
-                case Tasks.Regex:
+                case Function.Regex:
                     Program.MainForm.Regex_Click(null, EventArgs.Empty);
                     return true;
 
-                case Tasks.QRCode:
+                case Function.QRCode:
                     Program.MainForm.QrCode_Click(null, EventArgs.Empty);
                     return true;
 
-                case Tasks.OpenMainForm:
+                case Function.OpenMainForm:
                     Program.MainForm.ForceActivate();
                     return true;
             }

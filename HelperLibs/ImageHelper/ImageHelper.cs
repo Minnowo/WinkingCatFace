@@ -145,8 +145,6 @@ namespace WinkingCat.HelperLibs
                     return WORM.MimeType;
                 if ((ImgFormat)image.Tag == ImgFormat.webp)
                     return Webp.MimeType;
-                if ((ImgFormat)image.Tag == ImgFormat.ico)
-                    return ICO.MimeType;
             }
             catch { }
             return "image/unknown";
@@ -543,11 +541,6 @@ namespace WinkingCat.HelperLibs
                         result = WORM.FromFileAsBitmap(path);
                         result.Tag = ImgFormat.wrm;
                         return result;
-
-                    case ImgFormat.ico:
-                        result = ICO.FromFileAsBitmap(path);
-                        result.Tag = ImgFormat.ico;
-                        return result;
                 }
 
             }
@@ -558,7 +551,7 @@ namespace WinkingCat.HelperLibs
             return null;
         }
 
-        public static ImageBase LoadImage(string path)
+        public static IMAGE LoadImage(string path)
         {
             if (string.IsNullOrEmpty(path) || !File.Exists(path))
                 return null;
@@ -606,11 +599,6 @@ namespace WinkingCat.HelperLibs
                         WORM worm = new WORM();
                         worm.Load(path);
                         return worm;
-
-                    case ImgFormat.ico:
-                        ICO ico = new ICO();
-                        ico.Load(path);
-                        return ico;
                 }
 
             }

@@ -81,7 +81,7 @@ namespace WinkingCat.HelperLibs
     /// <summary>
     /// The supported format base. Implement this class when building a supported format.
     /// </summary>
-    public abstract class ImageBase : IImage
+    public abstract class IMAGE : IImage
     {
         #region Readonly / Const / Static 
 
@@ -151,8 +151,8 @@ namespace WinkingCat.HelperLibs
         /// </summary>
         /// <param name="image">The image to cast.</param>
         /// <param name="format">The format to cast.</param>
-        /// <returns>The image as <see cref="ImageBase"/> of its proper format.</returns>
-        public static ImageBase ProperCast(Image image, ImgFormat format)
+        /// <returns>The image as <see cref="IMAGE"/> of its proper format.</returns>
+        public static IMAGE ProperCast(Image image, ImgFormat format)
         {
             switch (format)
             {
@@ -176,9 +176,6 @@ namespace WinkingCat.HelperLibs
 
                 case ImgFormat.wrm:
                     return new WORM(image);
-
-                case ImgFormat.ico:
-                    return new ICO(image);
             }
             return null;
         }
@@ -233,12 +230,12 @@ namespace WinkingCat.HelperLibs
 
         public virtual ImgFormat GetImageFormat()
         {
-            return ImageBase.ImageFormat;
+            return IMAGE.ImageFormat;
         }
 
         public virtual string GetMimeType()
         {
-            return ImageBase.MimeType;
+            return IMAGE.MimeType;
         }
 
         public virtual void RotateRight90()
@@ -293,7 +290,7 @@ namespace WinkingCat.HelperLibs
                 return;
 
             Clear();
-            this.Image = ImageBase.StandardLoad(path);
+            this.Image = IMAGE.StandardLoad(path);
         }
 
         /// <summary>
@@ -328,14 +325,14 @@ namespace WinkingCat.HelperLibs
             GC.SuppressFinalize(this);
         }
 
-        public static implicit operator Image(ImageBase bas)
+        public static implicit operator Image(IMAGE bas)
         {
             if (bas == null)
                 return null;
             return bas.Image;
         }
 
-        public static implicit operator Bitmap(ImageBase bas)
+        public static implicit operator Bitmap(IMAGE bas)
         {
             if (bas == null)
                 return null;

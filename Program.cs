@@ -72,74 +72,31 @@ namespace WinkingCat
 
         private static void Run()
         {
-            NativeMethods.SetProcessDpiAwarenessContext(-3);
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
 
-            SettingsManager.LoadPathSettings();
-            PathHelper.UpdateRelativePaths();
+            SettingsManager.LoadMiscSettings();
 
-            Logger.Init(PathHelper.logPath + "\\" + DateTime.Now.ToString("yyyy MM dd") + ".txt");
-            Console.WriteLine("log path: " + PathHelper.logPath + "\\" + DateTime.Now.ToString("yyyy M dd") + ".txt");
+            PathHelper.CreateAllPaths();
 
-            Logger.WriteLine(";3c starting...");
-            Logger.WriteLine("path settings loaded");
-            Logger.WriteLine(PathHelper.currentDirectory);
-            Logger.WriteLine(PathHelper.configPath);
-            Logger.WriteLine(PathHelper.resourcePath);
-            Logger.WriteLine(PathHelper.screenshotDefaultPath);
-            Logger.WriteLine(PathHelper.logPath);
+            InternalSettings.EnableWebPIfPossible();
 
-            if (InternalSettings.EnableWebPIfPossible())
-            {
-                Logger.WriteLine("WebP plugin found");
-            }
-
-            if (SettingsManager.LoadMainFormSettings())
-            {
-                Logger.WriteLine("MainForm settings loaded successfully");
-            }
-
-            if (SettingsManager.LoadRegionCaptureSettings())
-            {
-                Logger.WriteLine("RegionCapture settings loaded successfully");
-            }
-
-            if (SettingsManager.LoadClipboardSettings())
-            {
-                Logger.WriteLine("Clipboard settings loaded successfully");
-            }
-
-            if (SettingsManager.LoadMiscSettings())
-            {
-                Logger.WriteLine("Misc settings loaded successfully");
-            }
-
-            if (SettingsManager.LoadMainFormStyles())
-            {
-                Logger.WriteLine("MainForm styles loaded successfully");
-            }
-
-            if (SettingsManager.LoadRegionCaptureStyles())
-            {
-                Logger.WriteLine("RegionCapture styles loaded successfully");
-            }
-
-            if (SettingsManager.LoadClipStyles())
-            {
-                Logger.WriteLine("Clip styles loaded successfully");
-            }
+            SettingsManager.LoadClipSettings();
+            SettingsManager.LoadMainFormSettings();
+            SettingsManager.LoadRegionCaptureSettings();
+            SettingsManager.LoadMainFormStyles();
+            SettingsManager.LoadRegionCaptureStyles();
+            SettingsManager.LoadClipStyles();
 
             HotkeyManager.Init();
 
-            if (SettingsManager.LoadHotkeySettings() != null)
+            List<Hotkey> hk;
+            if ((hk = SettingsManager.LoadHotkeySettings()) != null)
             {
-                HotkeyManager.UpdateHotkeys(SettingsManager.LoadHotkeySettings(), false);
-                Logger.WriteLine("Hotkeys loaded successfully");
+                HotkeyManager.UpdateHotkeys(hk, false);
             }
             else
             {
-                Logger.WriteLine("Hotkeys not loaded using default");
                 HotkeyManager.UpdateHotkeys(HotkeyManager.GetDefaultHotkeyList(), false);
             }
 

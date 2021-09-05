@@ -131,9 +131,8 @@ namespace WinkingCat.Uploaders
                     }
                 }
             }
-            catch (Exception exception)
+            catch
             {
-                Logger.WriteException(exception);
             }
             return result;
         }

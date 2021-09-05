@@ -67,18 +67,23 @@ namespace WinkingCat
 
         ToolStripMenuItem[] buttonOnlyItems;
         public bool autoFillColumn { get; set; } = true;
-        //public bool showingContextMenu { get; private set; } = false;
+
+        private string ItemsPath = "";
+
         public NoCheckboxListView()
         {
             SetStyle(ControlStyles.OptimizedDoubleBuffer | ControlStyles.AllPaintingInWmPaint | ControlStyles.EnableNotifyMessage, true);
             InitializeComponent();
 
             FullRowSelect = true;
-            PathHelper.UpdateRelativePaths();
-            if (File.Exists(PathHelper.loadedItemsPath))
+
+            string curDir = PathHelper.CurrentDirectory;
+            ItemsPath = Path.Combine(curDir, InternalSettings.List_View_Items_IO_Path);
+
+            if (File.Exists(ItemsPath))
             {
                 const Int32 BufferSize = 128;
-                using (var fileStream = File.OpenRead(PathHelper.loadedItemsPath))
+                using (var fileStream = File.OpenRead(ItemsPath))
                 using (var streamReader = new StreamReader(fileStream, Encoding.UTF8, true, BufferSize))
                 {
                     String line;
@@ -121,13 +126,13 @@ namespace WinkingCat
             }
             else
             {
-                StreamWriter w = File.AppendText(PathHelper.loadedItemsPath);
+                StreamWriter w = File.AppendText(ItemsPath);
                 w.Close();
                 w.Dispose();
             }
 
             #region cmsMain Events
-            toolStripMenuItemAlwaysOnTop.Checked = MainFormSettings.alwaysOnTop;
+            toolStripMenuItemAlwaysOnTop.Checked = SettingsManager.MainFormSettings.Always_On_Top;
 
             cmsMain.Opening += ContextMenuStrip_Opening;
             //cmsMain.Closing += CmsMain_Closing;
@@ -289,9 +294,8 @@ namespace WinkingCat
                     ClipManager.Clips[ClipManager.CreateClipAtCursor(image)].Options.FilePath = path;
                 }
             }
-            catch (Exception ex)
+            catch
             {
-                Logger.WriteException(ex);
                 MessageBox.Show("The file is either not an image or is corrupt");
             }
         }
@@ -419,7 +423,7 @@ namespace WinkingCat
         {
             OCRForm form = new OCRForm(Items[SelectedIndex].Tag.ToString());
             form.Owner = Program.MainForm;
-            form.TopMost = MainFormSettings.alwaysOnTop;
+            form.TopMost = SettingsManager.MainFormSettings.Always_On_Top;
             form.Show();
         }
         
@@ -444,13 +448,13 @@ namespace WinkingCat
         {
             if (toolStripMenuItemAlwaysOnTop.Checked)
             {
-                MainFormSettings.alwaysOnTop = true;
-                MainFormSettings.OnSettingsChangedEvent();
+                SettingsManager.MainFormSettings.Always_On_Top = true;
+                MainFormSettings.UpdateSettings();
             }
             else
             {
-                MainFormSettings.alwaysOnTop = false;
-                MainFormSettings.OnSettingsChangedEvent();
+                SettingsManager.MainFormSettings.Always_On_Top = false;
+                MainFormSettings.UpdateSettings();
             }
         }
 
@@ -469,25 +473,25 @@ namespace WinkingCat
 
         public async Task ListViewDumpAsync(ListViewItem[] items)
         {
-            if (File.Exists(PathHelper.loadedItemsPath))
+            if (!File.Exists(ItemsPath))
+                return;
+            
+            await Task.Run(() =>
             {
-                await Task.Run(() =>
+                System.IO.File.WriteAllText(ItemsPath, "");
+                using (StreamWriter w = File.AppendText(ItemsPath))
                 {
-                    System.IO.File.WriteAllText(PathHelper.loadedItemsPath, "");
-                    using (StreamWriter w = File.AppendText(PathHelper.loadedItemsPath))
+                    foreach (ListViewItem item in items.Reverse())
                     {
-                        foreach (ListViewItem item in items.Reverse())
-                        {
-                            w.WriteLine(item.Tag.ToString());
-                        }
+                        w.WriteLine(item.Tag.ToString());
                     }
-                });
-            }
+                }
+            });
         }
 
         public void AddItem(ListViewItem item)
         {
-            using(StreamWriter w = File.AppendText(PathHelper.loadedItemsPath))
+            using(StreamWriter w = File.AppendText(ItemsPath))
             {
                 w.WriteLine(item.Tag.ToString());
             }
@@ -498,7 +502,7 @@ namespace WinkingCat
 
         public void InsertItem(int index, ListViewItem item)
         {
-            using (StreamWriter w = File.AppendText(PathHelper.loadedItemsPath))
+            using (StreamWriter w = File.AppendText(ItemsPath))
             {
                 w.WriteLine(item.Tag.ToString());
             }

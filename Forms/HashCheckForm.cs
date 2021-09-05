@@ -66,7 +66,7 @@ namespace WinkingCat
 
         private void btnBrowse_Click(object sender, EventArgs e)
         {
-            string path = PathHelper.AskChooseFile();
+            string path = PathHelper.AskChooseFile(this);
             if (!string.IsNullOrEmpty(path))
             {
                 tbFilePathInput.Text = path;
@@ -75,7 +75,7 @@ namespace WinkingCat
 
         private void btnBrowse2_Click(object sender, EventArgs e)
         {
-            string path = PathHelper.AskChooseFile();
+            string path = PathHelper.AskChooseFile(this);
             if (!string.IsNullOrEmpty(path))
             {
                 tbFilePathInput2.Text = path;
@@ -151,29 +151,37 @@ namespace WinkingCat
         private void btnClearFileHash_Click(object sender, EventArgs e)
         {
             tbFileHash.Text = "";
+            colorLabel1.StaticBackColor = ApplicationStyles.currentStyle.mainFormStyle.lightBackgroundColor;
         }
 
         private void btnClearHashInput_Click(object sender, EventArgs e)
         {
             tbHashInput.Text = "";
+            colorLabel3.StaticBackColor = ApplicationStyles.currentStyle.mainFormStyle.lightBackgroundColor;
         }
 
         private void btnClearHashTarget_Click(object sender, EventArgs e)
         {
             tbHashTarget.Text = "";
+            colorLabel4.StaticBackColor = ApplicationStyles.currentStyle.mainFormStyle.lightBackgroundColor;
         }
 
         private void btnClearFileHash2_Click(object sender, EventArgs e)
         {
             tbFileHash2.Text = "";
+            colorLabel2.StaticBackColor = ApplicationStyles.currentStyle.mainFormStyle.lightBackgroundColor;
         }
 
         private void ResetTextBoxColor()
         {
-            tbFileHash.BackColor = ApplicationStyles.currentStyle.mainFormStyle.lightBackgroundColor;
+            /*tbFileHash.BackColor = ApplicationStyles.currentStyle.mainFormStyle.lightBackgroundColor;
             tbFileHash2.BackColor = ApplicationStyles.currentStyle.mainFormStyle.lightBackgroundColor;
             tbHashInput.BackColor = ApplicationStyles.currentStyle.mainFormStyle.lightBackgroundColor;
-            tbHashTarget.BackColor = ApplicationStyles.currentStyle.mainFormStyle.lightBackgroundColor;
+            tbHashTarget.BackColor = ApplicationStyles.currentStyle.mainFormStyle.lightBackgroundColor;*/
+            colorLabel1.StaticBackColor = ApplicationStyles.currentStyle.mainFormStyle.lightBackgroundColor;
+            colorLabel2.StaticBackColor = ApplicationStyles.currentStyle.mainFormStyle.lightBackgroundColor;
+            colorLabel3.StaticBackColor = ApplicationStyles.currentStyle.mainFormStyle.lightBackgroundColor;
+            colorLabel4.StaticBackColor = ApplicationStyles.currentStyle.mainFormStyle.lightBackgroundColor;
         }
 
         private void UpdateTextBoxColor()
@@ -181,38 +189,50 @@ namespace WinkingCat
             ResetTextBoxColor();
             if (tbFileHash.Text.Equals(tbFileHash2.Text, StringComparison.InvariantCultureIgnoreCase) && !string.IsNullOrEmpty(tbFileHash.Text) && !string.IsNullOrEmpty(tbFileHash2.Text))
             {
-                tbFileHash.BackColor = Color.FromArgb(200, 255, 200);
-                tbFileHash2.BackColor = Color.FromArgb(200, 255, 200);
+                //tbFileHash.BackColor = Color.FromArgb(200, 255, 200);
+                //tbFileHash2.BackColor = Color.FromArgb(200, 255, 200);
+                colorLabel1.StaticBackColor = Color.FromArgb(200, 255, 200);
+                colorLabel2.StaticBackColor = Color.FromArgb(200, 255, 200);
             }
 
             if (tbFileHash.Text.Equals(tbHashTarget.Text, StringComparison.InvariantCultureIgnoreCase) && !string.IsNullOrEmpty(tbFileHash.Text) && !string.IsNullOrEmpty(tbHashTarget.Text))
             {
-                tbFileHash.BackColor = Color.FromArgb(200, 255, 200);
-                tbHashTarget.BackColor = Color.FromArgb(200, 255, 200);
+                //tbFileHash.BackColor = Color.FromArgb(200, 255, 200);
+                //tbHashTarget.BackColor = Color.FromArgb(200, 255, 200);
+                colorLabel1.StaticBackColor = Color.FromArgb(200, 255, 200);
+                colorLabel4.StaticBackColor = Color.FromArgb(200, 255, 200);
             }
 
             if (tbFileHash2.Text.Equals(tbHashTarget.Text, StringComparison.InvariantCultureIgnoreCase) && !string.IsNullOrEmpty(tbFileHash2.Text) && !string.IsNullOrEmpty(tbHashTarget.Text))
             {
-                tbFileHash2.BackColor = Color.FromArgb(200, 255, 200);
-                tbHashTarget.BackColor = Color.FromArgb(200, 255, 200);
+                //tbFileHash2.BackColor = Color.FromArgb(200, 255, 200);
+                //tbHashTarget.BackColor = Color.FromArgb(200, 255, 200);
+                colorLabel2.StaticBackColor = Color.FromArgb(200, 255, 200);
+                colorLabel4.StaticBackColor = Color.FromArgb(200, 255, 200);
             }
 
             if (tbHashInput.Text.Equals(tbHashTarget.Text, StringComparison.InvariantCultureIgnoreCase) && !string.IsNullOrEmpty(tbHashInput.Text) && !string.IsNullOrEmpty(tbHashTarget.Text))
             {
-                tbHashInput.BackColor = Color.FromArgb(200, 255, 200);
-                tbHashTarget.BackColor = Color.FromArgb(200, 255, 200);
+                //tbHashInput.BackColor = Color.FromArgb(200, 255, 200);
+                //tbHashTarget.BackColor = Color.FromArgb(200, 255, 200);
+                colorLabel3.StaticBackColor = Color.FromArgb(200, 255, 200);
+                colorLabel4.StaticBackColor = Color.FromArgb(200, 255, 200);
             }
 
             if (tbHashInput.Text.Equals(tbFileHash.Text, StringComparison.InvariantCultureIgnoreCase) && !string.IsNullOrEmpty(tbHashInput.Text) && !string.IsNullOrEmpty(tbFileHash.Text))
             {
-                tbHashInput.BackColor = Color.FromArgb(200, 255, 200);
-                tbFileHash.BackColor = Color.FromArgb(200, 255, 200);
+                //tbHashInput.BackColor = Color.FromArgb(200, 255, 200);
+                //tbFileHash.BackColor = Color.FromArgb(200, 255, 200);
+                colorLabel3.StaticBackColor = Color.FromArgb(200, 255, 200);
+                colorLabel1.StaticBackColor = Color.FromArgb(200, 255, 200);
             }
 
             if (tbHashInput.Text.Equals(tbFileHash2.Text, StringComparison.InvariantCultureIgnoreCase) && !string.IsNullOrEmpty(tbHashInput.Text) && !string.IsNullOrEmpty(tbFileHash2.Text))
             {
-                tbHashInput.BackColor = Color.FromArgb(200, 255, 200);
-                tbFileHash2.BackColor = Color.FromArgb(200, 255, 200);
+                //tbHashInput.BackColor = Color.FromArgb(200, 255, 200);
+                //tbFileHash2.BackColor = Color.FromArgb(200, 255, 200);
+                colorLabel3.StaticBackColor = Color.FromArgb(200, 255, 200);
+                colorLabel2.StaticBackColor = Color.FromArgb(200, 255, 200);
             }
         }
 

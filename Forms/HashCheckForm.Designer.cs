@@ -59,6 +59,10 @@
             this.btnCopyFileHash2 = new System.Windows.Forms.Button();
             this.label7 = new System.Windows.Forms.Label();
             this.tbFileHash2 = new System.Windows.Forms.TextBox();
+            this.colorLabel1 = new WinkingCat.HelperLibs.ColorLabel();
+            this.colorLabel2 = new WinkingCat.HelperLibs.ColorLabel();
+            this.colorLabel3 = new WinkingCat.HelperLibs.ColorLabel();
+            this.colorLabel4 = new WinkingCat.HelperLibs.ColorLabel();
             this.SuspendLayout();
             // 
             // cbHashType
@@ -375,11 +379,47 @@
             this.tbFileHash2.Size = new System.Drawing.Size(463, 38);
             this.tbFileHash2.TabIndex = 27;
             // 
+            // colorLabel1
+            // 
+            this.colorLabel1.Location = new System.Drawing.Point(212, 245);
+            this.colorLabel1.Name = "colorLabel1";
+            this.colorLabel1.Size = new System.Drawing.Size(20, 20);
+            this.colorLabel1.StaticBackColor = System.Drawing.SystemColors.Control;
+            this.colorLabel1.TabIndex = 32;
+            // 
+            // colorLabel2
+            // 
+            this.colorLabel2.Location = new System.Drawing.Point(212, 325);
+            this.colorLabel2.Name = "colorLabel2";
+            this.colorLabel2.Size = new System.Drawing.Size(20, 20);
+            this.colorLabel2.StaticBackColor = System.Drawing.SystemColors.Control;
+            this.colorLabel2.TabIndex = 33;
+            // 
+            // colorLabel3
+            // 
+            this.colorLabel3.Location = new System.Drawing.Point(212, 408);
+            this.colorLabel3.Name = "colorLabel3";
+            this.colorLabel3.Size = new System.Drawing.Size(20, 20);
+            this.colorLabel3.StaticBackColor = System.Drawing.SystemColors.Control;
+            this.colorLabel3.TabIndex = 34;
+            // 
+            // colorLabel4
+            // 
+            this.colorLabel4.Location = new System.Drawing.Point(212, 491);
+            this.colorLabel4.Name = "colorLabel4";
+            this.colorLabel4.Size = new System.Drawing.Size(20, 20);
+            this.colorLabel4.StaticBackColor = System.Drawing.SystemColors.Control;
+            this.colorLabel4.TabIndex = 35;
+            // 
             // HashCheckForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(490, 568);
+            this.Controls.Add(this.colorLabel4);
+            this.Controls.Add(this.colorLabel3);
+            this.Controls.Add(this.colorLabel2);
+            this.Controls.Add(this.colorLabel1);
             this.Controls.Add(this.btnClearFileHash2);
             this.Controls.Add(this.btnPasteFileHash2);
             this.Controls.Add(this.btnCopyFileHash2);
@@ -452,5 +492,9 @@
         private System.Windows.Forms.Button btnCopyFileHash2;
         private System.Windows.Forms.Label label7;
         private System.Windows.Forms.TextBox tbFileHash2;
+        private HelperLibs.ColorLabel colorLabel1;
+        private HelperLibs.ColorLabel colorLabel2;
+        private HelperLibs.ColorLabel colorLabel3;
+        private HelperLibs.ColorLabel colorLabel4;
     }
 }

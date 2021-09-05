@@ -25,22 +25,22 @@ namespace WinkingCat
             preventUpdate = true;
 
             // general settings
-            cbShowInTray.Checked = MainFormSettings.showInTray;
-            cbMinimizeToTrayOnClose.Checked = MainFormSettings.minimizeToTray;
-            cbMinimizeToTrayOnStart.Checked = MainFormSettings.startInTray;
-            cbAlwaysOnTop.Checked = MainFormSettings.alwaysOnTop;
+            cbShowInTray.Checked = SettingsManager.MainFormSettings.Show_In_Tray;
+            cbMinimizeToTrayOnClose.Checked = SettingsManager.MainFormSettings.Hide_In_Tray_On_Close;
+            cbMinimizeToTrayOnStart.Checked = SettingsManager.MainFormSettings.Start_In_Tray;
+            cbAlwaysOnTop.Checked = SettingsManager.MainFormSettings.Always_On_Top;
 
-            foreach (Tasks task in Enum.GetValues(typeof(Tasks)))
+            foreach (Function task in Enum.GetValues(typeof(Function)))
             {
                 cbOnTrayLeftClick.Items.Add(task);
                 cbOnTrayMiddleClick.Items.Add(task);
                 cbOnTrayDoubleClick.Items.Add(task);
             }
-            cbOnTrayLeftClick.SelectedItem = MainFormSettings.onTrayLeftClick;
-            cbOnTrayMiddleClick.SelectedItem = MainFormSettings.onTrayMiddleClick;
-            cbOnTrayDoubleClick.SelectedItem = MainFormSettings.onTrayDoubleLeftClick;
+            cbOnTrayLeftClick.SelectedItem = SettingsManager.MainFormSettings.On_Tray_Left_Click;
+            cbOnTrayMiddleClick.SelectedItem = SettingsManager.MainFormSettings.On_Tray_Middle_Click;
+            cbOnTrayDoubleClick.SelectedItem = SettingsManager.MainFormSettings.On_Tray_Double_Click;
 
-            foreach(ImgFormat fmt in Enum.GetValues(typeof(ImgFormat)))
+            foreach (ImgFormat fmt in Enum.GetValues(typeof(ImgFormat)))
             {
                 if (fmt == ImgFormat.nil) continue;
                 if (fmt == ImgFormat.webp && !InternalSettings.WebP_Plugin_Exists) continue;
@@ -83,13 +83,13 @@ namespace WinkingCat
             {
                 cbDefaultColorFormat.Items.Add(colorformat);
             }
-            cbDefaultColorFormat.SelectedItem = ClipboardHelper.copyFormat;
+            cbDefaultColorFormat.SelectedItem = SettingsManager.MiscSettings.Default_Color_Format;
             cbAutoCopyImage.Checked = RegionCaptureOptions.AutoCopyImage;
             cbAutoCopyColor.Checked = RegionCaptureOptions.AutoCopyColor;
 
             // path settings
-            cbUseCustomScreenshotPath.Checked = PathHelper.UseCustomScreenshotPath;
-            tbCustomScreenshotPath.Text = PathHelper.screenshotCustomPath;
+            cbUseCustomScreenshotPath.Checked = SettingsManager.MiscSettings.Use_Custom_Screenshot_Folder;
+            tbCustomScreenshotPath.Text = SettingsManager.MiscSettings.Screenshot_Folder_Path;
 
             // hotkey settings
             UpdateHotkeyControls();
@@ -120,16 +120,15 @@ namespace WinkingCat
                 ApplicationStyles.ApplyCustomThemeToControl(this);
                 Refresh();
             }
-            catch (Exception e)
+            catch
             {
-                Logger.WriteException(e);
             }
         }
 
         public void UpdateHotkeyControls()
         {
             if (HotkeyManager.hotKeys != null)
-                foreach (HotkeySettings hotkey in HotkeyManager.hotKeys)
+                foreach (Hotkey hotkey in HotkeyManager.hotKeys)
                 {
                     AddHotkeyControl(new HotkeyInputControl(hotkey));
                 }
@@ -147,18 +146,11 @@ namespace WinkingCat
 
         private void SaveSettingsToDisk()
         {
-            if (SettingsManager.SavePathSettings())
-                Logger.WriteLine("PathSettings Settings Saved Successfully");
-            if (SettingsManager.SaveMainFormSettings())
-                Logger.WriteLine("MainForm Settings Saved Successfully");
-            if (SettingsManager.SaveRegionCaptureSettings())
-                Logger.WriteLine("RegionCapture Settings Saved Successfully");
-            if (SettingsManager.SaveClipboardSettings())
-                Logger.WriteLine("Clipboard Settings Saved Successfully");
-            if (SettingsManager.SaveMiscSettings())
-                Logger.WriteLine("Misc Settings Saved Successfully");
-            if (SettingsManager.SaveHotkeySettings(HotkeyManager.hotKeys))
-                Logger.WriteLine("Hotkeys Saved Successfully");
+            SettingsManager.SaveClipSettings();
+            SettingsManager.SaveMainFormSettings();
+            SettingsManager.SaveRegionCaptureSettings();
+            SettingsManager.SaveMiscSettings();
+            SettingsManager.SaveHotkeySettings(HotkeyManager.hotKeys);
         }
 
         private void ApplicationStyles_UpdateStylesEvent(object sender, EventArgs e)
@@ -187,8 +179,8 @@ namespace WinkingCat
             if (preventUpdate) return;
             if (cbShowInTray.Checked)
             {
-                MainFormSettings.showInTray = true;
-                MainFormSettings.minimizeToTray = cbMinimizeToTrayOnClose.Checked;
+                SettingsManager.MainFormSettings.Show_In_Tray = true;
+                SettingsManager.MainFormSettings.Hide_In_Tray_On_Close = cbMinimizeToTrayOnClose.Checked;
                 cbMinimizeToTrayOnClose.Enabled = true;
 
                 return;
@@ -196,44 +188,44 @@ namespace WinkingCat
 
             cbMinimizeToTrayOnClose.Enabled = false;
 
-            MainFormSettings.showInTray = false;
-            MainFormSettings.minimizeToTray = false;
+            SettingsManager.MainFormSettings.Show_In_Tray = false;
+            SettingsManager.MainFormSettings.Hide_In_Tray_On_Close = false;
         }
 
         private void MinimizeToTrayOnClose_CheckChanged(object sender, EventArgs e)
         {
             if (preventUpdate) return;
-            MainFormSettings.minimizeToTray = cbMinimizeToTrayOnClose.Checked;
+            SettingsManager.MainFormSettings.Hide_In_Tray_On_Close = cbMinimizeToTrayOnClose.Checked;
         }
 
         private void MinimizeToTrayOnStart_CheckChanged(object sender, EventArgs e)
         {
             if (preventUpdate) return;
-            MainFormSettings.startInTray = cbMinimizeToTrayOnStart.Checked;
+            SettingsManager.MainFormSettings.Start_In_Tray = cbMinimizeToTrayOnStart.Checked;
         }
 
         private void AlwaysOnTop_CheckChanged(object sender, EventArgs e)
         {
             if (preventUpdate) return;
-            MainFormSettings.alwaysOnTop = cbAlwaysOnTop.Checked;
+            SettingsManager.MainFormSettings.Always_On_Top = cbAlwaysOnTop.Checked;
         }
 
         private void OnTrayIconLeftClick_SelectedIndexChanged(object sender, EventArgs e)
         {
             if (preventUpdate) return;
-            MainFormSettings.onTrayLeftClick = (Tasks)cbOnTrayLeftClick.SelectedItem;
+            SettingsManager.MainFormSettings.On_Tray_Left_Click = (Function)cbOnTrayLeftClick.SelectedItem;
         }
 
         private void OnTrayIconDoubleClick_SelectedIndexChanged(object sender, EventArgs e)
         { 
             if (preventUpdate) return;
-            MainFormSettings.onTrayDoubleLeftClick = (Tasks)cbOnTrayDoubleClick.SelectedItem;
+            SettingsManager.MainFormSettings.On_Tray_Double_Click = (Function)cbOnTrayDoubleClick.SelectedItem;
         }
 
         private void OnTrayIconMiddleClick_SelectedIndexChanged(object sender, EventArgs e)
         {
             if (preventUpdate) return;
-            MainFormSettings.onTrayMiddleClick = (Tasks)cbOnTrayMiddleClick.SelectedItem;
+            SettingsManager.MainFormSettings.On_Tray_Middle_Click = (Function)cbOnTrayMiddleClick.SelectedItem;
         }
 
         private void DefaultImageFormat_SelectedIndexChanged(object sender, EventArgs e)
@@ -347,7 +339,7 @@ namespace WinkingCat
         private void DefaultColorFormat_SelectedIndexChanged(object sender, EventArgs e)
         {
             if (preventUpdate) return;
-            ClipboardHelper.copyFormat = (ColorFormat)cbDefaultColorFormat.SelectedItem;
+            SettingsManager.MiscSettings.Default_Color_Format = (ColorFormat)cbDefaultColorFormat.SelectedItem;
         }
 
         private void AutoCopyImage_CheckChanged(object sender, EventArgs e)
@@ -370,14 +362,12 @@ namespace WinkingCat
 
         private void control_HotkeyChanged(object sender, EventArgs e)
         {
-            HotkeyManager.RegisterHotkey(((HotkeyInputControl)sender).setting);
-            Logger.WriteLine(string.Format("Hotkey changed: {0}", ((HotkeyInputControl)sender).setting));
+            HotkeyManager.RegisterHotkey(((HotkeyInputControl)sender).Hotkey);
         }
 
         private void control_SelectedChanged(object sender, EventArgs e)
         {
-            HotkeyManager.RegisterHotkey(((HotkeyInputControl)sender).setting);
-            Logger.WriteLine(string.Format("Hotkey changed: {0}", ((HotkeyInputControl)sender).setting));
+            HotkeyManager.RegisterHotkey(((HotkeyInputControl)sender).Hotkey);
         }
 
         private void control_CheckboxChanged(object sender, EventArgs e)
@@ -392,7 +382,7 @@ namespace WinkingCat
         private void AddHotkey_Click(object sender, EventArgs e)
         {
             if (preventUpdate) return;
-            HotkeySettings newHotkey = new HotkeySettings(Tasks.RegionCapture, Keys.None);
+            Hotkey newHotkey = new Hotkey(Keys.None, Function.None);
             HotkeyManager.RegisterHotkey(newHotkey);
 
             AddHotkeyControl(new HotkeyInputControl(newHotkey));
@@ -403,7 +393,7 @@ namespace WinkingCat
             if (preventUpdate) return;
             if (selectedHotkey != null)
             {
-                HotkeyManager.UnRegisterHotkey(selectedHotkey.setting, true);
+                HotkeyManager.UnRegisterHotkey(selectedHotkey.Hotkey, true);
                 flpHotkeyDisplayPanel.Controls.Remove(selectedHotkey);
                 selectedHotkey.Dispose();
                 selectedHotkey = null;
@@ -414,7 +404,7 @@ namespace WinkingCat
         {
             if (preventUpdate) return;
             foreach (HotkeyInputControl control in flpHotkeyDisplayPanel.Controls)
-                HotkeyManager.UnRegisterHotkey(control.setting, true);
+                HotkeyManager.UnRegisterHotkey(control.Hotkey, true);
 
             flpHotkeyDisplayPanel.Controls.Clear();
             HotkeyManager.UpdateHotkeys(HotkeyManager.GetDefaultHotkeyList(), true);
@@ -427,16 +417,16 @@ namespace WinkingCat
         {
             string folderPath = PathHelper.AskChooseDirectory();
 
-            if (string.IsNullOrEmpty(folderPath) || !PathHelper.ValidDirectory(folderPath))
+            if (string.IsNullOrEmpty(folderPath) || !PathHelper.ValidPath(folderPath))
                 return;
 
             tbCustomScreenshotPath.Text = folderPath;
-            PathHelper.screenshotCustomPath = folderPath;
+            SettingsManager.MiscSettings.Screenshot_Folder_Path = folderPath;
         }
 
         private void UseCustomScreenshotFolder_CheckChanged(object sender, EventArgs e)
         {
-            PathHelper.UseCustomScreenshotPath = cbUseCustomScreenshotPath.Checked;
+            SettingsManager.MiscSettings.Use_Custom_Screenshot_Folder = cbUseCustomScreenshotPath.Checked;
         }
 
         

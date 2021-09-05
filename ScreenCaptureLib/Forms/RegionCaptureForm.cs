@@ -146,7 +146,7 @@ namespace WinkingCat.ScreenCaptureLib
                         PointToScreen(leftClickStart),
                         PointToScreen(leftClickStop),
                         ScreenHelper.CreateValidCropArea(leftClickStart, leftClickStop),
-                        ImageHelper.GetCroppedBitmap(leftClickStart, leftClickStop, image, PixelFormat.Format24bppRgb));
+                        ImageProcessor.GetCroppedBitmap(leftClickStart, leftClickStop, image, PixelFormat.Format24bppRgb));
 
                 case RegionResult.LastRegion:
                     return new LastRegionCaptureInfo(
@@ -154,7 +154,7 @@ namespace WinkingCat.ScreenCaptureLib
                         ImageHandler.LastInfo.StartLeftClick,
                         ImageHandler.LastInfo.StopLeftClick,
                         ImageHandler.LastInfo.Region,
-                        ImageHelper.GetCroppedBitmap(ImageHandler.LastInfo.Region, image, PixelFormat.Format24bppRgb));
+                        ImageProcessor.GetCroppedBitmap(ImageHandler.LastInfo.Region, image, PixelFormat.Format24bppRgb));
 
                 case RegionResult.Fullscreen:
                     return new LastRegionCaptureInfo(RegionResult.Fullscreen, true, image);
@@ -162,7 +162,7 @@ namespace WinkingCat.ScreenCaptureLib
                 case RegionResult.ActiveMonitor:
                     return new LastRegionCaptureInfo(
                         Screen.FromPoint(ScreenHelper.GetCursorPosition()),
-                        ImageHelper.GetCroppedBitmap(ScreenHelper.GetActiveScreenBounds0Based(), image, PixelFormat.Format24bppRgb));
+                        ImageProcessor.GetCroppedBitmap(ScreenHelper.GetActiveScreenBounds0Based(), image, PixelFormat.Format24bppRgb));
 
                 case RegionResult.Color:
                     return new LastRegionCaptureInfo(

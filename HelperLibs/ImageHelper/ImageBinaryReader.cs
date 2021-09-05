@@ -23,7 +23,6 @@ namespace WinkingCat.HelperLibs
             { TIFF.IdentifierBytes_2, ImgFormat.tif },
             { TIFF.IdentifierBytes_1, ImgFormat.tif },
             { BMP.IdentifierBytes_1, ImgFormat.bmp },
-            { ICO.IdentifierBytes_1, ImgFormat.ico },
             { WORM.IdentifierBytes_1, ImgFormat.wrm },
             { WORM.IdentifierBytes_2, ImgFormat.wrm }
         };
@@ -69,10 +68,8 @@ namespace WinkingCat.HelperLibs
                     return Webp.MimeType;
                 case ImgFormat.wrm:
                     return WORM.MimeType;
-                case ImgFormat.ico:
-                    return ICO.MimeType;
             }
-            return ImageBase.MimeType;
+            return IMAGE.MimeType;
         }
 
         /// <summary>

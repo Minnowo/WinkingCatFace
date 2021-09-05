@@ -16,6 +16,11 @@ namespace WinkingCat.HelperLibs
     public static class Extensions
     {
 
+        public static Bitmap Copy(this Image image)
+        {
+            return ImageProcessor.DeepClone(image, PixelFormat.Format32bppArgb);
+        }
+
         public static void ShowError(this Exception e)
         {
             MessageBox.Show(null, e.Message, "", MessageBoxButtons.OK, MessageBoxIcon.Error);
@@ -86,10 +91,7 @@ namespace WinkingCat.HelperLibs
                     return obj.Clone() as T;
                 }
             }
-            catch (Exception e)
-            {
-                Logger.WriteException(e);
-            }
+            catch { }
 
             return null;
         }

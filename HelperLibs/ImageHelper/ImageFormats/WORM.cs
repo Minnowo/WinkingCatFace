@@ -18,7 +18,7 @@ namespace WinkingCat.HelperLibs
     /// <summary>
     /// Provides the necessary information to support WORM images.
     /// </summary>
-    public class WORM : ImageBase
+    public class WORM : IMAGE
     {
         #region Readonly / Const / Static 
 

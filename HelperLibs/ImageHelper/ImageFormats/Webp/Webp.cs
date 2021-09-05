@@ -34,7 +34,7 @@ namespace WinkingCat.HelperLibs
 {
     // https://github.com/JosePineiro/WebP-wrapper
 
-    public sealed class Webp : ImageBase
+    public sealed class Webp : IMAGE
     {
         #region Readonly / Const / Static 
 

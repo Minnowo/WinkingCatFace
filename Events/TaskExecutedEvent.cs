@@ -9,8 +9,8 @@ namespace WinkingCat
 {
     public class TaskExecutedEvent : EventArgs
     {
-        public Tasks task { get; private set; }
-        public TaskExecutedEvent(Tasks t)
+        public Function task { get; private set; }
+        public TaskExecutedEvent(Function t)
         {
             task = t;
         }

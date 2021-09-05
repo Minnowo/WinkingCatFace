@@ -83,9 +83,8 @@ namespace WinkingCat.ScreenCaptureLib
                     CursorData cursorData = new CursorData();
                     cursorData.DrawCursor(hdcDest, rect.Location);
                 }
-                catch (Exception e)
+                catch
                 {
-                    Logger.WriteException(e);
                 }
             }
 

@@ -28,18 +28,30 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Text;
+using System.Drawing;
 using System.Threading.Tasks;
 
 namespace WinkingCat.HelperLibs
 {
     public static class InternalSettings
     {
+        public const string Plugin_IO_Path = "plugins\\";
+        public const string Default_Screenshot_IO_Path = "screenshots\\";
+        public const string Settings_IO_Path = "settings\\";
+
+        public const string Clip_Settings_IO_Path = "settigns\\clip.conf";
+        public const string Main_Form_Settings_IO_Path = "settings\\main.conf";
+        public const string Region_Capture_Settings_IO_Path = "settings\\capture.conf";
+        public const string Misc_Settings_IO_Path = "settings\\misc.conf";
+        public const string Hotkey_Settings_IO_Path = "settings\\hotkeys.conf";
+        public const string List_View_Items_IO_Path = "settings\\items.txt";
+
         public const string Folder_Select_Dialog_Title = "Select a folder";
         public const string Image_Select_Dialog_Title = "Select an image";
         public const string Save_File_Dialog_Title = "Save Item";
         public const string Move_File_Dialog_Title = "Move Item";
 
-        public const string All_Files_File_Dialog = "All Files (*.*)|*.";
+        public const string All_Files_File_Dialog = "All Files (*.*)|*.*";
 
         public static string PNG_File_Dialog =  "PNG (*.png)|*.png";
         public static string BMP_File_Dialog =  "BMP (*.bmp)|*.bmp";
@@ -93,6 +105,18 @@ namespace WinkingCat.HelperLibs
 
         #endregion
 
+        public static Size Max_Clip_Size
+        {
+            get
+            {
+                //https://social.msdn.microsoft.com/Forums/windows/en-US/a1843fa0-64f3-41f7-a117-a28b8d83dd12/windows-form-larger-than-screen-size?forum=winformsdesigner
+                Rectangle r = ScreenHelper.GetScreenBounds();
+                return new Size(r.Width + 12, r.Height + 12);
+            }
+        }
+
+        public static ColorFormat Clipboard_Color_Format = ColorFormat.RGB;
+
         public static long Jpeg_Quality = 75;
 
         public static int Image_Counter = -1;
@@ -104,6 +128,10 @@ namespace WinkingCat.HelperLibs
         public static bool Garbage_Collect_After_Clip_Destroyed = false;
         public static bool Garbage_Collect_After_All_Clips_Destroyed = true;
         public static bool Garbage_Collect_After_Gif_Encode = true;
+
+        public static bool Use_Alternate_Copy_Method = true;
+        public static bool Replace_Transparency_On_Copy = false;
+        public static Color Fill_Transparency_On_Copy_Color = Color.White;
 
         public static ImgFormat Default_Image_Format 
         {
@@ -152,7 +180,7 @@ namespace WinkingCat.HelperLibs
         }
     }
 
-    public static class MainFormSettings
+   /* public static class MainFormSettings
     {
         public static event EventHandler SettingsChangedEvent;
         public static bool hideMainFormOnCapture { get; set; } = true;
@@ -173,5 +201,5 @@ namespace WinkingCat.HelperLibs
                 SettingsChangedEvent(null, EventArgs.Empty);
             }
         }
-    }
+    }*/
 }
