@@ -10,9 +10,19 @@ using System.Windows.Forms;
 
 namespace WinkingCat.HelperLibs
 {
+    [DefaultEvent("ColorChanged")]
     public partial class ColorComboBox : UserControl
     {
         public event ColorEventHandler ColorChanged;
+
+        public COLOR CurrentColor
+        {
+            get
+            {
+                return GetColor();
+            }
+        }
+
         public decimal[] Values
         {
             get
@@ -105,7 +115,8 @@ namespace WinkingCat.HelperLibs
             UpdateMax();
             UpdateValues();
         }
-        public void OnColorChanged()
+
+        private COLOR GetColor()
         {
             COLOR mycolor = Color.White;
             switch (this.colorFormat)
@@ -113,26 +124,53 @@ namespace WinkingCat.HelperLibs
                 case ColorFormat.RGB:
                     mycolor = new COLOR((short)values[0], (short)values[1], (short)values[2]);
                     break;
+
                 case ColorFormat.ARGB:
-                    mycolor = new COLOR((short)values[1], (short)values[2], (short)values[3], (short)values[0]);
+                    mycolor = new COLOR((short)values[0], (short)values[1], (short)values[2], (short)values[3]);
                     break;
+
                 case ColorFormat.CMYK:
-                    Console.WriteLine($"{values[0]}, {values[1]}, {values[2]}, {values[3]}");
-                    mycolor = (new CMYK((int)Math.Round(values[0]), (int)Math.Round(values[1]), (int)Math.Round(values[2]), (int)Math.Round(values[3]))).ToColor();
+                    CMYK c = new CMYK(0, 0, 0, 0);
+                    c.C100 = (float)values[0];
+                    c.M100 = (float)values[1];
+                    c.Y100 = (float)values[2];
+                    c.K100 = (float)values[3];
+
+                    mycolor = c.ToColor();
                     break;
+
                 case ColorFormat.HSB:
                 case ColorFormat.HSV:
-                    mycolor = (new HSB((int)Math.Round(values[0]), (int)Math.Round(values[1]), (int)Math.Round(values[2]))).ToColor();
+                    HSB hsb = new HSB(0, 0, 0);
+
+                    hsb.Hue360 = (float)values[0];
+                    hsb.Saturation100 = (float)values[1];
+                    hsb.Brightness100 = (float)values[2];
+
+                    mycolor = hsb.ToColor();
                     break;
+
                 case ColorFormat.HSL:
-                    mycolor = (new HSL((int)Math.Round(values[0]), (int)Math.Round(values[1]), (int)Math.Round(values[2]))).ToColor();
+                    HSL hsl = new HSL(0, 0, 0);
+
+                    hsl.Hue360 = (float)values[0];
+                    hsl.Saturation100 = (float)values[1];
+                    hsl.Lightness100 = (float)values[2];
+
+                    mycolor = hsl.ToColor();
                     break;
             }
-            OnColorChanged(mycolor);
+
+            return mycolor;
+        }
+
+        public void OnColorChanged()
+        {
+            OnColorChanged(GetColor());
         }
         public void OnColorChanged(COLOR color)
         {
-            if(ColorChanged != null)
+            if (ColorChanged != null)
             {
                 ColorChanged(this, new ColorEventArgs(color, this.colorFormat));
             }
@@ -142,7 +180,9 @@ namespace WinkingCat.HelperLibs
         {
             if (preventOverflow)
                 return;
+
             preventOverflow = true;
+
             switch (ColorFormat)
             {
                 case ColorFormat.RGB:
@@ -175,6 +215,7 @@ namespace WinkingCat.HelperLibs
                     break;
             }
             UpdateValues();
+
             preventOverflow = false;
         }
 
@@ -260,49 +301,12 @@ namespace WinkingCat.HelperLibs
                     maxValues = new decimal[] { 100M, 100M, 100M, 100M };
                     ColorComboBox_ClientSizeChanged(null, EventArgs.Empty);
                     break;
-                case ColorFormat.AdobeRGB:
-                    ResizeValues(3);
-                    values = new decimal[] { 1M, 1M, 1M };
-                    minValues = new decimal[] { 0, 0, 0 };
-                    maxValues = new decimal[] { 255M, 255M, 255M };
-                    ColorComboBox_ClientSizeChanged(null, EventArgs.Empty);
-                    break;
-                case ColorFormat.XYZ:
-                    ResizeValues(3);
-                    values = new decimal[] { 1M, 1M, 1M };
-                    minValues = new decimal[] { 0, 0, 0 };
-                    maxValues = new decimal[] { 150M, 100M, 150M };
-                    break;
-                case ColorFormat.Yxy:
-                    ResizeValues(3);
-                    values = new decimal[] { 1M, 1M, 1M };
-                    minValues = new decimal[] { 0, 0, 0 };
-                    maxValues = new decimal[] { 100M, 1M, 1M };
-                    break;
             }
             UpdateMin();
             UpdateMax();
             UpdateValues();
         }
 
-        private void NumericUpDownKeyUp_Event(object sender, KeyEventArgs e)
-        {
-            if (this.decimalPlaces == 0)
-                if ((e.KeyValue >= 0x30 && e.KeyValue <= 0x39) | (e.KeyValue >= 0x60 && e.KeyValue <= 0x69)) // numbers and num pad
-                {
-                    NumericUpDown n = (NumericUpDown)sender;
-                    int index = this.Controls.IndexOf(n);
-
-                    if (((int)n.Value).ToString().Length + 1 > ((int)maxValues[index]).ToString().Length)
-                    {
-                        if (index + 1 < this.Controls.Count)
-                        {
-                            ((NumericUpDown)this.Controls[index + 1]).Select();
-                            ((NumericUpDown)this.Controls[index + 1]).Focus();
-                        }
-                    }
-                }
-        }
 
         private void ColorComboBox_ClientSizeChanged(object sender, EventArgs e)
         {
@@ -320,9 +324,12 @@ namespace WinkingCat.HelperLibs
         {
             if (preventOverflow)
                 return;
+
             preventOverflow = true;
+
             values[((NumericUpDown)sender).TabIndex] = ((NumericUpDown)sender).Value;
             OnColorChanged();
+
             preventOverflow = false;
         }
 

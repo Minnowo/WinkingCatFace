@@ -9,11 +9,12 @@ using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.Drawing.Drawing2D;
 
+
 namespace WinkingCat.HelperLibs
 {
     public partial class ColorPickerBox : ColorPickerBase
     {
-        public bool nyah = true;
+        
         public ColorPickerBox()
         {
             InitializeComponent();
@@ -37,8 +38,8 @@ namespace WinkingCat.HelperLibs
         {
             using (Graphics g = Graphics.FromImage(bmp))
             {
-                HSB start = HSB.FromHSB360(selectedColor.HSB.Hue360, 0, 0, selectedColor.ARGB.A);
-                HSB end = HSB.FromHSB360(selectedColor.HSB.Hue360, 100, 0, selectedColor.ARGB.A);
+                HSB start = new HSB((int)selectedColor.HSB.Hue360, 0, 0, selectedColor.ARGB.A);
+                HSB end = new HSB((int)selectedColor.HSB.Hue360, 100, 0, selectedColor.ARGB.A);
 
                 for (int y = 0; y < clientHeight; y++)
                 {
@@ -59,8 +60,8 @@ namespace WinkingCat.HelperLibs
         {
             using (Graphics g = Graphics.FromImage(bmp))
             {
-                HSB start = HSB.FromHSB360(0, selectedColor.HSB.Saturation100, 100, selectedColor.ARGB.A);
-                HSB end = HSB.FromHSB360(0, selectedColor.HSB.Saturation100, 0, selectedColor.ARGB.A);
+                HSB start = new HSB(0, (int)selectedColor.HSB.Saturation100, 100, selectedColor.ARGB.A);
+                HSB end = new HSB(0, (int)selectedColor.HSB.Saturation100, 0, selectedColor.ARGB.A);
 
                 for (int x = 0; x < clientWidth; x++)
                 {
@@ -81,8 +82,8 @@ namespace WinkingCat.HelperLibs
         {
             using (Graphics g = Graphics.FromImage(bmp))
             {
-                HSB start = HSB.FromHSB360(0, 100, selectedColor.HSB.Brightness100, selectedColor.ARGB.A);
-                HSB end = HSB.FromHSB360(0, 0, selectedColor.HSB.Brightness100, selectedColor.ARGB.A);
+                HSB start = new HSB(0, 100, (int)selectedColor.HSB.Brightness100, selectedColor.ARGB.A);
+                HSB end = new HSB(0, 0, (int)selectedColor.HSB.Brightness100, selectedColor.ARGB.A);
 
                 for (int x = 0; x < clientWidth; x++)
                 {
@@ -103,8 +104,8 @@ namespace WinkingCat.HelperLibs
         {
             using (Graphics g = Graphics.FromImage(bmp))
             {
-                ARGB start = new ARGB(selectedColor.ARGB.A, selectedColor.ARGB.R, 0, 0);
-                ARGB end = new ARGB(selectedColor.ARGB.A, selectedColor.ARGB.R, 0, 255);
+                ARGB start = new ARGB(selectedColor.ARGB.A, (int)selectedColor.ARGB.R, 0, 0);
+                ARGB end = new ARGB(selectedColor.ARGB.A, (int)selectedColor.ARGB.R, 0, 255);
 
                 for (int y = 0; y < clientHeight; y++)
                 {
@@ -125,8 +126,8 @@ namespace WinkingCat.HelperLibs
         {
             using (Graphics g = Graphics.FromImage(bmp))
             {
-                ARGB start = new ARGB(selectedColor.ARGB.A, 0, selectedColor.ARGB.G, 0);
-                ARGB end = new ARGB(selectedColor.ARGB.A, 0, selectedColor.ARGB.G, 255);
+                ARGB start = new ARGB(selectedColor.ARGB.A, 0, (int)selectedColor.ARGB.G, 0);
+                ARGB end = new ARGB(selectedColor.ARGB.A, 0, (int)selectedColor.ARGB.G, 255);
 
                 for (int y = 0; y < clientHeight; y++)
                 {
@@ -147,8 +148,8 @@ namespace WinkingCat.HelperLibs
         {
             using (Graphics g = Graphics.FromImage(bmp))
             {
-                ARGB start = new ARGB(selectedColor.ARGB.A, 0, 0, selectedColor.ARGB.B);
-                ARGB end = new ARGB(selectedColor.ARGB.A, 255, 0, selectedColor.ARGB.B);
+                ARGB start = new ARGB(selectedColor.ARGB.A, 0, 0, (int)selectedColor.ARGB.B);
+                ARGB end = new ARGB(selectedColor.ARGB.A, 255, 0, (int)selectedColor.ARGB.B);
 
                 for (int y = 0; y < clientHeight; y++)
                 {
@@ -169,8 +170,8 @@ namespace WinkingCat.HelperLibs
         {
             using (Graphics g = Graphics.FromImage(bmp))
             {
-                HSL start = HSL.FromHSL360(selectedColor.HSL.Hue360, 0, 0, selectedColor.ARGB.A);
-                HSL end = HSL.FromHSL360(selectedColor.HSL.Hue360, 100, 0, selectedColor.ARGB.A);
+                HSL start = new HSL((int)selectedColor.HSL.Hue360, 0, 0, selectedColor.ARGB.A);
+                HSL end = new HSL((int)selectedColor.HSL.Hue360, 100, 0, selectedColor.ARGB.A);
 
                 for (int y = 0; y < clientHeight; y++)
                 {
@@ -191,8 +192,8 @@ namespace WinkingCat.HelperLibs
         {
             using (Graphics g = Graphics.FromImage(bmp))
             {
-                HSL start = HSL.FromHSL360(0, selectedColor.HSL.Saturation100, 50, selectedColor.ARGB.A);
-                HSL end = HSL.FromHSL360(360, selectedColor.HSL.Saturation100, 50, selectedColor.ARGB.A);
+                HSL start = new HSL(0, (int)selectedColor.HSL.Saturation100, 50, selectedColor.ARGB.A);
+                HSL end = new HSL(360, (int)selectedColor.HSL.Saturation100, 50, selectedColor.ARGB.A);
 
                 for (int x = 0; x < clientWidth; x++)
                 {
@@ -224,8 +225,8 @@ namespace WinkingCat.HelperLibs
         {
             using (Graphics g = Graphics.FromImage(bmp))
             {
-                HSL start = HSL.FromHSL360(0, 100, selectedColor.HSL.Lightness100, selectedColor.ARGB.A);
-                HSL end = HSL.FromHSL360(0, 0, selectedColor.HSL.Lightness100, selectedColor.ARGB.A);
+                HSL start = new HSL(0, 100, (int)selectedColor.HSL.Lightness100, selectedColor.ARGB.A);
+                HSL end = new HSL(0, 0, (int)selectedColor.HSL.Lightness100, selectedColor.ARGB.A);
 
                 for (int x = 0; x < clientWidth; x++)
                 {

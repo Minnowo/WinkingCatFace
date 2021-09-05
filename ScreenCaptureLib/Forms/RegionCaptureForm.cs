@@ -90,17 +90,8 @@ namespace WinkingCat.ScreenCaptureLib
             }
 
             image = ScreenShotManager.CaptureRectangle(region);
-            // set the image wanted to play around with PixelFormat of the image
-            /*image = new Bitmap(region.Width, region.Height, PixelFormat.Format24bppRgb);
-            using (Graphics g = Graphics.FromImage(image))
-            using (Bitmap tmp = ScreenShotManager.CaptureRectangle(region))
-            {
-                g.DrawImage(tmp, new Point(0, 0));
-            }*/
 
-            // create the texture brush that will draw the background image to the canvas
-            // if the user wants an overlay it will be added to the texture brush
-            using(Bitmap DimmedCanvas = (Bitmap)image.Clone())
+            using(Bitmap DimmedCanvas = image.CloneSafe())
             using (Graphics g = Graphics.FromImage(DimmedCanvas))
             using (Brush brush = new SolidBrush(Color.FromArgb(ApplicationStyles.currentStyle.regionCaptureStyle.BackgroundOverlayOpacity, ApplicationStyles.currentStyle.regionCaptureStyle.BackgroundOverlayColor)))
             {
@@ -216,17 +207,6 @@ namespace WinkingCat.ScreenCaptureLib
                     if (isLeftClicking)
                     {
                         isLeftClicking = false;
-                    }
-                    return;
-
-                case InRegionTasks.SwapToolType:
-                    if (mode == RegionCaptureMode.ColorPicker)
-                    {
-                        mode = RegionCaptureMode.Default;
-                    }
-                    else if(mode == RegionCaptureMode.Default)
-                    {
-                        mode = RegionCaptureMode.ColorPicker;
                     }
                     return;
 

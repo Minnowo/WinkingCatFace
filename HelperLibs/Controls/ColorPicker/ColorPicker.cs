@@ -1,12 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
+﻿using System.ComponentModel;
 using System.Drawing;
-using System.Data;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
+
 
 namespace WinkingCat.HelperLibs
 {
@@ -23,35 +18,15 @@ namespace WinkingCat.HelperLibs
             }
             set
             {
-                if (selectedColor != value)
-                {
-                    selectedColor = value;
-                    colorBox.SelectedColor = selectedColor;
-                    colorSlider.SelectedColor = selectedColor;
-                    OnColorChanged();
-                }
+                selectedColor = value;
+                colorBox.SelectedColor = selectedColor;
+                colorSlider.SelectedColor = selectedColor;
+                OnColorChanged();
             }
         }
 
-        public COLOR AbsoluteColor
-        {
-            get
-            {
-                return absoluteColor;
-            }
-            private set
-            {
-                if (absoluteColor != value)
-                {
-                    absoluteColor = value;
-                    colorBox.SelectedColor = selectedColor;
-                    colorSlider.SelectedColor = selectedColor;
-                    OnColorChanged();
-                }
-            }
-        }
 
-        public DrawStyles DrawStyle
+        public ColorSpaceDrawStyle DrawStyle
         {
             get
             {
@@ -66,12 +41,12 @@ namespace WinkingCat.HelperLibs
             }
         }
 
-        [DefaultValue(DrawStyles.HSBHue)]
-        private DrawStyles drawStyle = DrawStyles.HSBHue;
+        [DefaultValue(ColorSpaceDrawStyle.HSBHue)]
+        private ColorSpaceDrawStyle drawStyle = ColorSpaceDrawStyle.HSBHue;
         private COLOR selectedColor;
-        private COLOR absoluteColor;
         private ColorPickerBox colorBox;
         private ColorPickerSlider colorSlider;
+
         public ColorPicker()
         {
             InitializeComponent();
@@ -84,19 +59,17 @@ namespace WinkingCat.HelperLibs
         private void ColorSlider_ColorChanged(object sender, ColorEventArgs e)
         {
             SelectedColor = e.Color;
-            absoluteColor = e.AbsoluteColor;
         }
 
         private void ColorBox_ColorChanged(object sender, ColorEventArgs e)
         {
             SelectedColor = e.Color;
-            absoluteColor = e.AbsoluteColor;
         }
 
         private void OnColorChanged()
         {
             if (ColorChanged != null)
-                ColorChanged(this, new ColorEventArgs(selectedColor, absoluteColor, DrawStyles.HSBHue));
+                ColorChanged(this, new ColorEventArgs(selectedColor, DrawStyle));
         }
 
         private void InitializeComponent()
@@ -112,7 +85,7 @@ namespace WinkingCat.HelperLibs
             | System.Windows.Forms.AnchorStyles.Right)));
             this.colorBox.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.colorBox.CrosshairVisible = true;
-            this.colorBox.DrawStyle = DrawStyles.HSBHue;
+            this.colorBox.DrawStyle = ColorSpaceDrawStyle.HSBHue;
             this.colorBox.Location = new System.Drawing.Point(0, 0);
             this.colorBox.Name = "colorBox";
             this.colorBox.Size = new System.Drawing.Size(258, 258);
@@ -124,7 +97,7 @@ namespace WinkingCat.HelperLibs
             | System.Windows.Forms.AnchorStyles.Right)));
             this.colorSlider.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.colorSlider.CrosshairVisible = true;
-            this.colorSlider.DrawStyle = DrawStyles.HSBHue;
+            this.colorSlider.DrawStyle = ColorSpaceDrawStyle.HSBHue;
             this.colorSlider.Location = new System.Drawing.Point(257, 0);
             this.colorSlider.Name = "colorSlider";
             this.colorSlider.Size = new System.Drawing.Size(32, 258);

@@ -70,7 +70,42 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="ClipOptions.cs" />
+    <Compile Include="Controls\ColorDisplay.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Controls\ColorDisplay.designer.cs">
+      <DependentUpon>ColorDisplay.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Controls\ColorPicker\ColorPicker.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Controls\ColorPicker\ColorPickerBase.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Controls\ColorPicker\ColorPickerBase.Designer.cs" />
+    <Compile Include="Controls\ColorPicker\ColorPickerBox.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Controls\ColorPicker\ColorPickerBox.Designer.cs" />
+    <Compile Include="Controls\ColorPicker\ColorPickerSlider.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Controls\ColorPicker\ColorPickerSlider.Designer.cs" />
+    <Compile Include="Enums\ColorFormat.cs" />
+    <Compile Include="Enums\ColorSpaceDrawStyle.cs" />
+    <Compile Include="Enums\HashType.cs" />
+    <Compile Include="Enums\HotkeyStatus.cs" />
+    <Compile Include="Enums\RegionCaptureMode.cs" />
+    <Compile Include="Enums\RegionResult.cs" />
+    <Compile Include="Enums\ToolTipLocation.cs" />
+    <Compile Include="Events\ColorChangedEvent.cs" />
+    <Compile Include="Forms\ColorPickerForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\ColorPickerForm.designer.cs">
+      <DependentUpon>ColorPickerForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Settings\ClipOptions.cs" />
     <Compile Include="Colors\ColorConverter.cs" />
     <Compile Include="Colors\ColorEditor.cs" />
     <Compile Include="Colors\ColorHelper.cs" />
@@ -90,27 +125,6 @@
     </Compile>
     <Compile Include="Controls\ColorLabel.Designer.cs">
       <DependentUpon>ColorLabel.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Controls\ColorPicker.cs">
-      <SubType>UserControl</SubType>
-    </Compile>
-    <Compile Include="Controls\ColorPickerBase.cs">
-      <SubType>UserControl</SubType>
-    </Compile>
-    <Compile Include="Controls\ColorPickerBase.Designer.cs">
-      <DependentUpon>ColorPickerBase.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Controls\ColorPickerBox.cs">
-      <SubType>UserControl</SubType>
-    </Compile>
-    <Compile Include="Controls\ColorPickerBox.Designer.cs">
-      <DependentUpon>ColorPickerBox.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Controls\ColorPickerSlider.cs">
-      <SubType>UserControl</SubType>
-    </Compile>
-    <Compile Include="Controls\ColorPickerSlider.Designer.cs">
-      <DependentUpon>ColorPickerSlider.cs</DependentUpon>
     </Compile>
     <Compile Include="Controls\DrawingBoard.cs">
       <SubType>UserControl</SubType>
@@ -133,13 +147,12 @@
     <Compile Include="Controls\_PictureBox.cs">
       <SubType>UserControl</SubType>
     </Compile>
-    <Compile Include="Events\ColorChangedEvent.cs" />
     <Compile Include="Forms\ImageViewerForm.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Enums.cs" />
+    <Compile Include="Enums\Enums.cs" />
     <Compile Include="Extensions\Extensions.cs" />
-    <Compile Include="Helpers.cs" />
+    <Compile Include="Helpers\Helpers.cs" />
     <Compile Include="Helpers\ClipboardHelper.cs" />
     <Compile Include="Helpers\CursorData.cs" />
     <Compile Include="Helpers\ImageHelper.cs" />
@@ -203,7 +216,7 @@
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
       <DependentUpon>Settings.settings</DependentUpon>
     </Compile>
-    <Compile Include="RegionCaptureOptions.cs" />
+    <Compile Include="Settings\RegionCaptureOptions.cs" />
     <Compile Include="Settings\SettingsManager.cs" />
     <Compile Include="Types\BitmapUndo.cs" />
     <Compile Include="Types\WindowInfo.cs" />
@@ -221,8 +234,14 @@
     </None>
   </ItemGroup>
   <ItemGroup>
+    <EmbeddedResource Include="Controls\ColorDisplay.resx">
+      <DependentUpon>ColorDisplay.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Controls\ImageView.resx">
       <DependentUpon>ImageView.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\ColorPickerForm.resx">
+      <DependentUpon>ColorPickerForm.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\ImageViewerForm.resx">
       <DependentUpon>ImageViewerForm.cs</DependentUpon>
