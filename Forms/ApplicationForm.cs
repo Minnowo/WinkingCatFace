@@ -7,6 +7,7 @@ using System.IO;
 using System.Threading;
 using WinkingCat.HelperLibs;
 using WinkingCat.ScreenCaptureLib;
+using WinkingCat.Uploaders;
 
 namespace WinkingCat
 {
@@ -367,6 +368,17 @@ namespace WinkingCat
 
             ChildrenForms.Add(cpf);
         }
+
+        private void OCRToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            OCRForm cpf = new OCRForm();
+            cpf.FormClosing += ChildFormClosing;
+            cpf.TopMost = SettingsManager.MainFormSettings.Always_On_Top;
+            cpf.StartPosition = FormStartPosition.CenterScreen;
+            cpf.Show();
+
+            ChildrenForms.Add(cpf);
+        }
         #endregion
 
         #region tray icon
@@ -583,6 +595,7 @@ namespace WinkingCat
             {
                 sf.Owner = this;
                 sf.TopMost = SettingsManager.MainFormSettings.Always_On_Top;
+                sf.StartPosition = FormStartPosition.CenterScreen;
                 sf.ShowDialog();
             }
         }
@@ -668,5 +681,7 @@ namespace WinkingCat
         }
 
         #endregion
+
+        
     }
 }

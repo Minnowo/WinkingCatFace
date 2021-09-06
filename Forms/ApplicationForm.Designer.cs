@@ -83,6 +83,7 @@
             this.tssToolStripSeparator1 = new System.Windows.Forms.ToolStripSeparator();
             this.tsbToolStripButton_Style = new System.Windows.Forms.ToolStripButton();
             this.tsbToolStripDropDownButton_Settings = new System.Windows.Forms.ToolStripButton();
+            this.oCRToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.cmTray.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.scMain)).BeginInit();
             this.scMain.Panel1.SuspendLayout();
@@ -513,6 +514,7 @@
             this.tsmiToolStripDropDownButton_ColorPicker,
             this.tsmiToolStripDropDownButton_HashCheck,
             this.tsmiToolStripDropDownButton_QrCode,
+            this.oCRToolStripMenuItem,
             this.tsmiToolStripDropDownButton_Regex});
             this.tsddbToolStripDropDownButton_Tools.Font = new System.Drawing.Font("Consolas", 11.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.tsddbToolStripDropDownButton_Tools.Image = global::WinkingCat.Properties.Resources.google_webmaster_tools_icon;
@@ -593,6 +595,14 @@
             this.tsbToolStripDropDownButton_Settings.Text = "Settings";
             this.tsbToolStripDropDownButton_Settings.Click += new System.EventHandler(this.ToolStripDropDownButton_Settings_Click);
             // 
+            // oCRToolStripMenuItem
+            // 
+            this.oCRToolStripMenuItem.ImageScaling = System.Windows.Forms.ToolStripItemImageScaling.None;
+            this.oCRToolStripMenuItem.Name = "oCRToolStripMenuItem";
+            this.oCRToolStripMenuItem.Size = new System.Drawing.Size(244, 38);
+            this.oCRToolStripMenuItem.Text = "OCR";
+            this.oCRToolStripMenuItem.Click += new System.EventHandler(this.OCRToolStripMenuItem_Click);
+            // 
             // ApplicationForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -670,6 +680,7 @@
         private System.Windows.Forms.ToolStripMenuItem tsmiTrayHashCheck;
         private System.Windows.Forms.ToolStripMenuItem tsmiTrayQrCodeScan;
         private System.Windows.Forms.ToolStripMenuItem tsmiToolStripDropDownButton_Regex;
+        private System.Windows.Forms.ToolStripMenuItem oCRToolStripMenuItem;
     }
 }
 

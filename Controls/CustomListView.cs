@@ -79,7 +79,7 @@ namespace WinkingCat
 
             string curDir = PathHelper.CurrentDirectory;
             ItemsPath = Path.Combine(curDir, InternalSettings.List_View_Items_IO_Path);
-
+            /*
             if (File.Exists(ItemsPath))
             {
                 const Int32 BufferSize = 128;
@@ -129,7 +129,7 @@ namespace WinkingCat
                 StreamWriter w = File.AppendText(ItemsPath);
                 w.Close();
                 w.Dispose();
-            }
+            }*/
 
             #region cmsMain Events
             toolStripMenuItemAlwaysOnTop.Checked = SettingsManager.MainFormSettings.Always_On_Top;
@@ -141,22 +141,22 @@ namespace WinkingCat
             toolStripMenuItemAlwaysOnTop.Click += ToolStripMenuItemAlwaysOnTop_Click;
             toolStripMenuItemRemoveFromList.Click += ToolStripMenuItemRemoveFromList_Click;
 
-            #region cmsOpen Events
+#region cmsOpen Events
             toolStripMenuItemOpenFile.Click += ToolStripMenuItemOpenFile_Click;
             toolStripMenuItemOpenFolder.Click += ToolStripMenuItemOpenFolder_Click;
             toolStripMenuItemOpenAsClip.Click += ToolStripMenuItemOpenAsClip_Click;
-            #endregion
+#endregion
 
-            #region cmsCopy Events
+#region cmsCopy Events
             toolStripMenuItemCopyImage.Click += ToolStripMenuItemCopyImage_Click;
             toolStripMenuItemCopyDimensions.Click += ToolStripMenuItemCopyDimensions_Click;
             toolStripMenuItemFile.Click += ToolStripMenuItemCopyFile_Click;
             toolStripMenuItemFileName.Click += ToolStripMenuItemCopyFileName_Click;
             toolStripMenuItemPath.Click += ToolStripMenuItemCopyPath_Click;
             toolStripMenuItemDirectory.Click += ToolStripMenuItemCopyDirectory_Click;
-            #endregion
+#endregion
 
-            #endregion
+#endregion
 
             MouseDoubleClick += MouseDoubleClick_Event;
 
@@ -225,9 +225,9 @@ namespace WinkingCat
             Refresh();
         }
         
-        #region cmsMain
+#region cmsMain
 
-        #region cmsOpen
+#region cmsOpen
         private void ToolStripMenuItemOpenFile_Click(object sender, EventArgs e)
         {
             if (SelectedIndex == -1)
@@ -299,9 +299,9 @@ namespace WinkingCat
                 MessageBox.Show("The file is either not an image or is corrupt");
             }
         }
-        #endregion
+#endregion
 
-        #region cmsCopy
+#region cmsCopy
         private void ToolStripMenuItemCopyImage_Click(object sender, EventArgs e)
         {
             if (SelectedIndex == -1)
@@ -417,7 +417,7 @@ namespace WinkingCat
                 SelectedIndex = -1;
             }
         }
-        #endregion
+#endregion
 
         private void ToolStripMenuItemOCR_Click(object sender, EventArgs e)
         {
@@ -469,7 +469,7 @@ namespace WinkingCat
                 await ListViewDumpAsync((ListViewItem[])this.Items.OfType<ListViewItem>().ToArray().Clone());
             }
         }
-        #endregion
+#endregion
 
         public async Task ListViewDumpAsync(ListViewItem[] items)
         {
