@@ -99,12 +99,28 @@
     <Compile Include="Enums\RegionResult.cs" />
     <Compile Include="Enums\ToolTipLocation.cs" />
     <Compile Include="Events\ColorChangedEvent.cs" />
+    <Compile Include="Events\ImageSavedEvent.cs" />
+    <Compile Include="Forms\ClipForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\ClipForm.Designer.cs">
+      <DependentUpon>ClipForm.cs</DependentUpon>
+    </Compile>
     <Compile Include="Forms\ColorPickerForm.cs">
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="Forms\ColorPickerForm.designer.cs">
       <DependentUpon>ColorPickerForm.cs</DependentUpon>
     </Compile>
+    <Compile Include="Forms\RegionCaptureForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\RegionCaptureForm.Designer.cs">
+      <DependentUpon>RegionCaptureForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Helpers\ClipManager.cs" />
+    <Compile Include="Helpers\RegionCaptureHelper.cs" />
+    <Compile Include="Helpers\ScreenshotHelper.cs" />
     <Compile Include="Settings\ClipOptions.cs" />
     <Compile Include="Colors\ColorConverter.cs" />
     <Compile Include="Colors\ColorEditor.cs" />
@@ -152,13 +168,12 @@
     </Compile>
     <Compile Include="Enums\Enums.cs" />
     <Compile Include="Extensions\Extensions.cs" />
-    <Compile Include="Helpers\Helpers.cs" />
+    <Compile Include="Helpers\Helper.cs" />
     <Compile Include="Helpers\ClipboardHelper.cs" />
     <Compile Include="Helpers\CursorData.cs" />
-    <Compile Include="Helpers\ImageHelper.cs" />
     <Compile Include="Helpers\PathHelpler.cs" />
     <Compile Include="Helpers\MathHelper.cs" />
-    <Compile Include="Helpers\ScreenHelpers.cs" />
+    <Compile Include="Helpers\ScreenHelper.cs" />
     <Compile Include="Helpers\TranslatorHelper.cs" />
     <Compile Include="Helpers\WindowHelpers.cs" />
     <Compile Include="ImageHelper\ByteHelper.cs" />
@@ -201,37 +216,19 @@
     <Compile Include="Native\NativeMethod_Helpers.cs" />
     <Compile Include="Native\NativeStructs.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Properties\ResourcePath.Designer.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTimeSharedInput>True</DesignTimeSharedInput>
-      <DependentUpon>ResourcePath.settings</DependentUpon>
-    </Compile>
     <Compile Include="Properties\Resources.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
       <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
-    <Compile Include="Properties\Settings.Designer.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTimeSharedInput>True</DesignTimeSharedInput>
-      <DependentUpon>Settings.settings</DependentUpon>
-    </Compile>
-    <Compile Include="Settings\RegionCaptureOptions.cs" />
     <Compile Include="Settings\SettingsManager.cs" />
     <Compile Include="Types\BitmapUndo.cs" />
+    <Compile Include="Types\RegionReturn.cs" />
     <Compile Include="Types\WindowInfo.cs" />
     <Compile Include="ValueTypeTypeConverter.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
-    <None Include="Properties\ResourcePath.settings">
-      <Generator>SettingsSingleFileGenerator</Generator>
-      <LastGenOutput>ResourcePath.Designer.cs</LastGenOutput>
-    </None>
-    <None Include="Properties\Settings.settings">
-      <Generator>SettingsSingleFileGenerator</Generator>
-      <LastGenOutput>Settings.Designer.cs</LastGenOutput>
-    </None>
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Controls\ColorDisplay.resx">
@@ -240,11 +237,17 @@
     <EmbeddedResource Include="Controls\ImageView.resx">
       <DependentUpon>ImageView.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="Forms\ClipForm.resx">
+      <DependentUpon>ClipForm.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Forms\ColorPickerForm.resx">
       <DependentUpon>ColorPickerForm.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\ImageViewerForm.resx">
       <DependentUpon>ImageViewerForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\RegionCaptureForm.resx">
+      <DependentUpon>RegionCaptureForm.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>

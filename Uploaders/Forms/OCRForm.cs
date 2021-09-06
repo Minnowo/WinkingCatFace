@@ -22,7 +22,7 @@ namespace WinkingCat.Uploaders
             InitializeComponent();
             HandleCreated += OCRForm_HandleCreated;
 
-            cbLanguage.Items.AddRange(Helpers.GetEnumDescriptions<OCRSpaceLanguages>());
+            cbLanguage.Items.AddRange(Helper.GetEnumDescriptions<OCRSpaceLanguages>());
             cbLanguage.SelectedIndex = 8;
 
             tbFilePath.Text = path;
@@ -104,7 +104,7 @@ namespace WinkingCat.Uploaders
                 {
                     clShowFailed.StaticBackColor = Color.LightGreen;
                 }
-                lblFileSize.Text = Helpers.SizeSuffix(PathHelper.GetFileSizeBytes(tbFilePath.Text));
+                lblFileSize.Text = Helper.SizeSuffix(PathHelper.GetFileSizeBytes(tbFilePath.Text));
             }
         }
 

@@ -15,53 +15,114 @@ using System.Diagnostics;
 
 namespace WinkingCat.HelperLibs
 {
-    public class Helpers
+    public class Helper
     {
         public static readonly Version OSVersion = Environment.OSVersion.Version;
         public static readonly string[] SizeSuffixes = { "bytes", "KB", "MB", "GB", "TB", "PB", "EB", "ZB", "YB" };
 
-        #region just stolen from sharex changed 1 function a little bit
-        public static Image CreateBarCode(string text, int width, int height, BarcodeFormat format = BarcodeFormat.QR_CODE)
+        /// <summary>
+        /// Returns true if the given OS build number is windows 10 or greater.
+        /// </summary>
+        /// <param name="build">The build number.</param>
+        /// <returns>true if 10 or greater, else false.</returns>
+        public static bool IsWindows10OrGreater(int build = -1)
         {
-            if (CheckQRCodeContent(text))
-            {
-                try
-                {
-                    BarcodeWriter writer = new BarcodeWriter
-                    {
-                        Format = format,
-
-                        Options = new QrCodeEncodingOptions
-                        {
-                            Width = width,
-                            Height = height,
-                            CharacterSet = "UTF-8"
-                        },
-                        Renderer = new BitmapRenderer()
-                    };
-
-                    return writer.Write(text);
-                }
-                catch (Exception e)
-                {
-                    Console.WriteLine(e);
-                }
-            }
-
-            return null;
+            return OSVersion.Major >= 10 && OSVersion.Build >= build;
         }
 
-        public static Size StringToSize(string s, string split = ",")
+        /// <summary>
+        /// Returns true if the current OS is vista or greater.
+        /// </summary>
+        /// <returns>true if vista or greater, else false.</returns>
+        public static bool IsWindowsVistaOrGreater()
         {
+            return OSVersion.Major >= 6;
+        }
+
+        /// <summary>
+        /// Gets a unique ID.
+        /// </summary>
+        /// <returns>A <see cref="string"/>.</returns>
+        public static string GetUniqueID()
+        {
+            return Guid.NewGuid().ToString("N");
+        }
+
+        /// <summary>
+        /// Gets the descriptions of enums.
+        /// </summary>
+        /// <typeparam name="T">The enum type.</typeparam>
+        /// <param name="skip">The skip.</param>
+        /// <returns>A <see cref="string[]"/> of the enum descriptions.</returns>
+        public static string[] GetEnumDescriptions<T>(int skip = 0)
+        {
+            return Enum.GetValues(typeof(T)).OfType<Enum>().Skip(skip).Select(x => x.GetDescription()).ToArray();
+        }
+
+        /// <summary>
+        /// Checks if a rectangle has a valid width / height.
+        /// </summary>
+        /// <param name="rect">The <see cref="Rectangle"/>.</param>
+        /// <returns>true if its valid, else false.</returns>
+        public static bool IsValidCropArea(Rectangle rect)
+        {
+            return rect.Width > 0 && rect.Height > 0;
+        }
+
+        /// <summary>
+        /// Checks if a rectangle has a valid width / height.
+        /// </summary>
+        /// <param name="a">Point 1 of the rectangle.</param>
+        /// <param name="b">Point 2 of the rectangle.</param>
+        /// <returns>true if its valid, else false.</returns>
+        public static bool IsValidCropArea(Point a, Point b)
+        {
+            return Math.Abs(a.X - b.X) > 0 && Math.Abs(a.Y - b.Y) > 0;
+        }
+
+        /// <summary>
+        /// Creates a rectangle from the given points.
+        /// </summary>
+        /// <param name="a">Point 1.</param>
+        /// <param name="b">Point 2.</param>
+        /// <returns>A <see cref="Rectangle"/>.</returns>
+        public static Rectangle CreateRect(Point a, Point b)
+        {
+            int x = Math.Min(a.X, b.X);
+            int y = Math.Min(a.Y, b.Y);
+            int width = Math.Abs(a.X - b.X);
+            int height = Math.Abs(a.Y - b.Y);
+
+            return new Rectangle(new Point(x, y), new Size(width, height));
+        }
+
+        public static Image CreateBarCode(string text, int width, int height, BarcodeFormat format = BarcodeFormat.QR_CODE)
+        {
+            if (!CheckQRCodeContent(text))
+                return null;
+            
             try
             {
-                string[] sizeParts = s.Split(new string[] { split }, StringSplitOptions.None);
-                return new Size(int.Parse(sizeParts[0]), int.Parse(sizeParts[1]));
+                BarcodeWriter writer = new BarcodeWriter
+                {
+                    Format = format,
+
+                    Options = new QrCodeEncodingOptions
+                    {
+                        Width = width,
+                        Height = height,
+                        CharacterSet = "UTF-8"
+                    },
+                    Renderer = new BitmapRenderer()
+                };
+
+                return writer.Write(text);
             }
             catch
             {
-                return Size.Empty;
             }
+            
+            return null;
         }
 
         public static Image CreateQRCode(string text, int size, BarcodeFormat format = BarcodeFormat.QR_CODE)
@@ -69,6 +130,12 @@ namespace WinkingCat.HelperLibs
             return CreateBarCode(text, size, size, format);
         }
 
+        /// <summary>
+        /// Reads the given barcade into a string[].
+        /// </summary>
+        /// <param name="bmp">The barcode.</param>
+        /// <param name="scanQRCodeOnly">Should only scan QR codes.</param>
+        /// <returns>The text from the given barcode.</returns>
         public static string[] BarcodeScan(Bitmap bmp, bool scanQRCodeOnly = false)
         {
             try
@@ -95,9 +162,8 @@ namespace WinkingCat.HelperLibs
                     return results.Where(x => x != null && !string.IsNullOrEmpty(x.Text)).Select(x => x.Text).ToArray();
                 }
             }
-            catch (Exception e)
+            catch
             {
-                Console.WriteLine(e);
             }
 
             return null;
@@ -107,7 +173,7 @@ namespace WinkingCat.HelperLibs
         {
             return !string.IsNullOrEmpty(content) && Encoding.UTF8.GetByteCount(content) <= 2952;
         }
-        #endregion
+
 
         public static void LaunchProcess(string path, string args, bool asAdmin = false)
         {
@@ -131,15 +197,19 @@ namespace WinkingCat.HelperLibs
             }
             catch
             {
-                // Log error.
             }
         }
 
-        public static string SizeSuffix(Int64 value, int decimalPlaces = 1)
+        public static string SizeSuffix(long value, int decimalPlaces = 1)
         {
-            if (decimalPlaces < 0) { throw new ArgumentOutOfRangeException("decimalPlaces"); }
-            if (value < 0) { return "-" + SizeSuffix(-value, decimalPlaces); }
-            if (value == 0) { return string.Format("{0:n" + decimalPlaces + "} bytes", 0); }
+            if (decimalPlaces < 0) 
+                decimalPlaces = 0;
+
+            if (value < 0)
+                return "-" + SizeSuffix(-value, decimalPlaces); 
+
+            if (value == 0)  
+                return string.Format("{0:n" + decimalPlaces + "} bytes", 0); 
 
             // mag is 0 for bytes, 1 for KB, 2, for MB, etc.
             int mag = (int)Math.Log(value, 1024);
@@ -156,9 +226,7 @@ namespace WinkingCat.HelperLibs
                 adjustedSize /= 1024;
             }
 
-            return string.Format("{0:n" + decimalPlaces + "} {1}",
-                adjustedSize,
-                SizeSuffixes[mag]);
+            return string.Format("{0:n" + decimalPlaces + "} {1}", adjustedSize, SizeSuffixes[mag]);
         }
 
         public static Keys ModifierAsKey(Modifiers mod)
@@ -205,37 +273,5 @@ namespace WinkingCat.HelperLibs
             }
             return Keys.None;
         }
-
-        public static bool IsWindows10OrGreater(int build = -1)
-        {
-            return OSVersion.Major >= 10 && OSVersion.Build >= build;
-        }
-        
-
-        public static string[] GetEnumDescriptions<T>(int skip = 0)
-        {
-            return Enum.GetValues(typeof(T)).OfType<Enum>().Skip(skip).Select(x => x.GetDescription()).ToArray();
-        }
-
-        public static string GetUniqueID()
-        {
-            return Guid.NewGuid().ToString("N");
-        }
-
-        public static bool IsWindowsVistaOrGreater()
-        {
-            return OSVersion.Major >= 6;
-        }
-        public static IntPtr CreateLParam(int x, int y)
-        {
-            return (IntPtr)(x | (y << 16));
-        }
-
-        public static IntPtr CreateLParam(Point p)
-        {
-            return CreateLParam(p.X, p.Y);
-        }
-
-        
     }
 }

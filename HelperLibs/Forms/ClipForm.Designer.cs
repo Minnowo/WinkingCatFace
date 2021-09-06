@@ -1,4 +1,4 @@
-﻿namespace WinkingCat.ClipHelper
+﻿namespace WinkingCat.HelperLibs
 {
     partial class ClipForm
     {
@@ -64,7 +64,7 @@
             this.tsmiCopyDefaultContextMenuItem,
             this.tsmiCopyZoomScaledContextMenuItem,
             this.tsmiCopyZoomedImage});
-            this.tsmiCopyToolStripMenuItem.Image = global::WinkingCat.ClipHelper.Properties.Resources.Clipboard_2_icon;
+            //this.tsmiCopyToolStripMenuItem.Image = global::WinkingCat.ClipHelper.Properties.Resources.Clipboard_2_icon;
             this.tsmiCopyToolStripMenuItem.ImageScaling = System.Windows.Forms.ToolStripItemImageScaling.None;
             this.tsmiCopyToolStripMenuItem.Name = "tsmiCopyToolStripMenuItem";
             this.tsmiCopyToolStripMenuItem.ShortcutKeyDisplayString = "Ctrl+C";
@@ -73,7 +73,7 @@
             // 
             // tsmiCopyDefaultContextMenuItem
             // 
-            this.tsmiCopyDefaultContextMenuItem.Image = global::WinkingCat.ClipHelper.Properties.Resources.Clipboard_2_icon;
+            //this.tsmiCopyDefaultContextMenuItem.Image = global::WinkingCat.ClipHelper.Properties.Resources.Clipboard_2_icon;
             this.tsmiCopyDefaultContextMenuItem.ImageScaling = System.Windows.Forms.ToolStripItemImageScaling.None;
             this.tsmiCopyDefaultContextMenuItem.Name = "tsmiCopyDefaultContextMenuItem";
             this.tsmiCopyDefaultContextMenuItem.Size = new System.Drawing.Size(163, 38);
@@ -89,7 +89,7 @@
             // 
             // tsmiCopyZoomedImage
             // 
-            this.tsmiCopyZoomedImage.Image = global::WinkingCat.ClipHelper.Properties.Resources.layer_resize_icon;
+            //this.tsmiCopyZoomedImage.Image = global::WinkingCat.ClipHelper.Properties.Resources.layer_resize_icon;
             this.tsmiCopyZoomedImage.ImageScaling = System.Windows.Forms.ToolStripItemImageScaling.None;
             this.tsmiCopyZoomedImage.Name = "tsmiCopyZoomedImage";
             this.tsmiCopyZoomedImage.Size = new System.Drawing.Size(163, 38);
@@ -111,7 +111,7 @@
             // 
             // tsmiOpenInEditor
             // 
-            this.tsmiOpenInEditor.Image = global::WinkingCat.ClipHelper.Properties.Resources.layer_stack_arrange_back_icon;
+            //this.tsmiOpenInEditor.Image = global::WinkingCat.ClipHelper.Properties.Resources.layer_stack_arrange_back_icon;
             this.tsmiOpenInEditor.ImageScaling = System.Windows.Forms.ToolStripItemImageScaling.None;
             this.tsmiOpenInEditor.Name = "tsmiOpenInEditor";
             this.tsmiOpenInEditor.Size = new System.Drawing.Size(196, 38);
@@ -132,7 +132,7 @@
             // tsmiAllowResizeToolStripMenuItem
             // 
             this.tsmiAllowResizeToolStripMenuItem.CheckOnClick = true;
-            this.tsmiAllowResizeToolStripMenuItem.Image = global::WinkingCat.ClipHelper.Properties.Resources.layer_resize_icon;
+            //this.tsmiAllowResizeToolStripMenuItem.Image = global::WinkingCat.ClipHelper.Properties.Resources.layer_resize_icon;
             this.tsmiAllowResizeToolStripMenuItem.ImageScaling = System.Windows.Forms.ToolStripItemImageScaling.None;
             this.tsmiAllowResizeToolStripMenuItem.Name = "tsmiAllowResizeToolStripMenuItem";
             this.tsmiAllowResizeToolStripMenuItem.ShortcutKeyDisplayString = "Ctrl+R";
@@ -141,7 +141,7 @@
             // 
             // tsmiOCRToolStripMenuItem
             // 
-            this.tsmiOCRToolStripMenuItem.Image = global::WinkingCat.ClipHelper.Properties.Resources.layer_shape_text_icon;
+            //this.tsmiOCRToolStripMenuItem.Image = global::WinkingCat.ClipHelper.Properties.Resources.layer_shape_text_icon;
             this.tsmiOCRToolStripMenuItem.ImageScaling = System.Windows.Forms.ToolStripItemImageScaling.None;
             this.tsmiOCRToolStripMenuItem.Name = "tsmiOCRToolStripMenuItem";
             this.tsmiOCRToolStripMenuItem.ShortcutKeyDisplayString = "Ctrl+T";
@@ -150,7 +150,7 @@
             // 
             // tsmiSaveToolStripMenuItem
             // 
-            this.tsmiSaveToolStripMenuItem.Image = global::WinkingCat.ClipHelper.Properties.Resources.save_download_icon;
+            //this.tsmiSaveToolStripMenuItem.Image = global::WinkingCat.ClipHelper.Properties.Resources.save_download_icon;
             this.tsmiSaveToolStripMenuItem.ImageScaling = System.Windows.Forms.ToolStripItemImageScaling.None;
             this.tsmiSaveToolStripMenuItem.Name = "tsmiSaveToolStripMenuItem";
             this.tsmiSaveToolStripMenuItem.ShortcutKeyDisplayString = "Ctrl+S";
@@ -164,7 +164,7 @@
             // 
             // tsmiDestroyToolStripMenuItem
             // 
-            this.tsmiDestroyToolStripMenuItem.Image = global::WinkingCat.ClipHelper.Properties.Resources.Error_Symbol_icon;
+            //this.tsmiDestroyToolStripMenuItem.Image = global::WinkingCat.ClipHelper.Properties.Resources.Error_Symbol_icon;
             this.tsmiDestroyToolStripMenuItem.ImageScaling = System.Windows.Forms.ToolStripItemImageScaling.None;
             this.tsmiDestroyToolStripMenuItem.Name = "tsmiDestroyToolStripMenuItem";
             this.tsmiDestroyToolStripMenuItem.ShortcutKeyDisplayString = "Esc";
@@ -178,7 +178,7 @@
             // 
             // tsmiDestroyAllClipsToolStripMenuItem
             // 
-            this.tsmiDestroyAllClipsToolStripMenuItem.Image = global::WinkingCat.ClipHelper.Properties.Resources.fire_icon;
+            //this.tsmiDestroyAllClipsToolStripMenuItem.Image = global::WinkingCat.ClipHelper.Properties.Resources.fire_icon;
             this.tsmiDestroyAllClipsToolStripMenuItem.ImageScaling = System.Windows.Forms.ToolStripItemImageScaling.None;
             this.tsmiDestroyAllClipsToolStripMenuItem.Name = "tsmiDestroyAllClipsToolStripMenuItem";
             this.tsmiDestroyAllClipsToolStripMenuItem.Size = new System.Drawing.Size(196, 38);

@@ -1,6 +1,6 @@
-﻿namespace WinkingCat.ScreenCaptureLib
+﻿namespace WinkingCat.HelperLibs
 {
-    partial class ClippingWindowForm
+    partial class RegionCaptureForm
     {
         /// <summary>
         /// Required designer variable.

@@ -4,28 +4,58 @@ using System.Drawing.Imaging;
 using System.Drawing.Drawing2D;
 using WinkingCat.HelperLibs;
 
-namespace WinkingCat.ScreenCaptureLib
+namespace WinkingCat.HelperLibs
 {
-    public static class ScreenShotManager
+    /// <summary>
+    /// A class used for capturing screenshots.
+    /// </summary>
+    public static class ScreenshotHelper
     {
-        public static bool captureCursor { get; set; } = false;
+        /// <summary>
+        /// Should screenshots capture the cursor.
+        /// </summary>
+        public static bool CaptureCursor = false;
+
+        /// <summary>
+        /// Should Native methods be used for screen capture.
+        /// </summary>
+        public static bool UseNativeCapture = true;
+
+
+        /// <summary>
+        /// Captures the given rectangle on the screen.
+        /// </summary>
+        /// <param name="rect">The <see cref="Rectangle"/> to capture.</param>
+        /// <returns>A <see cref="Bitmap"/> of the screen region.</returns>
         public static Bitmap CaptureRectangle(Rectangle rect)
         {
-
             Rectangle bounds = ScreenHelper.GetScreenBounds();
             rect = Rectangle.Intersect(bounds, rect);
 
-            //return ManagedRectAsImage(rect);
-            return CaptureRectangleNative(IntPtr.Zero, rect, captureCursor); // (IntPtr)0x0000000000010010
+            if(UseNativeCapture)
+                return CaptureRectangleNative(IntPtr.Zero, rect, CaptureCursor); 
             
-            
+            return ManagedRectAsImage(rect, CaptureCursor);
         }
-        public static Bitmap CaptureRectangle(int x, int y, int x1, int y1)
+
+        /// <summary>
+        /// Captures the given rectangle on the screen.
+        /// </summary>
+        /// <param name="x">The top left X of the capture.</param>
+        /// <param name="y">The top left Y of the capture.</param>
+        /// <param name="width">The width of the capture.</param>
+        /// <param name="height">The height of the capture.</param>
+        /// <returns>A <see cref="Bitmap"/> of the screen region.</returns>
+        public static Bitmap CaptureRectangle(int x, int y, int width, int height)
         {
-            return CaptureRectangle(new Rectangle(x, y, x1, y1));
+            return CaptureRectangle(new Rectangle(x, y, width, height));
         }
 
 
+        /// <summary>
+        /// Captures the entire screen.
+        /// </summary>
+        /// <returns>A <see cref="Bitmap"/> of the screen.</returns>
         public static Bitmap CaptureFullscreen()
         {
             Rectangle bounds = ScreenHelper.GetScreenBounds();
@@ -33,6 +63,11 @@ namespace WinkingCat.ScreenCaptureLib
             return CaptureRectangle(bounds);
         }
 
+
+        /// <summary>
+        /// Captures the active monitor.
+        /// </summary>
+        /// <returns>A <see cref="Bitmap"/> of the active monitor.</returns>
         public static Bitmap CaptureActiveMonitor()
         {
             Rectangle bounds = ScreenHelper.GetActiveScreenBounds();
@@ -41,34 +76,10 @@ namespace WinkingCat.ScreenCaptureLib
         }
 
 
-        public static Bitmap ResizeImage(Image image, int width, int height)
-        {
-            var destRect = new Rectangle(0, 0, width, height);
-            var destImage = new Bitmap(width, height);
-
-            destImage.SetResolution(image.HorizontalResolution, image.VerticalResolution);
-
-            using (var graphics = Graphics.FromImage(destImage))
-            {
-                graphics.InterpolationMode = InterpolationMode.NearestNeighbor;
-                graphics.PixelOffsetMode = PixelOffsetMode.Half;
-
-                using (var wrapMode = new ImageAttributes())
-                {
-                    wrapMode.SetWrapMode(WrapMode.TileFlipXY);
-                    graphics.DrawImage(image, destRect, 0, 0, image.Width, image.Height, GraphicsUnit.Pixel, wrapMode);
-                }
-            }
-
-            return destImage;
-        }
-
         private static Bitmap CaptureRectangleNative(IntPtr handle, Rectangle rect, bool captureCursor = false)
         {
             if (rect.Width == 0 || rect.Height == 0)
-            {
                 return null;
-            }
 
             IntPtr hdcSrc = NativeMethods.GetWindowDC(handle);
             IntPtr hdcDest = NativeMethods.CreateCompatibleDC(hdcSrc);
@@ -97,7 +108,7 @@ namespace WinkingCat.ScreenCaptureLib
             return bmp;
         }
 
-        public static Bitmap ManagedRectAsImage(Rectangle rect)
+        private static Bitmap ManagedRectAsImage(Rectangle rect, bool captureCursor = false)
         {
             if (rect.Width == 0 || rect.Height == 0)
             {
@@ -110,6 +121,18 @@ namespace WinkingCat.ScreenCaptureLib
             {
                 // Managed can't use SourceCopy | CaptureBlt because of .NET bug
                 g.CopyFromScreen(rect.Location, Point.Empty, rect.Size, CopyPixelOperation.SourceCopy);
+
+                if (captureCursor)
+                {
+                    try
+                    {
+                        CursorData cursorData = new CursorData();
+                        cursorData.DrawCursor(bmp, rect.Location);
+                    }
+                    catch
+                    {
+                    }
+                }
             }
 
             return bmp;

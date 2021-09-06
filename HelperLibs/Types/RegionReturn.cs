@@ -5,11 +5,10 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Drawing;
 using System.Windows.Forms;
-using WinkingCat.HelperLibs;
 
-namespace WinkingCat.ScreenCaptureLib
+namespace WinkingCat.HelperLibs
 {
-    public class LastRegionCaptureInfo : EventArgs, IDisposable
+    public class RegionReturn : EventArgs, IDisposable
     {
         /// <summary>
         /// The image captured.
@@ -56,12 +55,12 @@ namespace WinkingCat.ScreenCaptureLib
         /// </summary>
         public bool CapturedPrimaryMonitor { get; private set; }
 
-        public LastRegionCaptureInfo(RegionResult result)
+        public RegionReturn(RegionResult result)
         {
             Result = result;
         }
 
-        public LastRegionCaptureInfo(RegionResult result, Point startLeftClick, Point stopLeftClick, Rectangle region, Image image)
+        public RegionReturn(RegionResult result, Point startLeftClick, Point stopLeftClick, Rectangle region, Image image)
         {
             Result = result;
             StartLeftClick = startLeftClick;
@@ -70,7 +69,7 @@ namespace WinkingCat.ScreenCaptureLib
             Image = image;
         }
 
-        public LastRegionCaptureInfo(RegionResult result, bool capturedFullscreen, Image image)
+        public RegionReturn(RegionResult result, bool capturedFullscreen, Image image)
         {
             Result = result;
             CapturedScreenBounds = capturedFullscreen;
@@ -78,14 +77,14 @@ namespace WinkingCat.ScreenCaptureLib
             Image = image;
         }
 
-        public LastRegionCaptureInfo(Point stopLeftClick, Color color)
+        public RegionReturn(Point stopLeftClick, Color color)
         {
             Result = RegionResult.Color;
             Color = color;
             StopLeftClick = stopLeftClick;
         }
 
-        public LastRegionCaptureInfo(Screen capturedMonitor, Image image)
+        public RegionReturn(Screen capturedMonitor, Image image)
         {
             Result = RegionResult.ActiveMonitor;
             Image = image;
@@ -97,6 +96,7 @@ namespace WinkingCat.ScreenCaptureLib
         public void Dispose()
         {
             Image?.Dispose();
+            GC.SuppressFinalize(this);
         }
     }
 }

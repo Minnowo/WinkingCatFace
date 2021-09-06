@@ -1,18 +1,13 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Drawing;
 using System.IO;
-using WinkingCat.HelperLibs;
 
-namespace WinkingCat.ScreenCaptureLib
+namespace WinkingCat.HelperLibs
 {
     public class ImageSavedEvent : EventArgs
     {
         /// <summary>
-        /// The file name.
+        /// The file path.
         /// </summary>
         public string Name
         {
@@ -42,16 +37,23 @@ namespace WinkingCat.ScreenCaptureLib
         /// </summary>
         public long SizeInBytes { get; private set; }
 
-        public ImageSavedEvent(FileInfo info)
+        public ImageSavedEvent(FileInfo info, Size size)
         {
             this.FileInfo = info;
-            SizeInBytes = info.Length;
-            Dimensions = ImageHelper.GetImageDimensionsFromFile(info.FullName);
+            this.Dimensions = size;
+            this.SizeInBytes = info.Length;
         }
+
+        public ImageSavedEvent(FileInfo info) : this (info, ImageHelper.GetImageDimensionsFromFile(info.FullName))
+        {
+        }        
 
         public ImageSavedEvent(string path) : this(new FileInfo(path))
         {
+        }
 
+        public ImageSavedEvent(string path, Size size) : this(new FileInfo(path), size)
+        {
         }
     }
 }

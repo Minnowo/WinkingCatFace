@@ -49,22 +49,22 @@ namespace WinkingCat
             cbDefaultImageFormat.SelectedItem = InternalSettings.Default_Image_Format;
 
             // region capture settings
-            cbDrawScreenWideCrosshair.Checked = RegionCaptureOptions.DrawScreenWideCrosshair;
-            cbMarchingAnts.Checked = RegionCaptureOptions.DrawMarchingAnts;
-            cbDimBackground.Checked = RegionCaptureOptions.DrawBackgroundOverlay;
-            cbShowInfoText.Checked = RegionCaptureOptions.DrawInfoText;
-            cbMarchingAnts.Enabled = RegionCaptureOptions.DrawScreenWideCrosshair;
+            cbDrawScreenWideCrosshair.Checked = SettingsManager.RegionCaptureSettings.Draw_Screen_Wide_Crosshair;
+            cbMarchingAnts.Checked = SettingsManager.RegionCaptureSettings.Draw_Marching_Ants;
+            cbDimBackground.Checked = SettingsManager.RegionCaptureSettings.Draw_Background_Overlay;
+            cbShowInfoText.Checked = SettingsManager.RegionCaptureSettings.Draw_Info_Text;
+            cbMarchingAnts.Enabled = SettingsManager.RegionCaptureSettings.Draw_Screen_Wide_Crosshair;
 
-            cbShowMagnifier.Checked = RegionCaptureOptions.DrawMagnifier;
-            cbDrawMagnifierCrosshair.Checked = RegionCaptureOptions.DrawCrosshairInMagnifier;
-            cbDrawMagnifierGrid.Checked = RegionCaptureOptions.DrawPixelGridInMagnifier;
-            cbDrawMagnifierBorder.Checked = RegionCaptureOptions.DrawBorderOnMagnifier;
-            cbCenterMagnifierOnMouse.Checked = RegionCaptureOptions.CenterMagnifierOnMouse;
+            cbShowMagnifier.Checked = SettingsManager.RegionCaptureSettings.Draw_Magnifier;
+            cbDrawMagnifierCrosshair.Checked = SettingsManager.RegionCaptureSettings.Draw_Crosshair_In_Magnifier;
+            cbDrawMagnifierGrid.Checked = SettingsManager.RegionCaptureSettings.Draw_Pixel_Grid_In_Magnifier;
+            cbDrawMagnifierBorder.Checked = SettingsManager.RegionCaptureSettings.Draw_Border_On_Magnifier;
+            cbCenterMagnifierOnMouse.Checked = SettingsManager.RegionCaptureSettings.Center_Magnifier_On_Mouse;
 
-            nudMagnifierPixelCount.Value = RegionCaptureOptions.MagnifierPixelCount;
-            nudMagnifierPixelSize.Value = RegionCaptureOptions.MagnifierPixelSize;
-            nudMagnifierZoomLevel.Value = (decimal)RegionCaptureOptions.MagnifierZoomLevel;
-            nudMagnifierZoomScale.Value = (decimal)RegionCaptureOptions.MagnifierZoomScale;
+            nudMagnifierPixelCount.Value = SettingsManager.RegionCaptureSettings.Magnifier_Pixel_Count;
+            nudMagnifierPixelSize.Value = SettingsManager.RegionCaptureSettings.Magnifier_Pixel_Size;
+            nudMagnifierZoomLevel.Value = (decimal)SettingsManager.RegionCaptureSettings.Magnifier_Zoom_Level;
+            nudMagnifierZoomScale.Value = (decimal)SettingsManager.RegionCaptureSettings.Magnifier_Zoom_Scale;
 
             foreach (InRegionTasks task in Enum.GetValues(typeof(InRegionTasks)))
             {
@@ -73,10 +73,10 @@ namespace WinkingCat
                 cbXButton1Action.Items.Add(task);
                 cbXButton2Action.Items.Add(task);
             }
-            cbMiddleClickAction.SelectedItem = RegionCaptureOptions.OnMouseMiddleClick;
-            cbRightClickAction.SelectedItem = RegionCaptureOptions.OnMouseRightClick;
-            cbXButton1Action.SelectedItem = RegionCaptureOptions.OnXButton1Click;
-            cbXButton2Action.SelectedItem = RegionCaptureOptions.OnXButton2Click;
+            cbMiddleClickAction.SelectedItem = SettingsManager.RegionCaptureSettings.On_Mouse_Middle_Click;
+            cbRightClickAction.SelectedItem = SettingsManager.RegionCaptureSettings.On_Mouse_Right_Click;
+            cbXButton1Action.SelectedItem = SettingsManager.RegionCaptureSettings.On_XButton1_Click;
+            cbXButton2Action.SelectedItem = SettingsManager.RegionCaptureSettings.On_XButton2_Click;
 
             // clipboard settings
             foreach (ColorFormat colorformat in Enum.GetValues(typeof(ColorFormat)))
@@ -84,8 +84,8 @@ namespace WinkingCat
                 cbDefaultColorFormat.Items.Add(colorformat);
             }
             cbDefaultColorFormat.SelectedItem = SettingsManager.MiscSettings.Default_Color_Format;
-            cbAutoCopyImage.Checked = RegionCaptureOptions.AutoCopyImage;
-            cbAutoCopyColor.Checked = RegionCaptureOptions.AutoCopyColor;
+            cbAutoCopyImage.Checked = SettingsManager.RegionCaptureSettings.Auto_Copy_Image;
+            cbAutoCopyColor.Checked = SettingsManager.RegionCaptureSettings.Auto_Copy_Color;
 
             // path settings
             cbUseCustomScreenshotPath.Checked = SettingsManager.MiscSettings.Use_Custom_Screenshot_Folder;
@@ -243,14 +243,14 @@ namespace WinkingCat
             if (preventUpdate) return;
             if (cbDrawScreenWideCrosshair.Checked)
             {
-                RegionCaptureOptions.DrawScreenWideCrosshair = true;
-                RegionCaptureOptions.DrawMarchingAnts = cbMarchingAnts.Checked;
+                SettingsManager.RegionCaptureSettings.Draw_Screen_Wide_Crosshair= true;
+                SettingsManager.RegionCaptureSettings.Draw_Marching_Ants= cbMarchingAnts.Checked;
                 cbMarchingAnts.Enabled = true;
                 return;
             }
 
-            RegionCaptureOptions.DrawScreenWideCrosshair = false;
-            RegionCaptureOptions.DrawMarchingAnts = false;
+            SettingsManager.RegionCaptureSettings.Draw_Screen_Wide_Crosshair= false;
+            SettingsManager.RegionCaptureSettings.Draw_Marching_Ants= false;
             cbMarchingAnts.Enabled = false;
         }
 
@@ -260,23 +260,23 @@ namespace WinkingCat
             if (cbMarchingAnts.Checked)
             {
                 cbDrawScreenWideCrosshair.Checked = true;
-                RegionCaptureOptions.DrawMarchingAnts = true;
+                SettingsManager.RegionCaptureSettings.Draw_Marching_Ants= true;
                 return;
             }
 
-            RegionCaptureOptions.DrawMarchingAnts = false;
+            SettingsManager.RegionCaptureSettings.Draw_Marching_Ants= false;
         }
 
         private void DimBackground_CheckChanged(object sender, EventArgs e)
         {
             if (preventUpdate) return;
-            RegionCaptureOptions.DrawBackgroundOverlay = cbDimBackground.Checked;
+            SettingsManager.RegionCaptureSettings.Draw_Background_Overlay= cbDimBackground.Checked;
         }
 
         private void ShowInfoText_CheckChanged(object sender, EventArgs e)
         {
             if (preventUpdate) return;
-            RegionCaptureOptions.DrawInfoText = cbShowInfoText.Checked;
+            SettingsManager.RegionCaptureSettings.Draw_Info_Text = cbShowInfoText.Checked;
         }
 
         private void SolidScreenWideCrosshair_CheckChanged(object sender, EventArgs e)
@@ -287,10 +287,10 @@ namespace WinkingCat
         private void ClickAction_SelectedIndexChanged(object sender, EventArgs e)
         {
             if (preventUpdate) return;
-            RegionCaptureOptions.OnMouseMiddleClick = (InRegionTasks)cbMiddleClickAction.SelectedItem;
-            RegionCaptureOptions.OnMouseRightClick = (InRegionTasks)cbRightClickAction.SelectedItem;
-            RegionCaptureOptions.OnXButton1Click = (InRegionTasks)cbXButton1Action.SelectedItem;
-            RegionCaptureOptions.OnXButton2Click = (InRegionTasks)cbXButton2Action.SelectedItem;
+            SettingsManager.RegionCaptureSettings.On_Mouse_Middle_Click = (InRegionTasks)cbMiddleClickAction.SelectedItem;
+            SettingsManager.RegionCaptureSettings.On_Mouse_Right_Click = (InRegionTasks)cbRightClickAction.SelectedItem;
+            SettingsManager.RegionCaptureSettings.On_XButton1_Click = (InRegionTasks)cbXButton1Action.SelectedItem;
+            SettingsManager.RegionCaptureSettings.On_XButton2_Click = (InRegionTasks)cbXButton2Action.SelectedItem;
         }
 
         private void ShowMagnifier_CheckChanged(object sender, EventArgs e)
@@ -302,34 +302,34 @@ namespace WinkingCat
         private void DrawMagnifierCrosshair_CheckChanged(object sender, EventArgs e)
         {
             if (preventUpdate) return;
-            RegionCaptureOptions.DrawCrosshairInMagnifier = cbDrawMagnifierCrosshair.Checked;
+            SettingsManager.RegionCaptureSettings.Draw_Crosshair_In_Magnifier= cbDrawMagnifierCrosshair.Checked;
         }
 
         private void DrawMagnifierGrid_CheckChanged(object sender, EventArgs e)
         {
             if (preventUpdate) return;
-            RegionCaptureOptions.DrawPixelGridInMagnifier = cbDrawMagnifierGrid.Checked;
+            SettingsManager.RegionCaptureSettings.Draw_Pixel_Grid_In_Magnifier = cbDrawMagnifierGrid.Checked;
         }
 
         private void DrawMagnifierBorder_CheckChanged(object sender, EventArgs e)
         {
             if (preventUpdate) return;
-            RegionCaptureOptions.DrawBorderOnMagnifier = cbDrawMagnifierBorder.Checked;
+            SettingsManager.RegionCaptureSettings.Draw_Border_On_Magnifier = cbDrawMagnifierBorder.Checked;
         }
 
         private void CenterMagnifierOnMouse_CheckChanged(object sender, EventArgs e)
         {
             if (preventUpdate) return;
-            RegionCaptureOptions.CenterMagnifierOnMouse = cbCenterMagnifierOnMouse.Checked;
+            SettingsManager.RegionCaptureSettings.Center_Magnifier_On_Mouse= cbCenterMagnifierOnMouse.Checked;
         }
 
         private void NUD_ValueChanged(object sender, EventArgs e)
         {
             if (preventUpdate) return;
-            RegionCaptureOptions.MagnifierPixelCount = (int)nudMagnifierPixelCount.Value;
-            RegionCaptureOptions.MagnifierPixelSize = (int)nudMagnifierPixelSize.Value;
-            RegionCaptureOptions.MagnifierZoomLevel = (float)nudMagnifierZoomLevel.Value;
-            RegionCaptureOptions.MagnifierZoomScale = (float)nudMagnifierZoomScale.Value;
+            SettingsManager.RegionCaptureSettings.Magnifier_Pixel_Count = (int)nudMagnifierPixelCount.Value;
+            SettingsManager.RegionCaptureSettings.Magnifier_Pixel_Size = (int)nudMagnifierPixelSize.Value;
+            SettingsManager.RegionCaptureSettings.Magnifier_Zoom_Level = (float)nudMagnifierZoomLevel.Value;
+            SettingsManager.RegionCaptureSettings.Magnifier_Zoom_Scale = (float)nudMagnifierZoomScale.Value;
         }
 
         #endregion
@@ -345,13 +345,13 @@ namespace WinkingCat
         private void AutoCopyImage_CheckChanged(object sender, EventArgs e)
         {
             if (preventUpdate) return;
-            RegionCaptureOptions.AutoCopyImage = cbAutoCopyImage.Checked;
+            SettingsManager.RegionCaptureSettings.Auto_Copy_Image = cbAutoCopyImage.Checked;
         }
 
         private void AutoCopyColor_CheckChanged(object sender, EventArgs e)
         {
             if (preventUpdate) return;
-            RegionCaptureOptions.AutoCopyColor = cbAutoCopyColor.Checked;
+            SettingsManager.RegionCaptureSettings.Auto_Copy_Color = cbAutoCopyColor.Checked;
         }
 
         #endregion

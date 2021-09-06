@@ -39,7 +39,6 @@ D:\Programming\C#\WinkingCatFace\ClipManager\bin\Debug\Newtonsoft.Json.xml
 D:\Programming\C#\WinkingCatFace\ClipManager\bin\Debug\Microsoft.WindowsAPICodePack.pdb
 D:\Programming\C#\WinkingCatFace\ClipManager\bin\Debug\Microsoft.WindowsAPICodePack.xml
 D:\Programming\C#\WinkingCatFace\ClipManager\obj\Debug\WinkingCat.ClipHelper.csproj.AssemblyReference.cache
-D:\Programming\C#\WinkingCatFace\ClipManager\obj\Debug\WinkingCat.ClipHelper.ClipForm.resources
 D:\Programming\C#\WinkingCatFace\ClipManager\obj\Debug\WinkingCat.ClipHelper.Properties.Resources.resources
 D:\Programming\C#\WinkingCatFace\ClipManager\obj\Debug\WinkingCat.ClipHelper.csproj.GenerateResource.cache
 D:\Programming\C#\WinkingCatFace\ClipManager\obj\Debug\WinkingCat.ClipHelper.csproj.CoreCompileInputs.cache

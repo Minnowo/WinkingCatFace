@@ -96,12 +96,6 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Forms\ClipStylesForm.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="Forms\ClipStylesForm.Designer.cs">
-      <DependentUpon>ClipStylesForm.cs</DependentUpon>
-    </Compile>
     <Compile Include="Controls\CustomListView.cs">
       <SubType>Component</SubType>
     </Compile>
@@ -111,12 +105,6 @@
     </Compile>
     <Compile Include="Controls\HotkeyInputControl.Designer.cs">
       <DependentUpon>HotkeyInputControl.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Forms\ClipboardSettingsForm.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="Forms\ClipboardSettingsForm.Designer.cs">
-      <DependentUpon>ClipboardSettingsForm.cs</DependentUpon>
     </Compile>
     <Compile Include="Forms\ApplicationForm.cs">
       <SubType>Form</SubType>
@@ -173,18 +161,6 @@
       <DependentUpon>UploadSettingsForm.cs</DependentUpon>
     </Compile>
     <Compile Include="Events\TaskExecutedEvent.cs" />
-    <Compile Include="Forms\StylesForm.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="Forms\StylesForm.Designer.cs">
-      <DependentUpon>StylesForm.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Forms\RegionCaptureStylesForm.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="Forms\RegionCaptureStylesForm.Designer.cs">
-      <DependentUpon>RegionCaptureStylesForm.cs</DependentUpon>
-    </Compile>
     <Compile Include="TaskHandler.cs" />
     <EmbeddedResource Include="Controls\CustomListView.resx">
       <DependentUpon>CustomListView.cs</DependentUpon>
@@ -194,12 +170,6 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\ApplicationForm.resx">
       <DependentUpon>ApplicationForm.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Forms\ClipboardSettingsForm.resx">
-      <DependentUpon>ClipboardSettingsForm.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Forms\ClipStylesForm.resx">
-      <DependentUpon>ClipStylesForm.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\HashCheckForm.resx">
       <DependentUpon>HashCheckForm.cs</DependentUpon>
@@ -216,14 +186,8 @@
     <EmbeddedResource Include="Forms\RegexForm.resx">
       <DependentUpon>RegexForm.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Forms\RegionCaptureStylesForm.resx">
-      <DependentUpon>RegionCaptureStylesForm.cs</DependentUpon>
-    </EmbeddedResource>
     <EmbeddedResource Include="Forms\SettingsForm.resx">
       <DependentUpon>SettingsForm.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Forms\StylesForm.resx">
-      <DependentUpon>StylesForm.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\UploadSettingsForm.resx">
       <DependentUpon>UploadSettingsForm.cs</DependentUpon>

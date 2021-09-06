@@ -29,17 +29,17 @@ namespace WinkingCat
         public static bool CaptureWindow(WindowInfo window)
         {
             OnTaskExecuted(Function.CaptureWindow);
-            if (!ScreenHelper.IsValidCropArea(window.Rectangle))
+            if (!Helper.IsValidCropArea(window.Rectangle))
                 return false;
             
-            using (Image img = ScreenShotManager.CaptureRectangle(window.Rectangle))
+            using (Image img = ScreenshotHelper.CaptureRectangle(window.Rectangle))
             {
-                if (RegionCaptureOptions.AutoCopyImage)
+                if (SettingsManager.RegionCaptureSettings.Auto_Copy_Image)
                 {
                     ClipboardHelper.CopyImage(img);
                 }
 
-                if (img == null || string.IsNullOrEmpty(ImageHandler.Save(PathHelper.GetNewImageFileName(), img)))
+                if (img == null || string.IsNullOrEmpty(RegionCaptureHelper.Save(PathHelper.GetNewImageFileName(), img)))
                 {
                     return false;
                 }
@@ -57,7 +57,7 @@ namespace WinkingCat
             {
                 case Function.RegionCapture:
                     HotkeyManager.tempTgnoreHotkeyPress = true;
-                    ImageHandler.RegionCapture(RegionCaptureMode.Default);
+                    RegionCaptureHelper.RegionCapture(RegionCaptureMode.Default);
                     HotkeyManager.tempTgnoreHotkeyPress = false;
                     return true;
 
@@ -69,7 +69,7 @@ namespace WinkingCat
 
                 case Function.NewClipFromRegionCapture:
                     HotkeyManager.tempTgnoreHotkeyPress = true;
-                    ImageHandler.RegionCapture(RegionCaptureMode.Default, true);
+                    RegionCaptureHelper.RegionCapture(RegionCaptureMode.Default, true);
                     HotkeyManager.tempTgnoreHotkeyPress = false;
                     return true;
 
@@ -97,32 +97,32 @@ namespace WinkingCat
                     return true;
 
                 case Function.ScreenColorPicker:
-                    ImageHandler.RegionCapture(RegionCaptureMode.ColorPicker);
+                    RegionCaptureHelper.RegionCapture(RegionCaptureMode.ColorPicker);
                     return true;
 
                 case Function.CaptureLastRegion:
 
-                    if (ImageHandler.LastInfo == null || !ScreenHelper.IsValidCropArea(ImageHandler.LastInfo.Region))
+                    if (RegionCaptureHelper.LastRegionResult == null || !Helper.IsValidCropArea(RegionCaptureHelper.LastRegionResult.Region))
                         return false;
                     
-                    using (Image img = ScreenShotManager.CaptureRectangle(ScreenHelper.GetRectangle0Based(ImageHandler.LastInfo.Region)))
+                    using (Image img = ScreenshotHelper.CaptureRectangle(ScreenHelper.GetRectangle0Based(RegionCaptureHelper.LastRegionResult.Region)))
                     {
-                        if (img == null || string.IsNullOrEmpty(ImageHandler.Save(PathHelper.GetNewImageFileName(), img)))
+                        if (img == null || string.IsNullOrEmpty(RegionCaptureHelper.Save(PathHelper.GetNewImageFileName(), img)))
                             return false;
 
-                        if (RegionCaptureOptions.AutoCopyImage)
+                        if (SettingsManager.RegionCaptureSettings.Auto_Copy_Image)
                             ClipboardHelper.CopyImage(img);
                     }
                     return true;
 
                 case Function.CaptureFullScreen:
 
-                    using (Image img = ScreenShotManager.CaptureFullscreen())
+                    using (Image img = ScreenshotHelper.CaptureFullscreen())
                     {
-                        if (img == null || string.IsNullOrEmpty(ImageHandler.Save(PathHelper.GetNewImageFileName(), img)))
+                        if (img == null || string.IsNullOrEmpty(RegionCaptureHelper.Save(PathHelper.GetNewImageFileName(), img)))
                             return false;
 
-                        if (RegionCaptureOptions.AutoCopyImage)
+                        if (SettingsManager.RegionCaptureSettings.Auto_Copy_Image)
                             ClipboardHelper.CopyImage(img);
                     }
 
@@ -130,12 +130,12 @@ namespace WinkingCat
 
                 case Function.CaptureActiveMonitor:
 
-                    using (Image img = ScreenShotManager.CaptureActiveMonitor())
+                    using (Image img = ScreenshotHelper.CaptureActiveMonitor())
                     {
-                        if (img == null || string.IsNullOrEmpty(ImageHandler.Save(PathHelper.GetNewImageFileName(), img)))
+                        if (img == null || string.IsNullOrEmpty(RegionCaptureHelper.Save(PathHelper.GetNewImageFileName(), img)))
                             return false;
 
-                        if (RegionCaptureOptions.AutoCopyImage)
+                        if (SettingsManager.RegionCaptureSettings.Auto_Copy_Image)
                             ClipboardHelper.CopyImage(img);
                     }
 
@@ -143,12 +143,12 @@ namespace WinkingCat
 
                 case Function.CaptureActiveWindow:
 
-                    using (Image img = ScreenShotManager.CaptureRectangle(ScreenHelper.GetWindowRectangle(NativeMethods.GetForegroundWindow())))
+                    using (Image img = ScreenshotHelper.CaptureRectangle(ScreenHelper.GetWindowRectangle(NativeMethods.GetForegroundWindow())))
                     {
-                        if (img == null || string.IsNullOrEmpty(ImageHandler.Save(PathHelper.GetNewImageFileName(), img)))
+                        if (img == null || string.IsNullOrEmpty(RegionCaptureHelper.Save(PathHelper.GetNewImageFileName(), img)))
                             return false;
 
-                        if (RegionCaptureOptions.AutoCopyImage)
+                        if (SettingsManager.RegionCaptureSettings.Auto_Copy_Image)
                             ClipboardHelper.CopyImage(img);
                     }
 

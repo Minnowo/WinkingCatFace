@@ -14,8 +14,7 @@ namespace WinkingCat
     public partial class ApplicationForm : Form
     {
         public bool IsReady { get; private set; } = false;
-        public SettingsForm settingsForm { get; private set; } = null;
-        public StylesForm stylesForm { get; private set; } = null;
+
         public ColorPickerForm colorPickerForm { get; private set; } = null;
         public BarcodeForm qrCodeForm { get; private set; } = null;
         public HashCheckForm hashCheckForm { get; private set; } = null;
@@ -106,7 +105,7 @@ namespace WinkingCat
             ResizeEnd += MainForm_Resize;
             Shown += MainForm_Shown;
 
-            ImageHandler.ImageSaved += ImageSaved_Event;
+            RegionCaptureHelper.ImageSaved += ImageSaved_Event;
             ApplicationStyles.UpdateStylesEvent += ApplicationStyles_UpdateSylesEvent;
             //MainFormSettings.SettingsChangedEvent += UpdateSettings;
             lvListView.ItemSelectionChanged += LvListView_ItemSelectionChanged;
@@ -136,8 +135,6 @@ namespace WinkingCat
         public void HideAll()
         {
             Hide();
-            settingsForm?.Hide();
-            stylesForm?.Hide();
         }
 
         /// <summary>
@@ -146,8 +143,6 @@ namespace WinkingCat
         public void ShowAll()
         {
             Show();
-            settingsForm?.Show();
-            stylesForm?.Show();
         }
 
         /// <summary>
@@ -244,10 +239,10 @@ namespace WinkingCat
             }
             Thread.Sleep(SettingsManager.MainFormSettings.Wait_Hide_Time);
 
-            using (Bitmap img = ScreenShotManager.CaptureRectangle((Rectangle)tsi.Tag))
+            using (Bitmap img = ScreenshotHelper.CaptureRectangle((Rectangle)tsi.Tag))
             {
-                ImageHandler.Save(PathHelper.GetNewImageFileName(), img);
-                if (RegionCaptureOptions.AutoCopyImage)
+                RegionCaptureHelper.Save(PathHelper.GetNewImageFileName(), img);
+                if (SettingsManager.RegionCaptureSettings.Auto_Copy_Image)
                 {
                     ClipboardHelper.CopyImage(img);
                 }
@@ -316,13 +311,13 @@ namespace WinkingCat
         {
             if (tsmiToolStripMenuItem_captureCursor.Checked || tsmiCaptureCursorToolStripMenuItem.Checked)
             {
-                ScreenShotManager.captureCursor = true;
+                ScreenshotHelper.CaptureCursor = true;
                 tsmiToolStripMenuItem_captureCursor.Checked = true;
                 tsmiCaptureCursorToolStripMenuItem.Checked = true;
             }
             else
             {
-                ScreenShotManager.captureCursor = false;
+                ScreenshotHelper.CaptureCursor = false;
                 tsmiToolStripMenuItem_captureCursor.Checked = false;
                 tsmiCaptureCursorToolStripMenuItem.Checked = false;
 
@@ -610,7 +605,7 @@ namespace WinkingCat
             string[] row1 = {
                 e.FileInfo.Extension,                                   // file type
                 $"{e.Dimensions.Width}, {e.Dimensions.Height}",     // dimensions
-                Helpers.SizeSuffix(e.SizeInBytes),                         // size
+                Helper.SizeSuffix(e.SizeInBytes),                         // size
                 File.GetLastWriteTime(e.FullName).ToString()   // date modified
             };
 
@@ -636,14 +631,6 @@ namespace WinkingCat
         {
             switch (((Form)sender).Text)
             {
-                case "Styles":
-                    stylesForm?.Dispose();
-                    stylesForm = null;
-                    break;
-                case "Settings":
-                    settingsForm?.Dispose();
-                    settingsForm = null;
-                    break;
                 case "ColorPicker":
                     colorPickerForm?.Dispose();
                     colorPickerForm = null;
@@ -665,24 +652,16 @@ namespace WinkingCat
 
         private void ToolStripDropDownButton_Settings_Click(object sender, EventArgs e)
         {
-            settingsForm?.Close();
-            settingsForm?.Dispose();
-            settingsForm = new SettingsForm();
-            settingsForm.Owner = this;
-            settingsForm.TopMost = SettingsManager.MainFormSettings.Always_On_Top;
-            settingsForm.FormClosing += ChildFormClosing;
-            settingsForm.Show();
+            using (SettingsForm sf = new SettingsForm())
+            {
+                sf.Owner = this;
+                sf.TopMost = SettingsManager.MainFormSettings.Always_On_Top;
+                sf.ShowDialog();
+            }
         }
 
         private void ToolStripDropDownButton_Styles_Click(object sender, EventArgs e)
         {
-            stylesForm?.Close();
-            stylesForm?.Dispose();
-            stylesForm = new StylesForm();
-            stylesForm.Owner = this;
-            stylesForm.TopMost = SettingsManager.MainFormSettings.Always_On_Top;
-            stylesForm.FormClosing += ChildFormClosing;
-            stylesForm.Show();
         }
 
         #endregion

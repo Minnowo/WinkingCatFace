@@ -84,9 +84,6 @@ namespace WinkingCat
             SettingsManager.LoadClipSettings();
             SettingsManager.LoadMainFormSettings();
             SettingsManager.LoadRegionCaptureSettings();
-            SettingsManager.LoadMainFormStyles();
-            SettingsManager.LoadRegionCaptureStyles();
-            SettingsManager.LoadClipStyles();
 
             HotkeyManager.Init();
 

@@ -100,13 +100,13 @@ namespace WinkingCat
                             if (dimensions == Size.Empty)
                                 row = new string[4]{ info.Extension, 
                                     "", 
-                                    Helpers.SizeSuffix(info.Length), 
+                                    Helper.SizeSuffix(info.Length), 
                                     File.GetLastWriteTime(info.FullName).ToString()};
                             else
                                 row = new string[4] { info.Extension, 
                                     $"{dimensions.Width}, " +
                                     $"{dimensions.Height}", 
-                                    Helpers.SizeSuffix(info.Length), File.GetLastWriteTime(info.FullName).ToString() };
+                                    Helper.SizeSuffix(info.Length), File.GetLastWriteTime(info.FullName).ToString() };
 
                             ListViewItem item = new ListViewItem() { Text = info.Name, Tag = info.FullName };
                             item.SubItems.AddRange(row);

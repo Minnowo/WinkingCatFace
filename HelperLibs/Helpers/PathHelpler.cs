@@ -15,7 +15,6 @@ namespace WinkingCat.HelperLibs
 {
     public static class PathHelper
     {
-        public static string regionCaptureCursor { get; private set; } = ResourcePath.Default.regionCapturCrosshair;
         public static string CurrentDirectory { get { return Directory.GetCurrentDirectory(); } }
 
         public static void CreateAllPaths(string dir = "")

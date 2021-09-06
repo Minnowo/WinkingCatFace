@@ -5,10 +5,8 @@ using System.Drawing;
 using System.Drawing.Drawing2D;
 using System.IO;
 using System.Windows.Forms;
-using WinkingCat.HelperLibs;
-using WinkingCat.Uploaders;
 
-namespace WinkingCat.ClipHelper
+namespace WinkingCat.HelperLibs
 {
     public enum DragLoc
     {
@@ -86,8 +84,8 @@ namespace WinkingCat.ClipHelper
                 image.Height + (Options.BorderThickness << 1));
 
             _ZoomControlSize = new Size(
-                (int)Math.Round(StartWindowSize.Width * ApplicationStyles.currentStyle.clipStyle.ZoomSizePercent),
-                (int)Math.Round(StartWindowSize.Height * ApplicationStyles.currentStyle.clipStyle.ZoomSizePercent));
+                (int)Math.Round(StartWindowSize.Width * SettingsManager.ClipSettings.Zoom_Size_From_Percent),
+                (int)Math.Round(StartWindowSize.Height * SettingsManager.ClipSettings.Zoom_Size_From_Percent));
 
             MinimumSize = StartWindowSize;
             MaximumSize = StartWindowSize;
@@ -97,15 +95,15 @@ namespace WinkingCat.ClipHelper
             BackColor = Options.Color;
 
             zdbZoomedImageDisplay.Enabled = false;
-            zdbZoomedImageDisplay.borderColor = ApplicationStyles.currentStyle.clipStyle.zoomBorderColor;
-            zdbZoomedImageDisplay.replaceTransparent = ApplicationStyles.currentStyle.clipStyle.zoomReplaceTransparentColor;
-            if (ApplicationStyles.currentStyle.clipStyle.ZoomSizePercent == 1)
+            zdbZoomedImageDisplay.borderColor = SettingsManager.ClipSettings.Border_Color;
+            zdbZoomedImageDisplay.replaceTransparent = SettingsManager.ClipSettings.Zoom_Color;
+            if (SettingsManager.ClipSettings.Zoom_Size_From_Percent == 1f)
             {
                 zdbZoomedImageDisplay.BorderThickness = 0;
             }
             else
             {
-                zdbZoomedImageDisplay.BorderThickness = ApplicationStyles.currentStyle.clipStyle.zoomBorderThickness;
+                zdbZoomedImageDisplay.BorderThickness = SettingsManager.ClipSettings.Zoom_Border_Thickness;
             }
 
 
@@ -156,7 +154,6 @@ namespace WinkingCat.ClipHelper
             Timer updateMaxSizeTimer = new Timer() { Interval = 1000 };
             updateMaxSizeTimer.Tick += UpdateMaxSizeTimerTick_Event;
             updateMaxSizeTimer.Start();
-
         }
 
         
@@ -198,14 +195,14 @@ namespace WinkingCat.ClipHelper
             cmMain.Renderer = new ToolStripCustomRenderer();
             cmMain.Opacity = ApplicationStyles.currentStyle.mainFormStyle.contextMenuOpacity;
 
-            this.BackColor = ApplicationStyles.currentStyle.clipStyle.borderColor;
+            BackColor = SettingsManager.ClipSettings.Border_Color;
 
-            zdbZoomedImageDisplay.borderColor = ApplicationStyles.currentStyle.clipStyle.zoomBorderColor;
-            zdbZoomedImageDisplay.replaceTransparent = ApplicationStyles.currentStyle.clipStyle.zoomReplaceTransparentColor;
+            zdbZoomedImageDisplay.borderColor = SettingsManager.ClipSettings.Border_Color;
+            zdbZoomedImageDisplay.replaceTransparent = SettingsManager.ClipSettings.Zoom_Color;
 
             _ZoomControlSize = new Size(
-                (int)Math.Round(ClientSize.Width * ApplicationStyles.currentStyle.clipStyle.ZoomSizePercent),
-                (int)Math.Round(ClientSize.Height * ApplicationStyles.currentStyle.clipStyle.ZoomSizePercent));
+                (int)Math.Round(ClientSize.Width * SettingsManager.ClipSettings.Zoom_Size_From_Percent),
+                (int)Math.Round(ClientSize.Height * SettingsManager.ClipSettings.Zoom_Size_From_Percent));
 
             Refresh();
         }
@@ -226,7 +223,7 @@ namespace WinkingCat.ClipHelper
         /// </summary>
         public void OCR_Image()
         {
-            if (File.Exists(Options.FilePath))
+            /*if (File.Exists(Options.FilePath))
             {
                 OCRForm form = new OCRForm(Options.FilePath);
                 form.Owner = this;
@@ -246,7 +243,7 @@ namespace WinkingCat.ClipHelper
                 return;
             }
             
-            MessageBox.Show("The path to the image has does not exist, and the image failed to save");
+            MessageBox.Show("The path to the image has does not exist, and the image failed to save");*/
         }
 
         /// <summary>
@@ -311,7 +308,7 @@ namespace WinkingCat.ClipHelper
         /// </summary>
         public void InvertImage()
         {
-            _ChangeTracker.CurrentBitmap.InvertColor();
+            _ChangeTracker.InvertBitmap();
             Invalidate();
         }
 
@@ -330,6 +327,7 @@ namespace WinkingCat.ClipHelper
         public void RotateLeft()
         {
             _ChangeTracker.RotateLeft();
+            UpdateRotation();
             Invalidate();
         }
 
@@ -339,6 +337,7 @@ namespace WinkingCat.ClipHelper
         public void RotateRight()
         {
             _ChangeTracker.RotateRight();
+            UpdateRotation();
             Invalidate();
         }
 
@@ -365,9 +364,6 @@ namespace WinkingCat.ClipHelper
         /// </summary>
         public void Redo()
         {
-            if (_ChangeTracker.RedoCount == 0)
-                return;
-
             _ChangeTracker.Redo();
             Invalidate();
         }
@@ -377,9 +373,6 @@ namespace WinkingCat.ClipHelper
         /// </summary>
         public void Undo()
         {
-            if (_ChangeTracker.UndoCount == 0)
-                return;
-
             _ChangeTracker.Undo();
             Invalidate();
         }
@@ -390,7 +383,7 @@ namespace WinkingCat.ClipHelper
                 _ZoomControlSize.Width + (zdbZoomedImageDisplay.BorderThickness << 1),
                 _ZoomControlSize.Height + (zdbZoomedImageDisplay.BorderThickness << 1));
 
-            if (ApplicationStyles.currentStyle.clipStyle.zoomFollowMouse)
+            if (SettingsManager.ClipSettings.Zoom_Follow_Mouse)
             {
                 zdbZoomedImageDisplay.Location = new Point(
                     mousePos.X - (zdbZoomedImageDisplay.ClientSize.Width >> 1),
@@ -659,8 +652,8 @@ namespace WinkingCat.ClipHelper
                     Invalidate();
 
                     _ZoomControlSize = new Size(
-                        (int)Math.Round(ClientSize.Width * ApplicationStyles.currentStyle.clipStyle.ZoomSizePercent),
-                        (int)Math.Round(ClientSize.Height * ApplicationStyles.currentStyle.clipStyle.ZoomSizePercent));
+                        (int)Math.Round(ClientSize.Width * SettingsManager.ClipSettings.Zoom_Size_From_Percent),
+                        (int)Math.Round(ClientSize.Height * SettingsManager.ClipSettings.Zoom_Size_From_Percent));
                 }
                 else
                 {

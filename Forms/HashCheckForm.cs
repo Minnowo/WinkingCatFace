@@ -22,7 +22,7 @@ namespace WinkingCat
         public HashCheckForm()
         {
             InitializeComponent();
-            cbHashType.Items.AddRange(Helpers.GetEnumDescriptions<HashType>());
+            cbHashType.Items.AddRange(Helper.GetEnumDescriptions<HashType>());
             cbHashType.SelectedIndex = 0;
             hashCheck = new HashCheck();
             hashCheck.FileCheckProgressChanged += HashCheck_FileCheckProgressChanged;

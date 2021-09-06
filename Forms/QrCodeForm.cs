@@ -8,7 +8,6 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using WinkingCat.HelperLibs;
-using WinkingCat.ScreenCaptureLib;
 using ZXing;
 using System.Threading;
 
@@ -78,14 +77,14 @@ namespace WinkingCat
 
         private void EncodeText(string text)
         {
-            if (isReady)
-            {
-                ClearQRCode();
+            if (!isReady)
+                return;
+            
+            ClearQRCode();
 
-                int size = Math.Min(pbQRDisplay.Width, pbQRDisplay.Height);
-                pbQRDisplay.Image = Helpers.CreateQRCode(text, size, (BarcodeFormat)cmFormat.SelectedItem);
-                pbQRDisplay.BackColor = Color.White;
-            }
+            int size = Math.Min(pbQRDisplay.Width, pbQRDisplay.Height);
+            pbQRDisplay.Image = Helper.CreateQRCode(text, size, (BarcodeFormat)cmFormat.SelectedItem);
+            pbQRDisplay.BackColor = Color.White;
         }
 
         private void Form_Load(object sender, EventArgs e)
@@ -102,7 +101,7 @@ namespace WinkingCat
         {
             string output = "";
 
-            string[] results = Helpers.BarcodeScan(bmp);
+            string[] results = Helper.BarcodeScan(bmp);
 
             if (results != null)
             {
@@ -114,56 +113,56 @@ namespace WinkingCat
 
         private void bFromScreen_Click(object sender, EventArgs e)
         {
-            if (isReady)
+            if (!isReady)
+                return;
+            
+            if (Visible)
             {
-                if (Visible)
-                {
-                    Hide();
-                    Thread.Sleep(SettingsManager.MainFormSettings.Wait_Hide_Time);
-                }
-
-                using(Bitmap img = (Bitmap)ImageHandler.GetRegionResultImage())
-                {
-                    if(img != null)
-                    {
-                        Decode(img);
-                    }
-                }
-                this.ForceActivate();
+                Hide();
+                Thread.Sleep(SettingsManager.MainFormSettings.Wait_Hide_Time);
             }
+
+            using(Bitmap img = (Bitmap)RegionCaptureHelper.GetRegionResultImage())
+            {
+                if(img != null)
+                {
+                    Decode(img);
+                }
+            }
+            this.ForceActivate();
         }
 
         private void bFromFile_Click(object sender, EventArgs e)
         {
-            if (isReady)
-            {
-                string[] res = ImageHelper.OpenImageFileDialog(false, Program.MainForm);
-                if (res == null | res.Length < 1)
-                    return;
+            if (!isReady)
+                return;
+            
+            string[] res = ImageHelper.OpenImageFileDialog(false, Program.MainForm);
+            if (res == null | res.Length < 1)
+                return;
 
-                using (Bitmap img = ImageHelper.LoadImage(res[0]))
+            using (Bitmap img = ImageHelper.LoadImageAsBitmap(res[0]))
+            {
+                if (img != null)
                 {
-                    if (img != null)
-                    {
-                        Decode(img);
-                    }
+                    Decode(img);
                 }
-                GC.Collect();
             }
+            GC.Collect();
         }
 
         private void bFromClipboard_Click(object sender, EventArgs e)
         {
-            if (isReady)
+            if (!isReady)
+                return;
+            
+            if (Clipboard.ContainsImage())
             {
-                if (Clipboard.ContainsImage())
+                using (Bitmap img = (Bitmap)Clipboard.GetImage())
                 {
-                    using (Bitmap img = (Bitmap)Clipboard.GetImage())
+                    if (img != null)
                     {
-                        if (img != null)
-                        {
-                            Decode(img);
-                        }
+                        Decode(img);
                     }
                 }
             }

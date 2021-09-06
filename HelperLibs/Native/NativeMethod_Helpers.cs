@@ -13,11 +13,11 @@ namespace WinkingCat.HelperLibs
     {
         public static bool UseImmersiveDarkMode(IntPtr handle, bool enabled)
         {
-            if (Helpers.IsWindows10OrGreater(17763))
+            if (Helper.IsWindows10OrGreater(17763))
             {
                 DwmWindowAttribute attribute;
                 attribute = DwmWindowAttribute.DWMWA_USE_IMMERSIVE_DARK_MODE_BEFORE_20H1;
-                if (Helpers.IsWindows10OrGreater(18985))
+                if (Helper.IsWindows10OrGreater(18985))
                 {
                     attribute = DwmWindowAttribute.DWMWA_USE_IMMERSIVE_DARK_MODE;
                 }
@@ -118,7 +118,7 @@ namespace WinkingCat.HelperLibs
 
         public static bool IsDWMEnabled()
         {
-            return Helpers.IsWindowsVistaOrGreater() && DwmIsCompositionEnabled();
+            return Helper.IsWindowsVistaOrGreater() && DwmIsCompositionEnabled();
         }
 
         public static Icon GetApplicationIcon(IntPtr handle)

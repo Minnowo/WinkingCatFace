@@ -37,7 +37,7 @@ namespace WinkingCat
 
             if (hotkeyInfo.ID == 0)
             {
-                string uniqueID = Helpers.GetUniqueID();
+                string uniqueID = Helper.GetUniqueID();
                 hotkeyInfo.ID = NativeMethods.GlobalAddAtom(uniqueID);
 
                 if (hotkeyInfo.ID == 0)
