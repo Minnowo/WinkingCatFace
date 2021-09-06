@@ -205,6 +205,8 @@
     <Compile Include="Settings\MainFormSettings.cs" />
     <Compile Include="Settings\MiscSettings.cs" />
     <Compile Include="Settings\RegionCaptureSettings.cs" />
+    <Compile Include="Settings\StyleClasses\CustomColorTable.cs" />
+    <Compile Include="Settings\StyleClasses\ToolStripCustomRenderer.cs" />
     <Compile Include="Types\Hotkey.cs" />
     <Compile Include="Types\HotkeySettings.cs" />
     <Compile Include="Types\InstanceManager.cs" />
@@ -260,6 +262,35 @@
   <ItemGroup>
     <None Include="Resources\%3b3white.ico" />
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <None Include="Resources\Clipboard-2-icon.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\fire-icon.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\layer-resize-icon.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\layer-shape-text-icon.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\Actions-transform-scale-icon - new.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\Error-Symbol-icon.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\save-download-icon.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\magnifiere-32x32-2.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\magnifiere-32x32-3.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\Crosshair.cur" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

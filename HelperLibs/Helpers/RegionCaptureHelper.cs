@@ -1,6 +1,6 @@
 ﻿using System;
 using System.Drawing;
-
+using System.Windows.Forms;
 
 namespace WinkingCat.HelperLibs
 {
@@ -10,15 +10,67 @@ namespace WinkingCat.HelperLibs
         public static event EventHandler<ImageSavedEvent> ImageSaved;
         public static RegionReturn LastRegionResult { get; private set; }
 
-
-        public static Image GetRegionResultImage()
+        public static bool GetRegionResultImage(Form form, out Image image)
         {
+            Helper.WaitHideForm(form, out bool reshow);
+
+            bool result = GetRegionResultImage(out image);
+
+            if (reshow)
+                form.Show();
+
+            return result;
+        }
+
+        public static bool GetRegionResultImage(out Image image)
+        {
+            SettingsManager.RegionCaptureSettings.Mode = RegionCaptureMode.Default;
             using (RegionCaptureForm regionCapture = new RegionCaptureForm(ScreenHelper.GetScreenBounds()))
             {
                 regionCapture.ShowDialog();
                 LastRegionResult?.Dispose();
-                LastRegionResult = regionCapture.GetResultImage();
-                return LastRegionResult.Image.CloneSafe();
+                LastRegionResult = regionCapture.GetRsult();
+
+                if (LastRegionResult.Result == RegionResult.Close || LastRegionResult.Image == null)
+                {
+                    image = null;
+                    return false;
+                }
+
+                image = LastRegionResult.Image.CloneSafe();
+                return true;
+            }
+        }
+
+        public static bool GetRegionResultColor(Form form, out COLOR color)
+        {
+            Helper.WaitHideForm(form, out bool reshow);
+
+            bool result =  GetRegionResultColor(out color);
+            
+            if (reshow)
+                form.Show();
+
+            return result;        
+        }
+
+        public static bool GetRegionResultColor(out COLOR color)
+        {
+            SettingsManager.RegionCaptureSettings.Mode = RegionCaptureMode.ColorPicker;
+            using (RegionCaptureForm regionCapture = new RegionCaptureForm(ScreenHelper.GetScreenBounds()))
+            {
+                regionCapture.ShowDialog();
+                LastRegionResult?.Dispose();
+                LastRegionResult = regionCapture.GetRsult();
+
+                if (LastRegionResult.Result == RegionResult.Close)
+                {
+                    color = Color.Empty;
+                    return false;
+                }
+
+                color = LastRegionResult.Color;
+                return true;
             }
         }
 
@@ -35,7 +87,7 @@ namespace WinkingCat.HelperLibs
                 regionCapture.ShowDialog();
 
                 LastRegionResult?.Dispose();
-                LastRegionResult = regionCapture.GetResultImage();
+                LastRegionResult = regionCapture.GetRsult();
 
                 if (LastRegionResult.Result == RegionResult.Close)
                     return;

@@ -183,7 +183,7 @@ namespace WinkingCat.HelperLibs
         /// </summary>
         public void UpdateTheme()
         {
-            if (ApplicationStyles.currentStyle.mainFormStyle.useImersiveDarkMode)
+            if (SettingsManager.MainFormSettings.useImersiveDarkMode)
             {
                 this.Icon = Properties.Resources._3white;
             }
@@ -193,7 +193,7 @@ namespace WinkingCat.HelperLibs
             }
 
             cmMain.Renderer = new ToolStripCustomRenderer();
-            cmMain.Opacity = ApplicationStyles.currentStyle.mainFormStyle.contextMenuOpacity;
+            cmMain.Opacity = SettingsManager.MainFormSettings.contextMenuOpacity;
 
             BackColor = SettingsManager.ClipSettings.Border_Color;
 

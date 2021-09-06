@@ -46,6 +46,7 @@ namespace WinkingCat.HelperLibs
             this.Text = "ColorPicker";
             this.MaximizeBox = false;
             this.KeyPreview = true;
+            this.HandleCreated += ColorPickerForm_HandleCreated;
 
             nudAlphaValue.Value = 255;
 
@@ -59,6 +60,18 @@ namespace WinkingCat.HelperLibs
             
         }
 
+        private void ColorPickerForm_HandleCreated(object sender, EventArgs e)
+        {
+            UpdateTheme();
+        }
+
+        public void UpdateTheme()
+        {
+            SettingsManager.ApplyImmersiveDarkTheme(this, IsHandleCreated);
+            ApplicationStyles.ApplyCustomThemeToControl(this);
+            Refresh();
+        }
+
         private void ColorPicker_ColorChanged(object sender, ColorEventArgs e)
         {
             if (preventOverflow)
@@ -70,6 +83,7 @@ namespace WinkingCat.HelperLibs
 
         private void ColorComboBox_ColorChanged(object sender, ColorEventArgs e)
         {
+            e.Color.A = (byte)nudAlphaValue.Value;
             UpdateColors(e.Color);
         }
 
@@ -91,15 +105,15 @@ namespace WinkingCat.HelperLibs
             ccb_HSL.UpdateColor(e);
             ccb_CMYK.UpdateColor(e);
 
-            tb_DecimalDisplay.Text = ColorHelper.ColorToDecimal(e).ToString();
-
             if (e.isTransparent)
             {
                 tb_HexDisplay.Text = ColorHelper.ColorToHex(e, ColorFormat.ARGB);
+                tb_DecimalDisplay.Text = ColorHelper.ColorToDecimal(e, ColorFormat.ARGB).ToString();
             }
             else
             {
                 tb_HexDisplay.Text = ColorHelper.ColorToHex(e, ColorFormat.RGB);
+                tb_DecimalDisplay.Text = ColorHelper.ColorToDecimal(e, ColorFormat.RGB).ToString();
             }
 
             cd_ColorDisplayMain.CurrentColor = e;
@@ -223,7 +237,15 @@ namespace WinkingCat.HelperLibs
             {
                 if (int.TryParse(tb_DecimalInput.Text, out int dec))
                 {
-                    UpdateColors(ColorHelper.DecimalToColor(dec));
+                    if (dec.ToString().Length > 8)
+                    {
+                        Color c = ColorHelper.DecimalToColor(dec, ColorFormat.ARGB);
+                        UpdateColors(c);
+                    }
+                    else
+                    {
+                        UpdateColors(ColorHelper.DecimalToColor(dec));
+                    }
                 }
             }
             catch
@@ -301,8 +323,10 @@ namespace WinkingCat.HelperLibs
 
         private void ScreenColorPicker_Click(object sender, EventArgs e)
         {
-            
-            
+            if(RegionCaptureHelper.GetRegionResultColor(this, out COLOR c))
+            {
+                UpdateColors(c);
+            }
         }
     }
 }

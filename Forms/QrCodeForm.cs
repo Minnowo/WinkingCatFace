@@ -16,7 +16,7 @@ namespace WinkingCat
     public partial class BarcodeForm : Form
     {
         private bool isReady;
-        private bool isHandleCreated = false;
+
         public BarcodeForm()
         {
             InitializeComponent();
@@ -33,7 +33,6 @@ namespace WinkingCat
 
         private void BarcodeForm_HandleCreated(object sender, EventArgs e)
         {
-            isHandleCreated = true;
             UpdateTheme();
         }
 
@@ -44,18 +43,7 @@ namespace WinkingCat
 
         private void UpdateTheme()
         {
-            if (ApplicationStyles.currentStyle.mainFormStyle.useImersiveDarkMode && isHandleCreated)
-            {
-                NativeMethods.UseImmersiveDarkMode(Handle, true);
-                this.Icon = ApplicationStyles.whiteIcon; //Properties.Resources._3white;
-            }
-            else
-            {
-                NativeMethods.UseImmersiveDarkMode(Handle, false);
-                this.Icon = ApplicationStyles.blackIcon; //Properties.Resources._3black;
-            }
-
-            this.BackColor = ApplicationStyles.currentStyle.mainFormStyle.backgroundColor;
+            SettingsManager.ApplyImmersiveDarkTheme(this, IsHandleCreated);
             ApplicationStyles.ApplyCustomThemeToControl(this);
             Refresh();
         }
@@ -115,21 +103,18 @@ namespace WinkingCat
         {
             if (!isReady)
                 return;
-            
-            if (Visible)
-            {
-                Hide();
-                Thread.Sleep(SettingsManager.MainFormSettings.Wait_Hide_Time);
-            }
 
-            using(Bitmap img = (Bitmap)RegionCaptureHelper.GetRegionResultImage())
+            if (RegionCaptureHelper.GetRegionResultImage(this, out Image i))
             {
-                if(img != null)
+                using (Bitmap img = (Bitmap)i)
                 {
-                    Decode(img);
+                    if (img != null)
+                    {
+                        Decode(img);
+                    }
                 }
+                this.ForceActivate();
             }
-            this.ForceActivate();
         }
 
         private void bFromFile_Click(object sender, EventArgs e)
@@ -138,7 +123,7 @@ namespace WinkingCat
                 return;
             
             string[] res = ImageHelper.OpenImageFileDialog(false, Program.MainForm);
-            if (res == null | res.Length < 1)
+            if (res == null || res.Length < 1)
                 return;
 
             using (Bitmap img = ImageHelper.LoadImageAsBitmap(res[0]))
@@ -158,7 +143,7 @@ namespace WinkingCat
             
             if (Clipboard.ContainsImage())
             {
-                using (Bitmap img = (Bitmap)Clipboard.GetImage())
+                using (Bitmap img = ClipboardHelper.GetImage())
                 {
                     if (img != null)
                     {

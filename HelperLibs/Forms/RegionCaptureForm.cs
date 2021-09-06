@@ -83,14 +83,15 @@ namespace WinkingCat.HelperLibs
 #endif
 
             ResumeLayout();
-            
+
 
             // set the cursor 
-            /*var buffer = Properties.Resources.ResourceManager.GetObject(PathHelper.regionCaptureCursor) as byte[];
+
+            var buffer = Properties.Resources.Crosshair;
             using (MemoryStream m = new MemoryStream(buffer))
             {
                 Cursor = new Cursor(m);
-            }*/
+            }
 
             image = ScreenshotHelper.CaptureRectangle(region);
 
@@ -109,34 +110,11 @@ namespace WinkingCat.HelperLibs
         }
 
 
-        public static bool PickScreenColor(out Color color)
-        {
-            RegionCaptureMode mode = SettingsManager.RegionCaptureSettings.Mode;
-            SettingsManager.RegionCaptureSettings.Mode = RegionCaptureMode.ColorPicker;
-
-            using (RegionCaptureForm regionCapture = new RegionCaptureForm(ScreenHelper.GetScreenBounds()))
-            {
-                regionCapture.ShowDialog();
-
-                RegionReturn result = regionCapture.GetResultImage();
-
-                if (result.Result == RegionResult.Close)
-                {
-                    color = Color.Empty;
-                    return false;
-                }
-
-                color = result.Color;
-                return true;
-            }
-        }
-
-
         /// <summary>
         /// Gets the RegionCaptureInfo for the given region capture.
         /// </summary>
         /// <returns> The image/color captured and other info.</returns>
-        public RegionReturn GetResultImage()
+        public RegionReturn GetRsult()
         {
             if (result == RegionResult.Region)
             {

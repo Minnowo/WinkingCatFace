@@ -18,7 +18,7 @@ namespace WinkingCat
     public partial class HashCheckForm : Form
     {
         private HashCheck hashCheck;
-        private bool isHandleCreated = false;
+        
         public HashCheckForm()
         {
             InitializeComponent();
@@ -37,23 +37,12 @@ namespace WinkingCat
 
         private void HashCheckForm_HandleCreated(object sender, EventArgs e)
         {
-            isHandleCreated = true;
             UpdateTheme();
         }
 
         public void UpdateTheme()
         {
-            if (ApplicationStyles.currentStyle.mainFormStyle.useImersiveDarkMode && isHandleCreated)
-            {
-                NativeMethods.UseImmersiveDarkMode(Handle, true);
-                this.Icon = ApplicationStyles.whiteIcon; //Properties.Resources._3white;
-            }
-            else
-            {
-                NativeMethods.UseImmersiveDarkMode(Handle, false);
-                this.Icon = ApplicationStyles.blackIcon; //Properties.Resources._3black;
-            }
-
+            SettingsManager.ApplyImmersiveDarkTheme(this, IsHandleCreated);
             ApplicationStyles.ApplyCustomThemeToControl(this);
             Refresh();
         }
@@ -151,25 +140,25 @@ namespace WinkingCat
         private void btnClearFileHash_Click(object sender, EventArgs e)
         {
             tbFileHash.Text = "";
-            colorLabel1.StaticBackColor = ApplicationStyles.currentStyle.mainFormStyle.lightBackgroundColor;
+            colorLabel1.StaticBackColor = SettingsManager.MainFormSettings.lightBackgroundColor;
         }
 
         private void btnClearHashInput_Click(object sender, EventArgs e)
         {
             tbHashInput.Text = "";
-            colorLabel3.StaticBackColor = ApplicationStyles.currentStyle.mainFormStyle.lightBackgroundColor;
+            colorLabel3.StaticBackColor = SettingsManager.MainFormSettings.lightBackgroundColor;
         }
 
         private void btnClearHashTarget_Click(object sender, EventArgs e)
         {
             tbHashTarget.Text = "";
-            colorLabel4.StaticBackColor = ApplicationStyles.currentStyle.mainFormStyle.lightBackgroundColor;
+            colorLabel4.StaticBackColor = SettingsManager.MainFormSettings.lightBackgroundColor;
         }
 
         private void btnClearFileHash2_Click(object sender, EventArgs e)
         {
             tbFileHash2.Text = "";
-            colorLabel2.StaticBackColor = ApplicationStyles.currentStyle.mainFormStyle.lightBackgroundColor;
+            colorLabel2.StaticBackColor = SettingsManager.MainFormSettings.lightBackgroundColor;
         }
 
         private void ResetTextBoxColor()
@@ -178,10 +167,10 @@ namespace WinkingCat
             tbFileHash2.BackColor = ApplicationStyles.currentStyle.mainFormStyle.lightBackgroundColor;
             tbHashInput.BackColor = ApplicationStyles.currentStyle.mainFormStyle.lightBackgroundColor;
             tbHashTarget.BackColor = ApplicationStyles.currentStyle.mainFormStyle.lightBackgroundColor;*/
-            colorLabel1.StaticBackColor = ApplicationStyles.currentStyle.mainFormStyle.lightBackgroundColor;
-            colorLabel2.StaticBackColor = ApplicationStyles.currentStyle.mainFormStyle.lightBackgroundColor;
-            colorLabel3.StaticBackColor = ApplicationStyles.currentStyle.mainFormStyle.lightBackgroundColor;
-            colorLabel4.StaticBackColor = ApplicationStyles.currentStyle.mainFormStyle.lightBackgroundColor;
+            colorLabel1.StaticBackColor = SettingsManager.MainFormSettings.lightBackgroundColor;
+            colorLabel2.StaticBackColor = SettingsManager.MainFormSettings.lightBackgroundColor;
+            colorLabel3.StaticBackColor = SettingsManager.MainFormSettings.lightBackgroundColor;
+            colorLabel4.StaticBackColor = SettingsManager.MainFormSettings.lightBackgroundColor;
         }
 
         private void UpdateTextBoxColor()

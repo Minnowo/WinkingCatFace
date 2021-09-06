@@ -122,7 +122,7 @@ namespace WinkingCat
 
             HotkeyManager.ignoreHotkeyPress = true;
 
-            buttonHotkey.BackColor = ColorHelper.Invert(ApplicationStyles.currentStyle.mainFormStyle.textColor);
+            buttonHotkey.BackColor = ColorHelper.Invert(SettingsManager.MainFormSettings.textColor);
             buttonHotkey.Text = "Select a hotkey";
 
             Hotkey.Keys = Keys.None;
@@ -142,7 +142,7 @@ namespace WinkingCat
                 Hotkey.Keys = Keys.None;
             }
 
-            buttonHotkey.BackColor = ApplicationStyles.currentStyle.mainFormStyle.lightBackgroundColor;
+            buttonHotkey.BackColor = SettingsManager.MainFormSettings.lightBackgroundColor;
             buttonHotkey.UseVisualStyleBackColor = true;
 
             OnHotkeyChanged();

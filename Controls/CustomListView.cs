@@ -211,17 +211,17 @@ namespace WinkingCat
         public void UpdateTheme()
         {
             this.SupportCustomTheme();
-            this.BackColor = ApplicationStyles.currentStyle.mainFormStyle.backgroundColor;
-            this.ForeColor = ApplicationStyles.currentStyle.mainFormStyle.textColor;
+            this.BackColor = SettingsManager.MainFormSettings.backgroundColor;
+            this.ForeColor = SettingsManager.MainFormSettings.textColor;
 
             cmsMain.Renderer = new ToolStripCustomRenderer();
-            cmsMain.Opacity = ApplicationStyles.currentStyle.mainFormStyle.contextMenuOpacity;
+            cmsMain.Opacity = SettingsManager.MainFormSettings.contextMenuOpacity;
 
             cmsOpen.Renderer = new ToolStripCustomRenderer();
-            cmsOpen.Opacity = ApplicationStyles.currentStyle.mainFormStyle.contextMenuOpacity;
+            cmsOpen.Opacity = SettingsManager.MainFormSettings.contextMenuOpacity;
 
             cmsCopy.Renderer = new ToolStripCustomRenderer();
-            cmsCopy.Opacity = ApplicationStyles.currentStyle.mainFormStyle.contextMenuOpacity;
+            cmsCopy.Opacity = SettingsManager.MainFormSettings.contextMenuOpacity;
             Refresh();
         }
         
@@ -449,12 +449,12 @@ namespace WinkingCat
             if (toolStripMenuItemAlwaysOnTop.Checked)
             {
                 SettingsManager.MainFormSettings.Always_On_Top = true;
-                MainFormSettings.UpdateSettings();
+                SettingsManager.CallUpdateSettings();
             }
             else
             {
                 SettingsManager.MainFormSettings.Always_On_Top = false;
-                MainFormSettings.UpdateSettings();
+                SettingsManager.CallUpdateSettings();
             }
         }
 

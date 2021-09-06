@@ -302,7 +302,7 @@ namespace WinkingCat.HelperLibs
 
         protected override void OnPaint(PaintEventArgs e)
         {
-            e.Graphics.Clear(ApplicationStyles.currentStyle.mainFormStyle.imageViewerBackColor);
+            e.Graphics.Clear(SettingsManager.MainFormSettings.imageViewerBackColor);
             Graphics g = e.Graphics;
 
             DrawImage(g);

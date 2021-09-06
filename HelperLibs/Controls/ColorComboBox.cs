@@ -68,6 +68,7 @@ namespace WinkingCat.HelperLibs
                 }
             }
         }
+
         public ColorFormat ColorFormat
         {
             get
@@ -122,42 +123,29 @@ namespace WinkingCat.HelperLibs
             switch (this.colorFormat)
             {
                 case ColorFormat.RGB:
-                    mycolor = new COLOR((short)values[0], (short)values[1], (short)values[2]);
+                    mycolor.ARGB = COLOR.FromARGB((short)values[0], (short)values[1], (short)values[2]);
+                    mycolor.UpdateARGB();
                     break;
 
                 case ColorFormat.ARGB:
-                    mycolor = new COLOR((short)values[0], (short)values[1], (short)values[2], (short)values[3]);
+                    mycolor.ARGB = COLOR.FromARGB((short)values[0], (short)values[1], (short)values[2], (short)values[3]);
+                    mycolor.UpdateARGB();
                     break;
 
                 case ColorFormat.CMYK:
-                    CMYK c = new CMYK(0, 0, 0, 0);
-                    c.C100 = (float)values[0];
-                    c.M100 = (float)values[1];
-                    c.Y100 = (float)values[2];
-                    c.K100 = (float)values[3];
-
-                    mycolor = c.ToColor();
+                    mycolor.CMYK = CMYK.FromCMYK100((float)values[0], (float)values[1], (float)values[2], (float)values[3]);
+                    mycolor.UpdateCMYK();
                     break;
 
                 case ColorFormat.HSB:
                 case ColorFormat.HSV:
-                    HSB hsb = new HSB(0, 0, 0);
-
-                    hsb.Hue360 = (float)values[0];
-                    hsb.Saturation100 = (float)values[1];
-                    hsb.Brightness100 = (float)values[2];
-
-                    mycolor = hsb.ToColor();
+                    mycolor.HSB = HSB.FromHSB360((float)values[0], (float)values[1], (float)values[2]);
+                    mycolor.UpdateHSB();
                     break;
 
                 case ColorFormat.HSL:
-                    HSL hsl = new HSL(0, 0, 0);
-
-                    hsl.Hue360 = (float)values[0];
-                    hsl.Saturation100 = (float)values[1];
-                    hsl.Lightness100 = (float)values[2];
-
-                    mycolor = hsl.ToColor();
+                    mycolor.HSL = HSL.FromHSL360((float)values[0], (float)values[1], (float)values[2]);
+                    mycolor.UpdateHSL();
                     break;
             }
 
@@ -310,7 +298,9 @@ namespace WinkingCat.HelperLibs
 
         private void ColorComboBox_ClientSizeChanged(object sender, EventArgs e)
         {
+            COLOR c = GetColor();
             CreateNumericUpDown();
+            UpdateColor(c);
         }
 
         private void ResizeValues(int newSize)
@@ -352,9 +342,7 @@ namespace WinkingCat.HelperLibs
                 n.Minimum = minValues[i];
                 n.Maximum = maxValues[i];
                 n.Value = values[i];
-                //n.KeyUp += NumericUpDownKeyUp_Event;
                 n.ValueChanged += NumericUpDown_ValueChanged;
-                //n.MouseUp += Button_MouseUp;
                 this.Controls.Add(n);
             }
             Refresh();

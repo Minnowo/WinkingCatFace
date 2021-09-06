@@ -229,49 +229,24 @@ namespace WinkingCat.HelperLibs
             return string.Format("{0:n" + decimalPlaces + "} {1}", adjustedSize, SizeSuffixes[mag]);
         }
 
-        public static Keys ModifierAsKey(Modifiers mod)
+
+        public static void WaitHideForm(Form form, out bool showFormAgain)
         {
-            // this is really dumb but i can't think of a better way of doing this tbh so
-            switch (mod)
+            if (form == null || !SettingsManager.MainFormSettings.Hide_Form_On_Captrue)
             {
-                
-                case Modifiers.Shift | Modifiers.Control | Modifiers.Alt | Modifiers.Win:
-                    return Keys.Shift | Keys.Control | Keys.Alt | Keys.LWin;
-
-                case Modifiers.Shift | Modifiers.Control | Modifiers.Alt:
-                    return Keys.Shift | Keys.Control | Keys.Alt;
-
-                case Modifiers.Shift | Modifiers.Control:
-                    return Keys.Shift | Keys.Control;
-
-                case Modifiers.Shift | Modifiers.Alt:
-                    return Keys.Shift | Keys.Alt;
-
-                case Modifiers.Shift | Modifiers.Win:
-                    return Keys.Shift | Keys.LWin;
-
-                case Modifiers.Control:
-                    return Keys.Control;
-
-                case Modifiers.Control | Modifiers.Alt:
-                    return Keys.Control | Keys.Alt;
-
-                case Modifiers.Control | Modifiers.Win:
-                    return Keys.Control | Keys.LWin;
-
-                case Modifiers.Alt | Modifiers.Win:
-                    return Keys.Alt | Keys.LWin;
-
-                case Modifiers.Shift:
-                    return Keys.Shift;
-
-                case Modifiers.Alt:
-                    return Keys.Alt;
-                
-                case Modifiers.Win:
-                    return Keys.LWin;
+                showFormAgain = false;
+                return;
             }
-            return Keys.None;
+
+            if (form.WindowState != FormWindowState.Minimized)
+            {
+                showFormAgain = true;
+                form.Hide();
+                System.Threading.Thread.Sleep(SettingsManager.MainFormSettings.Wait_Hide_Time);
+                return;
+            }
+
+            showFormAgain = false;
         }
     }
 }

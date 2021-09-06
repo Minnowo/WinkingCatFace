@@ -121,12 +121,6 @@
     <Compile Include="Forms\HotkeyForm.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Forms\HotkeySettingsForm.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="Forms\HotkeySettingsForm.Designer.cs">
-      <DependentUpon>HotkeySettingsForm.cs</DependentUpon>
-    </Compile>
     <Compile Include="Forms\QrCodeForm.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -140,12 +134,6 @@
       <DependentUpon>RegexForm.cs</DependentUpon>
     </Compile>
     <Compile Include="HotkeyManager.cs" />
-    <Compile Include="Forms\MainWindowStylesForm.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="Forms\MainWindowStylesForm.Designer.cs">
-      <DependentUpon>MainWindowStylesForm.cs</DependentUpon>
-    </Compile>
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Forms\SettingsForm.cs">
@@ -153,12 +141,6 @@
     </Compile>
     <Compile Include="Forms\SettingsForm.Designer.cs">
       <DependentUpon>SettingsForm.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Forms\UploadSettingsForm.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="Forms\UploadSettingsForm.Designer.cs">
-      <DependentUpon>UploadSettingsForm.cs</DependentUpon>
     </Compile>
     <Compile Include="Events\TaskExecutedEvent.cs" />
     <Compile Include="TaskHandler.cs" />
@@ -174,12 +156,6 @@
     <EmbeddedResource Include="Forms\HashCheckForm.resx">
       <DependentUpon>HashCheckForm.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Forms\HotkeySettingsForm.resx">
-      <DependentUpon>HotkeySettingsForm.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Forms\MainWindowStylesForm.resx">
-      <DependentUpon>MainWindowStylesForm.cs</DependentUpon>
-    </EmbeddedResource>
     <EmbeddedResource Include="Forms\QrCodeForm.resx">
       <DependentUpon>QrCodeForm.cs</DependentUpon>
     </EmbeddedResource>
@@ -188,9 +164,6 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\SettingsForm.resx">
       <DependentUpon>SettingsForm.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Forms\UploadSettingsForm.resx">
-      <DependentUpon>UploadSettingsForm.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>

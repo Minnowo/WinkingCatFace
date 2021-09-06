@@ -15,7 +15,6 @@ namespace WinkingCat
     {
         public HotkeyInputControl selectedHotkey { get; private set; }
 
-        private bool isHandleCreated = false;
         private bool preventUpdate = false;
         public SettingsForm()
         {
@@ -105,24 +104,9 @@ namespace WinkingCat
         
         public void UpdateTheme()
         {
-            try
-            {
-                if (ApplicationStyles.currentStyle.mainFormStyle.useImersiveDarkMode && isHandleCreated)
-                {
-                    NativeMethods.UseImmersiveDarkMode(Handle, true);
-                    this.Icon = ApplicationStyles.whiteIcon;
-                }
-                else
-                {
-                    NativeMethods.UseImmersiveDarkMode(Handle, false);
-                    this.Icon = ApplicationStyles.blackIcon;
-                }
-                ApplicationStyles.ApplyCustomThemeToControl(this);
-                Refresh();
-            }
-            catch
-            {
-            }
+            SettingsManager.ApplyImmersiveDarkTheme(this, IsHandleCreated);
+            ApplicationStyles.ApplyCustomThemeToControl(this);
+            Refresh();
         }
 
         public void UpdateHotkeyControls()
@@ -166,7 +150,6 @@ namespace WinkingCat
         }
         public void HandleCreated_Event(object sender, EventArgs e)
         {
-            isHandleCreated = true;
             UpdateTheme();
         }
 

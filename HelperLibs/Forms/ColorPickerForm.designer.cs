@@ -33,17 +33,14 @@
             this.rb_DisplayBlue = new System.Windows.Forms.RadioButton();
             this.rb_DisplayGreen = new System.Windows.Forms.RadioButton();
             this.rb_DisplayRed = new System.Windows.Forms.RadioButton();
-            this.ccb_RGB = new WinkingCat.HelperLibs.ColorComboBox();
             this.pnl_HSLColor = new System.Windows.Forms.Panel();
             this.rb_DisplayLightness = new System.Windows.Forms.RadioButton();
             this.rb_DisplayHSLSaturation = new System.Windows.Forms.RadioButton();
             this.rb_DisplayHSLHue = new System.Windows.Forms.RadioButton();
-            this.ccb_HSL = new WinkingCat.HelperLibs.ColorComboBox();
             this.pnl_HSBColor = new System.Windows.Forms.Panel();
             this.rb_DisplayBrightness = new System.Windows.Forms.RadioButton();
             this.rb_DisplayHSBSaturation = new System.Windows.Forms.RadioButton();
             this.rb_DisplayHSBHue = new System.Windows.Forms.RadioButton();
-            this.ccb_HSB = new WinkingCat.HelperLibs.ColorComboBox();
             this.lbl_RGBColor = new System.Windows.Forms.Label();
             this.lbl_HSBColor = new System.Windows.Forms.Label();
             this.lbl_HSLColor = new System.Windows.Forms.Label();
@@ -53,7 +50,6 @@
             this.tb_HexInput = new System.Windows.Forms.TextBox();
             this.tb_DecimalInput = new System.Windows.Forms.TextBox();
             this.panel1 = new System.Windows.Forms.Panel();
-            this.ccb_CMYK = new WinkingCat.HelperLibs.ColorComboBox();
             this.btn_CopyRGB = new System.Windows.Forms.Button();
             this.btn_PasteRGB = new System.Windows.Forms.Button();
             this.btn_PasteHSB = new System.Windows.Forms.Button();
@@ -68,7 +64,11 @@
             this.nudAlphaValue = new System.Windows.Forms.NumericUpDown();
             this.btn_ScreenColorPicker = new System.Windows.Forms.Button();
             this.label1 = new System.Windows.Forms.Label();
+            this.ccb_CMYK = new WinkingCat.HelperLibs.ColorComboBox();
             this.cd_ColorDisplayMain = new WinkingCat.HelperLibs.ColorDisplay();
+            this.ccb_HSL = new WinkingCat.HelperLibs.ColorComboBox();
+            this.ccb_HSB = new WinkingCat.HelperLibs.ColorComboBox();
+            this.ccb_RGB = new WinkingCat.HelperLibs.ColorComboBox();
             this.cp_ColorPickerMain = new WinkingCat.HelperLibs.ColorPicker();
             this.pnl_RGBColor.SuspendLayout();
             this.pnl_HSLColor.SuspendLayout();
@@ -125,64 +125,6 @@
             this.rb_DisplayRed.UseVisualStyleBackColor = true;
             this.rb_DisplayRed.CheckedChanged += new System.EventHandler(this.RadioButton_CheckChanged);
             // 
-            // ccb_RGB
-            // 
-            this.ccb_RGB.ColorFormat = WinkingCat.HelperLibs.ColorFormat.RGB;
-            this.ccb_RGB.DecimalPlaces = ((byte)(0));
-            this.ccb_RGB.Location = new System.Drawing.Point(3, 3);
-            this.ccb_RGB.MaxValues = new decimal[] {
-        new decimal(new int[] {
-                    255,
-                    0,
-                    0,
-                    0}),
-        new decimal(new int[] {
-                    255,
-                    0,
-                    0,
-                    0}),
-        new decimal(new int[] {
-                    255,
-                    0,
-                    0,
-                    0})};
-            this.ccb_RGB.MinValues = new decimal[] {
-        new decimal(new int[] {
-                    0,
-                    0,
-                    0,
-                    0}),
-        new decimal(new int[] {
-                    0,
-                    0,
-                    0,
-                    0}),
-        new decimal(new int[] {
-                    0,
-                    0,
-                    0,
-                    0})};
-            this.ccb_RGB.Name = "ccb_RGB";
-            this.ccb_RGB.Size = new System.Drawing.Size(212, 23);
-            this.ccb_RGB.TabIndex = 0;
-            this.ccb_RGB.Values = new decimal[] {
-        new decimal(new int[] {
-                    1,
-                    0,
-                    0,
-                    0}),
-        new decimal(new int[] {
-                    1,
-                    0,
-                    0,
-                    0}),
-        new decimal(new int[] {
-                    1,
-                    0,
-                    0,
-                    0})};
-            this.ccb_RGB.ColorChanged += new WinkingCat.HelperLibs.ColorEventHandler(this.ColorComboBox_ColorChanged);
-            // 
             // pnl_HSLColor
             // 
             this.pnl_HSLColor.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
@@ -231,64 +173,6 @@
             this.rb_DisplayHSLHue.UseVisualStyleBackColor = true;
             this.rb_DisplayHSLHue.CheckedChanged += new System.EventHandler(this.RadioButton_CheckChanged);
             // 
-            // ccb_HSL
-            // 
-            this.ccb_HSL.ColorFormat = WinkingCat.HelperLibs.ColorFormat.HSL;
-            this.ccb_HSL.DecimalPlaces = ((byte)(1));
-            this.ccb_HSL.Location = new System.Drawing.Point(3, 3);
-            this.ccb_HSL.MaxValues = new decimal[] {
-        new decimal(new int[] {
-                    360,
-                    0,
-                    0,
-                    0}),
-        new decimal(new int[] {
-                    100,
-                    0,
-                    0,
-                    0}),
-        new decimal(new int[] {
-                    100,
-                    0,
-                    0,
-                    0})};
-            this.ccb_HSL.MinValues = new decimal[] {
-        new decimal(new int[] {
-                    0,
-                    0,
-                    0,
-                    0}),
-        new decimal(new int[] {
-                    0,
-                    0,
-                    0,
-                    0}),
-        new decimal(new int[] {
-                    0,
-                    0,
-                    0,
-                    0})};
-            this.ccb_HSL.Name = "ccb_HSL";
-            this.ccb_HSL.Size = new System.Drawing.Size(212, 23);
-            this.ccb_HSL.TabIndex = 0;
-            this.ccb_HSL.Values = new decimal[] {
-        new decimal(new int[] {
-                    1,
-                    0,
-                    0,
-                    0}),
-        new decimal(new int[] {
-                    1,
-                    0,
-                    0,
-                    0}),
-        new decimal(new int[] {
-                    1,
-                    0,
-                    0,
-                    0})};
-            this.ccb_HSL.ColorChanged += new WinkingCat.HelperLibs.ColorEventHandler(this.ColorComboBox_ColorChanged);
-            // 
             // pnl_HSBColor
             // 
             this.pnl_HSBColor.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
@@ -336,64 +220,6 @@
             this.rb_DisplayHSBHue.Text = "Hue";
             this.rb_DisplayHSBHue.UseVisualStyleBackColor = true;
             this.rb_DisplayHSBHue.CheckedChanged += new System.EventHandler(this.RadioButton_CheckChanged);
-            // 
-            // ccb_HSB
-            // 
-            this.ccb_HSB.ColorFormat = WinkingCat.HelperLibs.ColorFormat.HSB;
-            this.ccb_HSB.DecimalPlaces = ((byte)(1));
-            this.ccb_HSB.Location = new System.Drawing.Point(3, 3);
-            this.ccb_HSB.MaxValues = new decimal[] {
-        new decimal(new int[] {
-                    360,
-                    0,
-                    0,
-                    0}),
-        new decimal(new int[] {
-                    100,
-                    0,
-                    0,
-                    0}),
-        new decimal(new int[] {
-                    100,
-                    0,
-                    0,
-                    0})};
-            this.ccb_HSB.MinValues = new decimal[] {
-        new decimal(new int[] {
-                    0,
-                    0,
-                    0,
-                    0}),
-        new decimal(new int[] {
-                    0,
-                    0,
-                    0,
-                    0}),
-        new decimal(new int[] {
-                    0,
-                    0,
-                    0,
-                    0})};
-            this.ccb_HSB.Name = "ccb_HSB";
-            this.ccb_HSB.Size = new System.Drawing.Size(212, 23);
-            this.ccb_HSB.TabIndex = 0;
-            this.ccb_HSB.Values = new decimal[] {
-        new decimal(new int[] {
-                    1,
-                    0,
-                    0,
-                    0}),
-        new decimal(new int[] {
-                    1,
-                    0,
-                    0,
-                    0}),
-        new decimal(new int[] {
-                    1,
-                    0,
-                    0,
-                    0})};
-            this.ccb_HSB.ColorChanged += new WinkingCat.HelperLibs.ColorEventHandler(this.ColorComboBox_ColorChanged);
             // 
             // lbl_RGBColor
             // 
@@ -478,6 +304,156 @@
             this.panel1.Size = new System.Drawing.Size(220, 50);
             this.panel1.TabIndex = 17;
             // 
+            // btn_CopyRGB
+            // 
+            this.btn_CopyRGB.Font = new System.Drawing.Font("Consolas", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.btn_CopyRGB.Location = new System.Drawing.Point(438, 20);
+            this.btn_CopyRGB.Name = "btn_CopyRGB";
+            this.btn_CopyRGB.Size = new System.Drawing.Size(41, 23);
+            this.btn_CopyRGB.TabIndex = 18;
+            this.btn_CopyRGB.Text = "Copy";
+            this.btn_CopyRGB.UseVisualStyleBackColor = true;
+            this.btn_CopyRGB.Click += new System.EventHandler(this.CopyColor_Click);
+            // 
+            // btn_PasteRGB
+            // 
+            this.btn_PasteRGB.Font = new System.Drawing.Font("Consolas", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.btn_PasteRGB.Location = new System.Drawing.Point(479, 20);
+            this.btn_PasteRGB.Name = "btn_PasteRGB";
+            this.btn_PasteRGB.Size = new System.Drawing.Size(50, 23);
+            this.btn_PasteRGB.TabIndex = 19;
+            this.btn_PasteRGB.Text = "Paste";
+            this.btn_PasteRGB.UseVisualStyleBackColor = true;
+            this.btn_PasteRGB.Click += new System.EventHandler(this.PasteColor_Click);
+            // 
+            // btn_PasteHSB
+            // 
+            this.btn_PasteHSB.Font = new System.Drawing.Font("Consolas", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.btn_PasteHSB.Location = new System.Drawing.Point(479, 122);
+            this.btn_PasteHSB.Name = "btn_PasteHSB";
+            this.btn_PasteHSB.Size = new System.Drawing.Size(50, 23);
+            this.btn_PasteHSB.TabIndex = 21;
+            this.btn_PasteHSB.Text = "Paste";
+            this.btn_PasteHSB.UseVisualStyleBackColor = true;
+            this.btn_PasteHSB.Click += new System.EventHandler(this.PasteColor_Click);
+            // 
+            // btn_CopyHSB
+            // 
+            this.btn_CopyHSB.Font = new System.Drawing.Font("Consolas", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.btn_CopyHSB.Location = new System.Drawing.Point(438, 122);
+            this.btn_CopyHSB.Name = "btn_CopyHSB";
+            this.btn_CopyHSB.Size = new System.Drawing.Size(41, 23);
+            this.btn_CopyHSB.TabIndex = 20;
+            this.btn_CopyHSB.Text = "Copy";
+            this.btn_CopyHSB.UseVisualStyleBackColor = true;
+            this.btn_CopyHSB.Click += new System.EventHandler(this.CopyColor_Click);
+            // 
+            // btn_PasteCMYK
+            // 
+            this.btn_PasteCMYK.Font = new System.Drawing.Font("Consolas", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.btn_PasteCMYK.Location = new System.Drawing.Point(716, 122);
+            this.btn_PasteCMYK.Name = "btn_PasteCMYK";
+            this.btn_PasteCMYK.Size = new System.Drawing.Size(50, 23);
+            this.btn_PasteCMYK.TabIndex = 23;
+            this.btn_PasteCMYK.Text = "Paste";
+            this.btn_PasteCMYK.UseVisualStyleBackColor = true;
+            this.btn_PasteCMYK.Click += new System.EventHandler(this.PasteColor_Click);
+            // 
+            // btn_CopyCMYK
+            // 
+            this.btn_CopyCMYK.Font = new System.Drawing.Font("Consolas", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.btn_CopyCMYK.Location = new System.Drawing.Point(675, 122);
+            this.btn_CopyCMYK.Name = "btn_CopyCMYK";
+            this.btn_CopyCMYK.Size = new System.Drawing.Size(41, 23);
+            this.btn_CopyCMYK.TabIndex = 22;
+            this.btn_CopyCMYK.Text = "Copy";
+            this.btn_CopyCMYK.UseVisualStyleBackColor = true;
+            this.btn_CopyCMYK.Click += new System.EventHandler(this.CopyColor_Click);
+            // 
+            // btn_PasteHSL
+            // 
+            this.btn_PasteHSL.Font = new System.Drawing.Font("Consolas", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.btn_PasteHSL.Location = new System.Drawing.Point(716, 20);
+            this.btn_PasteHSL.Name = "btn_PasteHSL";
+            this.btn_PasteHSL.Size = new System.Drawing.Size(50, 23);
+            this.btn_PasteHSL.TabIndex = 25;
+            this.btn_PasteHSL.Text = "Paste";
+            this.btn_PasteHSL.UseVisualStyleBackColor = true;
+            this.btn_PasteHSL.Click += new System.EventHandler(this.PasteColor_Click);
+            // 
+            // btn_CopyHSL
+            // 
+            this.btn_CopyHSL.Font = new System.Drawing.Font("Consolas", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.btn_CopyHSL.Location = new System.Drawing.Point(675, 20);
+            this.btn_CopyHSL.Name = "btn_CopyHSL";
+            this.btn_CopyHSL.Size = new System.Drawing.Size(41, 23);
+            this.btn_CopyHSL.TabIndex = 24;
+            this.btn_CopyHSL.Text = "Copy";
+            this.btn_CopyHSL.UseVisualStyleBackColor = true;
+            this.btn_CopyHSL.Click += new System.EventHandler(this.CopyColor_Click);
+            // 
+            // btn_Okay
+            // 
+            this.btn_Okay.Location = new System.Drawing.Point(412, 247);
+            this.btn_Okay.Name = "btn_Okay";
+            this.btn_Okay.Size = new System.Drawing.Size(75, 23);
+            this.btn_Okay.TabIndex = 27;
+            this.btn_Okay.Text = "Ok";
+            this.btn_Okay.UseVisualStyleBackColor = true;
+            this.btn_Okay.Click += new System.EventHandler(this.CloseForm_Event);
+            // 
+            // tb_HexDisplay
+            // 
+            this.tb_HexDisplay.Font = new System.Drawing.Font("Consolas", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.tb_HexDisplay.Location = new System.Drawing.Point(686, 229);
+            this.tb_HexDisplay.MaxLength = 8;
+            this.tb_HexDisplay.Name = "tb_HexDisplay";
+            this.tb_HexDisplay.ReadOnly = true;
+            this.tb_HexDisplay.Size = new System.Drawing.Size(79, 20);
+            this.tb_HexDisplay.TabIndex = 28;
+            // 
+            // tb_DecimalDisplay
+            // 
+            this.tb_DecimalDisplay.Font = new System.Drawing.Font("Consolas", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.tb_DecimalDisplay.Location = new System.Drawing.Point(564, 229);
+            this.tb_DecimalDisplay.MaxLength = 15;
+            this.tb_DecimalDisplay.Name = "tb_DecimalDisplay";
+            this.tb_DecimalDisplay.ReadOnly = true;
+            this.tb_DecimalDisplay.Size = new System.Drawing.Size(79, 20);
+            this.tb_DecimalDisplay.TabIndex = 29;
+            // 
+            // nudAlphaValue
+            // 
+            this.nudAlphaValue.Location = new System.Drawing.Point(686, 203);
+            this.nudAlphaValue.Maximum = new decimal(new int[] {
+            255,
+            0,
+            0,
+            0});
+            this.nudAlphaValue.Name = "nudAlphaValue";
+            this.nudAlphaValue.Size = new System.Drawing.Size(79, 20);
+            this.nudAlphaValue.TabIndex = 30;
+            this.nudAlphaValue.ValueChanged += new System.EventHandler(this.Alpha_ValueChanged);
+            // 
+            // btn_ScreenColorPicker
+            // 
+            this.btn_ScreenColorPicker.Image = ((System.Drawing.Image)(resources.GetObject("btn_ScreenColorPicker.Image")));
+            this.btn_ScreenColorPicker.Location = new System.Drawing.Point(366, 230);
+            this.btn_ScreenColorPicker.Name = "btn_ScreenColorPicker";
+            this.btn_ScreenColorPicker.Size = new System.Drawing.Size(40, 40);
+            this.btn_ScreenColorPicker.TabIndex = 26;
+            this.btn_ScreenColorPicker.UseVisualStyleBackColor = true;
+            this.btn_ScreenColorPicker.Click += new System.EventHandler(this.ScreenColorPicker_Click);
+            // 
+            // label1
+            // 
+            this.label1.AutoSize = true;
+            this.label1.Location = new System.Drawing.Point(647, 205);
+            this.label1.Name = "label1";
+            this.label1.Size = new System.Drawing.Size(37, 13);
+            this.label1.TabIndex = 31;
+            this.label1.Text = "Alpha:";
+            // 
             // ccb_CMYK
             // 
             this.ccb_CMYK.ColorFormat = WinkingCat.HelperLibs.ColorFormat.CMYK;
@@ -551,156 +527,6 @@
                     0})};
             this.ccb_CMYK.ColorChanged += new WinkingCat.HelperLibs.ColorEventHandler(this.ColorComboBox_ColorChanged);
             // 
-            // btn_CopyRGB
-            // 
-            this.btn_CopyRGB.Font = new System.Drawing.Font("Consolas", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.btn_CopyRGB.Location = new System.Drawing.Point(442, 23);
-            this.btn_CopyRGB.Name = "btn_CopyRGB";
-            this.btn_CopyRGB.Size = new System.Drawing.Size(41, 19);
-            this.btn_CopyRGB.TabIndex = 18;
-            this.btn_CopyRGB.Text = "Copy";
-            this.btn_CopyRGB.UseVisualStyleBackColor = true;
-            this.btn_CopyRGB.Click += new System.EventHandler(this.CopyColor_Click);
-            // 
-            // btn_PasteRGB
-            // 
-            this.btn_PasteRGB.Font = new System.Drawing.Font("Consolas", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.btn_PasteRGB.Location = new System.Drawing.Point(483, 23);
-            this.btn_PasteRGB.Name = "btn_PasteRGB";
-            this.btn_PasteRGB.Size = new System.Drawing.Size(45, 19);
-            this.btn_PasteRGB.TabIndex = 19;
-            this.btn_PasteRGB.Text = "Paste";
-            this.btn_PasteRGB.UseVisualStyleBackColor = true;
-            this.btn_PasteRGB.Click += new System.EventHandler(this.PasteColor_Click);
-            // 
-            // btn_PasteHSB
-            // 
-            this.btn_PasteHSB.Font = new System.Drawing.Font("Consolas", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.btn_PasteHSB.Location = new System.Drawing.Point(483, 125);
-            this.btn_PasteHSB.Name = "btn_PasteHSB";
-            this.btn_PasteHSB.Size = new System.Drawing.Size(45, 19);
-            this.btn_PasteHSB.TabIndex = 21;
-            this.btn_PasteHSB.Text = "Paste";
-            this.btn_PasteHSB.UseVisualStyleBackColor = true;
-            this.btn_PasteHSB.Click += new System.EventHandler(this.PasteColor_Click);
-            // 
-            // btn_CopyHSB
-            // 
-            this.btn_CopyHSB.Font = new System.Drawing.Font("Consolas", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.btn_CopyHSB.Location = new System.Drawing.Point(442, 125);
-            this.btn_CopyHSB.Name = "btn_CopyHSB";
-            this.btn_CopyHSB.Size = new System.Drawing.Size(41, 19);
-            this.btn_CopyHSB.TabIndex = 20;
-            this.btn_CopyHSB.Text = "Copy";
-            this.btn_CopyHSB.UseVisualStyleBackColor = true;
-            this.btn_CopyHSB.Click += new System.EventHandler(this.CopyColor_Click);
-            // 
-            // btn_PasteCMYK
-            // 
-            this.btn_PasteCMYK.Font = new System.Drawing.Font("Consolas", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.btn_PasteCMYK.Location = new System.Drawing.Point(720, 125);
-            this.btn_PasteCMYK.Name = "btn_PasteCMYK";
-            this.btn_PasteCMYK.Size = new System.Drawing.Size(45, 19);
-            this.btn_PasteCMYK.TabIndex = 23;
-            this.btn_PasteCMYK.Text = "Paste";
-            this.btn_PasteCMYK.UseVisualStyleBackColor = true;
-            this.btn_PasteCMYK.Click += new System.EventHandler(this.PasteColor_Click);
-            // 
-            // btn_CopyCMYK
-            // 
-            this.btn_CopyCMYK.Font = new System.Drawing.Font("Consolas", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.btn_CopyCMYK.Location = new System.Drawing.Point(679, 125);
-            this.btn_CopyCMYK.Name = "btn_CopyCMYK";
-            this.btn_CopyCMYK.Size = new System.Drawing.Size(41, 19);
-            this.btn_CopyCMYK.TabIndex = 22;
-            this.btn_CopyCMYK.Text = "Copy";
-            this.btn_CopyCMYK.UseVisualStyleBackColor = true;
-            this.btn_CopyCMYK.Click += new System.EventHandler(this.CopyColor_Click);
-            // 
-            // btn_PasteHSL
-            // 
-            this.btn_PasteHSL.Font = new System.Drawing.Font("Consolas", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.btn_PasteHSL.Location = new System.Drawing.Point(720, 23);
-            this.btn_PasteHSL.Name = "btn_PasteHSL";
-            this.btn_PasteHSL.Size = new System.Drawing.Size(45, 19);
-            this.btn_PasteHSL.TabIndex = 25;
-            this.btn_PasteHSL.Text = "Paste";
-            this.btn_PasteHSL.UseVisualStyleBackColor = true;
-            this.btn_PasteHSL.Click += new System.EventHandler(this.PasteColor_Click);
-            // 
-            // btn_CopyHSL
-            // 
-            this.btn_CopyHSL.Font = new System.Drawing.Font("Consolas", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.btn_CopyHSL.Location = new System.Drawing.Point(679, 23);
-            this.btn_CopyHSL.Name = "btn_CopyHSL";
-            this.btn_CopyHSL.Size = new System.Drawing.Size(41, 19);
-            this.btn_CopyHSL.TabIndex = 24;
-            this.btn_CopyHSL.Text = "Copy";
-            this.btn_CopyHSL.UseVisualStyleBackColor = true;
-            this.btn_CopyHSL.Click += new System.EventHandler(this.CopyColor_Click);
-            // 
-            // btn_Okay
-            // 
-            this.btn_Okay.Location = new System.Drawing.Point(412, 247);
-            this.btn_Okay.Name = "btn_Okay";
-            this.btn_Okay.Size = new System.Drawing.Size(75, 23);
-            this.btn_Okay.TabIndex = 27;
-            this.btn_Okay.Text = "Ok";
-            this.btn_Okay.UseVisualStyleBackColor = true;
-            this.btn_Okay.Click += new System.EventHandler(this.CloseForm_Event);
-            // 
-            // tb_HexDisplay
-            // 
-            this.tb_HexDisplay.Font = new System.Drawing.Font("Consolas", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.tb_HexDisplay.Location = new System.Drawing.Point(686, 229);
-            this.tb_HexDisplay.MaxLength = 8;
-            this.tb_HexDisplay.Name = "tb_HexDisplay";
-            this.tb_HexDisplay.ReadOnly = true;
-            this.tb_HexDisplay.Size = new System.Drawing.Size(79, 20);
-            this.tb_HexDisplay.TabIndex = 28;
-            // 
-            // tb_DecimalDisplay
-            // 
-            this.tb_DecimalDisplay.Font = new System.Drawing.Font("Consolas", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.tb_DecimalDisplay.Location = new System.Drawing.Point(564, 229);
-            this.tb_DecimalDisplay.MaxLength = 15;
-            this.tb_DecimalDisplay.Name = "tb_DecimalDisplay";
-            this.tb_DecimalDisplay.ReadOnly = true;
-            this.tb_DecimalDisplay.Size = new System.Drawing.Size(79, 20);
-            this.tb_DecimalDisplay.TabIndex = 29;
-            // 
-            // nudAlphaValue
-            // 
-            this.nudAlphaValue.Location = new System.Drawing.Point(686, 203);
-            this.nudAlphaValue.Maximum = new decimal(new int[] {
-            255,
-            0,
-            0,
-            0});
-            this.nudAlphaValue.Name = "nudAlphaValue";
-            this.nudAlphaValue.Size = new System.Drawing.Size(79, 20);
-            this.nudAlphaValue.TabIndex = 30;
-            this.nudAlphaValue.ValueChanged += new System.EventHandler(this.Alpha_ValueChanged);
-            // 
-            // btn_ScreenColorPicker
-            // 
-            this.btn_ScreenColorPicker.Image = ((System.Drawing.Image)(resources.GetObject("btn_ScreenColorPicker.Image")));
-            this.btn_ScreenColorPicker.Location = new System.Drawing.Point(366, 230);
-            this.btn_ScreenColorPicker.Name = "btn_ScreenColorPicker";
-            this.btn_ScreenColorPicker.Size = new System.Drawing.Size(40, 40);
-            this.btn_ScreenColorPicker.TabIndex = 26;
-            this.btn_ScreenColorPicker.UseVisualStyleBackColor = true;
-            this.btn_ScreenColorPicker.Click += new System.EventHandler(this.ScreenColorPicker_Click);
-            // 
-            // label1
-            // 
-            this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(647, 205);
-            this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(37, 13);
-            this.label1.TabIndex = 31;
-            this.label1.Text = "Alpha:";
-            // 
             // cd_ColorDisplayMain
             // 
             this.cd_ColorDisplayMain.BackColor = System.Drawing.Color.Black;
@@ -712,6 +538,180 @@
             this.cd_ColorDisplayMain.ShowToolTipAfter = 255;
             this.cd_ColorDisplayMain.Size = new System.Drawing.Size(52, 49);
             this.cd_ColorDisplayMain.TabIndex = 8;
+            // 
+            // ccb_HSL
+            // 
+            this.ccb_HSL.ColorFormat = WinkingCat.HelperLibs.ColorFormat.HSL;
+            this.ccb_HSL.DecimalPlaces = ((byte)(1));
+            this.ccb_HSL.Location = new System.Drawing.Point(3, 3);
+            this.ccb_HSL.MaxValues = new decimal[] {
+        new decimal(new int[] {
+                    360,
+                    0,
+                    0,
+                    0}),
+        new decimal(new int[] {
+                    100,
+                    0,
+                    0,
+                    0}),
+        new decimal(new int[] {
+                    100,
+                    0,
+                    0,
+                    0})};
+            this.ccb_HSL.MinValues = new decimal[] {
+        new decimal(new int[] {
+                    0,
+                    0,
+                    0,
+                    0}),
+        new decimal(new int[] {
+                    0,
+                    0,
+                    0,
+                    0}),
+        new decimal(new int[] {
+                    0,
+                    0,
+                    0,
+                    0})};
+            this.ccb_HSL.Name = "ccb_HSL";
+            this.ccb_HSL.Size = new System.Drawing.Size(212, 23);
+            this.ccb_HSL.TabIndex = 0;
+            this.ccb_HSL.Values = new decimal[] {
+        new decimal(new int[] {
+                    1,
+                    0,
+                    0,
+                    0}),
+        new decimal(new int[] {
+                    1,
+                    0,
+                    0,
+                    0}),
+        new decimal(new int[] {
+                    1,
+                    0,
+                    0,
+                    0})};
+            this.ccb_HSL.ColorChanged += new WinkingCat.HelperLibs.ColorEventHandler(this.ColorComboBox_ColorChanged);
+            // 
+            // ccb_HSB
+            // 
+            this.ccb_HSB.ColorFormat = WinkingCat.HelperLibs.ColorFormat.HSB;
+            this.ccb_HSB.DecimalPlaces = ((byte)(1));
+            this.ccb_HSB.Location = new System.Drawing.Point(3, 3);
+            this.ccb_HSB.MaxValues = new decimal[] {
+        new decimal(new int[] {
+                    360,
+                    0,
+                    0,
+                    0}),
+        new decimal(new int[] {
+                    100,
+                    0,
+                    0,
+                    0}),
+        new decimal(new int[] {
+                    100,
+                    0,
+                    0,
+                    0})};
+            this.ccb_HSB.MinValues = new decimal[] {
+        new decimal(new int[] {
+                    0,
+                    0,
+                    0,
+                    0}),
+        new decimal(new int[] {
+                    0,
+                    0,
+                    0,
+                    0}),
+        new decimal(new int[] {
+                    0,
+                    0,
+                    0,
+                    0})};
+            this.ccb_HSB.Name = "ccb_HSB";
+            this.ccb_HSB.Size = new System.Drawing.Size(212, 23);
+            this.ccb_HSB.TabIndex = 0;
+            this.ccb_HSB.Values = new decimal[] {
+        new decimal(new int[] {
+                    1,
+                    0,
+                    0,
+                    0}),
+        new decimal(new int[] {
+                    1,
+                    0,
+                    0,
+                    0}),
+        new decimal(new int[] {
+                    1,
+                    0,
+                    0,
+                    0})};
+            this.ccb_HSB.ColorChanged += new WinkingCat.HelperLibs.ColorEventHandler(this.ColorComboBox_ColorChanged);
+            // 
+            // ccb_RGB
+            // 
+            this.ccb_RGB.ColorFormat = WinkingCat.HelperLibs.ColorFormat.RGB;
+            this.ccb_RGB.DecimalPlaces = ((byte)(0));
+            this.ccb_RGB.Location = new System.Drawing.Point(3, 3);
+            this.ccb_RGB.MaxValues = new decimal[] {
+        new decimal(new int[] {
+                    255,
+                    0,
+                    0,
+                    0}),
+        new decimal(new int[] {
+                    255,
+                    0,
+                    0,
+                    0}),
+        new decimal(new int[] {
+                    255,
+                    0,
+                    0,
+                    0})};
+            this.ccb_RGB.MinValues = new decimal[] {
+        new decimal(new int[] {
+                    0,
+                    0,
+                    0,
+                    0}),
+        new decimal(new int[] {
+                    0,
+                    0,
+                    0,
+                    0}),
+        new decimal(new int[] {
+                    0,
+                    0,
+                    0,
+                    0})};
+            this.ccb_RGB.Name = "ccb_RGB";
+            this.ccb_RGB.Size = new System.Drawing.Size(212, 23);
+            this.ccb_RGB.TabIndex = 0;
+            this.ccb_RGB.Values = new decimal[] {
+        new decimal(new int[] {
+                    1,
+                    0,
+                    0,
+                    0}),
+        new decimal(new int[] {
+                    1,
+                    0,
+                    0,
+                    0}),
+        new decimal(new int[] {
+                    1,
+                    0,
+                    0,
+                    0})};
+            this.ccb_RGB.ColorChanged += new WinkingCat.HelperLibs.ColorEventHandler(this.ColorComboBox_ColorChanged);
             // 
             // cp_ColorPickerMain
             // 

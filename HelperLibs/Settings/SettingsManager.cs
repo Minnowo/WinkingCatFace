@@ -14,6 +14,9 @@ namespace WinkingCat.HelperLibs
 {
     public static class SettingsManager
     {
+        public delegate void SettingsUpdated();
+        public static event SettingsUpdated SettingsUpdatedEvent;
+
         private static XmlSerializer MainFormSettings_Serializer = new XmlSerializer(typeof(MainFormSettings));
         private static XmlSerializer RegionCaptureSettings_Serializer = new XmlSerializer(typeof(RegionCaptureSettings));
         private static XmlSerializer ClipSettings_Serializer = new XmlSerializer(typeof(ClipSettings));
@@ -24,6 +27,29 @@ namespace WinkingCat.HelperLibs
         public static RegionCaptureSettings RegionCaptureSettings = new RegionCaptureSettings();
         public static ClipSettings ClipSettings = new ClipSettings();
         public static MiscSettings MiscSettings = new MiscSettings();
+
+        public static void ApplyImmersiveDarkTheme(Form form, bool enable)
+        {
+            if (form == null || form.IsDisposed)
+                return;
+
+            if (enable && MainFormSettings.useImersiveDarkMode)
+            {
+                NativeMethods.UseImmersiveDarkMode(form.Handle, true);
+                form.Icon = ApplicationStyles.whiteIcon;
+            }
+            else
+            {
+                NativeMethods.UseImmersiveDarkMode(form.Handle, false);
+                form.Icon = ApplicationStyles.blackIcon;
+            }
+        }
+
+        public static void CallUpdateSettings()
+        {
+            if (SettingsUpdatedEvent != null)
+                SettingsUpdatedEvent();
+        }
 
         public static void SaveAllSettings(List<Hotkey> hotkeys)
         {

@@ -16,7 +16,7 @@ namespace WinkingCat
     public partial class RegexForm : Form
     {
         private Regex reg;
-        private bool isHandleCreated = false;
+
         public RegexForm()
         {
             InitializeComponent();
@@ -26,7 +26,6 @@ namespace WinkingCat
 
         private void RegexForm_HandleCreated(object sender, EventArgs e)
         {
-            isHandleCreated = true;
             UpdateTheme();
         }
 
@@ -37,17 +36,9 @@ namespace WinkingCat
 
         public void UpdateTheme()
         {
-            if (ApplicationStyles.currentStyle.mainFormStyle.useImersiveDarkMode && isHandleCreated)
-            {
-                NativeMethods.UseImmersiveDarkMode(Handle, true);
-                this.Icon = ApplicationStyles.whiteIcon; //Properties.Resources._3white;
-            }
-            else
-            {
-                NativeMethods.UseImmersiveDarkMode(Handle, false);
-                this.Icon = ApplicationStyles.blackIcon; //Properties.Resources._3black;
-            }
+            SettingsManager.ApplyImmersiveDarkTheme(this, IsHandleCreated);
             ApplicationStyles.ApplyCustomThemeToControl(this);
+            Refresh();
         }
 
         private void btnRunCheck_Click(object sender, EventArgs e)

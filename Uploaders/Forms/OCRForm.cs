@@ -36,17 +36,9 @@ namespace WinkingCat.Uploaders
 
         public void UpdateTheme()
         {
-            if (ApplicationStyles.currentStyle.mainFormStyle.useImersiveDarkMode && isHandleCreated)
-            {
-                NativeMethods.UseImmersiveDarkMode(Handle, true);
-                this.Icon = ApplicationStyles.whiteIcon; //Properties.Resources._3white;
-            }
-            else
-            {
-                NativeMethods.UseImmersiveDarkMode(Handle, false);
-                this.Icon = ApplicationStyles.blackIcon; //Properties.Resources._3black;
-            }
+            SettingsManager.ApplyImmersiveDarkTheme(this, IsHandleCreated);
             ApplicationStyles.ApplyCustomThemeToControl(this);
+            Refresh();
         }
 
         private async void btnRunOCR_Click(object sender, EventArgs e)

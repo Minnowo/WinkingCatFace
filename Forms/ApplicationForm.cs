@@ -15,10 +15,7 @@ namespace WinkingCat
     {
         public bool IsReady { get; private set; } = false;
 
-        public ColorPickerForm colorPickerForm { get; private set; } = null;
-        public BarcodeForm qrCodeForm { get; private set; } = null;
-        public HashCheckForm hashCheckForm { get; private set; } = null;
-        public RegexForm regexForm { get; private set; } = null;
+        public List<Form> ChildrenForms = new List<Form>();
 
         private System.Windows.Forms.Timer trayClickTimer;
 
@@ -28,13 +25,13 @@ namespace WinkingCat
         private bool allowShowDisplay = !SettingsManager.MainFormSettings.Start_In_Tray;
         private bool isInTrayOrMinimized = SettingsManager.MainFormSettings.Start_In_Tray;
         private bool forceDropDownClose = false;
-        private bool isHandleCreated = false;
 
         public ApplicationForm()
         {
             InitializeComponent();
             SuspendLayout();
 
+            this.Text = "";
 #if !DEBUG
             TopMost = MainFormSettings.alwaysOnTop;
             niTrayIcon.Visible = MainFormSettings.showInTray;
@@ -107,9 +104,11 @@ namespace WinkingCat
 
             RegionCaptureHelper.ImageSaved += ImageSaved_Event;
             ApplicationStyles.UpdateStylesEvent += ApplicationStyles_UpdateSylesEvent;
-            //MainFormSettings.SettingsChangedEvent += UpdateSettings;
+            SettingsManager.SettingsUpdatedEvent += UpdateSettings;
             lvListView.ItemSelectionChanged += LvListView_ItemSelectionChanged;
             pbPreviewBox.pbMain.MouseClick += PbPreviewBox_MouseClick;
+
+            TopMost = SettingsManager.MainFormSettings.Always_On_Top;
 
             ResumeLayout();
 
@@ -167,25 +166,14 @@ namespace WinkingCat
         /// </summary>
         public void UpdateTheme()
         {
-            if (ApplicationStyles.currentStyle.mainFormStyle.useImersiveDarkMode && isHandleCreated)
-            {
-                NativeMethods.UseImmersiveDarkMode(Handle, true);
-                this.Icon = ApplicationStyles.whiteIcon;
-            }
-            else
-            {
-                NativeMethods.UseImmersiveDarkMode(Handle, false);
-                this.Icon = ApplicationStyles.blackIcon;
-            }
+            SettingsManager.ApplyImmersiveDarkTheme(this, IsHandleCreated);
 
-            this.Text = "";
-            this.BackColor = ApplicationStyles.currentStyle.mainFormStyle.backgroundColor;
             tsMain.Renderer = new ToolStripCustomRenderer();
 
             cmTray.Renderer = new ToolStripCustomRenderer();
-            cmTray.Opacity = ApplicationStyles.currentStyle.mainFormStyle.contextMenuOpacity;
+            cmTray.Opacity = SettingsManager.MainFormSettings.contextMenuOpacity;
 
-            lvListView.ForeColor = ApplicationStyles.currentStyle.mainFormStyle.textColor;
+            lvListView.ForeColor = SettingsManager.MainFormSettings.textColor;
             Refresh();
         }
 
@@ -253,59 +241,39 @@ namespace WinkingCat
 
         private void RegionCapture_Click(object sender, EventArgs e)
         {
-            if (SettingsManager.MainFormSettings.Hide_Form_On_Captrue && !isInTrayOrMinimized)
-            {
-                HideAll();
-                Thread.Sleep(SettingsManager.MainFormSettings.Wait_Hide_Time);
-            }
+            Helper.WaitHideForm(this, out bool reshow);
+
             TaskHandler.ExecuteTask(Function.RegionCapture);
 
-            if (SettingsManager.MainFormSettings.Hide_Form_On_Captrue && !isInTrayOrMinimized)
-            {
-                ShowAll();
-            }
+            if (reshow)
+                this.Show();
         }
         private void MonitorCapture_Click(object sender, EventArgs e)
         {
-            if (SettingsManager.MainFormSettings.Hide_Form_On_Captrue && !isInTrayOrMinimized)
-            {
-                HideAll();
-                Thread.Sleep(SettingsManager.MainFormSettings.Wait_Hide_Time);
-            }
+            Helper.WaitHideForm(this, out bool reshow);
+
             TaskHandler.ExecuteTask(Function.CaptureActiveMonitor);
 
-            if (SettingsManager.MainFormSettings.Hide_Form_On_Captrue && !isInTrayOrMinimized)
-            {
-                ShowAll();
-            }
+            if (reshow)
+                this.Show();
         }
         private void FullscreenCapture_Click(object sender, EventArgs e)
         {
-            if (SettingsManager.MainFormSettings.Hide_Form_On_Captrue && !isInTrayOrMinimized)
-            {
-                HideAll();
-                Thread.Sleep(SettingsManager.MainFormSettings.Wait_Hide_Time);
-            }
+            Helper.WaitHideForm(this, out bool reshow);
+
             TaskHandler.ExecuteTask(Function.CaptureFullScreen);
 
-            if (SettingsManager.MainFormSettings.Hide_Form_On_Captrue && !isInTrayOrMinimized)
-            {
-                ShowAll();
-            }
+            if (reshow)
+                this.Show();
         }
         private void LastRegionCapture_Click(object sender, EventArgs e)
         {
-            if (SettingsManager.MainFormSettings.Hide_Form_On_Captrue)
-            {
-                HideAll();
-                Thread.Sleep(SettingsManager.MainFormSettings.Wait_Hide_Time);
-            }
+            Helper.WaitHideForm(this, out bool reshow);
+
             TaskHandler.ExecuteTask(Function.CaptureLastRegion);
 
-            if (SettingsManager.MainFormSettings.Hide_Form_On_Captrue)
-            {
-                ShowAll();
-            }
+            if (reshow)
+                this.Show();
         }
         private void CursorCapture_Click(object sender, EventArgs e)
         {
@@ -328,17 +296,12 @@ namespace WinkingCat
         #region Clips dropdown buttons
         private void NewClip_Click(object sender, EventArgs e)
         {
-            if (SettingsManager.MainFormSettings.Hide_Form_On_Captrue && !isInTrayOrMinimized)
-            {
-                HideAll();
-                Thread.Sleep(SettingsManager.MainFormSettings.Wait_Hide_Time);
-            }
+            Helper.WaitHideForm(this, out bool reshow);
+
             TaskHandler.ExecuteTask(Function.NewClipFromRegionCapture);
 
-            if (SettingsManager.MainFormSettings.Hide_Form_On_Captrue && !isInTrayOrMinimized)
-            {
-                ShowAll();
-            }
+            if (reshow)
+                this.Show();
         }
         private void ClipFromClipboard_Click(object sender, EventArgs e)
         {
@@ -353,78 +316,56 @@ namespace WinkingCat
         #region Tools dropdown buttons
         private void ScreenColorPicker_Click(object sender, EventArgs e)
         {
-            if (SettingsManager.MainFormSettings.Hide_Form_On_Captrue && !isInTrayOrMinimized)
-            {
-                Hide();
-                Thread.Sleep(SettingsManager.MainFormSettings.Wait_Hide_Time);
-            }
+            Helper.WaitHideForm(this, out bool reshow);
+
             TaskHandler.ExecuteTask(Function.ScreenColorPicker);
 
-            if (SettingsManager.MainFormSettings.Hide_Form_On_Captrue && !isInTrayOrMinimized)
-            {
-                Thread.Sleep(SettingsManager.MainFormSettings.Wait_Hide_Time);
-                Show();
-            }
+            if (reshow)
+                this.Show();
         }
 
         internal void ColorPicker_Click(object sender, EventArgs e)
         {
-            if(colorPickerForm != null)
-            {
-                colorPickerForm.ForceActivate();
-            }
-            else
-            {
-                colorPickerForm = new ColorPickerForm();
-                colorPickerForm.TopMost = SettingsManager.MainFormSettings.Always_On_Top;
-                colorPickerForm.FormClosing += ChildFormClosing;
-                colorPickerForm.Show();
-            }
+            ColorPickerForm cpf = new ColorPickerForm();
+            cpf.FormClosing += ChildFormClosing;
+            cpf.TopMost = SettingsManager.MainFormSettings.Always_On_Top;
+            cpf.StartPosition = FormStartPosition.CenterScreen;
+            cpf.Show();
+
+            ChildrenForms.Add(cpf);
         }
 
         internal void QrCode_Click(object sender, EventArgs e) 
         {
-            if(qrCodeForm != null)
-            {
-                qrCodeForm.ForceActivate();
-            }
-            else
-            {
-                qrCodeForm = new BarcodeForm();
-                qrCodeForm.TopMost = SettingsManager.MainFormSettings.Always_On_Top;
-                qrCodeForm.FormClosing += ChildFormClosing;
-                qrCodeForm.Show();
-            }
+            BarcodeForm cpf = new BarcodeForm();
+            cpf.FormClosing += ChildFormClosing;
+            cpf.TopMost = SettingsManager.MainFormSettings.Always_On_Top;
+            cpf.StartPosition = FormStartPosition.CenterScreen;
+            cpf.Show();
+
+            ChildrenForms.Add(cpf);
         }
 
         internal void HashCheck_Click(object sender, EventArgs e)
         {
-            if (hashCheckForm != null)
-            {
-                hashCheckForm.ForceActivate();
-            }
-            else
-            {
-                hashCheckForm = new HashCheckForm();
-                hashCheckForm.TopMost = SettingsManager.MainFormSettings.Always_On_Top;
-                hashCheckForm.FormClosing += ChildFormClosing;
-                hashCheckForm.Show();
-            }
+            HashCheckForm cpf = new HashCheckForm();
+            cpf.FormClosing += ChildFormClosing;
+            cpf.TopMost = SettingsManager.MainFormSettings.Always_On_Top;
+            cpf.StartPosition = FormStartPosition.CenterScreen;
+            cpf.Show();
+
+            ChildrenForms.Add(cpf);
         }
 
         internal void Regex_Click(object sender, EventArgs e)
         {
-            if (regexForm != null)
-            {
-                regexForm.ForceActivate();
-            }
-            else
-            {
-                regexForm = new RegexForm();
-                regexForm.TopMost = SettingsManager.MainFormSettings.Always_On_Top;
-                regexForm.FormClosing += ChildFormClosing;
-                regexForm.Show();
-            }
+            RegexForm cpf = new RegexForm();
+            cpf.FormClosing += ChildFormClosing;
+            cpf.TopMost = SettingsManager.MainFormSettings.Always_On_Top;
+            cpf.StartPosition = FormStartPosition.CenterScreen;
+            cpf.Show();
+
+            ChildrenForms.Add(cpf);
         }
         #endregion
 
@@ -490,7 +431,6 @@ namespace WinkingCat
 
         private void MainForm_HandleCreated(object sender, EventArgs e)
         {
-            isHandleCreated = true;
             UpdateTheme();
             IsReady = true;
         }
@@ -527,14 +467,17 @@ namespace WinkingCat
 
         #region Settings / Styles events
 
-        private void UpdateSettings(object sender, EventArgs e)
+        private void UpdateSettings()
         {
             TopMost = SettingsManager.MainFormSettings.Always_On_Top;
             niTrayIcon.Visible = SettingsManager.MainFormSettings.Show_In_Tray;
             
-            foreach(Form a in Application.OpenForms)
+            foreach(Form child in ChildrenForms)
             {
-                a.TopMost = SettingsManager.MainFormSettings.Always_On_Top;
+                if (child == null || child.IsDisposed) 
+                    continue;
+
+                child.TopMost = TopMost;
             }
         }
 
@@ -629,25 +572,9 @@ namespace WinkingCat
 
         private void ChildFormClosing(object sender, EventArgs e)
         {
-            switch (((Form)sender).Text)
-            {
-                case "ColorPicker":
-                    colorPickerForm?.Dispose();
-                    colorPickerForm = null;
-                    break;
-                case "Qr Code":
-                    qrCodeForm?.Dispose();
-                    qrCodeForm = null;
-                    break;
-                case "HashCheck":
-                    hashCheckForm?.Dispose();
-                    hashCheckForm = null;
-                    break;
-                case "Regex":
-                    regexForm?.Dispose();
-                    regexForm = null;
-                    break;
-            }
+            Form cf = sender as Form;
+
+            ChildrenForms.Remove(cf);
         }
 
         private void ToolStripDropDownButton_Settings_Click(object sender, EventArgs e)
