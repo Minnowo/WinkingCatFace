@@ -79,7 +79,7 @@ namespace WinkingCat
 
             string curDir = PathHelper.CurrentDirectory;
             ItemsPath = Path.Combine(curDir, InternalSettings.List_View_Items_IO_Path);
-            /*
+            
             if (File.Exists(ItemsPath))
             {
                 const Int32 BufferSize = 128;
@@ -129,7 +129,7 @@ namespace WinkingCat
                 StreamWriter w = File.AppendText(ItemsPath);
                 w.Close();
                 w.Dispose();
-            }*/
+            }
 
             #region cmsMain Events
             toolStripMenuItemAlwaysOnTop.Checked = SettingsManager.MainFormSettings.Always_On_Top;
