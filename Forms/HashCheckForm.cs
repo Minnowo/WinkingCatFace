@@ -22,7 +22,12 @@ namespace WinkingCat
         public HashCheckForm()
         {
             InitializeComponent();
-            cbHashType.Items.AddRange(Helper.GetEnumDescriptions<HashType>());
+
+            foreach(HashType i in Enum.GetValues(typeof(HashType)))
+            {
+                cbHashType.Items.Add(EnumHelper.HashTypeToString(i));
+            }
+            
             cbHashType.SelectedIndex = 0;
             hashCheck = new HashCheck();
             hashCheck.FileCheckProgressChanged += HashCheck_FileCheckProgressChanged;
@@ -178,48 +183,36 @@ namespace WinkingCat
             ResetTextBoxColor();
             if (tbFileHash.Text.Equals(tbFileHash2.Text, StringComparison.InvariantCultureIgnoreCase) && !string.IsNullOrEmpty(tbFileHash.Text) && !string.IsNullOrEmpty(tbFileHash2.Text))
             {
-                //tbFileHash.BackColor = Color.FromArgb(200, 255, 200);
-                //tbFileHash2.BackColor = Color.FromArgb(200, 255, 200);
                 colorLabel1.StaticBackColor = Color.FromArgb(200, 255, 200);
                 colorLabel2.StaticBackColor = Color.FromArgb(200, 255, 200);
             }
 
             if (tbFileHash.Text.Equals(tbHashTarget.Text, StringComparison.InvariantCultureIgnoreCase) && !string.IsNullOrEmpty(tbFileHash.Text) && !string.IsNullOrEmpty(tbHashTarget.Text))
             {
-                //tbFileHash.BackColor = Color.FromArgb(200, 255, 200);
-                //tbHashTarget.BackColor = Color.FromArgb(200, 255, 200);
                 colorLabel1.StaticBackColor = Color.FromArgb(200, 255, 200);
                 colorLabel4.StaticBackColor = Color.FromArgb(200, 255, 200);
             }
 
             if (tbFileHash2.Text.Equals(tbHashTarget.Text, StringComparison.InvariantCultureIgnoreCase) && !string.IsNullOrEmpty(tbFileHash2.Text) && !string.IsNullOrEmpty(tbHashTarget.Text))
             {
-                //tbFileHash2.BackColor = Color.FromArgb(200, 255, 200);
-                //tbHashTarget.BackColor = Color.FromArgb(200, 255, 200);
                 colorLabel2.StaticBackColor = Color.FromArgb(200, 255, 200);
                 colorLabel4.StaticBackColor = Color.FromArgb(200, 255, 200);
             }
 
             if (tbHashInput.Text.Equals(tbHashTarget.Text, StringComparison.InvariantCultureIgnoreCase) && !string.IsNullOrEmpty(tbHashInput.Text) && !string.IsNullOrEmpty(tbHashTarget.Text))
             {
-                //tbHashInput.BackColor = Color.FromArgb(200, 255, 200);
-                //tbHashTarget.BackColor = Color.FromArgb(200, 255, 200);
                 colorLabel3.StaticBackColor = Color.FromArgb(200, 255, 200);
                 colorLabel4.StaticBackColor = Color.FromArgb(200, 255, 200);
             }
 
             if (tbHashInput.Text.Equals(tbFileHash.Text, StringComparison.InvariantCultureIgnoreCase) && !string.IsNullOrEmpty(tbHashInput.Text) && !string.IsNullOrEmpty(tbFileHash.Text))
             {
-                //tbHashInput.BackColor = Color.FromArgb(200, 255, 200);
-                //tbFileHash.BackColor = Color.FromArgb(200, 255, 200);
                 colorLabel3.StaticBackColor = Color.FromArgb(200, 255, 200);
                 colorLabel1.StaticBackColor = Color.FromArgb(200, 255, 200);
             }
 
             if (tbHashInput.Text.Equals(tbFileHash2.Text, StringComparison.InvariantCultureIgnoreCase) && !string.IsNullOrEmpty(tbHashInput.Text) && !string.IsNullOrEmpty(tbFileHash2.Text))
             {
-                //tbHashInput.BackColor = Color.FromArgb(200, 255, 200);
-                //tbFileHash2.BackColor = Color.FromArgb(200, 255, 200);
                 colorLabel3.StaticBackColor = Color.FromArgb(200, 255, 200);
                 colorLabel2.StaticBackColor = Color.FromArgb(200, 255, 200);
             }
@@ -371,8 +364,6 @@ namespace WinkingCat
                 {
                     case HashType.CRC32:
                         return new Crc32();
-                    case HashType.CRC64:
-                        return new Crc64(0x42F0E1EBA9EA3693);
                     case HashType.MD5:
                         return new MD5CryptoServiceProvider();
                     case HashType.SHA1:

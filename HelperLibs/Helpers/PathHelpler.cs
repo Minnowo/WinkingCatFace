@@ -17,9 +17,12 @@ namespace WinkingCat.HelperLibs
     {
         public static string CurrentDirectory { get { return Directory.GetCurrentDirectory(); } }
 
+        /// <summary>
+        /// Creates all the paths used by the application.
+        /// </summary>
+        /// <param name="dir">The parent directory.</param>
         public static void CreateAllPaths(string dir = "")
         {
-
             string curDir;
 
             if (string.IsNullOrEmpty(dir)) 
@@ -39,6 +42,10 @@ namespace WinkingCat.HelperLibs
                 CreateDirectory(Path.Combine(curDir, InternalSettings.Plugin_IO_Path));
         }
 
+        /// <summary>
+        /// Creates a directory.
+        /// </summary>
+        /// <param name="directoryPath"></param>
         public static void CreateDirectory(string directoryPath)
         {
             if (string.IsNullOrEmpty(directoryPath) || Directory.Exists(directoryPath))
@@ -53,6 +60,10 @@ namespace WinkingCat.HelperLibs
             }
         }
 
+        /// <summary>
+        /// Gets the screenshot folder path.
+        /// </summary>
+        /// <returns>The screenshot folder path.</returns>
         public static string GetScreenshotFolder()
         {
             string curDir = CurrentDirectory;
@@ -64,6 +75,11 @@ namespace WinkingCat.HelperLibs
             return Path.Combine(curDir, SettingsManager.MiscSettings.Screenshot_Folder_Path);
         }
 
+        /// <summary>
+        /// Checks if the given path is valid.
+        /// </summary>
+        /// <param name="path">The path.</param>
+        /// <returns>true if its valid, else false.</returns>
         public static bool ValidPath(string path)
         {
             try
@@ -96,9 +112,8 @@ namespace WinkingCat.HelperLibs
             {
                 InternalSettings.Image_Counter++;
                 string pathh = Path.Combine(
-                    GetScreenshotFolder(),
-                    InternalSettings.Image_Counter.ToString().PadLeft(20, '0') +
-                    "." + InternalSettings.Default_Image_Format.ToString());
+                    GetScreenshotFolder(), 
+                    InternalSettings.Image_Counter.ToString().PadLeft(20, '0') + "." + InternalSettings.Default_Image_Format.ToString());
 
                 if (!File.Exists(pathh))
                     return pathh;
@@ -106,52 +121,24 @@ namespace WinkingCat.HelperLibs
         }
 
         /// <summary>
-        /// Returns a file name that does not exist.
+        /// Creates a directory from the given file path.
         /// </summary>
-        /// <param name="dir">The directory of the file.</param>
-        /// <returns></returns>
-        public static string GetNewFileName(string dir = "", string ext = "")
-        {
-            if (string.IsNullOrEmpty(dir))
-                dir = CurrentDirectory;
-
-            string fileName;
-
-            // try 10 times 
-            for (int x = 0; x < 10; x++)
-            {
-                if(string.IsNullOrEmpty(ext))
-                    fileName = Path.Combine(dir, DateTime.Now.Ticks.GetHashCode().ToString("x").ToUpper()); 
-                else 
-                    fileName = Path.Combine(dir, DateTime.Now.Ticks.GetHashCode().ToString("x").ToUpper() + "." + ext);
-
-                if (!File.Exists(fileName))
-                    return fileName;
-            }
-
-            // start using guid after 10 tries at the other method
-            // would be really surprised if this code ever runs tbh
-            while (true)
-            {
-                if(string.IsNullOrEmpty(ext))
-                    fileName = Path.Combine(dir, Guid.NewGuid().ToString());
-                else
-                    fileName = Path.Combine(dir, Guid.NewGuid().ToString() + "." + ext);
-
-                if (!File.Exists(fileName))
-                    return fileName;
-            }
-        }
-
+        /// <param name="filePath">The file path.</param>
         public static void CreateDirectoryFromFilePath(string filePath)
         {
-            if (!string.IsNullOrEmpty(filePath))
-            {
-                string directoryPath = Path.GetDirectoryName(filePath);
-                CreateDirectory(directoryPath);
-            }
+            if (string.IsNullOrEmpty(filePath))
+                return;
+            
+            string directoryPath = Path.GetDirectoryName(filePath);
+            CreateDirectory(directoryPath);
         }
 
+        /// <summary>
+        /// Gets the extension from a string.
+        /// </summary>
+        /// <param name="filePath">The file path.</param>
+        /// <param name="includeDot">Should the returned extension include a dot.</param>
+        /// <returns>The file extension of the given string.</returns>
         public static string GetFilenameExtension(string filePath, bool includeDot = false)
         {
             if (string.IsNullOrEmpty(filePath))

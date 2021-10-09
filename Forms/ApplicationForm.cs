@@ -6,7 +6,6 @@ using System.Windows.Forms;
 using System.IO;
 using System.Threading;
 using WinkingCat.HelperLibs;
-using WinkingCat.ScreenCaptureLib;
 using WinkingCat.Uploaders;
 
 namespace WinkingCat
@@ -26,6 +25,7 @@ namespace WinkingCat
         private bool allowShowDisplay = !SettingsManager.MainFormSettings.Start_In_Tray;
         private bool isInTrayOrMinimized = SettingsManager.MainFormSettings.Start_In_Tray;
         private bool forceDropDownClose = false;
+        private bool preventOverflow = false;
 
         public ApplicationForm()
         {
@@ -34,10 +34,13 @@ namespace WinkingCat
 
             this.Text = "";
 #if !DEBUG
-            TopMost = MainFormSettings.alwaysOnTop;
-            niTrayIcon.Visible = MainFormSettings.showInTray;
+            TopMost = SettingsManager.MainFormSettings.Always_On_Top;
+            niTrayIcon.Visible = SettingsManager.MainFormSettings.Show_In_Tray;
 #endif
-
+            preventOverflow = true;
+            tsmiToolStripMenuItem_captureCursor.Checked = SettingsManager.RegionCaptureSettings.Capture_Cursor;
+            tsmiCaptureCursorToolStripMenuItem.Checked = SettingsManager.RegionCaptureSettings.Capture_Cursor;
+            preventOverflow = false;
             #region Capture dropdown buttons event bindings
             tsddbToolStripDropDownButton_Capture.DropDown.Closing += toolStripDropDown_Closing;
             tsddbToolStripDropDownButton_Capture.DropDownOpening += tsmiCapture_DropDownOpening;
@@ -249,6 +252,7 @@ namespace WinkingCat
             if (reshow)
                 this.Show();
         }
+
         private void MonitorCapture_Click(object sender, EventArgs e)
         {
             Helper.WaitHideForm(this, out bool reshow);
@@ -258,6 +262,7 @@ namespace WinkingCat
             if (reshow)
                 this.Show();
         }
+
         private void FullscreenCapture_Click(object sender, EventArgs e)
         {
             Helper.WaitHideForm(this, out bool reshow);
@@ -267,6 +272,7 @@ namespace WinkingCat
             if (reshow)
                 this.Show();
         }
+
         private void LastRegionCapture_Click(object sender, EventArgs e)
         {
             Helper.WaitHideForm(this, out bool reshow);
@@ -276,9 +282,19 @@ namespace WinkingCat
             if (reshow)
                 this.Show();
         }
+
         private void CursorCapture_Click(object sender, EventArgs e)
         {
-            if (tsmiToolStripMenuItem_captureCursor.Checked || tsmiCaptureCursorToolStripMenuItem.Checked)
+            if (preventOverflow)
+                return;
+
+            preventOverflow = true;
+            ToolStripMenuItem tsmi = sender as ToolStripMenuItem;
+
+            if (tsmi == null)
+                return;
+
+            if (tsmi.Checked)
             {
                 ScreenshotHelper.CaptureCursor = true;
                 tsmiToolStripMenuItem_captureCursor.Checked = true;
@@ -289,8 +305,8 @@ namespace WinkingCat
                 ScreenshotHelper.CaptureCursor = false;
                 tsmiToolStripMenuItem_captureCursor.Checked = false;
                 tsmiCaptureCursorToolStripMenuItem.Checked = false;
-
             }
+            preventOverflow = false;
         }
 #endregion
 
@@ -602,6 +618,13 @@ namespace WinkingCat
 
         private void ToolStripDropDownButton_Styles_Click(object sender, EventArgs e)
         {
+            using (StylesForm sf = new StylesForm())
+            {
+                sf.Owner = this;
+                sf.TopMost = SettingsManager.MainFormSettings.Always_On_Top;
+                sf.StartPosition = FormStartPosition.CenterScreen;
+                sf.ShowDialog();
+            }
         }
 
         #endregion

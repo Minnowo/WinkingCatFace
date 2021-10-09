@@ -133,6 +133,12 @@
     <Compile Include="Forms\RegexForm.Designer.cs">
       <DependentUpon>RegexForm.cs</DependentUpon>
     </Compile>
+    <Compile Include="Forms\StylesForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\StylesForm.Designer.cs">
+      <DependentUpon>StylesForm.cs</DependentUpon>
+    </Compile>
     <Compile Include="HotkeyManager.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -164,6 +170,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\SettingsForm.resx">
       <DependentUpon>SettingsForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\StylesForm.resx">
+      <DependentUpon>StylesForm.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
@@ -257,17 +266,9 @@
     <None Include="Resources\gear-in-icon.png" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="ClipManager\WinkingCat.ClipHelper.csproj">
-      <Project>{e9346324-4f31-4035-b72c-22d79335112d}</Project>
-      <Name>WinkingCat.ClipHelper</Name>
-    </ProjectReference>
     <ProjectReference Include="HelperLibs\WinkingCat.HelperLibs.csproj">
       <Project>{9d5d4aa3-5ff0-46b3-aca4-af277f4713cd}</Project>
       <Name>WinkingCat.HelperLibs</Name>
-    </ProjectReference>
-    <ProjectReference Include="ScreenCaptureLib\WinkingCat.ScreenCaptureLib.csproj">
-      <Project>{3a626c93-b19a-48d7-9dc4-92f4063ff857}</Project>
-      <Name>WinkingCat.ScreenCaptureLib</Name>
     </ProjectReference>
     <ProjectReference Include="Uploaders\WinkingCat.Uploaders.csproj">
       <Project>{3d8102c2-8543-48aa-a357-a1e2fcc7c93c}</Project>

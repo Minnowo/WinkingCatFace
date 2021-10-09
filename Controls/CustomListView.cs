@@ -5,7 +5,6 @@ using System.Drawing;
 using System.Windows.Forms;
 using System.IO;
 using WinkingCat.HelperLibs;
-using WinkingCat.ClipHelper;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;

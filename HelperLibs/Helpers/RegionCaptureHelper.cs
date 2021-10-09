@@ -106,7 +106,13 @@ namespace WinkingCat.HelperLibs
                 string path = string.Empty;
 
                 if (InternalSettings.Save_Images_To_Disk)
+                {
                     path = PathHelper.GetNewImageFileName();
+                    if (InternalSettings.Default_Image_Format == ImgFormat.wrm && InternalSettings.Save_WORM_As_DWORM)
+                    {
+                        path = path.Split('.')[0] + ".dwrm";
+                    }
+                }
 
                 if (creatClip)
                 {

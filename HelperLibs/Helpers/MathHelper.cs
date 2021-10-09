@@ -12,6 +12,14 @@ namespace WinkingCat.HelperLibs
 {
     public static class MathHelper
     {
+        /// <summary>
+        /// Clamps a number to the minimum and maximum value given.
+        /// </summary>
+        /// <typeparam name="T">Any comparable type.</typeparam>
+        /// <param name="num">The number.</param>
+        /// <param name="min">The minimum value.</param>
+        /// <param name="max">The maximum value.</param>
+        /// <returns>The given number between the min and max.</returns>
         public static T Clamp<T>(T num, T min, T max) where T : IComparable<T>
         {
             if (num.CompareTo(min) <= 0) return min;
@@ -19,86 +27,35 @@ namespace WinkingCat.HelperLibs
             return num;
         }
 
-        public static double checkSquareRoot(double x, double y)
-        {
-            var result = Math.Pow(x, y);
-
-            if (x > 0)
-            {
-                return result;
-            }
-            else
-            {
-                return -1 * Math.Pow(-x, y);
-            }
-        }
-
-        public static bool IsNumericType(this object o)
-        {
-            switch (Type.GetTypeCode(o.GetType()))
-            {
-                case TypeCode.Byte:
-                case TypeCode.SByte:
-                case TypeCode.UInt16:
-                case TypeCode.UInt32:
-                case TypeCode.UInt64:
-                case TypeCode.Int16:
-                case TypeCode.Int32:
-                case TypeCode.Int64:
-                case TypeCode.Decimal:
-                case TypeCode.Double:
-                case TypeCode.Single:
-                    return true;
-                default:
-                    return false;
-            }
-        }
-        public static Size PictureBoxZoomSize(PictureBox pictureBox, Size imageSize)
-        {
-            double wfactor = (double)imageSize.Width / pictureBox.ClientSize.Width;
-            double hfactor = (double)imageSize.Height / pictureBox.ClientSize.Height;
-
-            double resizeFactor = Math.Max(wfactor, hfactor);
-            Size newImageSize = new Size((int)(imageSize.Width / resizeFactor), (int)(imageSize.Height / resizeFactor));
-            return newImageSize;
-        }
-
+        /// <summary>
+        /// Makes the given int even.
+        /// </summary>
+        /// <param name="input">The number to make even.</param>
+        /// <param name="roundUp">Should the number be increased by 1 to make it even.</param>
+        /// <returns>The given numbber +- 1 to make even.</returns>
         public static int MakeEven(int input, bool roundUp = true)
         {
             if (IsEven(input))
-            {
                 return input;
-            }
-            else
-            {
-                if (roundUp)
-                    return input + 1;
-                else
-                    return input - 1;
-            }
+            
+            if (roundUp)
+                return input + 1;
+            return input - 1;
         }
 
         public static int MakeOdd(int input, bool roundUp = true)
         {
-            if (IsEven(input))
-            {
-                if (roundUp)
-                    return input + 1;
-                else
-                    return input - 1;
-            }
-            else
-            {
+            if (!IsEven(input))
                 return input;
-            }
+            
+            if (roundUp)
+                return input + 1;
+            return input - 1;
         }
 
         public static bool IsEven(int number)
         {
-            if (number % 2 == 0)
-                return true; //even number
-            else
-                return false; //odd number
+            return (number % 2 == 0); //even number
         }
     }
 }

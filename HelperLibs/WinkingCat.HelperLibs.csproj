@@ -91,6 +91,9 @@
       <SubType>UserControl</SubType>
     </Compile>
     <Compile Include="Controls\ColorPicker\ColorPickerSlider.Designer.cs" />
+    <Compile Include="Controls\ToolStripClickThrough.cs">
+      <SubType>Component</SubType>
+    </Compile>
     <Compile Include="Enums\ColorFormat.cs" />
     <Compile Include="Enums\ColorSpaceDrawStyle.cs" />
     <Compile Include="Enums\HashType.cs" />
@@ -119,6 +122,7 @@
       <DependentUpon>RegionCaptureForm.cs</DependentUpon>
     </Compile>
     <Compile Include="Helpers\ClipManager.cs" />
+    <Compile Include="Helpers\EnumHelper.cs" />
     <Compile Include="Helpers\RegionCaptureHelper.cs" />
     <Compile Include="Helpers\ScreenshotHelper.cs" />
     <Compile Include="Settings\ClipOptions.cs" />

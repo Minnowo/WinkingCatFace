@@ -62,7 +62,8 @@
             this.chColumnHeader3 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.chColumnHeader4 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.pbPreviewBox = new WinkingCat.HelperLibs._PictureBox();
-            this.tsMain = new System.Windows.Forms.ToolStrip();
+            //this.tsMain = new System.Windows.Forms.ToolStrip();
+            this.tsMain = new WinkingCat.HelperLibs.ToolStripEx(); // enable click through
             this.tsddbToolStripDropDownButton_Capture = new System.Windows.Forms.ToolStripDropDownButton();
             this.tsmiToolStripMenuItem_region = new System.Windows.Forms.ToolStripMenuItem();
             this.tsmiToolStripMenuItem_monitor = new System.Windows.Forms.ToolStripMenuItem();

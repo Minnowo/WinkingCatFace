@@ -7,7 +7,7 @@ using System.Windows.Forms.Design;
 
 namespace WinkingCat.HelperLibs
 {
-    /*class ColorEditor : UITypeEditor
+    class ColorEditor : UITypeEditor
     {
         public override UITypeEditorEditStyle GetEditStyle(ITypeDescriptorContext context)
         {
@@ -64,6 +64,5 @@ namespace WinkingCat.HelperLibs
 
             e.Graphics.DrawRectangleProper(Pens.Black, e.Bounds);
         }
-    }*/
-   
+    }
 }

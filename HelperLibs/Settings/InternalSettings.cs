@@ -53,14 +53,13 @@ namespace WinkingCat.HelperLibs
 
         public const string All_Files_File_Dialog = "All Files (*.*)|*.*";
 
-        public static string PNG_File_Dialog =  "PNG (*.png)|*.png";
-        public static string BMP_File_Dialog =  "BMP (*.bmp)|*.bmp";
-        public static string GIF_File_Dialog =  "GIF (*.gif)|*.gif";
-        public static string WEBP_File_Dialog = "WebP (*.webp)|*.webp";
-        public static string TIFF_File_Dialog = "TIFF (*.tif, *.tiff)|*.tif;*.tiff";
-        public static string JPEG_File_Dialog = "JPEG (*.jpg, *.jpeg, *.jpe, *.jfif)|*.jpg;*.jpeg;*.jpe;*.jfif";
+        public const string PNG_File_Dialog =  "PNG (*.png)|*.png";
+        public const string BMP_File_Dialog =  "BMP (*.bmp)|*.bmp";
+        public const string GIF_File_Dialog =  "GIF (*.gif)|*.gif";
+        public const string WEBP_File_Dialog = "WebP (*.webp)|*.webp";
+        public const string TIFF_File_Dialog = "TIFF (*.tif, *.tiff)|*.tif;*.tiff";
+        public const string JPEG_File_Dialog = "JPEG (*.jpg, *.jpeg, *.jpe, *.jfif)|*.jpg;*.jpeg;*.jpe;*.jfif";
         public const string WRM_File_Dialog = "WRM (*.wrm, *.dwrm)|*.wrm;*.dwrm";
-        public const string ICO_File_Dialog = "ICO (*.ico)|*.ico";
 
         public static string Image_Dialog_Filters = string.Join("|",
             new string[]
@@ -70,16 +69,15 @@ namespace WinkingCat.HelperLibs
                 BMP_File_Dialog,
                 TIFF_File_Dialog,
                 GIF_File_Dialog,
-                WRM_File_Dialog,
-                ICO_File_Dialog
+                WRM_File_Dialog
             });
 
 
         public static List<string> Readable_Image_Formats_Dialog_Options = new List<string>
-        { "*.png", "*.jpg", "*.jpeg", "*.jpe", "*.jfif", "*.gif", "*.bmp", "*.tif", "*.tiff", "*.ico", "*.wrm", "*.dwrm" };
+        { "*.png", "*.jpg", "*.jpeg", "*.jpe", "*.jfif", "*.gif", "*.bmp", "*.tif", "*.tiff", "*.wrm", "*.dwrm" };
 
         public static List<string> Readable_Image_Formats = new List<string>()
-        { "png", "jpg", "jpeg", "jpe", "jfif", "gif", "bmp", "tif", "tiff", "ico", "wrm", "dwrm" };
+        { "png", "jpg", "jpeg", "jpe", "jfif", "gif", "bmp", "tif", "tiff", "wrm", "dwrm" };
 
         public static string All_Image_Files_File_Dialog = string.Format(
             "Graphic Types ({0})|{1}",
@@ -92,14 +90,9 @@ namespace WinkingCat.HelperLibs
 
         #endregion
 
-        #region plugins
-
-        // webp support
-        public const string libwebP_x64 = "AppConfig\\plugins\\libwebp_x64.dll";
-        public const string libwebP_x86 = "AppConfig\\plugins\\libwebp_x86.dll";
 
         public static bool WebP_Plugin_Exists = false;
-        #endregion
+
 
         #region rate limits
 
@@ -118,6 +111,8 @@ namespace WinkingCat.HelperLibs
         public static ColorFormat Clipboard_Color_Format = ColorFormat.RGB;
 
         public static long Jpeg_Quality = 75;
+
+        public static bool Save_WORM_As_DWORM = true;
 
         public static int Image_Counter = -1;
 
@@ -152,54 +147,60 @@ namespace WinkingCat.HelperLibs
 
         public static bool CPU_Type_x64 = IntPtr.Size == 8;
 
+        public static void UpdateDialogFilters()
+        {
+            if (WebP_Plugin_Exists)
+            {
+                if (!Readable_Image_Formats.Contains("webp"))
+                {
+                    Readable_Image_Formats_Dialog_Options.Add("*.webp");
+                    Readable_Image_Formats.Add("webp");
+                }
+            }
+
+            All_Image_Files_File_Dialog = string.Format(
+                "Graphic Types ({0})|{1}",
+                string.Join(", ", Readable_Image_Formats_Dialog_Options),
+                string.Join(";", Readable_Image_Formats_Dialog_Options));
+
+            Image_Dialog_Filters = string.Join("|",
+                new string[]
+                {
+                    PNG_File_Dialog,
+                    JPEG_File_Dialog,
+                    BMP_File_Dialog,
+                    TIFF_File_Dialog,
+                    GIF_File_Dialog,
+                    WRM_File_Dialog
+                });
+
+            if (WebP_Plugin_Exists)
+            {
+                Image_Dialog_Filters += "|" + WEBP_File_Dialog;
+            }
+        }
+
         public static bool EnableWebPIfPossible()
         {
             if (CPU_Type_x64)
             {
-                if (File.Exists(libwebP_x64))
+                if (File.Exists(Path.Combine(PathHelper.CurrentDirectory, Webp.libwebP_x64)))
                 {
                     WebP_Plugin_Exists = true;
-                    Readable_Image_Formats_Dialog_Options.Add("*.webp");
-                    Readable_Image_Formats.Add("webp");
-                    Image_Dialog_Filters += "|" + WEBP_File_Dialog;
+                    UpdateDialogFilters();
                     return true;
                 }
             }
             else
             {
-                if (File.Exists(libwebP_x86))
+                if (File.Exists(Path.Combine(PathHelper.CurrentDirectory, Webp.libwebP_x86)))
                 {
                     WebP_Plugin_Exists = true;
-                    Readable_Image_Formats_Dialog_Options.Add("*.webp");
-                    Readable_Image_Formats.Add("webp");
-                    Image_Dialog_Filters += "|" + WEBP_File_Dialog;
+                    UpdateDialogFilters();
                     return true;
                 }
             }
             return false;
         }
     }
-
-   /* public static class MainFormSettings
-    {
-        public static event EventHandler SettingsChangedEvent;
-        public static bool hideMainFormOnCapture { get; set; } = true;
-        public static bool showInTray { get; set; } = true;
-        public static bool minimizeToTray { get; set; } = true;
-        public static bool startInTray { get; set; } = false;
-        public static bool alwaysOnTop { get; set; } = true;
-        public static int waitHideTime { get; set; } = 300;
-
-        public static Tasks onTrayLeftClick { get; set; } = Tasks.RegionCapture;
-        public static Tasks onTrayDoubleLeftClick { get; set; } = Tasks.OpenMainForm;
-        public static Tasks onTrayMiddleClick { get; set; } = Tasks.NewClipFromClipboard;
-
-        public static void OnSettingsChangedEvent()
-        {
-            if (SettingsChangedEvent != null)
-            {
-                SettingsChangedEvent(null, EventArgs.Empty);
-            }
-        }
-    }*/
 }

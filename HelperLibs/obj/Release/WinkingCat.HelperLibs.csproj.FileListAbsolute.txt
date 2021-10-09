@@ -37,7 +37,6 @@ D:\Programming\C#\WinkingCatFace\HelperLibs\bin\Release\Microsoft.WindowsAPICode
 D:\Programming\C#\WinkingCatFace\HelperLibs\bin\Release\Microsoft.WindowsAPICodePack.ShellExtensions.xml
 D:\Programming\C#\WinkingCatFace\HelperLibs\bin\Release\zxing.xml
 D:\Programming\C#\WinkingCatFace\HelperLibs\bin\Release\zxing.presentation.xml
-D:\Programming\C#\WinkingCatFace\HelperLibs\obj\Release\WinkingCat.HelperLibs.csproj.AssemblyReference.cache
 D:\Programming\C#\WinkingCatFace\HelperLibs\obj\Release\WinkingCat.HelperLibs.ImageView.resources
 D:\Programming\C#\WinkingCatFace\HelperLibs\obj\Release\WinkingCat.HelperLibs.ImageViewerForm.resources
 D:\Programming\C#\WinkingCatFace\HelperLibs\obj\Release\WinkingCat.HelperLibs.Properties.Resources.resources
@@ -46,3 +45,8 @@ D:\Programming\C#\WinkingCatFace\HelperLibs\obj\Release\WinkingCat.HelperLibs.cs
 D:\Programming\C#\WinkingCatFace\HelperLibs\obj\Release\WinkingCat.HelperLibs.csproj.CopyComplete
 D:\Programming\C#\WinkingCatFace\HelperLibs\obj\Release\HelperLibs.dll
 D:\Programming\C#\WinkingCatFace\HelperLibs\obj\Release\HelperLibs.pdb
+D:\Programming\C#\WinkingCatFace\HelperLibs\obj\Release\WinkingCat.HelperLibs.ColorDisplay.resources
+D:\Programming\C#\WinkingCatFace\HelperLibs\obj\Release\WinkingCat.HelperLibs.ClipForm.resources
+D:\Programming\C#\WinkingCatFace\HelperLibs\obj\Release\WinkingCat.HelperLibs.ColorPickerForm.resources
+D:\Programming\C#\WinkingCatFace\HelperLibs\obj\Release\WinkingCat.HelperLibs.RegionCaptureForm.resources
+D:\Programming\C#\WinkingCatFace\HelperLibs\obj\Release\WinkingCat.HelperLibs.csproj.AssemblyReference.cache
