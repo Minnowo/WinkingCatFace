@@ -31,6 +31,7 @@
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(SettingsForm));
             this.tcMain = new System.Windows.Forms.TabControl();
             this.tpMain = new System.Windows.Forms.TabPage();
+            this.cbMaximizeBox = new System.Windows.Forms.CheckBox();
             this.cbUseDWRMOverWRM = new System.Windows.Forms.CheckBox();
             this.cbSaveImageToDisk = new System.Windows.Forms.CheckBox();
             this.cbDefaultImageFormat = new System.Windows.Forms.ComboBox();
@@ -88,7 +89,7 @@
             this.btnBrowseFolders = new System.Windows.Forms.Button();
             this.tbCustomScreenshotPath = new System.Windows.Forms.TextBox();
             this.cbUseCustomScreenshotPath = new System.Windows.Forms.CheckBox();
-            this.cbMaximizeBox = new System.Windows.Forms.CheckBox();
+            this.cbHideClipsOnCapture = new System.Windows.Forms.CheckBox();
             this.tcMain.SuspendLayout();
             this.tpMain.SuspendLayout();
             this.tbRegionCapture.SuspendLayout();
@@ -119,6 +120,7 @@
             // 
             // tpMain
             // 
+            this.tpMain.Controls.Add(this.cbHideClipsOnCapture);
             this.tpMain.Controls.Add(this.cbMaximizeBox);
             this.tpMain.Controls.Add(this.cbUseDWRMOverWRM);
             this.tpMain.Controls.Add(this.cbSaveImageToDisk);
@@ -141,6 +143,17 @@
             this.tpMain.TabIndex = 0;
             this.tpMain.Text = "General";
             this.tpMain.UseVisualStyleBackColor = true;
+            // 
+            // cbMaximizeBox
+            // 
+            this.cbMaximizeBox.AutoSize = true;
+            this.cbMaximizeBox.Location = new System.Drawing.Point(183, 75);
+            this.cbMaximizeBox.Name = "cbMaximizeBox";
+            this.cbMaximizeBox.Size = new System.Drawing.Size(166, 17);
+            this.cbMaximizeBox.TabIndex = 14;
+            this.cbMaximizeBox.Text = "Show Mainform Maximize Box";
+            this.cbMaximizeBox.UseVisualStyleBackColor = true;
+            this.cbMaximizeBox.CheckedChanged += new System.EventHandler(this.ToggleMaximizeBox_CheckedChanged);
             // 
             // cbUseDWRMOverWRM
             // 
@@ -803,14 +816,14 @@
             // 
             // checkBox1
             // 
-            this.cbMaximizeBox.AutoSize = true;
-            this.cbMaximizeBox.Location = new System.Drawing.Point(183, 75);
-            this.cbMaximizeBox.Name = "checkBox1";
-            this.cbMaximizeBox.Size = new System.Drawing.Size(166, 17);
-            this.cbMaximizeBox.TabIndex = 14;
-            this.cbMaximizeBox.Text = "Show Mainform Maximize Box";
-            this.cbMaximizeBox.UseVisualStyleBackColor = true;
-            this.cbMaximizeBox.CheckedChanged += new System.EventHandler(this.ToggleMaximizeBox_CheckedChanged);
+            this.cbHideClipsOnCapture.AutoSize = true;
+            this.cbHideClipsOnCapture.Location = new System.Drawing.Point(8, 75);
+            this.cbHideClipsOnCapture.Name = "checkBox1";
+            this.cbHideClipsOnCapture.Size = new System.Drawing.Size(130, 17);
+            this.cbHideClipsOnCapture.TabIndex = 15;
+            this.cbHideClipsOnCapture.Text = "Hide Clips On Capture";
+            this.cbHideClipsOnCapture.UseVisualStyleBackColor = true;
+            this.cbHideClipsOnCapture.CheckedChanged += new System.EventHandler(this.HideClipsOnCapture_CheckedChanged);
             // 
             // SettingsForm
             // 
@@ -906,5 +919,6 @@
         private System.Windows.Forms.CheckBox cbSaveImageToDisk;
         private System.Windows.Forms.CheckBox cbUseDWRMOverWRM;
         private System.Windows.Forms.CheckBox cbMaximizeBox;
+        private System.Windows.Forms.CheckBox cbHideClipsOnCapture;
     }
 }

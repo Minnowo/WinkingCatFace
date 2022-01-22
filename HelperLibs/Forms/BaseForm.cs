@@ -57,6 +57,11 @@ namespace WinkingCat.HelperLibs
         {
             if (!show)
             {
+                if(this.WindowState == FormWindowState.Minimized || !this.Visible || this.Opacity == 0)
+                {
+                    return;
+                }
+
                 if (PreventHide)
                 {
                     return;

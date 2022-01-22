@@ -13,6 +13,9 @@ namespace WinkingCat.HelperLibs
     [TypeConverter(typeof(ExpandableObjectConverter))]
     public class ClipSettings
     {
+        [Browsable(false)]
+        public bool Never_Hide_Clips { get; set; } = true;
+
         [DisplayName("Border Grab Size (px)")]
         public int Border_Grab_Size { get; set; } = 1;
 

@@ -49,3 +49,4 @@ D:\Programming\C#\WinkingCatFace\HelperLibs\obj\Release\WinkingCat.HelperLibs.cs
 D:\Programming\C#\WinkingCatFace\HelperLibs\obj\Release\WinkingCat.HelperLibs.csproj.CopyComplete
 D:\Programming\C#\WinkingCatFace\HelperLibs\obj\Release\HelperLibs.dll
 D:\Programming\C#\WinkingCatFace\HelperLibs\obj\Release\HelperLibs.pdb
+D:\Programming\C#\WinkingCatFace\HelperLibs\obj\Release\WinkingCat.HelperLibs.csproj.AssemblyReference.cache

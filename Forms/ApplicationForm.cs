@@ -110,6 +110,7 @@ namespace WinkingCat
             pbPreviewBox.pbMain.MouseClick += PbPreviewBox_MouseClick;
 
             TopMost = SettingsManager.MainFormSettings.Always_On_Top;
+            MaximizeBox = SettingsManager.MainFormSettings.Show_Maximize_Box;
 
             base.RegisterEvents();
 

@@ -30,6 +30,7 @@ namespace WinkingCat
             cbAlwaysOnTop.Checked = SettingsManager.MainFormSettings.Always_On_Top;
             cbSaveImageToDisk.Checked = InternalSettings.Save_Images_To_Disk;
             cbUseDWRMOverWRM.Checked = InternalSettings.Save_WORM_As_DWORM;
+            cbHideClipsOnCapture.Checked = SettingsManager.ClipSettings.Never_Hide_Clips;
 
             foreach (Function task in Enum.GetValues(typeof(Function)))
             {
@@ -217,6 +218,12 @@ namespace WinkingCat
         {
             if (preventUpdate) return;
             SettingsManager.MainFormSettings.Show_Maximize_Box = cbMaximizeBox.Checked;
+        }
+
+        private void HideClipsOnCapture_CheckedChanged(object sender, EventArgs e)
+        {
+            if (preventUpdate) return;
+            SettingsManager.ClipSettings.Never_Hide_Clips = !cbHideClipsOnCapture.Checked;
         }
         #endregion
 

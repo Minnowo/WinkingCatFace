@@ -114,6 +114,7 @@ namespace WinkingCat.HelperLibs
             KeyDown += FormKeyDown;
             MouseWheel += ClipForm_MouseWheel;
 
+            base.PreventHide = SettingsManager.ClipSettings.Never_Hide_Clips;
             base.RegisterEvents();
 
             #region context menu
