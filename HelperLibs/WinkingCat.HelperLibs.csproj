@@ -100,9 +100,14 @@
     <Compile Include="Enums\HotkeyStatus.cs" />
     <Compile Include="Enums\RegionCaptureMode.cs" />
     <Compile Include="Enums\RegionResult.cs" />
+    <Compile Include="Enums\SlashType.cs" />
     <Compile Include="Enums\ToolTipLocation.cs" />
     <Compile Include="Events\ColorChangedEvent.cs" />
     <Compile Include="Events\ImageSavedEvent.cs" />
+    <Compile Include="Extensions\StreamExtensions.cs" />
+    <Compile Include="Forms\BaseForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
     <Compile Include="Forms\ClipForm.cs">
       <SubType>Form</SubType>
     </Compile>

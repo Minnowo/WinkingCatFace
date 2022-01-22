@@ -5,7 +5,7 @@ using System.Windows.Forms;
 
 namespace WinkingCat.HelperLibs
 {
-    public partial class ColorPickerForm : Form
+    public partial class ColorPickerForm : BaseForm
     {
         public ColorSpaceDrawStyle ColorBoxDrawStyle
         {
@@ -46,13 +46,13 @@ namespace WinkingCat.HelperLibs
             this.Text = "ColorPicker";
             this.MaximizeBox = false;
             this.KeyPreview = true;
-            this.HandleCreated += ColorPickerForm_HandleCreated;
 
             nudAlphaValue.Value = 255;
 
             rb_DisplayHSBHue.Checked = true;
 
             UpdateColors(startingColor);
+            base.RegisterEvents();
         }
 
         public ColorPickerForm() : this(Color.Red)
@@ -60,17 +60,6 @@ namespace WinkingCat.HelperLibs
             
         }
 
-        private void ColorPickerForm_HandleCreated(object sender, EventArgs e)
-        {
-            UpdateTheme();
-        }
-
-        public void UpdateTheme()
-        {
-            SettingsManager.ApplyImmersiveDarkTheme(this, IsHandleCreated);
-            ApplicationStyles.ApplyCustomThemeToControl(this);
-            Refresh();
-        }
 
         private void ColorPicker_ColorChanged(object sender, ColorEventArgs e)
         {
@@ -323,7 +312,7 @@ namespace WinkingCat.HelperLibs
 
         private void ScreenColorPicker_Click(object sender, EventArgs e)
         {
-            if(RegionCaptureHelper.GetRegionResultColor(this, out COLOR c))
+            if(RegionCaptureHelper.GetRegionResultColor(out COLOR c))
             {
                 UpdateColors(c);
             }

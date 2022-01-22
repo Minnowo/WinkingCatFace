@@ -1,31 +1,44 @@
 ﻿using System;
 using System.Drawing;
 using System.Windows.Forms;
+using System.Threading;
 
 namespace WinkingCat.HelperLibs
 {
     public static class RegionCaptureHelper
     {
-        public static event EventHandler<RegionReturn> CaptureEvent;
+        public delegate void RequestShowFormsEvent(bool show);
+        public static event RequestShowFormsEvent RequestShowForms;
+
         public static event EventHandler<ImageSavedEvent> ImageSaved;
         public static RegionReturn LastRegionResult { get; private set; }
 
-        public static bool GetRegionResultImage(Form form, out Image image)
+        /// <summary>
+        /// Sends a global event notifying all forms to hide or show themselves.
+        /// </summary>
+        /// <param name="show">False if the forms should hide, True if they should be shown.</param>
+        /// <param name="sleepThread">Should Thread.Sleep be called after hiding / showing.</param>
+        public static void RequestFormsHide(bool show, bool sleepThread = true)
         {
-            Helper.WaitHideForm(form, out bool reshow);
+            if (!SettingsManager.MainFormSettings.Hide_Form_On_Captrue)
+                return;
 
-            bool result = GetRegionResultImage(out image);
+            if (RequestShowForms != null)
+            {
+                RequestShowForms.Invoke(show);
+            }
 
-            if (reshow)
-                form.Show();
-
-            return result;
+            // when forms are being hidden it may take a bit to fully hide them
+            if (sleepThread) 
+            {
+                Thread.Sleep(SettingsManager.MainFormSettings.Wait_Hide_Time);
+            }
         }
+
 
         public static bool GetRegionResultImage(out Image image)
         {
-            SettingsManager.RegionCaptureSettings.Mode = RegionCaptureMode.Default;
-            using (RegionCaptureForm regionCapture = new RegionCaptureForm(ScreenHelper.GetScreenBounds()))
+            using (RegionCaptureForm regionCapture = new RegionCaptureForm(ScreenHelper.GetScreenBounds(), RegionCaptureMode.Default))
             {
                 regionCapture.ShowDialog();
                 LastRegionResult?.Dispose();
@@ -42,22 +55,9 @@ namespace WinkingCat.HelperLibs
             }
         }
 
-        public static bool GetRegionResultColor(Form form, out COLOR color)
-        {
-            Helper.WaitHideForm(form, out bool reshow);
-
-            bool result =  GetRegionResultColor(out color);
-            
-            if (reshow)
-                form.Show();
-
-            return result;        
-        }
-
         public static bool GetRegionResultColor(out COLOR color)
         {
-            SettingsManager.RegionCaptureSettings.Mode = RegionCaptureMode.ColorPicker;
-            using (RegionCaptureForm regionCapture = new RegionCaptureForm(ScreenHelper.GetScreenBounds()))
+            using (RegionCaptureForm regionCapture = new RegionCaptureForm(ScreenHelper.GetScreenBounds(), RegionCaptureMode.ColorPicker))
             {
                 regionCapture.ShowDialog();
                 LastRegionResult?.Dispose();
@@ -74,20 +74,20 @@ namespace WinkingCat.HelperLibs
             }
         }
 
-        public static void RegionCapture(RegionCaptureMode mode, bool creatClip = false)
-        {
-            SettingsManager.RegionCaptureSettings.Mode = mode;
-            RegionCapture(creatClip);
-        }
-
         public static void RegionCapture(bool creatClip = false)
         {
-            using (RegionCaptureForm regionCapture = new RegionCaptureForm(ScreenHelper.GetScreenBounds()))
+            RegionCapture(SettingsManager.RegionCaptureSettings.Mode, creatClip);
+        }
+
+        public static void RegionCapture(RegionCaptureMode mode, bool creatClip = false)
+        {
+            using (RegionCaptureForm regionCapture = new RegionCaptureForm(ScreenHelper.GetScreenBounds(), mode))
             {
                 regionCapture.ShowDialog();
 
                 LastRegionResult?.Dispose();
                 LastRegionResult = regionCapture.GetRsult();
+
 
                 if (LastRegionResult.Result == RegionResult.Close)
                     return;
@@ -95,8 +95,9 @@ namespace WinkingCat.HelperLibs
                 if(LastRegionResult.Result == RegionResult.Color)
                 {
                     if (SettingsManager.RegionCaptureSettings.Auto_Copy_Color)
+                    {
                         ClipboardHelper.FormatCopyColor(SettingsManager.MiscSettings.Default_Color_Format, LastRegionResult.Color);
-                    OnCaptureEvent(LastRegionResult);
+                    }
                     return;
                 }
 
@@ -108,10 +109,6 @@ namespace WinkingCat.HelperLibs
                 if (InternalSettings.Save_Images_To_Disk)
                 {
                     path = PathHelper.GetNewImageFileName();
-                    if (InternalSettings.Default_Image_Format == ImgFormat.wrm && InternalSettings.Save_WORM_As_DWORM)
-                    {
-                        path = path.Split('.')[0] + ".dwrm";
-                    }
                 }
 
                 if (creatClip)
@@ -126,8 +123,6 @@ namespace WinkingCat.HelperLibs
 
                 if (LastRegionResult.Image != null)
                     LastRegionResult.Image.Dispose();
-
-                OnCaptureEvent(LastRegionResult);
             }
         }
 
@@ -143,15 +138,6 @@ namespace WinkingCat.HelperLibs
             return string.Empty;
         }
 
-
-        private static void OnCaptureEvent(RegionReturn info)
-        {
-            if (CaptureEvent != null)
-            {
-                CaptureEvent(null, info);
-            }
-        }
-
         private static void OnImageSaved(string info, Size size)
         {
             OnImageSaved(new ImageSavedEvent(info, size));
@@ -161,7 +147,7 @@ namespace WinkingCat.HelperLibs
         {
             if (ImageSaved != null)
             {
-                ImageSaved(null, info);
+                ImageSaved.Invoke(null, info);
             }
         }
     }

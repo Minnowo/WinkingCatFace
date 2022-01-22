@@ -12,7 +12,8 @@ namespace WinkingCat.HelperLibs
 
     public class ApplicationStyles
     {
-        public static event EventHandler UpdateStylesEvent;
+        public delegate void ThemeUpdated();
+        public static event ThemeUpdated UpdateThemeEvent;
         public static ApplicationStyles currentStyle { get; set; } = new ApplicationStyles();
 
 
@@ -119,9 +120,9 @@ namespace WinkingCat.HelperLibs
 
         private static void OnUpdateEvent()
         {
-            if (UpdateStylesEvent != null)
+            if (UpdateThemeEvent != null)
             {
-                UpdateStylesEvent(null, EventArgs.Empty);
+                UpdateThemeEvent.Invoke();
             }
         }
     }

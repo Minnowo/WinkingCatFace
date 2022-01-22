@@ -29,7 +29,9 @@ namespace WinkingCat
             OnTaskExecuted(Function.CaptureWindow);
             if (!Helper.IsValidCropArea(window.Rectangle))
                 return false;
-            
+
+            RegionCaptureHelper.RequestFormsHide(false, true);
+
             using (Image img = ScreenshotHelper.CaptureRectangle(window.Rectangle))
             {
                 if (SettingsManager.RegionCaptureSettings.Auto_Copy_Image)
@@ -39,9 +41,12 @@ namespace WinkingCat
 
                 if (img == null || string.IsNullOrEmpty(RegionCaptureHelper.Save(PathHelper.GetNewImageFileName(), img)))
                 {
+                    RegionCaptureHelper.RequestFormsHide(true, false);
                     return false;
                 }
-                 
+
+                RegionCaptureHelper.RequestFormsHide(true, false);
+
                 return true;
             } 
         }
@@ -51,11 +56,14 @@ namespace WinkingCat
             OnTaskExecuted(task);
 
             Image image;
+
             switch (task)
             {
                 case Function.RegionCapture:
                     HotkeyManager.tempTgnoreHotkeyPress = true;
-                    RegionCaptureHelper.RegionCapture(RegionCaptureMode.Default);
+                    RegionCaptureHelper.RequestFormsHide(false, true);
+                    RegionCaptureHelper.RegionCapture(RegionCaptureMode.Default, false);
+                    RegionCaptureHelper.RequestFormsHide(true, false);
                     HotkeyManager.tempTgnoreHotkeyPress = false;
                     return true;
 
@@ -67,7 +75,9 @@ namespace WinkingCat
 
                 case Function.NewClipFromRegionCapture:
                     HotkeyManager.tempTgnoreHotkeyPress = true;
+                    RegionCaptureHelper.RequestFormsHide(false, true);
                     RegionCaptureHelper.RegionCapture(RegionCaptureMode.Default, true);
+                    RegionCaptureHelper.RequestFormsHide(true, false);
                     HotkeyManager.tempTgnoreHotkeyPress = false;
                     return true;
 
@@ -102,53 +112,83 @@ namespace WinkingCat
 
                     if (RegionCaptureHelper.LastRegionResult == null || !Helper.IsValidCropArea(RegionCaptureHelper.LastRegionResult.Region))
                         return false;
-                    
+
+                    RegionCaptureHelper.RequestFormsHide(false, true);
+
                     using (Image img = ScreenshotHelper.CaptureRectangle(ScreenHelper.GetRectangle0Based(RegionCaptureHelper.LastRegionResult.Region)))
                     {
                         if (img == null || string.IsNullOrEmpty(RegionCaptureHelper.Save(PathHelper.GetNewImageFileName(), img)))
+                        {
+                            RegionCaptureHelper.RequestFormsHide(true, false);
                             return false;
+                        }
 
                         if (SettingsManager.RegionCaptureSettings.Auto_Copy_Image)
                             ClipboardHelper.CopyImage(img);
                     }
+
+                    RegionCaptureHelper.RequestFormsHide(true, false);
+
                     return true;
 
                 case Function.CaptureFullScreen:
 
+                    RegionCaptureHelper.RequestFormsHide(false, true);
+
                     using (Image img = ScreenshotHelper.CaptureFullscreen())
                     {
                         if (img == null || string.IsNullOrEmpty(RegionCaptureHelper.Save(PathHelper.GetNewImageFileName(), img)))
+                        {
+                            RegionCaptureHelper.RequestFormsHide(true, false);
                             return false;
+                        }
 
                         if (SettingsManager.RegionCaptureSettings.Auto_Copy_Image)
                             ClipboardHelper.CopyImage(img);
                     }
+
+                    RegionCaptureHelper.RequestFormsHide(true, false);
 
                     return true;
 
                 case Function.CaptureActiveMonitor:
 
+                    RegionCaptureHelper.RequestFormsHide(false, true);
+
                     using (Image img = ScreenshotHelper.CaptureActiveMonitor())
                     {
                         if (img == null || string.IsNullOrEmpty(RegionCaptureHelper.Save(PathHelper.GetNewImageFileName(), img)))
+                        {
+                            RegionCaptureHelper.RequestFormsHide(true, false);
                             return false;
+                        }
 
                         if (SettingsManager.RegionCaptureSettings.Auto_Copy_Image)
                             ClipboardHelper.CopyImage(img);
                     }
+
+                    RegionCaptureHelper.RequestFormsHide(true, false);
 
                     return true;
 
                 case Function.CaptureActiveWindow:
 
-                    using (Image img = ScreenshotHelper.CaptureRectangle(ScreenHelper.GetWindowRectangle(NativeMethods.GetForegroundWindow())))
+                    RegionCaptureHelper.RequestFormsHide(false, true);
+
+                    using (Image img = ScreenshotHelper.CaptureRectangle(
+                        ScreenHelper.GetWindowRectangle(NativeMethods.GetForegroundWindow())))
                     {
                         if (img == null || string.IsNullOrEmpty(RegionCaptureHelper.Save(PathHelper.GetNewImageFileName(), img)))
+                        {
+                            RegionCaptureHelper.RequestFormsHide(true, false);
                             return false;
+                        }
 
                         if (SettingsManager.RegionCaptureSettings.Auto_Copy_Image)
                             ClipboardHelper.CopyImage(img);
                     }
+
+                    RegionCaptureHelper.RequestFormsHide(true, false);
 
                     return true;
 

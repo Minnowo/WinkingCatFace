@@ -13,33 +13,20 @@ using WinkingCat.HelperLibs;
 namespace WinkingCat.Uploaders
 {
     
-    public partial class OCRForm : Form
+    public partial class OCRForm : BaseForm
     {
-        private bool isHandleCreated = false;
-
         public OCRForm(string path = "")
         {
             InitializeComponent();
-            HandleCreated += OCRForm_HandleCreated;
 
             cbLanguage.Items.AddRange(Helper.GetEnumDescriptions<OCRSpaceLanguages>());
             cbLanguage.SelectedIndex = 8;
 
             tbFilePath.Text = path;
+
+            base.RegisterEvents();
         }
 
-        private void OCRForm_HandleCreated(object sender, EventArgs e)
-        {
-            isHandleCreated = true;
-            UpdateTheme();
-        }
-
-        public void UpdateTheme()
-        {
-            SettingsManager.ApplyImmersiveDarkTheme(this, IsHandleCreated);
-            ApplicationStyles.ApplyCustomThemeToControl(this);
-            Refresh();
-        }
 
         private async void btnRunOCR_Click(object sender, EventArgs e)
         {

@@ -13,15 +13,11 @@ using System.Threading;
 
 namespace WinkingCat
 {
-    public partial class BarcodeForm : Form
+    public partial class BarcodeForm : BaseForm
     {
-        private bool isReady;
-
         public BarcodeForm()
         {
             InitializeComponent();
-            this.HandleCreated += BarcodeForm_HandleCreated;
-            StyleChanged += BarcodeForm_StyleChanged;
             this.Text = "Qr Code";
             foreach (BarcodeFormat format in new BarcodeFormat[] { BarcodeFormat.AZTEC, BarcodeFormat.CODABAR, BarcodeFormat.CODE_39, BarcodeFormat.CODE_128, BarcodeFormat.DATA_MATRIX, BarcodeFormat.PDF_417, BarcodeFormat.QR_CODE })
             {
@@ -29,23 +25,8 @@ namespace WinkingCat
             }
             cmFormat.SelectedItem = BarcodeFormat.QR_CODE;
             pbQRDisplay.SizeMode = PictureBoxSizeMode.CenterImage;
-        }
 
-        private void BarcodeForm_HandleCreated(object sender, EventArgs e)
-        {
-            UpdateTheme();
-        }
-
-        private void BarcodeForm_StyleChanged(object sender, EventArgs e)
-        {
-            UpdateTheme();
-        }
-
-        private void UpdateTheme()
-        {
-            SettingsManager.ApplyImmersiveDarkTheme(this, IsHandleCreated);
-            ApplicationStyles.ApplyCustomThemeToControl(this);
-            Refresh();
+            base.RegisterEvents();
         }
 
         private void textBox1_TextChanged(object sender, EventArgs e)
@@ -65,7 +46,7 @@ namespace WinkingCat
 
         private void EncodeText(string text)
         {
-            if (!isReady)
+            if (!IsReady)
                 return;
             
             ClearQRCode();
@@ -73,11 +54,6 @@ namespace WinkingCat
             int size = Math.Min(pbQRDisplay.Width, pbQRDisplay.Height);
             pbQRDisplay.Image = Helper.CreateQRCode(text, size, (BarcodeFormat)cmFormat.SelectedItem);
             pbQRDisplay.BackColor = Color.White;
-        }
-
-        private void Form_Load(object sender, EventArgs e)
-        {
-            isReady = true;
         }
 
         private void comboBox1_SelectedIndexChanged(object sender, EventArgs e)
@@ -101,10 +77,12 @@ namespace WinkingCat
 
         private void bFromScreen_Click(object sender, EventArgs e)
         {
-            if (!isReady)
+            if (!IsReady)
                 return;
 
-            if (RegionCaptureHelper.GetRegionResultImage(this, out Image i))
+            RegionCaptureHelper.RequestFormsHide(false, true);
+
+            if (RegionCaptureHelper.GetRegionResultImage(out Image i))
             {
                 using (Bitmap img = (Bitmap)i)
                 {
@@ -115,11 +93,13 @@ namespace WinkingCat
                 }
                 this.ForceActivate();
             }
+
+            RegionCaptureHelper.RequestFormsHide(true, false);
         }
 
         private void bFromFile_Click(object sender, EventArgs e)
         {
-            if (!isReady)
+            if (!IsReady)
                 return;
             
             string[] res = ImageHelper.OpenImageFileDialog(false, Program.MainForm);
@@ -138,7 +118,7 @@ namespace WinkingCat
 
         private void bFromClipboard_Click(object sender, EventArgs e)
         {
-            if (!isReady)
+            if (!IsReady)
                 return;
             
             if (Clipboard.ContainsImage())

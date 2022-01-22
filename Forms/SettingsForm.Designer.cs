@@ -28,8 +28,11 @@
         /// </summary>
         private void InitializeComponent()
         {
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(SettingsForm));
             this.tcMain = new System.Windows.Forms.TabControl();
             this.tpMain = new System.Windows.Forms.TabPage();
+            this.cbUseDWRMOverWRM = new System.Windows.Forms.CheckBox();
+            this.cbSaveImageToDisk = new System.Windows.Forms.CheckBox();
             this.cbDefaultImageFormat = new System.Windows.Forms.ComboBox();
             this.label14 = new System.Windows.Forms.Label();
             this.label3 = new System.Windows.Forms.Label();
@@ -85,6 +88,7 @@
             this.btnBrowseFolders = new System.Windows.Forms.Button();
             this.tbCustomScreenshotPath = new System.Windows.Forms.TextBox();
             this.cbUseCustomScreenshotPath = new System.Windows.Forms.CheckBox();
+            this.cbMaximizeBox = new System.Windows.Forms.CheckBox();
             this.tcMain.SuspendLayout();
             this.tpMain.SuspendLayout();
             this.tbRegionCapture.SuspendLayout();
@@ -115,6 +119,9 @@
             // 
             // tpMain
             // 
+            this.tpMain.Controls.Add(this.cbMaximizeBox);
+            this.tpMain.Controls.Add(this.cbUseDWRMOverWRM);
+            this.tpMain.Controls.Add(this.cbSaveImageToDisk);
             this.tpMain.Controls.Add(this.cbDefaultImageFormat);
             this.tpMain.Controls.Add(this.label14);
             this.tpMain.Controls.Add(this.label3);
@@ -135,11 +142,33 @@
             this.tpMain.Text = "General";
             this.tpMain.UseVisualStyleBackColor = true;
             // 
+            // cbUseDWRMOverWRM
+            // 
+            this.cbUseDWRMOverWRM.AutoSize = true;
+            this.cbUseDWRMOverWRM.Location = new System.Drawing.Point(183, 52);
+            this.cbUseDWRMOverWRM.Name = "cbUseDWRMOverWRM";
+            this.cbUseDWRMOverWRM.Size = new System.Drawing.Size(141, 17);
+            this.cbUseDWRMOverWRM.TabIndex = 13;
+            this.cbUseDWRMOverWRM.Text = "Use DWRM Over WRM";
+            this.cbUseDWRMOverWRM.UseVisualStyleBackColor = true;
+            this.cbUseDWRMOverWRM.CheckedChanged += new System.EventHandler(this.UseDWRMOverWRM_CheckedChanged);
+            // 
+            // cbSaveImageToDisk
+            // 
+            this.cbSaveImageToDisk.AutoSize = true;
+            this.cbSaveImageToDisk.Location = new System.Drawing.Point(183, 29);
+            this.cbSaveImageToDisk.Name = "cbSaveImageToDisk";
+            this.cbSaveImageToDisk.Size = new System.Drawing.Size(128, 17);
+            this.cbSaveImageToDisk.TabIndex = 12;
+            this.cbSaveImageToDisk.Text = "Save Images To Disk";
+            this.cbSaveImageToDisk.UseVisualStyleBackColor = true;
+            this.cbSaveImageToDisk.CheckedChanged += new System.EventHandler(this.SaveImageToDisk_CheckedChanged);
+            // 
             // cbDefaultImageFormat
             // 
             this.cbDefaultImageFormat.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.cbDefaultImageFormat.FormattingEnabled = true;
-            this.cbDefaultImageFormat.Location = new System.Drawing.Point(11, 209);
+            this.cbDefaultImageFormat.Location = new System.Drawing.Point(8, 259);
             this.cbDefaultImageFormat.Name = "cbDefaultImageFormat";
             this.cbDefaultImageFormat.Size = new System.Drawing.Size(108, 21);
             this.cbDefaultImageFormat.TabIndex = 11;
@@ -148,7 +177,7 @@
             // label14
             // 
             this.label14.AutoSize = true;
-            this.label14.Location = new System.Drawing.Point(8, 193);
+            this.label14.Location = new System.Drawing.Point(5, 243);
             this.label14.Name = "label14";
             this.label14.Size = new System.Drawing.Size(111, 13);
             this.label14.TabIndex = 10;
@@ -157,7 +186,7 @@
             // label3
             // 
             this.label3.AutoSize = true;
-            this.label3.Location = new System.Drawing.Point(8, 150);
+            this.label3.Location = new System.Drawing.Point(5, 200);
             this.label3.Name = "label3";
             this.label3.Size = new System.Drawing.Size(129, 13);
             this.label3.TabIndex = 9;
@@ -166,7 +195,7 @@
             // label2
             // 
             this.label2.AutoSize = true;
-            this.label2.Location = new System.Drawing.Point(8, 123);
+            this.label2.Location = new System.Drawing.Point(5, 173);
             this.label2.Name = "label2";
             this.label2.Size = new System.Drawing.Size(132, 13);
             this.label2.TabIndex = 8;
@@ -175,7 +204,7 @@
             // label1
             // 
             this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(8, 96);
+            this.label1.Location = new System.Drawing.Point(5, 146);
             this.label1.Name = "label1";
             this.label1.Size = new System.Drawing.Size(116, 13);
             this.label1.TabIndex = 7;
@@ -185,7 +214,7 @@
             // 
             this.cbOnTrayMiddleClick.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.cbOnTrayMiddleClick.FormattingEnabled = true;
-            this.cbOnTrayMiddleClick.Location = new System.Drawing.Point(183, 147);
+            this.cbOnTrayMiddleClick.Location = new System.Drawing.Point(180, 197);
             this.cbOnTrayMiddleClick.Name = "cbOnTrayMiddleClick";
             this.cbOnTrayMiddleClick.Size = new System.Drawing.Size(261, 21);
             this.cbOnTrayMiddleClick.TabIndex = 6;
@@ -195,7 +224,7 @@
             // 
             this.cbOnTrayDoubleClick.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.cbOnTrayDoubleClick.FormattingEnabled = true;
-            this.cbOnTrayDoubleClick.Location = new System.Drawing.Point(183, 120);
+            this.cbOnTrayDoubleClick.Location = new System.Drawing.Point(180, 170);
             this.cbOnTrayDoubleClick.Name = "cbOnTrayDoubleClick";
             this.cbOnTrayDoubleClick.Size = new System.Drawing.Size(261, 21);
             this.cbOnTrayDoubleClick.TabIndex = 5;
@@ -205,7 +234,7 @@
             // 
             this.cbOnTrayLeftClick.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.cbOnTrayLeftClick.FormattingEnabled = true;
-            this.cbOnTrayLeftClick.Location = new System.Drawing.Point(183, 93);
+            this.cbOnTrayLeftClick.Location = new System.Drawing.Point(180, 143);
             this.cbOnTrayLeftClick.Name = "cbOnTrayLeftClick";
             this.cbOnTrayLeftClick.Size = new System.Drawing.Size(261, 21);
             this.cbOnTrayLeftClick.TabIndex = 4;
@@ -772,15 +801,29 @@
             this.cbUseCustomScreenshotPath.UseVisualStyleBackColor = true;
             this.cbUseCustomScreenshotPath.CheckedChanged += new System.EventHandler(this.UseCustomScreenshotFolder_CheckChanged);
             // 
+            // checkBox1
+            // 
+            this.cbMaximizeBox.AutoSize = true;
+            this.cbMaximizeBox.Location = new System.Drawing.Point(183, 75);
+            this.cbMaximizeBox.Name = "checkBox1";
+            this.cbMaximizeBox.Size = new System.Drawing.Size(166, 17);
+            this.cbMaximizeBox.TabIndex = 14;
+            this.cbMaximizeBox.Text = "Show Mainform Maximize Box";
+            this.cbMaximizeBox.UseVisualStyleBackColor = true;
+            this.cbMaximizeBox.CheckedChanged += new System.EventHandler(this.ToggleMaximizeBox_CheckedChanged);
+            // 
             // SettingsForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(460, 439);
             this.Controls.Add(this.tcMain);
+            this.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(235)))), ((int)(((byte)(235)))), ((int)(((byte)(235)))));
+            this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.MinimumSize = new System.Drawing.Size(300, 235);
             this.Name = "SettingsForm";
             this.Text = "SettingsForm";
+            this.TopMost = true;
             this.tcMain.ResumeLayout(false);
             this.tpMain.ResumeLayout(false);
             this.tpMain.PerformLayout();
@@ -860,5 +903,8 @@
         private System.Windows.Forms.CheckBox cbUseCustomScreenshotPath;
         private System.Windows.Forms.ComboBox cbDefaultImageFormat;
         private System.Windows.Forms.Label label14;
+        private System.Windows.Forms.CheckBox cbSaveImageToDisk;
+        private System.Windows.Forms.CheckBox cbUseDWRMOverWRM;
+        private System.Windows.Forms.CheckBox cbMaximizeBox;
     }
 }

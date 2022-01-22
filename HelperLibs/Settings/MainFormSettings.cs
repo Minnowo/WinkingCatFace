@@ -15,6 +15,9 @@ namespace WinkingCat.HelperLibs
     public class MainFormSettings
     {
         [Browsable(false)]
+        public bool Show_Maximize_Box { get; set; } = true;
+
+        [Browsable(false)]
         public bool Show_In_Tray { get; set; } = true;
         [Browsable(false)]
         public bool Start_In_Tray { get; set; } = false;

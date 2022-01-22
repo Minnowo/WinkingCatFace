@@ -173,10 +173,9 @@ namespace WinkingCat
             toolStripMenuItemDirectory,
             toolStripMenuItemPath,
             toolStripMenuItemRemoveFromList};
-            ApplicationStyles.UpdateStylesEvent += ApplicationStyles_UpdateSylesEvent;
-            UpdateTheme();
-            
 
+            ApplicationStyles.UpdateThemeEvent += UpdateTheme;
+            UpdateTheme();
         }
         private bool supressIndexChangeEvent = false;
         protected override void OnMouseDown(MouseEventArgs e)
@@ -202,10 +201,6 @@ namespace WinkingCat
             }
         }
 
-        private void ApplicationStyles_UpdateSylesEvent(object sender, EventArgs e)
-        {
-            UpdateTheme();
-        }
 
         public void UpdateTheme()
         {

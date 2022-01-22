@@ -32,17 +32,17 @@ namespace WinkingCat.HelperLibs
         private Pen borderDotPen, borderPen, magnifierBorderPen, magnifierGridPen;
         private Font infoFont;
 
-        public RegionCaptureForm() : this(ScreenHelper.GetScreenBounds())
+        public RegionCaptureForm() : this(ScreenHelper.GetScreenBounds(), SettingsManager.RegionCaptureSettings.Mode)
         {
 
         }
-        public RegionCaptureForm(Rectangle region)
+        public RegionCaptureForm(Rectangle region, RegionCaptureMode mode_)
         {
             SetStyle(ControlStyles.OptimizedDoubleBuffer | ControlStyles.UserPaint | ControlStyles.AllPaintingInWmPaint, true);
 
             // force the client area to be at 0, 0 so that when you draw using graphics it draws in the correct location
             clientArea = new Rectangle(new Point(0, 0), new Size(region.Width, region.Height));
-            mode = SettingsManager.RegionCaptureSettings.Mode;
+            mode = mode_; 
 
             // borderDotPen draws the dashed lines for the screenwide corsshair and selection box
             // magnifierBorderPen draws the border around the magnifier

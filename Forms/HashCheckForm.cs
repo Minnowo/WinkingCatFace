@@ -15,7 +15,7 @@ using System.Diagnostics;
 
 namespace WinkingCat
 {
-    public partial class HashCheckForm : Form
+    public partial class HashCheckForm : BaseForm
     {
         private HashCheck hashCheck;
         
@@ -31,25 +31,8 @@ namespace WinkingCat
             cbHashType.SelectedIndex = 0;
             hashCheck = new HashCheck();
             hashCheck.FileCheckProgressChanged += HashCheck_FileCheckProgressChanged;
-            HandleCreated += HashCheckForm_HandleCreated;
-            ApplicationStyles.UpdateStylesEvent += ApplicationStyles_UpdateStylesEvent;
-        }
 
-        private void ApplicationStyles_UpdateStylesEvent(object sender, EventArgs e)
-        {
-            UpdateTheme();
-        }
-
-        private void HashCheckForm_HandleCreated(object sender, EventArgs e)
-        {
-            UpdateTheme();
-        }
-
-        public void UpdateTheme()
-        {
-            SettingsManager.ApplyImmersiveDarkTheme(this, IsHandleCreated);
-            ApplicationStyles.ApplyCustomThemeToControl(this);
-            Refresh();
+            base.RegisterEvents();
         }
 
         private void HashCheck_FileCheckProgressChanged(float progress)

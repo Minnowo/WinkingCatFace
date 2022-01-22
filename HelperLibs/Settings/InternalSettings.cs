@@ -39,7 +39,7 @@ namespace WinkingCat.HelperLibs
         public const string Default_Screenshot_IO_Path = "screenshots\\";
         public const string Settings_IO_Path = "settings\\";
 
-        public const string Clip_Settings_IO_Path = "settigns\\clip.conf";
+        public const string Clip_Settings_IO_Path = "settings\\clip.conf";
         public const string Main_Form_Settings_IO_Path = "settings\\main.conf";
         public const string Region_Capture_Settings_IO_Path = "settings\\capture.conf";
         public const string Misc_Settings_IO_Path = "settings\\misc.conf";

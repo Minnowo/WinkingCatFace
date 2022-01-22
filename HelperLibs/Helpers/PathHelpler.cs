@@ -91,33 +91,55 @@ namespace WinkingCat.HelperLibs
             return false;
         }
 
-        public static string GetNewImageFileName(ImgFormat fmt)
+        public static string GetNewImageFileName(string ext)
         {
-            while (true)
+            if (string.IsNullOrEmpty(ext) || ext.Length < 1)
             {
-                InternalSettings.Image_Counter++;
-                string pathh = Path.Combine(
-                    GetScreenshotFolder(),
-                    InternalSettings.Image_Counter.ToString().PadLeft(20, '0') +
-                    "." + fmt.ToString());
-
-                if (!File.Exists(pathh))
-                    return pathh;
+                ext = "";
             }
+            else if(ext[0] != '.')
+            {
+                ext = '.' + ext;
+            }
+
+            string path;
+            string folder = GetScreenshotFolder();
+            
+            do
+            {
+                path = Path.Combine(
+                    folder,
+                    (++InternalSettings.Image_Counter).ToString().PadLeft(20, '0') + ext);
+            }
+            while (File.Exists(path));
+
+            return path;
         }
 
         public static string GetNewImageFileName()
         {
-            while (true)
-            {
-                InternalSettings.Image_Counter++;
-                string pathh = Path.Combine(
-                    GetScreenshotFolder(), 
-                    InternalSettings.Image_Counter.ToString().PadLeft(20, '0') + "." + InternalSettings.Default_Image_Format.ToString());
+            string path;
+            string folder = GetScreenshotFolder();
+            string ext;
 
-                if (!File.Exists(pathh))
-                    return pathh;
+            if (InternalSettings.Default_Image_Format == ImgFormat.wrm && InternalSettings.Save_WORM_As_DWORM)
+            {
+                ext = ".dwrm";
             }
+            else
+            {
+                ext = '.' + InternalSettings.Default_Image_Format.ToString();
+            }
+
+            do
+            {
+                path = Path.Combine(
+                    folder,
+                    (++InternalSettings.Image_Counter).ToString().PadLeft(20, '0') + ext);
+            }
+            while (File.Exists(path));
+
+            return path;
         }
 
         /// <summary>

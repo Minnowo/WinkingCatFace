@@ -32,8 +32,10 @@ namespace WinkingCat
             this.tabControl1 = new System.Windows.Forms.TabControl();
             this.tabPage1 = new System.Windows.Forms.TabPage();
             this.tabPage2 = new System.Windows.Forms.TabPage();
+            this.tabPage3 = new System.Windows.Forms.TabPage();
             this.propertyGrid1 = new System.Windows.Forms.PropertyGrid();
             this.propertyGrid2 = new System.Windows.Forms.PropertyGrid();
+            this.propertyGrid3 = new System.Windows.Forms.PropertyGrid();
             this.tabControl1.SuspendLayout();
             this.tabPage1.SuspendLayout();
             this.tabPage2.SuspendLayout();
@@ -43,6 +45,7 @@ namespace WinkingCat
             // 
             this.tabControl1.Controls.Add(this.tabPage1);
             this.tabControl1.Controls.Add(this.tabPage2);
+            this.tabControl1.Controls.Add(this.tabPage3);
             this.tabControl1.Location = new System.Drawing.Point(12, 12);
             this.tabControl1.Name = "tabControl1";
             this.tabControl1.SelectedIndex = 0;
@@ -57,7 +60,7 @@ namespace WinkingCat
             this.tabPage1.Padding = new System.Windows.Forms.Padding(3);
             this.tabPage1.Size = new System.Drawing.Size(364, 400);
             this.tabPage1.TabIndex = 0;
-            this.tabPage1.Text = "Main Form Colors";
+            this.tabPage1.Text = "Main Form Styles";
             this.tabPage1.UseVisualStyleBackColor = true;
             // 
             // tabPage2
@@ -68,8 +71,19 @@ namespace WinkingCat
             this.tabPage2.Padding = new System.Windows.Forms.Padding(3);
             this.tabPage2.Size = new System.Drawing.Size(364, 400);
             this.tabPage2.TabIndex = 1;
-            this.tabPage2.Text = "Capture Colors";
+            this.tabPage2.Text = "Capture Styles";
             this.tabPage2.UseVisualStyleBackColor = true;
+            // 
+            // tabPage3
+            // 
+            this.tabPage3.Controls.Add(this.propertyGrid3);
+            this.tabPage3.Location = new System.Drawing.Point(4, 22);
+            this.tabPage3.Name = "tabPage3";
+            this.tabPage3.Padding = new System.Windows.Forms.Padding(3);
+            this.tabPage3.Size = new System.Drawing.Size(364, 400);
+            this.tabPage3.TabIndex = 1;
+            this.tabPage3.Text = "Clip Styles";
+            this.tabPage3.UseVisualStyleBackColor = true;
             // 
             // propertyGrid1
             // 
@@ -93,6 +107,17 @@ namespace WinkingCat
             this.propertyGrid2.TabIndex = 1;
             this.propertyGrid2.ToolbarVisible = false;
             // 
+            // propertyGrid3
+            // 
+            this.propertyGrid3.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.propertyGrid3.HelpVisible = false;
+            this.propertyGrid3.Location = new System.Drawing.Point(3, 3);
+            this.propertyGrid3.Name = "propertyGrid3";
+            this.propertyGrid3.PropertySort = System.Windows.Forms.PropertySort.NoSort;
+            this.propertyGrid3.Size = new System.Drawing.Size(358, 394);
+            this.propertyGrid3.TabIndex = 1;
+            this.propertyGrid3.ToolbarVisible = false;
+            // 
             // StylesForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -104,6 +129,7 @@ namespace WinkingCat
             this.tabControl1.ResumeLayout(false);
             this.tabPage1.ResumeLayout(false);
             this.tabPage2.ResumeLayout(false);
+            this.tabPage3.ResumeLayout(false);
             this.ResumeLayout(false);
 
         }
@@ -115,5 +141,7 @@ namespace WinkingCat
         private System.Windows.Forms.PropertyGrid propertyGrid1;
         private System.Windows.Forms.TabPage tabPage2;
         private System.Windows.Forms.PropertyGrid propertyGrid2;
+        private System.Windows.Forms.TabPage tabPage3;
+        private System.Windows.Forms.PropertyGrid propertyGrid3;
     }
 }

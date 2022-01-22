@@ -612,7 +612,7 @@
             this.Controls.Add(this.scMain);
             this.Controls.Add(this.tsMain);
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
-            this.MaximizeBox = false;
+            this.MaximizeBox = true;
             this.MinimumSize = new System.Drawing.Size(666, 250);
             this.Name = "ApplicationForm";
             this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.MainForm_FormClosing);

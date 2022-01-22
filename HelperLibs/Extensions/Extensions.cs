@@ -56,19 +56,19 @@ namespace WinkingCat.HelperLibs
                 return ReturnStrHash(crypt.ComputeHash(stream)); 
             }
         }
-
+     
         public static void InvokeSafe(this Control control, Action action)
         {
-            if (control != null && !control.IsDisposed)
+            if (control == null || control.IsDisposed)
+                return;
+
+            if (control.InvokeRequired)
             {
-                if (control.InvokeRequired)
-                {
-                    control.Invoke(action);
-                }
-                else
-                {
-                    action();
-                }
+                control.Invoke(action);
+            }
+            else
+            {
+                action();
             }
         }
 

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Drawing;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using System.Linq;
 using System.IO;
 using System.Threading;
 using WinkingCat.HelperLibs;
@@ -11,11 +12,9 @@ using WinkingCat.Uploaders;
 namespace WinkingCat
 {
 
-    public partial class ApplicationForm : Form
+    public partial class ApplicationForm : BaseForm
     {
-        public bool IsReady { get; private set; } = false;
-
-        public List<Form> ChildrenForms = new List<Form>();
+        List<BaseForm> _childrenHandles = new List<BaseForm>();
 
         private System.Windows.Forms.Timer trayClickTimer;
 
@@ -99,7 +98,6 @@ namespace WinkingCat
             tsmiExitToolStripMenuItem.Click += ExitApplication_Click;
 #endregion
 
-            HandleCreated += MainForm_HandleCreated;
             LostFocus += MainForm_LostFocus;
             GotFocus += MainForm_GotFocus;
             Resize += MainForm_Resize;
@@ -107,12 +105,13 @@ namespace WinkingCat
             Shown += MainForm_Shown;
 
             RegionCaptureHelper.ImageSaved += ImageSaved_Event;
-            ApplicationStyles.UpdateStylesEvent += ApplicationStyles_UpdateSylesEvent;
-            SettingsManager.SettingsUpdatedEvent += UpdateSettings;
+
             lvListView.ItemSelectionChanged += LvListView_ItemSelectionChanged;
             pbPreviewBox.pbMain.MouseClick += PbPreviewBox_MouseClick;
 
             TopMost = SettingsManager.MainFormSettings.Always_On_Top;
+
+            base.RegisterEvents();
 
             ResumeLayout();
 
@@ -168,7 +167,7 @@ namespace WinkingCat
         /// <summary>
         /// Updates the theme.
         /// </summary>
-        public void UpdateTheme()
+        public override void UpdateTheme()
         {
             SettingsManager.ApplyImmersiveDarkTheme(this, IsHandleCreated);
 
@@ -203,19 +202,20 @@ namespace WinkingCat
             if(Handle != win.Handle)
             {
                 win.Activate();
-                if(win.IsMinimized)
-                    win.Restore();
-
-                if (SettingsManager.MainFormSettings.Hide_Form_On_Captrue && !isInTrayOrMinimized)
+                if (win.IsMinimized)
                 {
-                    HideAll();
+                    win.Restore();
+                }
+
+                BaseForm bf = this._childrenHandles.FirstOrDefault(x => x.Handle == win.Handle);
+
+                if(bf != null)
+                {
+                    bf.PreventHideNext = true;
                 }
             }
 
-            Thread.Sleep(SettingsManager.MainFormSettings.Wait_Hide_Time);
             TaskHandler.CaptureWindow(win);
-
-            ShowAll();
         }
 
         private void MonitorItems_Click(object sender, EventArgs e)
@@ -225,11 +225,7 @@ namespace WinkingCat
 
             ToolStripItem tsi = (ToolStripItem)sender;
 
-            if (SettingsManager.MainFormSettings.Hide_Form_On_Captrue && !isInTrayOrMinimized)
-            {
-                HideAll();
-            }
-            Thread.Sleep(SettingsManager.MainFormSettings.Wait_Hide_Time);
+            RegionCaptureHelper.RequestFormsHide(false, true);
 
             using (Bitmap img = ScreenshotHelper.CaptureRectangle((Rectangle)tsi.Tag))
             {
@@ -240,47 +236,27 @@ namespace WinkingCat
                 }
             }
 
-            ShowAll();
+            RegionCaptureHelper.RequestFormsHide(true, false);
         }
 
         private void RegionCapture_Click(object sender, EventArgs e)
         {
-            Helper.WaitHideForm(this, out bool reshow);
-
             TaskHandler.ExecuteTask(Function.RegionCapture);
-
-            if (reshow)
-                this.Show();
         }
 
         private void MonitorCapture_Click(object sender, EventArgs e)
         {
-            Helper.WaitHideForm(this, out bool reshow);
-
             TaskHandler.ExecuteTask(Function.CaptureActiveMonitor);
-
-            if (reshow)
-                this.Show();
         }
 
         private void FullscreenCapture_Click(object sender, EventArgs e)
         {
-            Helper.WaitHideForm(this, out bool reshow);
-
             TaskHandler.ExecuteTask(Function.CaptureFullScreen);
-
-            if (reshow)
-                this.Show();
         }
 
         private void LastRegionCapture_Click(object sender, EventArgs e)
         {
-            Helper.WaitHideForm(this, out bool reshow);
-
             TaskHandler.ExecuteTask(Function.CaptureLastRegion);
-
-            if (reshow)
-                this.Show();
         }
 
         private void CursorCapture_Click(object sender, EventArgs e)
@@ -313,12 +289,7 @@ namespace WinkingCat
         #region Clips dropdown buttons
         private void NewClip_Click(object sender, EventArgs e)
         {
-            Helper.WaitHideForm(this, out bool reshow);
-
             TaskHandler.ExecuteTask(Function.NewClipFromRegionCapture);
-
-            if (reshow)
-                this.Show();
         }
         private void ClipFromClipboard_Click(object sender, EventArgs e)
         {
@@ -331,69 +302,65 @@ namespace WinkingCat
 #endregion
 
         #region Tools dropdown buttons
+
         private void ScreenColorPicker_Click(object sender, EventArgs e)
         {
-            Helper.WaitHideForm(this, out bool reshow);
-
             TaskHandler.ExecuteTask(Function.ScreenColorPicker);
-
-            if (reshow)
-                this.Show();
         }
 
         internal void ColorPicker_Click(object sender, EventArgs e)
         {
             ColorPickerForm cpf = new ColorPickerForm();
-            cpf.FormClosing += ChildFormClosing;
+            cpf.FormClosing += Childform_Closing;
             cpf.TopMost = SettingsManager.MainFormSettings.Always_On_Top;
             cpf.StartPosition = FormStartPosition.CenterScreen;
             cpf.Show();
-
-            ChildrenForms.Add(cpf);
+            _childrenHandles.Add(cpf);
         }
 
         internal void QrCode_Click(object sender, EventArgs e) 
         {
             BarcodeForm cpf = new BarcodeForm();
-            cpf.FormClosing += ChildFormClosing;
+            cpf.FormClosing += Childform_Closing;
             cpf.TopMost = SettingsManager.MainFormSettings.Always_On_Top;
             cpf.StartPosition = FormStartPosition.CenterScreen;
             cpf.Show();
-
-            ChildrenForms.Add(cpf);
+            _childrenHandles.Add(cpf);
         }
 
         internal void HashCheck_Click(object sender, EventArgs e)
         {
             HashCheckForm cpf = new HashCheckForm();
-            cpf.FormClosing += ChildFormClosing;
+            cpf.FormClosing += Childform_Closing;
             cpf.TopMost = SettingsManager.MainFormSettings.Always_On_Top;
             cpf.StartPosition = FormStartPosition.CenterScreen;
             cpf.Show();
-
-            ChildrenForms.Add(cpf);
+            _childrenHandles.Add(cpf);
         }
 
         internal void Regex_Click(object sender, EventArgs e)
         {
             RegexForm cpf = new RegexForm();
-            cpf.FormClosing += ChildFormClosing;
+            cpf.FormClosing += Childform_Closing;
             cpf.TopMost = SettingsManager.MainFormSettings.Always_On_Top;
             cpf.StartPosition = FormStartPosition.CenterScreen;
             cpf.Show();
-
-            ChildrenForms.Add(cpf);
+            _childrenHandles.Add(cpf);
         }
 
         private void OCRToolStripMenuItem_Click(object sender, EventArgs e)
         {
             OCRForm cpf = new OCRForm();
-            cpf.FormClosing += ChildFormClosing;
+            cpf.FormClosing += Childform_Closing;
             cpf.TopMost = SettingsManager.MainFormSettings.Always_On_Top;
             cpf.StartPosition = FormStartPosition.CenterScreen;
             cpf.Show();
+            _childrenHandles.Add(cpf);
+        }
 
-            ChildrenForms.Add(cpf);
+        private void Childform_Closing(object sender, EventArgs e)
+        {
+            _childrenHandles.Remove((BaseForm)sender);
         }
         #endregion
 
@@ -457,12 +424,6 @@ namespace WinkingCat
             UpdateTheme();
         }
 
-        private void MainForm_HandleCreated(object sender, EventArgs e)
-        {
-            UpdateTheme();
-            IsReady = true;
-        }
-
         private void MainForm_Resize(object sender, EventArgs e)
         {
             CheckWindowState();
@@ -495,23 +456,11 @@ namespace WinkingCat
 
         #region Settings / Styles events
 
-        private void UpdateSettings()
+        public override void UpdateSettings()
         {
             TopMost = SettingsManager.MainFormSettings.Always_On_Top;
             niTrayIcon.Visible = SettingsManager.MainFormSettings.Show_In_Tray;
-            
-            foreach(Form child in ChildrenForms)
-            {
-                if (child == null || child.IsDisposed) 
-                    continue;
-
-                child.TopMost = TopMost;
-            }
-        }
-
-        private void ApplicationStyles_UpdateSylesEvent(object sender, EventArgs e)
-        {
-            UpdateTheme();
+            MaximizeBox = SettingsManager.MainFormSettings.Show_Maximize_Box;
         }
 
         #endregion
@@ -597,13 +546,6 @@ namespace WinkingCat
         #endregion
 
         #region ChildForms
-
-        private void ChildFormClosing(object sender, EventArgs e)
-        {
-            Form cf = sender as Form;
-
-            ChildrenForms.Remove(cf);
-        }
 
         private void ToolStripDropDownButton_Settings_Click(object sender, EventArgs e)
         {

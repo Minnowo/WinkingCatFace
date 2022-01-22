@@ -11,7 +11,7 @@ using WinkingCat.HelperLibs;
 
 namespace WinkingCat
 {
-    public partial class SettingsForm : Form
+    public partial class SettingsForm : BaseForm
     {
         public HotkeyInputControl selectedHotkey { get; private set; }
 
@@ -28,6 +28,8 @@ namespace WinkingCat
             cbMinimizeToTrayOnClose.Checked = SettingsManager.MainFormSettings.Hide_In_Tray_On_Close;
             cbMinimizeToTrayOnStart.Checked = SettingsManager.MainFormSettings.Start_In_Tray;
             cbAlwaysOnTop.Checked = SettingsManager.MainFormSettings.Always_On_Top;
+            cbSaveImageToDisk.Checked = InternalSettings.Save_Images_To_Disk;
+            cbUseDWRMOverWRM.Checked = InternalSettings.Save_WORM_As_DWORM;
 
             foreach (Function task in Enum.GetValues(typeof(Function)))
             {
@@ -95,18 +97,9 @@ namespace WinkingCat
 
             preventUpdate = false;
 
-            this.HandleCreated += HandleCreated_Event;
             this.FormClosing += new FormClosingEventHandler(OnFormClosing_Event);
 
-            ApplicationStyles.UpdateStylesEvent += ApplicationStyles_UpdateStylesEvent;
-        }
-
-        
-        public void UpdateTheme()
-        {
-            SettingsManager.ApplyImmersiveDarkTheme(this, IsHandleCreated);
-            ApplicationStyles.ApplyCustomThemeToControl(this);
-            Refresh();
+            base.RegisterEvents();
         }
 
         public void UpdateHotkeyControls()
@@ -137,20 +130,11 @@ namespace WinkingCat
             SettingsManager.SaveHotkeySettings(HotkeyManager.hotKeys);
         }
 
-        private void ApplicationStyles_UpdateStylesEvent(object sender, EventArgs e)
-        {
-            UpdateTheme();
-        }
-
         #region MainForm events
 
         private void OnFormClosing_Event(object sender, EventArgs e)
         {
             SaveSettingsToDisk();
-        }
-        public void HandleCreated_Event(object sender, EventArgs e)
-        {
-            UpdateTheme();
         }
 
         #endregion
@@ -217,6 +201,23 @@ namespace WinkingCat
             InternalSettings.Default_Image_Format = (ImgFormat)cbDefaultImageFormat.SelectedItem;
         }
 
+        private void SaveImageToDisk_CheckedChanged(object sender, EventArgs e)
+        {
+            if (preventUpdate) return;
+            InternalSettings.Save_Images_To_Disk = cbSaveImageToDisk.Checked;
+        }
+
+        private void UseDWRMOverWRM_CheckedChanged(object sender, EventArgs e)
+        {
+            if (preventUpdate) return;
+            InternalSettings.Save_WORM_As_DWORM = cbUseDWRMOverWRM.Checked;
+        }
+
+        private void ToggleMaximizeBox_CheckedChanged(object sender, EventArgs e)
+        {
+            if (preventUpdate) return;
+            SettingsManager.MainFormSettings.Show_Maximize_Box = cbMaximizeBox.Checked;
+        }
         #endregion
 
         #region Region Capture Settings Tab

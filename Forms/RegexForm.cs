@@ -13,32 +13,14 @@ using WinkingCat.HelperLibs;
 
 namespace WinkingCat
 {
-    public partial class RegexForm : Form
+    public partial class RegexForm : BaseForm
     {
         private Regex reg;
 
         public RegexForm()
         {
             InitializeComponent();
-            HandleCreated += RegexForm_HandleCreated;
-            ApplicationStyles.UpdateStylesEvent += ApplicationStyles_UpdateStylesEvent;
-        }
-
-        private void RegexForm_HandleCreated(object sender, EventArgs e)
-        {
-            UpdateTheme();
-        }
-
-        private void ApplicationStyles_UpdateStylesEvent(object sender, EventArgs e)
-        {
-            UpdateTheme();
-        }
-
-        public void UpdateTheme()
-        {
-            SettingsManager.ApplyImmersiveDarkTheme(this, IsHandleCreated);
-            ApplicationStyles.ApplyCustomThemeToControl(this);
-            Refresh();
+            base.RegisterEvents();
         }
 
         private void btnRunCheck_Click(object sender, EventArgs e)

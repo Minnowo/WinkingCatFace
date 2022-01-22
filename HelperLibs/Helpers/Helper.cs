@@ -20,6 +20,16 @@ namespace WinkingCat.HelperLibs
         public static readonly Version OSVersion = Environment.OSVersion.Version;
         public static readonly string[] SizeSuffixes = { "bytes", "KB", "MB", "GB", "TB", "PB", "EB", "ZB", "YB" };
 
+        public const string Numbers = "0123456789"; // 48 ... 57
+        public const string AlphabetCapital = "ABCDEFGHIJKLMNOPQRSTUVWXYZ"; // 65 ... 90
+        public const string Alphabet = "abcdefghijklmnopqrstuvwxyz"; // 97 ... 122
+        public const string Alphanumeric = Numbers + AlphabetCapital + Alphabet;
+        public const string AlphanumericInverse = Numbers + Alphabet + AlphabetCapital;
+        public const string Hexadecimal = Numbers + "ABCDEF";
+        public const string Base58 = "123456789ABCDEFGHJKLMNPQRSTUVWXYZabcdefghijkmnopqrstuvwxyz"; // https://en.wikipedia.org/wiki/Base58
+        public const string Base56 = "23456789ABCDEFGHJKLMNPQRSTUVWXYZabcdefghijkmnpqrstuvwxyz"; // A variant, Base56, excludes 1 (one) and o (lowercase o) compared to Base 58.
+
+
         /// <summary>
         /// Returns true if the given OS build number is windows 10 or greater.
         /// </summary>
@@ -28,6 +38,15 @@ namespace WinkingCat.HelperLibs
         public static bool IsWindows10OrGreater(int build = -1)
         {
             return OSVersion.Major >= 10 && OSVersion.Build >= build;
+        }
+
+        /// <summary>
+        /// Returns true if the current OS is windows 7.
+        /// </summary>
+        /// <returns>true if the current OS is windows 7, else false.</returns>
+        public static bool IsWindows7()
+        {
+            return OSVersion.Major == 6 && OSVersion.Minor == 1;
         }
 
         /// <summary>
@@ -229,24 +248,5 @@ namespace WinkingCat.HelperLibs
             return string.Format("{0:n" + decimalPlaces + "} {1}", adjustedSize, SizeSuffixes[mag]);
         }
 
-
-        public static void WaitHideForm(Form form, out bool showFormAgain)
-        {
-            if (form == null || !SettingsManager.MainFormSettings.Hide_Form_On_Captrue)
-            {
-                showFormAgain = false;
-                return;
-            }
-
-            if (form.WindowState != FormWindowState.Minimized)
-            {
-                showFormAgain = true;
-                form.Hide();
-                System.Threading.Thread.Sleep(SettingsManager.MainFormSettings.Wait_Hide_Time);
-                return;
-            }
-
-            showFormAgain = false;
-        }
     }
 }

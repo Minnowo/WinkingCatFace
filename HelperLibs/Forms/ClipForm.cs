@@ -15,7 +15,7 @@ namespace WinkingCat.HelperLibs
         Right,
         Bottom
     }
-    public partial class ClipForm : Form, IUndoable
+    public partial class ClipForm : BaseForm, IUndoable
     {
         /// <summary>
         /// The name of the clip.
@@ -114,7 +114,7 @@ namespace WinkingCat.HelperLibs
             KeyDown += FormKeyDown;
             MouseWheel += ClipForm_MouseWheel;
 
-            ApplicationStyles.UpdateStylesEvent += UpdateTheme;
+            base.RegisterEvents();
 
             #region context menu
             cmMain.Opening += CmMain_Opening;
@@ -181,7 +181,7 @@ namespace WinkingCat.HelperLibs
         /// <summary>
         /// Updates the theme of the form.
         /// </summary>
-        public void UpdateTheme()
+        public override void UpdateTheme()
         {
             if (SettingsManager.MainFormSettings.useImersiveDarkMode)
             {
@@ -223,6 +223,7 @@ namespace WinkingCat.HelperLibs
         /// </summary>
         public void OCR_Image()
         {
+            // cause i'm really smart, you can't access OCRForm because this class is in the helper dll 
             /*if (File.Exists(Options.FilePath))
             {
                 OCRForm form = new OCRForm(Options.FilePath);
