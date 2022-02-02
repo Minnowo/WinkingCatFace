@@ -35,6 +35,7 @@ namespace WinkingCat.HelperLibs
 {
     public static class InternalSettings
     {
+        public const string DRIVES_FOLDERNAME = "|Drives|";
         public const string Plugin_IO_Path = "plugins\\";
         public const string Default_Screenshot_IO_Path = "screenshots\\";
         public const string Settings_IO_Path = "settings\\";

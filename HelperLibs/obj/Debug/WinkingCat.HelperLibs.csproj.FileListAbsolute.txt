@@ -37,6 +37,7 @@ D:\Programming\C#\WinkingCatFace\HelperLibs\bin\Debug\Microsoft.WindowsAPICodePa
 D:\Programming\C#\WinkingCatFace\HelperLibs\bin\Debug\Microsoft.WindowsAPICodePack.ShellExtensions.xml
 D:\Programming\C#\WinkingCatFace\HelperLibs\bin\Debug\zxing.xml
 D:\Programming\C#\WinkingCatFace\HelperLibs\bin\Debug\zxing.presentation.xml
+D:\Programming\C#\WinkingCatFace\HelperLibs\obj\Debug\WinkingCat.HelperLibs.csproj.AssemblyReference.cache
 D:\Programming\C#\WinkingCatFace\HelperLibs\obj\Debug\WinkingCat.HelperLibs.ColorDisplay.resources
 D:\Programming\C#\WinkingCatFace\HelperLibs\obj\Debug\WinkingCat.HelperLibs.ImageView.resources
 D:\Programming\C#\WinkingCatFace\HelperLibs\obj\Debug\WinkingCat.HelperLibs.ClipForm.resources

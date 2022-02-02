@@ -256,13 +256,16 @@ namespace WinkingCat.HelperLibs
         {
             if (!File.Exists(path))
                 return false;
-            
-            File.Delete(path);
 
-            if (File.Exists(path))
+            try
+            {
+                File.Delete(path);
+                return true;
+            }
+            catch 
+            {
                 return false;
-            
-            return true;
+            }
         }
 
         public static long GetFileSizeBytes(string path)
@@ -272,6 +275,38 @@ namespace WinkingCat.HelperLibs
                 return new FileInfo(path).Length;
             }
             return 0;
+        }
+
+        /// <summary>
+        /// Tries to create a <see cref="DirectoryInfo"/> for the given path.
+        /// </summary>
+        /// <param name="path">The path.</param>
+        /// <returns>true if the <see cref="DirectoryInfo"/> does not throw an error, else false</returns>
+        public static bool IsValidDirectoryPath(string path)
+        {
+            try
+            {
+                new DirectoryInfo(path);
+                return true;
+            }
+            catch
+            {
+                return false;
+            }
+        }
+
+        public static bool IsValidDirectoryPath(string path, out DirectoryInfo info)
+        {
+            try
+            {
+                info = new DirectoryInfo(path);
+                return true;
+            }
+            catch
+            {
+                info = null;
+                return false;
+            }
         }
     }
 }

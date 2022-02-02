@@ -27,7 +27,12 @@ namespace WinkingCat
 
             if (hotkey != null && !ignoreHotkeyPress && !tempTgnoreHotkeyPress)
             {
+                int i = SettingsManager.MainFormSettings.Wait_Hide_Time;
+                SettingsManager.MainFormSettings.Wait_Hide_Time = 0;
+
                 TaskHandler.ExecuteTask(hotkey.Callback);
+
+                SettingsManager.MainFormSettings.Wait_Hide_Time = i;
             }
         }
 

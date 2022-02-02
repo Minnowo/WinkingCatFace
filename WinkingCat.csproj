@@ -99,6 +99,15 @@
     <Compile Include="Controls\CustomListView.cs">
       <SubType>Component</SubType>
     </Compile>
+    <Compile Include="Controls\FolderView.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Controls\FolderView.Designer.cs">
+      <DependentUpon>FolderView.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Controls\LISTVIEW.cs">
+      <SubType>Component</SubType>
+    </Compile>
     <Compile Include="Events\CheckboxCheckedEvent.cs" />
     <Compile Include="Controls\HotkeyInputControl.cs">
       <SubType>UserControl</SubType>
@@ -152,6 +161,9 @@
     <Compile Include="TaskHandler.cs" />
     <EmbeddedResource Include="Controls\CustomListView.resx">
       <DependentUpon>CustomListView.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Controls\FolderView.resx">
+      <DependentUpon>FolderView.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Controls\HotkeyInputControl.resx">
       <DependentUpon>HotkeyInputControl.cs</DependentUpon>

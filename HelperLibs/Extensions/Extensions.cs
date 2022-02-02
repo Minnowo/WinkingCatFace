@@ -10,11 +10,22 @@ using System.IO;
 using System.Reflection;
 using System.ComponentModel;
 using System.Drawing.Imaging;
+using System.Text.RegularExpressions;
 
 namespace WinkingCat.HelperLibs
 {
     public static class Extensions
     {
+        public static IEnumerable<T> OrderByNatural<T>(this IEnumerable<T> items, Func<T, string> selector, StringComparer stringComparer = null)
+        {
+            Regex regex = new Regex(@"\d+", RegexOptions.Compiled);
+
+            int maxDigits = items
+                          .SelectMany(i => regex.Matches(selector(i)).Cast<Match>().Select(digitChunk => (int?)digitChunk.Value.Length))
+                          .Max() ?? 0;
+
+            return items.OrderBy(i => regex.Replace(selector(i), match => match.Value.PadLeft(maxDigits, '0')), stringComparer ?? StringComparer.CurrentCulture);
+        }
 
         public static Bitmap Copy(this Image image)
         {
@@ -26,36 +37,6 @@ namespace WinkingCat.HelperLibs
             MessageBox.Show(null, e.Message, "", MessageBoxButtons.OK, MessageBoxIcon.Error);
         }
 
-        public static byte[] ToByteArray(this Image x)
-        {
-            ImageConverter _imageConverter = new ImageConverter();
-            byte[] xByte = (byte[])_imageConverter.ConvertTo(x, typeof(byte[]));
-            return xByte;
-        }
-
-        public static ImageFormat ImageFormatFromString(this string format)
-        {
-            Type type = typeof(System.Drawing.Imaging.ImageFormat);
-            BindingFlags flags = BindingFlags.GetProperty;
-            object o = type.InvokeMember(format, flags, null, type, null);
-            return (ImageFormat)o;
-        }
-
-        public static string GetHash<T>(this string str) where T : HashAlgorithm, new()
-        {
-            using (T crypt = new T())
-            {
-                return ReturnStrHash(crypt.ComputeHash(Encoding.UTF8.GetBytes(str)));
-            }
-        }
-
-        public static string GetHash<T>(this Stream stream) where T : HashAlgorithm, new() 
-        { 
-            using (T crypt = new T()) 
-            { 
-                return ReturnStrHash(crypt.ComputeHash(stream)); 
-            }
-        }
      
         public static void InvokeSafe(this Control control, Action action)
         {
@@ -183,10 +164,7 @@ namespace WinkingCat.HelperLibs
             return value.ToString();
         }
 
-        public static T Clamp<T>(this T input, T min, T max) where T : IComparable<T>
-        {
-            return MathHelper.Clamp(input, min, max);
-        }
+        
         public static IList<T> Swap<T>(this IList<T> list, int indexA, int indexB)
         {
             T tmp = list[indexA];

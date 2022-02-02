@@ -12,10 +12,11 @@ using ZXing.Common;
 using ZXing.QrCode;
 using ZXing.Rendering;
 using System.Diagnostics;
+using System.Text.RegularExpressions;
 
 namespace WinkingCat.HelperLibs
 {
-    public class Helper
+    public static class Helper
     {
         public static readonly Version OSVersion = Environment.OSVersion.Version;
         public static readonly string[] SizeSuffixes = { "bytes", "KB", "MB", "GB", "TB", "PB", "EB", "ZB", "YB" };
@@ -114,6 +115,19 @@ namespace WinkingCat.HelperLibs
 
             return new Rectangle(new Point(x, y), new Size(width, height));
         }
+
+        public static int StringCompareNatural(string a, string b, StringComparison comparison = StringComparison.CurrentCulture)
+        {
+            Regex regex = new Regex(@"\d+", RegexOptions.Compiled);
+
+            int max = new[] { a, b }.SelectMany(x => regex.Matches(x).Cast<Match>().Select(y => (int?)y.Value.Length)).Max() ?? 0;
+
+            return string.Compare(
+                regex.Replace(a, m => m.Value.PadLeft(max, '0')),
+                regex.Replace(b, m => m.Value.PadLeft(max, '0')), comparison);
+        }
+
+        
 
         public static Image CreateBarCode(string text, int width, int height, BarcodeFormat format = BarcodeFormat.QR_CODE)
         {

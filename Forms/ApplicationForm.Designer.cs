@@ -55,15 +55,8 @@
             this.tsmiOpenMainWindowToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.tsmiExitToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.scMain = new System.Windows.Forms.SplitContainer();
-            this.lvListView = new WinkingCat.NoCheckboxListView();
-            this.chColumnHeader1 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
-            this.chColumnHeader5 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
-            this.chColumnHeader2 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
-            this.chColumnHeader3 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
-            this.chColumnHeader4 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.pbPreviewBox = new WinkingCat.HelperLibs._PictureBox();
-            //this.tsMain = new System.Windows.Forms.ToolStrip();
-            this.tsMain = new WinkingCat.HelperLibs.ToolStripEx(); // enable click through
+            this.tsMain = new WinkingCat.HelperLibs.ToolStripEx();
             this.tsddbToolStripDropDownButton_Capture = new System.Windows.Forms.ToolStripDropDownButton();
             this.tsmiToolStripMenuItem_region = new System.Windows.Forms.ToolStripMenuItem();
             this.tsmiToolStripMenuItem_monitor = new System.Windows.Forms.ToolStripMenuItem();
@@ -80,11 +73,17 @@
             this.tsmiToolStripDropDownButton_ColorPicker = new System.Windows.Forms.ToolStripMenuItem();
             this.tsmiToolStripDropDownButton_HashCheck = new System.Windows.Forms.ToolStripMenuItem();
             this.tsmiToolStripDropDownButton_QrCode = new System.Windows.Forms.ToolStripMenuItem();
+            this.oCRToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.tsmiToolStripDropDownButton_Regex = new System.Windows.Forms.ToolStripMenuItem();
             this.tssToolStripSeparator1 = new System.Windows.Forms.ToolStripSeparator();
             this.tsbToolStripButton_Style = new System.Windows.Forms.ToolStripButton();
             this.tsbToolStripDropDownButton_Settings = new System.Windows.Forms.ToolStripButton();
-            this.oCRToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.chColumnHeader1 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
+            this.chColumnHeader5 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
+            this.chColumnHeader2 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
+            this.chColumnHeader3 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
+            this.chColumnHeader4 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
+            this.lvListView = new WinkingCat.Controls.LISTVIEW();
             this.cmTray.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.scMain)).BeginInit();
             this.scMain.Panel1.SuspendLayout();
@@ -323,54 +322,6 @@
             this.scMain.SplitterWidth = 6;
             this.scMain.TabIndex = 2;
             // 
-            // lvListView
-            // 
-            this.lvListView.autoFillColumn = true;
-            this.lvListView.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(40)))), ((int)(((byte)(42)))), ((int)(((byte)(54)))));
-            this.lvListView.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.lvListView.Columns.AddRange(new System.Windows.Forms.ColumnHeader[] {
-            this.chColumnHeader1,
-            this.chColumnHeader5,
-            this.chColumnHeader2,
-            this.chColumnHeader3,
-            this.chColumnHeader4});
-            this.lvListView.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.lvListView.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(248)))), ((int)(((byte)(248)))), ((int)(((byte)(242)))));
-            this.lvListView.FullRowSelect = true;
-            this.lvListView.HideSelection = false;
-            this.lvListView.Location = new System.Drawing.Point(0, 0);
-            this.lvListView.Name = "lvListView";
-            this.lvListView.OwnerDraw = true;
-            this.lvListView.Size = new System.Drawing.Size(902, 211);
-            this.lvListView.TabIndex = 2;
-            this.lvListView.UseCompatibleStateImageBehavior = false;
-            this.lvListView.View = System.Windows.Forms.View.Details;
-            // 
-            // chColumnHeader1
-            // 
-            this.chColumnHeader1.Text = "Name";
-            this.chColumnHeader1.Width = 200;
-            // 
-            // chColumnHeader5
-            // 
-            this.chColumnHeader5.Text = "Type";
-            this.chColumnHeader5.Width = 100;
-            // 
-            // chColumnHeader2
-            // 
-            this.chColumnHeader2.Text = "Dimensions";
-            this.chColumnHeader2.Width = 120;
-            // 
-            // chColumnHeader3
-            // 
-            this.chColumnHeader3.Text = "Size";
-            this.chColumnHeader3.Width = 120;
-            // 
-            // chColumnHeader4
-            // 
-            this.chColumnHeader4.Text = "DateModified";
-            this.chColumnHeader4.Width = 200;
-            // 
             // pbPreviewBox
             // 
             this.pbPreviewBox.Dock = System.Windows.Forms.DockStyle.Fill;
@@ -382,6 +333,7 @@
             // tsMain
             // 
             this.tsMain.AutoSize = false;
+            this.tsMain.ClickThrough = false;
             this.tsMain.Dock = System.Windows.Forms.DockStyle.Left;
             this.tsMain.GripStyle = System.Windows.Forms.ToolStripGripStyle.Hidden;
             this.tsMain.ImageScalingSize = new System.Drawing.Size(24, 24);
@@ -559,6 +511,14 @@
             this.tsmiToolStripDropDownButton_QrCode.Size = new System.Drawing.Size(244, 38);
             this.tsmiToolStripDropDownButton_QrCode.Text = "QrCode Scan";
             // 
+            // oCRToolStripMenuItem
+            // 
+            this.oCRToolStripMenuItem.ImageScaling = System.Windows.Forms.ToolStripItemImageScaling.None;
+            this.oCRToolStripMenuItem.Name = "oCRToolStripMenuItem";
+            this.oCRToolStripMenuItem.Size = new System.Drawing.Size(244, 38);
+            this.oCRToolStripMenuItem.Text = "OCR";
+            this.oCRToolStripMenuItem.Click += new System.EventHandler(this.OCRToolStripMenuItem_Click);
+            // 
             // tsmiToolStripDropDownButton_Regex
             // 
             this.tsmiToolStripDropDownButton_Regex.Name = "tsmiToolStripDropDownButton_Regex";
@@ -592,17 +552,57 @@
             this.tsbToolStripDropDownButton_Settings.ImageScaling = System.Windows.Forms.ToolStripItemImageScaling.None;
             this.tsbToolStripDropDownButton_Settings.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.tsbToolStripDropDownButton_Settings.Name = "tsbToolStripDropDownButton_Settings";
-            this.tsbToolStripDropDownButton_Settings.Size = new System.Drawing.Size(108, 36);
+            this.tsbToolStripDropDownButton_Settings.Size = new System.Drawing.Size(182, 36);
             this.tsbToolStripDropDownButton_Settings.Text = "Settings";
             this.tsbToolStripDropDownButton_Settings.Click += new System.EventHandler(this.ToolStripDropDownButton_Settings_Click);
             // 
-            // oCRToolStripMenuItem
+            // chColumnHeader1
             // 
-            this.oCRToolStripMenuItem.ImageScaling = System.Windows.Forms.ToolStripItemImageScaling.None;
-            this.oCRToolStripMenuItem.Name = "oCRToolStripMenuItem";
-            this.oCRToolStripMenuItem.Size = new System.Drawing.Size(244, 38);
-            this.oCRToolStripMenuItem.Text = "OCR";
-            this.oCRToolStripMenuItem.Click += new System.EventHandler(this.OCRToolStripMenuItem_Click);
+            this.chColumnHeader1.Text = "Name";
+            this.chColumnHeader1.Width = 200;
+            // 
+            // chColumnHeader5
+            // 
+            this.chColumnHeader5.Text = "Type";
+            this.chColumnHeader5.Width = 100;
+            // 
+            // chColumnHeader2
+            // 
+            this.chColumnHeader2.Text = "Dimensions";
+            this.chColumnHeader2.Width = 120;
+            // 
+            // chColumnHeader3
+            // 
+            this.chColumnHeader3.Text = "Size";
+            this.chColumnHeader3.Width = 120;
+            // 
+            // chColumnHeader4
+            // 
+            this.chColumnHeader4.Text = "DateModified";
+            this.chColumnHeader4.Width = 200;
+            // 
+            // lvListView
+            // 
+            this.lvListView.AllowDrop = true;
+            this.lvListView.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(40)))), ((int)(((byte)(42)))), ((int)(((byte)(54)))));
+            this.lvListView.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.lvListView.Columns.AddRange(new System.Windows.Forms.ColumnHeader[] {
+            this.chColumnHeader1,
+            this.chColumnHeader5,
+            this.chColumnHeader2,
+            this.chColumnHeader3,
+            this.chColumnHeader4});
+            this.lvListView.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.lvListView.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(248)))), ((int)(((byte)(248)))), ((int)(((byte)(242)))));
+            this.lvListView.FullRowSelect = true;
+            this.lvListView.HideSelection = false;
+            this.lvListView.Location = new System.Drawing.Point(0, 0);
+            this.lvListView.Name = "lvListView";
+            this.lvListView.OwnerDraw = true;
+            this.lvListView.Size = new System.Drawing.Size(902, 211);
+            this.lvListView.TabIndex = 2;
+            this.lvListView.UseCompatibleStateImageBehavior = false;
+            this.lvListView.View = System.Windows.Forms.View.Details;
             // 
             // ApplicationForm
             // 
@@ -611,10 +611,11 @@
             this.ClientSize = new System.Drawing.Size(1086, 211);
             this.Controls.Add(this.scMain);
             this.Controls.Add(this.tsMain);
+            this.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(235)))), ((int)(((byte)(235)))), ((int)(((byte)(235)))));
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
-            this.MaximizeBox = true;
             this.MinimumSize = new System.Drawing.Size(666, 250);
             this.Name = "ApplicationForm";
+            this.TopMost = true;
             this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.MainForm_FormClosing);
             this.cmTray.ResumeLayout(false);
             this.scMain.Panel1.ResumeLayout(false);
@@ -649,7 +650,6 @@
         private System.Windows.Forms.ToolStripMenuItem tsmiClipFromClipboardToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem tsmiClipFromFileToolStripMenuItem;
         private System.Windows.Forms.SplitContainer scMain;
-        private System.Windows.Forms.ToolStrip tsMain;
         private System.Windows.Forms.ToolStripDropDownButton tsddbToolStripDropDownButton_Capture;
         private System.Windows.Forms.ToolStripMenuItem tsmiToolStripMenuItem_region;
         private System.Windows.Forms.ToolStripMenuItem tsmiToolStripMenuItem_monitor;
@@ -669,12 +669,6 @@
         private System.Windows.Forms.ToolStripSeparator tssToolStripSeparator1;
         private System.Windows.Forms.ToolStripButton tsbToolStripButton_Style;
         private System.Windows.Forms.ToolStripButton tsbToolStripDropDownButton_Settings;
-        private NoCheckboxListView lvListView;
-        private System.Windows.Forms.ColumnHeader chColumnHeader1;
-        private System.Windows.Forms.ColumnHeader chColumnHeader5;
-        private System.Windows.Forms.ColumnHeader chColumnHeader2;
-        private System.Windows.Forms.ColumnHeader chColumnHeader3;
-        private System.Windows.Forms.ColumnHeader chColumnHeader4;
         private HelperLibs._PictureBox pbPreviewBox;
         private System.Windows.Forms.ToolStripMenuItem tsmiTrayScreenColorPicker;
         private System.Windows.Forms.ToolStripMenuItem tsmiTrayColorWheel;
@@ -682,6 +676,13 @@
         private System.Windows.Forms.ToolStripMenuItem tsmiTrayQrCodeScan;
         private System.Windows.Forms.ToolStripMenuItem tsmiToolStripDropDownButton_Regex;
         private System.Windows.Forms.ToolStripMenuItem oCRToolStripMenuItem;
+        private HelperLibs.ToolStripEx tsMain;
+        private Controls.LISTVIEW lvListView;
+        private System.Windows.Forms.ColumnHeader chColumnHeader1;
+        private System.Windows.Forms.ColumnHeader chColumnHeader5;
+        private System.Windows.Forms.ColumnHeader chColumnHeader2;
+        private System.Windows.Forms.ColumnHeader chColumnHeader3;
+        private System.Windows.Forms.ColumnHeader chColumnHeader4;
     }
 }
 

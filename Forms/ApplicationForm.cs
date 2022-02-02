@@ -30,17 +30,33 @@ namespace WinkingCat
         {
             InitializeComponent();
             SuspendLayout();
-
-            this.Text = "";
-#if !DEBUG
-            TopMost = SettingsManager.MainFormSettings.Always_On_Top;
-            niTrayIcon.Visible = SettingsManager.MainFormSettings.Show_In_Tray;
-#endif
             preventOverflow = true;
+
+            trayClickTimer = new System.Windows.Forms.Timer();
+
             tsmiToolStripMenuItem_captureCursor.Checked = SettingsManager.RegionCaptureSettings.Capture_Cursor;
             tsmiCaptureCursorToolStripMenuItem.Checked = SettingsManager.RegionCaptureSettings.Capture_Cursor;
+
+#if !DEBUG
+            MaximizeBox        = SettingsManager.MainFormSettings.Show_Maximize_Box;
+            TopMost            = SettingsManager.MainFormSettings.Always_On_Top;
+            niTrayIcon.Visible = SettingsManager.MainFormSettings.Show_In_Tray;
+#endif
+
+            RegisterEvents();
+
             preventOverflow = false;
-            #region Capture dropdown buttons event bindings
+            ResumeLayout();
+
+            lvListView.AutoResizeColumns(ColumnHeaderAutoResizeStyle.ColumnContent);
+            lvListView.AutoResizeColumns(ColumnHeaderAutoResizeStyle.HeaderSize);
+            this.pbPreviewBox.previewOnClick = true;
+        }
+
+        protected override void RegisterEvents()
+        {
+            base.RegisterEvents();
+            
             tsddbToolStripDropDownButton_Capture.DropDown.Closing += toolStripDropDown_Closing;
             tsddbToolStripDropDownButton_Capture.DropDownOpening += tsmiCapture_DropDownOpening;
 
@@ -48,17 +64,13 @@ namespace WinkingCat
             tsmiToolStripMenuItem_fullscreen.Click += FullscreenCapture_Click;
             tsmiToolStripMenuItem_lastRegion.Click += LastRegionCapture_Click;
             tsmiToolStripMenuItem_captureCursor.Click += CursorCapture_Click;
-            #endregion
 
-            #region Clips dropdown buttons event bindings
             tsddbToolStripDropDownButton_Clips.DropDown.Closing += toolStripDropDown_Closing;
 
             tsmiToolStripMenuItem_newClip.Click += NewClip_Click;
             tsmiToolStripMenuItem_clipFromClipboard.Click += ClipFromClipboard_Click;
             tsmiToolStripMenuItem_clipFromFile.Click += ClipFromFile_Click;
-            #endregion
 
-            #region Tools dropdown buttons event bindings
             tsddbToolStripDropDownButton_Tools.DropDown.Closing += toolStripDropDown_Closing;
 
             tsmiToolStripDropDownButton_screenColorPicker.Click += ScreenColorPicker_Click;
@@ -66,15 +78,9 @@ namespace WinkingCat
             tsmiToolStripDropDownButton_QrCode.Click += QrCode_Click;
             tsmiToolStripDropDownButton_HashCheck.Click += HashCheck_Click;
             tsmiToolStripDropDownButton_Regex.Click += Regex_Click;
-            #endregion
 
-            #region Tray icon event bindings
-            trayClickTimer = new System.Windows.Forms.Timer();
-            trayClickTimer.Tick += TrayClickTimer_Interval;
-            niTrayIcon.MouseUp += NiTrayIcon_MouseClick1Up;
-            cmTray.Opening += tsmiCapture_DropDownOpening;
-
-            // capture
+            // system tray stuff // 
+            // capture 
             tsmiRegionToolStripMenuItem.Click += RegionCapture_Click;
             tsmiFullscreenToolStripMenuItem.Click += FullscreenCapture_Click;
             tsmiLastRegionToolStripMenuItem.Click += LastRegionCapture_Click;
@@ -96,29 +102,17 @@ namespace WinkingCat
             tsmiSettingsToolStripMenuItem.Click += ToolStripDropDownButton_Settings_Click;
             tsmiOpenMainWindowToolStripMenuItem.Click += OpenMainWindow_Click;
             tsmiExitToolStripMenuItem.Click += ExitApplication_Click;
-#endregion
 
-            LostFocus += MainForm_LostFocus;
-            GotFocus += MainForm_GotFocus;
-            Resize += MainForm_Resize;
-            ResizeEnd += MainForm_Resize;
-            Shown += MainForm_Shown;
+            // timer 
+            trayClickTimer.Tick += TrayClickTimer_Interval;
+            niTrayIcon.MouseUp += NiTrayIcon_MouseClick1Up;
+            cmTray.Opening += tsmiCapture_DropDownOpening;
 
             RegionCaptureHelper.ImageSaved += ImageSaved_Event;
 
             lvListView.ItemSelectionChanged += LvListView_ItemSelectionChanged;
             pbPreviewBox.pbMain.MouseClick += PbPreviewBox_MouseClick;
 
-            TopMost = SettingsManager.MainFormSettings.Always_On_Top;
-            MaximizeBox = SettingsManager.MainFormSettings.Show_Maximize_Box;
-
-            base.RegisterEvents();
-
-            ResumeLayout();
-
-            lvListView.AutoResizeColumns(ColumnHeaderAutoResizeStyle.ColumnContent);
-            lvListView.AutoResizeColumns(ColumnHeaderAutoResizeStyle.HeaderSize);
-            this.pbPreviewBox.previewOnClick = true;
         }
 
         /// <summary>
@@ -473,7 +467,7 @@ namespace WinkingCat
             switch (e.Button)
             {
                 case MouseButtons.Right:
-                    this.lvListView.UnselectAll();
+                    this.lvListView.DeselectAll();
                     this.scMain.Panel2Collapsed = true;
                     this.scMain.Panel2.Hide();
                     this.pbPreviewBox.Reset();
@@ -523,7 +517,7 @@ namespace WinkingCat
 
         public void ImageSaved_Event(object sender, ImageSavedEvent e)
         {
-            string[] row1 = {
+            /*string[] row1 = {
                 e.FileInfo.Extension,                                   // file type
                 $"{e.Dimensions.Width}, {e.Dimensions.Height}",     // dimensions
                 Helper.SizeSuffix(e.SizeInBytes),                         // size
@@ -541,7 +535,7 @@ namespace WinkingCat
             else
             {
                 lvListView.InsertItem(0, item);
-            }
+            }*/
         }
 
         #endregion

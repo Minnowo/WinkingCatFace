@@ -46,7 +46,7 @@ namespace WinkingCat.HelperLibs
         /// <summary>
         /// Registers default events used by the form.
         /// </summary>
-        protected void RegisterEvents()
+        protected virtual void RegisterEvents()
         {
             RegionCaptureHelper.RequestShowForms += ShowHide;
             SettingsManager.SettingsUpdatedEvent += UpdateSettings;
