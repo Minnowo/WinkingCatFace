@@ -10,7 +10,6 @@ namespace WinkingCat.HelperLibs
         public delegate void RequestShowFormsEvent(bool show);
         public static event RequestShowFormsEvent RequestShowForms;
 
-        public static event EventHandler<ImageSavedEvent> ImageSaved;
         public static RegionReturn LastRegionResult { get; private set; }
 
         /// <summary>
@@ -131,24 +130,10 @@ namespace WinkingCat.HelperLibs
         {
             if (ImageHelper.SaveImage(img, imageName))
             {
-                OnImageSaved(imageName, img.Size);
                 return imageName;
             }
 
             return string.Empty;
-        }
-
-        private static void OnImageSaved(string info, Size size)
-        {
-            OnImageSaved(new ImageSavedEvent(info, size));
-        }
-
-        private static void OnImageSaved(ImageSavedEvent info)
-        {
-            if (ImageSaved != null)
-            {
-                ImageSaved.Invoke(null, info);
-            }
         }
     }
 }

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Windows.Forms;
 using WinkingCat.HelperLibs;
+using System.IO;
 
 namespace WinkingCat
 {
@@ -20,11 +21,15 @@ namespace WinkingCat
 
         private void Form_Closing(object sender, EventArgs e)
         {
+            string dir = PathHelper.CurrentDirectory;
+
+            Directory.SetCurrentDirectory(PathHelper.BaseDirectory);
             SettingsManager.SaveClipSettings();
             SettingsManager.SaveMainFormSettings();
             SettingsManager.SaveRegionCaptureSettings();
             SettingsManager.SaveMiscSettings();
             SettingsManager.SaveHotkeySettings(HotkeyManager.hotKeys);
+            Directory.SetCurrentDirectory(dir);
         }
     }
 }

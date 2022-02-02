@@ -1,5 +1,5 @@
 ﻿using System;
-
+using System.IO;
 using System.Windows.Forms;
 
 using WinkingCat.HelperLibs;
@@ -54,12 +54,12 @@ namespace WinkingCat.Controls
             if (SelectedItemsCount < 1)
                 return;
 
-            if (this.SelectedIndex1 == this.SelectedIndices[0])
+            if (this.SelectedIndex2 == this.SelectedIndices[0])
             {
                 this.SelectedIndex1 = this.SelectedIndices[SelectedItemsCount - 1];
             }
 
-            if (this.SelectedIndex2 == this.SelectedIndices[0])
+            if (this.SelectedIndex1 == this.SelectedIndices[0])
             {
                 this.SelectedIndex2 = this.SelectedIndices[SelectedItemsCount - 1];
             }
@@ -78,8 +78,14 @@ namespace WinkingCat.Controls
             int c = 0;
             foreach (int i in this.SelectedIndices)
             {
-                files[c] = this.Items[i].SubItems[2].Text;
-                c++;
+                if (Items[i].Tag is FileInfo)
+                {
+                    files[c++] = ((FileInfo)Items[i].Tag).FullName;
+                }
+                else if (Items[i].Tag is DirectoryInfo)
+                {
+                    files[c++] = ((DirectoryInfo)Items[i].Tag).FullName;
+                }
             }
 
             DoDragDrop(new DataObject(DataFormats.FileDrop, files), this.DragDropEffects);
@@ -179,9 +185,16 @@ namespace WinkingCat.Controls
             }
         }
 
+        protected override void OnItemSelectionChanged(ListViewItemSelectionChangedEventArgs e)
+        {
+            SelectedIndex1 = e.ItemIndex;
+            SelectedIndex2 = e.ItemIndex;
+            base.OnItemSelectionChanged(e);
+        }
+
         protected override void WndProc(ref Message m)
         {
-            if (autoFillColumn && m.Msg == (int)WindowsMessages.PAINT && !DesignMode)
+            if (SettingsManager.MainFormSettings.forceColumnFill && m.Msg == (int)WindowsMessages.PAINT && !DesignMode)
             {
                 if (Columns.Count != 0) // sizes the columns to fill the rest of the list box
                 {

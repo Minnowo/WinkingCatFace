@@ -5,6 +5,7 @@ using System.Drawing.Imaging;
 using System.Drawing.Drawing2D;
 using System.IO;
 using System.Windows.Forms;
+using System.Threading.Tasks;
 
 namespace WinkingCat.HelperLibs
 {
@@ -549,6 +550,11 @@ namespace WinkingCat.HelperLibs
                 e.ShowError();
             }
             return null;
+        }
+
+        public static async Task<IMAGE> LoadImageAsync(string path)
+        {
+            return await Task.Run(() => { return LoadImage(path); });
         }
 
         public static IMAGE LoadImage(string path)

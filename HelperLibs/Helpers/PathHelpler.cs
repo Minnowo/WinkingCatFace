@@ -15,6 +15,7 @@ namespace WinkingCat.HelperLibs
 {
     public static class PathHelper
     {
+        public static string BaseDirectory = "";
         public static string CurrentDirectory { get { return Directory.GetCurrentDirectory(); } }
 
         /// <summary>
@@ -27,7 +28,7 @@ namespace WinkingCat.HelperLibs
 
             if (string.IsNullOrEmpty(dir)) 
             {
-                curDir = CurrentDirectory; 
+                curDir = BaseDirectory; 
             }
             else
             {
@@ -66,7 +67,7 @@ namespace WinkingCat.HelperLibs
         /// <returns>The screenshot folder path.</returns>
         public static string GetScreenshotFolder()
         {
-            string curDir = CurrentDirectory;
+            string curDir = BaseDirectory;
             CreateAllPaths(curDir);
 
             if (!SettingsManager.MiscSettings.Use_Custom_Screenshot_Folder || string.IsNullOrEmpty(SettingsManager.MiscSettings.Screenshot_Folder_Path))

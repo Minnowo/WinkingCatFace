@@ -23,6 +23,7 @@ X:\Languages\C#\WinkingCatFace\HelperLibs\obj\Release\WinkingCat.HelperLibs.cspr
 X:\Languages\C#\WinkingCatFace\HelperLibs\obj\Release\HelperLibs.dll
 X:\Languages\C#\WinkingCatFace\HelperLibs\obj\Release\HelperLibs.pdb
 D:\Programming\C#\WinkingCatFace\HelperLibs\bin\Release\HelperLibs.dll
+D:\Programming\C#\WinkingCatFace\HelperLibs\bin\Release\HelperLibs.pdb
 D:\Programming\C#\WinkingCatFace\HelperLibs\bin\Release\Microsoft.WindowsAPICodePack.dll
 D:\Programming\C#\WinkingCatFace\HelperLibs\bin\Release\Microsoft.WindowsAPICodePack.Shell.dll
 D:\Programming\C#\WinkingCatFace\HelperLibs\bin\Release\Microsoft.WindowsAPICodePack.ShellExtensions.dll
@@ -48,4 +49,3 @@ D:\Programming\C#\WinkingCatFace\HelperLibs\obj\Release\WinkingCat.HelperLibs.cs
 D:\Programming\C#\WinkingCatFace\HelperLibs\obj\Release\WinkingCat.HelperLibs.csproj.CopyComplete
 D:\Programming\C#\WinkingCatFace\HelperLibs\obj\Release\HelperLibs.dll
 D:\Programming\C#\WinkingCatFace\HelperLibs\obj\Release\HelperLibs.pdb
-D:\Programming\C#\WinkingCatFace\HelperLibs\bin\Release\HelperLibs.pdb

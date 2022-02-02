@@ -53,11 +53,15 @@ namespace WinkingCat.HelperLibs
 
         public static void SaveAllSettings(List<Hotkey> hotkeys)
         {
+            string dir = Directory.GetCurrentDirectory();
+
+            Directory.SetCurrentDirectory(AppContext.BaseDirectory);
             SettingsManager.SaveClipSettings();
             SettingsManager.SaveMainFormSettings();
             SettingsManager.SaveRegionCaptureSettings();
             SettingsManager.SaveMiscSettings();
             SettingsManager.SaveHotkeySettings(hotkeys);
+            Directory.SetCurrentDirectory(dir);
         }
 
 

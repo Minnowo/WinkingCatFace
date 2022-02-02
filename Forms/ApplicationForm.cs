@@ -16,7 +16,10 @@ namespace WinkingCat
     {
         List<BaseForm> _childrenHandles = new List<BaseForm>();
 
+        private Task _loadImageThread;
+
         private System.Windows.Forms.Timer trayClickTimer;
+        private TIMER _loadImageTimer = new TIMER() { Interval = 50 };
 
         private int trayClickCount = 0;
 
@@ -30,6 +33,12 @@ namespace WinkingCat
         {
             InitializeComponent();
             SuspendLayout();
+
+            folderView1.ListView_.View = View.Details;
+            folderView1.ListView_.Columns.Add(new ColumnHeader() { Name = "Filename", Text = "Filename", Width=500});
+            folderView1.ListView_.Columns.Add(new ColumnHeader() { Name = "Size", Text = "Size", Width =30 });
+            folderView1.CurrentDirectory = PathHelper.GetScreenshotFolder();
+
             preventOverflow = true;
 
             trayClickTimer = new System.Windows.Forms.Timer();
@@ -42,15 +51,14 @@ namespace WinkingCat
             TopMost            = SettingsManager.MainFormSettings.Always_On_Top;
             niTrayIcon.Visible = SettingsManager.MainFormSettings.Show_In_Tray;
 #endif
+            _loadImageTimer.SetInterval(100);
 
             RegisterEvents();
 
             preventOverflow = false;
             ResumeLayout();
 
-            lvListView.AutoResizeColumns(ColumnHeaderAutoResizeStyle.ColumnContent);
-            lvListView.AutoResizeColumns(ColumnHeaderAutoResizeStyle.HeaderSize);
-            this.pbPreviewBox.previewOnClick = true;
+            // this.pbPreviewBox.previewOnClick = true;
         }
 
         protected override void RegisterEvents()
@@ -108,10 +116,11 @@ namespace WinkingCat
             niTrayIcon.MouseUp += NiTrayIcon_MouseClick1Up;
             cmTray.Opening += tsmiCapture_DropDownOpening;
 
-            RegionCaptureHelper.ImageSaved += ImageSaved_Event;
+            _loadImageTimer.Tick += LoadImageTimer_Tick;
+            folderView1.ListView_.SelectedIndexChanged += LvListView_ItemSelectionChanged;
 
-            lvListView.ItemSelectionChanged += LvListView_ItemSelectionChanged;
-            pbPreviewBox.pbMain.MouseClick += PbPreviewBox_MouseClick;
+            //lvListView.ItemSelectionChanged += LvListView_ItemSelectionChanged;
+            // pbPreviewBox.pbMain.MouseClick += PbPreviewBox_MouseClick;
 
         }
 
@@ -171,7 +180,7 @@ namespace WinkingCat
             cmTray.Renderer = new ToolStripCustomRenderer();
             cmTray.Opacity = SettingsManager.MainFormSettings.contextMenuOpacity;
 
-            lvListView.ForeColor = SettingsManager.MainFormSettings.textColor;
+            //lvListView.ForeColor = SettingsManager.MainFormSettings.textColor;
             Refresh();
         }
 
@@ -447,6 +456,32 @@ namespace WinkingCat
             }
         }
 
+        private void LoadImageTimer_Tick(object sender, EventArgs e)
+        {
+            _loadImageTimer.Stop();
+
+            if (folderView1.ListView_.SelectedIndex1 == -1)
+                return;
+
+
+            if(folderView1.ListView_.Items[folderView1.ListView_.SelectedIndex1].Tag is FileInfo)
+            {
+                FileInfo f = folderView1.ListView_.Items[folderView1.ListView_.SelectedIndex1].Tag as FileInfo;
+
+                if (!File.Exists(f.FullName))
+                    return;
+
+                if (imageDisplay1.ImagePath != null && f.FullName == imageDisplay1.ImagePath.FullName)
+                    return;
+
+                if (_loadImageThread != null && _loadImageThread.Status == TaskStatus.Running)
+                    return;
+
+                _loadImageThread?.Dispose();
+                _loadImageThread = imageDisplay1.TryLoadImageAsync(f.FullName);
+            }
+        }
+
         #endregion
 
         #region Settings / Styles events
@@ -467,28 +502,18 @@ namespace WinkingCat
             switch (e.Button)
             {
                 case MouseButtons.Right:
-                    this.lvListView.DeselectAll();
+                    //this.lvListView.DeselectAll();
                     this.scMain.Panel2Collapsed = true;
                     this.scMain.Panel2.Hide();
-                    this.pbPreviewBox.Reset();
+                    // this.pbPreviewBox.Reset();
                     break;
             }
         }
 
-        private void LvListView_ItemSelectionChanged(object sender, ListViewItemSelectionChangedEventArgs e)
+        private void LvListView_ItemSelectionChanged(object sender, EventArgs e)
         {
-                if (e.IsSelected)
-                {
-                    this.scMain.Panel2.Show();
-                    this.scMain.Panel2Collapsed = false;
-                    this.pbPreviewBox.SetImage((string)e.Item.Tag);
-                }
-                else
-                {
-                    this.scMain.Panel2Collapsed = true;
-                    this.scMain.Panel2.Hide();
-                    this.pbPreviewBox.Reset();
-                }
+            _loadImageTimer.Stop();
+            _loadImageTimer.Start();
         }
 
         private void toolStripDropDown_Closing(object sender, ToolStripDropDownClosingEventArgs e)
@@ -509,33 +534,6 @@ namespace WinkingCat
                         forceDropDownClose = false;
                     break;
             }
-        }
-
-        #endregion
-
-        #region other events
-
-        public void ImageSaved_Event(object sender, ImageSavedEvent e)
-        {
-            /*string[] row1 = {
-                e.FileInfo.Extension,                                   // file type
-                $"{e.Dimensions.Width}, {e.Dimensions.Height}",     // dimensions
-                Helper.SizeSuffix(e.SizeInBytes),                         // size
-                File.GetLastWriteTime(e.FullName).ToString()   // date modified
-            };
-
-            ListViewItem item = new ListViewItem() { Text = e.Name, Tag = e.FullName };
-
-            item.SubItems.AddRange(row1);
-
-            if (lvListView.Items.Count <= 0)
-            {
-                lvListView.AddItem(item);
-            }
-            else
-            {
-                lvListView.InsertItem(0, item);
-            }*/
         }
 
         #endregion

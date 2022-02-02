@@ -34,6 +34,8 @@ namespace WinkingCat.HelperLibs
         public bool AboveDrives { get { return _AboveDrives; } }
         private bool _AboveDrives = false;
 
+        public bool GetAbsolutePaths = true;
+
         public string CurrentDirectory
         {
             get
@@ -108,11 +110,12 @@ namespace WinkingCat.HelperLibs
 
             directory = path;
 
+            FileCache = new List<string>();
+            DirectoryCache = new List<string>();
+
             if (!Directory.Exists(path))
             {
                 CreateWatchers(Directory.GetCurrentDirectory(), false);
-                FileCache = new List<string>();
-                DirectoryCache = new List<string>();
                 return;
             }
 

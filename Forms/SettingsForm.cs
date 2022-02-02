@@ -6,6 +6,7 @@ using System.Drawing;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.IO;
 using System.Windows.Forms;
 using WinkingCat.HelperLibs;
 
@@ -124,11 +125,15 @@ namespace WinkingCat
 
         private void SaveSettingsToDisk()
         {
+            string dir = PathHelper.CurrentDirectory;
+
+            Directory.SetCurrentDirectory(PathHelper.BaseDirectory);
             SettingsManager.SaveClipSettings();
             SettingsManager.SaveMainFormSettings();
             SettingsManager.SaveRegionCaptureSettings();
             SettingsManager.SaveMiscSettings();
             SettingsManager.SaveHotkeySettings(HotkeyManager.hotKeys);
+            Directory.SetCurrentDirectory(dir);
         }
 
         #region MainForm events

@@ -18,7 +18,6 @@ namespace WinkingCat
         /// </summary>
         public static ApplicationForm MainForm;
 
-
         [STAThread]
         static void Main(string[] args)
         {
@@ -72,6 +71,8 @@ namespace WinkingCat
 
         private static void Run()
         {
+            PathHelper.BaseDirectory = AppContext.BaseDirectory;
+
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
 
@@ -101,6 +102,7 @@ namespace WinkingCat
 
             Application.Run(MainForm);
 
+            Directory.SetCurrentDirectory(PathHelper.BaseDirectory);
 
             SettingsManager.SaveAllSettings(HotkeyManager.hotKeys);
         }

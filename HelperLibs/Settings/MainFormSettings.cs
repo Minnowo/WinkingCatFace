@@ -15,6 +15,9 @@ namespace WinkingCat.HelperLibs
     public class MainFormSettings
     {
         [Browsable(false)]
+        public bool Open_Files_On_Double_Click { get; set; } = true;
+
+        [Browsable(false)]
         public bool Show_Maximize_Box { get; set; } = true;
 
         [Browsable(false)]
@@ -50,6 +53,9 @@ namespace WinkingCat.HelperLibs
         public float contextMenuOpacity { get; set; } = 0.9f;
         [DisplayName("Use Imersive Dark Mode")]
         public bool useImersiveDarkMode { get; set; } = true;
+
+        [DisplayName("Force Listview Column Fill")]
+        public bool forceColumnFill { get; set; } = true;
 
         [XmlIgnore]
         [DisplayName("Background Color")]

@@ -15,6 +15,11 @@ namespace WinkingCat.Controls
 {
     public partial class FolderView : UserControl
     {
+        public ListViewGroupCollection Groups
+        {
+            get { return this.ListView_.Groups; }
+        }
+
         /// <summary>
         /// The current worker directory / displayed directory
         /// </summary>
@@ -82,7 +87,7 @@ namespace WinkingCat.Controls
         /// <summary>
         /// Prevents overflow errors
         /// </summary>
-        private bool _PreventOverflow = true;
+        private bool _PreventOverflow = false;
 
         public FolderView()
         {
@@ -94,6 +99,11 @@ namespace WinkingCat.Controls
             this.textBox1.AutoCompleteMode = AutoCompleteMode.Suggest;
             this.textBox1.AutoCompleteSource = AutoCompleteSource.FileSystemDirectories;
 
+            ListView_.RetrieveVirtualItem += new RetrieveVirtualItemEventHandler(listView1_RetrieveVirtualItem);
+            ListView_.CacheVirtualItems += new CacheVirtualItemsEventHandler(listView1_CacheVirtualItems);
+            ListView_.ItemActivate += ListView1_ItemActivate;
+
+            ListView_.GridLines = false;
             this.ListView_.VirtualMode = true;
             this.ListView_.VirtualListSize = 0;
             this.ListView_.Sorting = SortOrder.None;
@@ -111,6 +121,13 @@ namespace WinkingCat.Controls
             _FolderWatcher.FileRenamed += _FolderWatcher_FileRenamed;
             _FolderWatcher.ItemChanged += _FolderWatcher_ItemChanged;
 
+            ListView_.UpdateTheme();
+            ListView_.AutoResizeColumns(ColumnHeaderAutoResizeStyle.ColumnContent);
+            ListView_.AutoResizeColumns(ColumnHeaderAutoResizeStyle.HeaderSize);
+
+            ApplicationStyles.ApplyCustomThemeToControl(this);
+
+            CurrentDirectory = PathHelper.GetScreenshotFolder();
         }
 
         public void ForceListviewRedraw()
@@ -272,7 +289,7 @@ namespace WinkingCat.Controls
             {
                 Directory.SetCurrentDirectory(PathHelper.GetScreenshotFolder());
             }
-
+            Console.WriteLine(path);
             _FolderWatcher.UpdateDirectory(path);
             
             this.ListView_.VirtualListSize = _FolderWatcher.GetTotalCount();
@@ -280,6 +297,28 @@ namespace WinkingCat.Controls
             ForceListviewRedraw();
 
             GC.Collect();
+        }
+
+        private void ListView1_ItemActivate(object sender, EventArgs e)
+        {
+            if (_PreventOverflow || ListView_.SelectedIndex1 == -1)
+                return;
+
+            if (ListView_.Items[ListView_.SelectedIndex1].Tag == null)
+                return;
+
+            if (ListView_.Items[ListView_.SelectedIndex1].Tag is FileInfo)
+            {
+                if (SettingsManager.MainFormSettings.Open_Files_On_Double_Click)
+                {
+                    PathHelper.OpenWithDefaultProgram(((FileInfo)ListView_.Items[ListView_.SelectedIndex1].Tag).FullName);
+                }
+                return;
+            }
+            else if (ListView_.Items[ListView_.SelectedIndex1].Tag is DirectoryInfo)
+                    {
+                UpdateDirectory(((DirectoryInfo)ListView_.Items[ListView_.SelectedIndex1].Tag).FullName, true); 
+            }
         }
 
         private void listView1_RetrieveVirtualItem(object sender, RetrieveVirtualItemEventArgs e)
@@ -301,7 +340,7 @@ namespace WinkingCat.Controls
                     DirectoryInfo dinfo = new DirectoryInfo(_FolderWatcher.DirectoryCache[e.ItemIndex]);
                     ListViewItem ditem = new ListViewItem(dinfo.Name);
                     ditem.SubItems.Add("");
-                    ditem.SubItems.Add(dinfo.FullName);
+                    ditem.Tag = dinfo;
 
                     e.Item = ditem;
                     return;
@@ -317,6 +356,7 @@ namespace WinkingCat.Controls
                 {
                     finfo = new FileInfo(_FolderWatcher.FileCache[index]);
                     fitem = new ListViewItem(finfo.Name);
+
                     if (finfo.Exists)
                     {
                         fitem.SubItems.Add(Helper.SizeSuffix(finfo.Length, 2));
@@ -325,12 +365,12 @@ namespace WinkingCat.Controls
                     {
                         fitem.SubItems.Add(Helper.SizeSuffix(0, 2));
                     }
-                    fitem.SubItems.Add(finfo.FullName);
+
+                    fitem.Tag = finfo;
                 }
                 else
                 {
                     fitem = new ListViewItem();
-                    fitem.SubItems.Add("");
                     fitem.SubItems.Add("");
                 }
 
@@ -376,12 +416,11 @@ namespace WinkingCat.Controls
                         ditem = new ListViewItem(dinfo.Name);
 
                         ditem.SubItems.Add("");
-                        ditem.SubItems.Add(dinfo.FullName);
+                        ditem.Tag = dinfo;
                     }
                     else
                     {
                         ditem = new ListViewItem();
-                        ditem.SubItems.Add("");
                         ditem.SubItems.Add("");
                     }
                     _ListViewItemCache[count] = ditem;
@@ -405,12 +444,11 @@ namespace WinkingCat.Controls
                         ditem = new ListViewItem(dinfo.Name);
 
                         ditem.SubItems.Add("");
-                        ditem.SubItems.Add(dinfo.FullName);
+                        ditem.Tag = dinfo;
                     }
                     else
                     {
                         ditem = new ListViewItem();
-                        ditem.SubItems.Add("");
                         ditem.SubItems.Add("");
                     }
 
@@ -437,12 +475,12 @@ namespace WinkingCat.Controls
                         {
                             fitem.SubItems.Add("DELETED");
                         }
-                        fitem.SubItems.Add(finfo.FullName);
+
+                        fitem.Tag = finfo;
                     }
                     else
                     {
                         fitem = new ListViewItem();
-                        fitem.SubItems.Add("");
                         fitem.SubItems.Add("");
                     }
 
@@ -474,12 +512,11 @@ namespace WinkingCat.Controls
                         fitem.SubItems.Add("DELETED");
                     }
 
-                    fitem.SubItems.Add(finfo.FullName);
+                    fitem.Tag = finfo;
                 }
                 else
                 {
                     fitem = new ListViewItem();
-                    fitem.SubItems.Add("");
                     fitem.SubItems.Add("");
                 }
 
@@ -490,7 +527,27 @@ namespace WinkingCat.Controls
 
         private void UpDirectoryLevel_Click(object sender, EventArgs e)
         {
+            if (!PathHelper.IsValidDirectoryPath(this.CurrentDirectory))
+                return;
 
+            if (string.IsNullOrEmpty(this.CurrentDirectory) || CurrentDirectory == InternalSettings.DRIVES_FOLDERNAME)
+            {
+                this.LoadDirectory(InternalSettings.DRIVES_FOLDERNAME, true);
+                this.UpdateTextbox();
+                return;
+            }
+
+            DirectoryInfo info = new DirectoryInfo(this.CurrentDirectory);
+            if (info.Parent != null)
+            {
+                this.UpdateDirectory(info.Parent.FullName, true);
+                this.SetLastDirectoryIndex();
+            }
+            else
+            {
+                this.LoadDirectory(InternalSettings.DRIVES_FOLDERNAME, true);
+            }
+            this.UpdateTextbox();
         }
 
         private void textBox1_PreviewKeyDown(object sender, PreviewKeyDownEventArgs e)

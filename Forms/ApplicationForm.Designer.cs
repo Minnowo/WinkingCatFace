@@ -55,7 +55,6 @@
             this.tsmiOpenMainWindowToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.tsmiExitToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.scMain = new System.Windows.Forms.SplitContainer();
-            this.pbPreviewBox = new WinkingCat.HelperLibs._PictureBox();
             this.tsMain = new WinkingCat.HelperLibs.ToolStripEx();
             this.tsddbToolStripDropDownButton_Capture = new System.Windows.Forms.ToolStripDropDownButton();
             this.tsmiToolStripMenuItem_region = new System.Windows.Forms.ToolStripMenuItem();
@@ -78,12 +77,8 @@
             this.tssToolStripSeparator1 = new System.Windows.Forms.ToolStripSeparator();
             this.tsbToolStripButton_Style = new System.Windows.Forms.ToolStripButton();
             this.tsbToolStripDropDownButton_Settings = new System.Windows.Forms.ToolStripButton();
-            this.chColumnHeader1 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
-            this.chColumnHeader5 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
-            this.chColumnHeader2 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
-            this.chColumnHeader3 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
-            this.chColumnHeader4 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
-            this.lvListView = new WinkingCat.Controls.LISTVIEW();
+            this.imageDisplay1 = new WinkingCat.HelperLibs.Controls.ImageDisplay();
+            this.folderView1 = new WinkingCat.Controls.FolderView();
             this.cmTray.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.scMain)).BeginInit();
             this.scMain.Panel1.SuspendLayout();
@@ -311,24 +306,15 @@
             // 
             // scMain.Panel1
             // 
-            this.scMain.Panel1.Controls.Add(this.lvListView);
+            this.scMain.Panel1.Controls.Add(this.folderView1);
             // 
             // scMain.Panel2
             // 
-            this.scMain.Panel2.Controls.Add(this.pbPreviewBox);
-            this.scMain.Panel2Collapsed = true;
-            this.scMain.Size = new System.Drawing.Size(902, 211);
+            this.scMain.Panel2.Controls.Add(this.imageDisplay1);
+            this.scMain.Size = new System.Drawing.Size(902, 406);
             this.scMain.SplitterDistance = 600;
             this.scMain.SplitterWidth = 6;
             this.scMain.TabIndex = 2;
-            // 
-            // pbPreviewBox
-            // 
-            this.pbPreviewBox.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.pbPreviewBox.Location = new System.Drawing.Point(0, 0);
-            this.pbPreviewBox.Name = "pbPreviewBox";
-            this.pbPreviewBox.Size = new System.Drawing.Size(96, 100);
-            this.pbPreviewBox.TabIndex = 0;
             // 
             // tsMain
             // 
@@ -348,7 +334,7 @@
             this.tsMain.Location = new System.Drawing.Point(0, 0);
             this.tsMain.Name = "tsMain";
             this.tsMain.ShowItemToolTips = false;
-            this.tsMain.Size = new System.Drawing.Size(184, 211);
+            this.tsMain.Size = new System.Drawing.Size(184, 406);
             this.tsMain.TabIndex = 1;
             this.tsMain.Text = "toolStrip1";
             // 
@@ -556,59 +542,37 @@
             this.tsbToolStripDropDownButton_Settings.Text = "Settings";
             this.tsbToolStripDropDownButton_Settings.Click += new System.EventHandler(this.ToolStripDropDownButton_Settings_Click);
             // 
-            // chColumnHeader1
+            // imageDisplay1
             // 
-            this.chColumnHeader1.Text = "Name";
-            this.chColumnHeader1.Width = 200;
+            this.imageDisplay1.CellColor1 = System.Drawing.Color.FromArgb(((int)(((byte)(32)))), ((int)(((byte)(32)))), ((int)(((byte)(32)))));
+            this.imageDisplay1.CellColor2 = System.Drawing.Color.FromArgb(((int)(((byte)(64)))), ((int)(((byte)(64)))), ((int)(((byte)(64)))));
+            this.imageDisplay1.CellScale = 2F;
+            this.imageDisplay1.CellSize = 32;
+            this.imageDisplay1.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.imageDisplay1.DrawMode = WinkingCat.HelperLibs.Controls.DrawMode.FitImage;
+            this.imageDisplay1.Image = null;
+            this.imageDisplay1.InterpolationMode = System.Drawing.Drawing2D.InterpolationMode.NearestNeighbor;
+            this.imageDisplay1.Location = new System.Drawing.Point(0, 0);
+            this.imageDisplay1.Name = "imageDisplay1";
+            this.imageDisplay1.Size = new System.Drawing.Size(296, 406);
+            this.imageDisplay1.TabIndex = 0;
             // 
-            // chColumnHeader5
+            // folderView1
             // 
-            this.chColumnHeader5.Text = "Type";
-            this.chColumnHeader5.Width = 100;
-            // 
-            // chColumnHeader2
-            // 
-            this.chColumnHeader2.Text = "Dimensions";
-            this.chColumnHeader2.Width = 120;
-            // 
-            // chColumnHeader3
-            // 
-            this.chColumnHeader3.Text = "Size";
-            this.chColumnHeader3.Width = 120;
-            // 
-            // chColumnHeader4
-            // 
-            this.chColumnHeader4.Text = "DateModified";
-            this.chColumnHeader4.Width = 200;
-            // 
-            // lvListView
-            // 
-            this.lvListView.AllowDrop = true;
-            this.lvListView.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(40)))), ((int)(((byte)(42)))), ((int)(((byte)(54)))));
-            this.lvListView.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.lvListView.Columns.AddRange(new System.Windows.Forms.ColumnHeader[] {
-            this.chColumnHeader1,
-            this.chColumnHeader5,
-            this.chColumnHeader2,
-            this.chColumnHeader3,
-            this.chColumnHeader4});
-            this.lvListView.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.lvListView.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(248)))), ((int)(((byte)(248)))), ((int)(((byte)(242)))));
-            this.lvListView.FullRowSelect = true;
-            this.lvListView.HideSelection = false;
-            this.lvListView.Location = new System.Drawing.Point(0, 0);
-            this.lvListView.Name = "lvListView";
-            this.lvListView.OwnerDraw = true;
-            this.lvListView.Size = new System.Drawing.Size(902, 211);
-            this.lvListView.TabIndex = 2;
-            this.lvListView.UseCompatibleStateImageBehavior = false;
-            this.lvListView.View = System.Windows.Forms.View.Details;
+            this.folderView1.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(42)))), ((int)(((byte)(47)))), ((int)(((byte)(56)))));
+            this.folderView1.CurrentDirectory = "C:\\";
+            this.folderView1.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.folderView1.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(235)))), ((int)(((byte)(235)))), ((int)(((byte)(235)))));
+            this.folderView1.Location = new System.Drawing.Point(0, 0);
+            this.folderView1.Name = "folderView1";
+            this.folderView1.Size = new System.Drawing.Size(600, 406);
+            this.folderView1.TabIndex = 0;
             // 
             // ApplicationForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(1086, 211);
+            this.ClientSize = new System.Drawing.Size(1086, 406);
             this.Controls.Add(this.scMain);
             this.Controls.Add(this.tsMain);
             this.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(235)))), ((int)(((byte)(235)))), ((int)(((byte)(235)))));
@@ -669,7 +633,6 @@
         private System.Windows.Forms.ToolStripSeparator tssToolStripSeparator1;
         private System.Windows.Forms.ToolStripButton tsbToolStripButton_Style;
         private System.Windows.Forms.ToolStripButton tsbToolStripDropDownButton_Settings;
-        private HelperLibs._PictureBox pbPreviewBox;
         private System.Windows.Forms.ToolStripMenuItem tsmiTrayScreenColorPicker;
         private System.Windows.Forms.ToolStripMenuItem tsmiTrayColorWheel;
         private System.Windows.Forms.ToolStripMenuItem tsmiTrayHashCheck;
@@ -677,12 +640,8 @@
         private System.Windows.Forms.ToolStripMenuItem tsmiToolStripDropDownButton_Regex;
         private System.Windows.Forms.ToolStripMenuItem oCRToolStripMenuItem;
         private HelperLibs.ToolStripEx tsMain;
-        private Controls.LISTVIEW lvListView;
-        private System.Windows.Forms.ColumnHeader chColumnHeader1;
-        private System.Windows.Forms.ColumnHeader chColumnHeader5;
-        private System.Windows.Forms.ColumnHeader chColumnHeader2;
-        private System.Windows.Forms.ColumnHeader chColumnHeader3;
-        private System.Windows.Forms.ColumnHeader chColumnHeader4;
+        private Controls.FolderView folderView1;
+        private HelperLibs.Controls.ImageDisplay imageDisplay1;
     }
 }
 
