@@ -148,6 +148,8 @@ namespace WinkingCat.HelperLibs
 
         public static bool CPU_Type_x64 = IntPtr.Size == 8;
 
+        public static Size TSMI_Generated_Icon_Size = new Size(16, 16);
+
         public static void UpdateDialogFilters()
         {
             if (WebP_Plugin_Exists)

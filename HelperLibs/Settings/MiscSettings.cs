@@ -4,6 +4,7 @@ using System.ComponentModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Drawing.Drawing2D;
 
 namespace WinkingCat.HelperLibs
 {
@@ -38,5 +39,7 @@ namespace WinkingCat.HelperLibs
         }
         public ImgFormat Default_Image_Format { get; set; } = ImgFormat.png;
         public ColorFormat Default_Color_Format { get; set; } = ColorFormat.RGB;
+        public InterpolationMode Default_Interpolation_Mode { get; set; } = InterpolationMode.NearestNeighbor;
+        public HelperLibs.Controls.DrawMode Default_Draw_Mode { get; set; } = Controls.DrawMode.FitImage;
     }
 }

@@ -60,6 +60,22 @@ namespace WinkingCat.HelperLibs
             
         }
 
+        public static bool PickColorDialogue(out Color c, Color inital)
+        {
+            using(ColorPickerForm cpf = new ColorPickerForm(inital))
+            {
+                cpf.ShowDialog();
+
+                if (cpf.DialogResult == DialogResult.Cancel)
+                {
+                    c = inital;
+                    return false;
+                }
+
+                c = cpf.GetCurrentColor();
+                return true;
+            }
+        }
 
         private void ColorPicker_ColorChanged(object sender, ColorEventArgs e)
         {

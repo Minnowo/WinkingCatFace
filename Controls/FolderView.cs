@@ -125,9 +125,17 @@ namespace WinkingCat.Controls
             ListView_.AutoResizeColumns(ColumnHeaderAutoResizeStyle.ColumnContent);
             ListView_.AutoResizeColumns(ColumnHeaderAutoResizeStyle.HeaderSize);
 
-            ApplicationStyles.ApplyCustomThemeToControl(this);
+            UpdateTheme();
 
-            CurrentDirectory = PathHelper.GetScreenshotFolder();
+            CurrentDirectory = "C:\\";// PathHelper.GetScreenshotFolder();
+
+            ApplicationStyles.UpdateThemeEvent += UpdateTheme;
+        }
+
+        public void UpdateTheme()
+        {
+            ApplicationStyles.ApplyCustomThemeToControl(this);
+            Invalidate();
         }
 
         public void ForceListviewRedraw()

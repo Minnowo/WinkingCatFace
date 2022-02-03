@@ -55,6 +55,13 @@
             this.tsmiOpenMainWindowToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.tsmiExitToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.scMain = new System.Windows.Forms.SplitContainer();
+            this.folderView1 = new WinkingCat.Controls.FolderView();
+            this.button2 = new System.Windows.Forms.Button();
+            this.button1 = new System.Windows.Forms.Button();
+            this.textBox1 = new System.Windows.Forms.TextBox();
+            this.comboBox2 = new System.Windows.Forms.ComboBox();
+            this.comboBox1 = new System.Windows.Forms.ComboBox();
+            this.imageDisplay1 = new WinkingCat.HelperLibs.Controls.ImageDisplay();
             this.tsMain = new WinkingCat.HelperLibs.ToolStripEx();
             this.tsddbToolStripDropDownButton_Capture = new System.Windows.Forms.ToolStripDropDownButton();
             this.tsmiToolStripMenuItem_region = new System.Windows.Forms.ToolStripMenuItem();
@@ -77,14 +84,22 @@
             this.tssToolStripSeparator1 = new System.Windows.Forms.ToolStripSeparator();
             this.tsbToolStripButton_Style = new System.Windows.Forms.ToolStripButton();
             this.tsbToolStripDropDownButton_Settings = new System.Windows.Forms.ToolStripButton();
-            this.imageDisplay1 = new WinkingCat.HelperLibs.Controls.ImageDisplay();
-            this.folderView1 = new WinkingCat.Controls.FolderView();
+            this.imageDisplayContextMenu = new System.Windows.Forms.ContextMenuStrip(this.components);
+            this.copyImageToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.useBackColor1OnlyToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.setBackColor1ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.setBackColor2ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.resetXYOffsetToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.toolStripSeparator1 = new System.Windows.Forms.ToolStripSeparator();
+            this.resetBackColorsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.toolStripSeparator2 = new System.Windows.Forms.ToolStripSeparator();
             this.cmTray.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.scMain)).BeginInit();
             this.scMain.Panel1.SuspendLayout();
             this.scMain.Panel2.SuspendLayout();
             this.scMain.SuspendLayout();
             this.tsMain.SuspendLayout();
+            this.imageDisplayContextMenu.SuspendLayout();
             this.SuspendLayout();
             // 
             // niTrayIcon
@@ -310,11 +325,97 @@
             // 
             // scMain.Panel2
             // 
+            this.scMain.Panel2.Controls.Add(this.button2);
+            this.scMain.Panel2.Controls.Add(this.button1);
+            this.scMain.Panel2.Controls.Add(this.textBox1);
+            this.scMain.Panel2.Controls.Add(this.comboBox2);
+            this.scMain.Panel2.Controls.Add(this.comboBox1);
             this.scMain.Panel2.Controls.Add(this.imageDisplay1);
-            this.scMain.Size = new System.Drawing.Size(902, 406);
-            this.scMain.SplitterDistance = 600;
+            this.scMain.Size = new System.Drawing.Size(955, 406);
+            this.scMain.SplitterDistance = 590;
             this.scMain.SplitterWidth = 6;
             this.scMain.TabIndex = 2;
+            // 
+            // folderView1
+            // 
+            this.folderView1.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(42)))), ((int)(((byte)(47)))), ((int)(((byte)(56)))));
+            this.folderView1.CurrentDirectory = "C:\\";
+            this.folderView1.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.folderView1.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(235)))), ((int)(((byte)(235)))), ((int)(((byte)(235)))));
+            this.folderView1.Location = new System.Drawing.Point(0, 0);
+            this.folderView1.Name = "folderView1";
+            this.folderView1.Size = new System.Drawing.Size(590, 406);
+            this.folderView1.TabIndex = 0;
+            // 
+            // button2
+            // 
+            this.button2.Anchor = System.Windows.Forms.AnchorStyles.Right;
+            this.button2.Location = new System.Drawing.Point(308, 2);
+            this.button2.Name = "button2";
+            this.button2.Size = new System.Drawing.Size(23, 23);
+            this.button2.TabIndex = 5;
+            this.button2.Text = "^";
+            this.button2.UseVisualStyleBackColor = true;
+            this.button2.Click += new System.EventHandler(this.button2_Click);
+            // 
+            // button1
+            // 
+            this.button1.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.button1.Location = new System.Drawing.Point(330, 2);
+            this.button1.Name = "button1";
+            this.button1.Size = new System.Drawing.Size(23, 23);
+            this.button1.TabIndex = 4;
+            this.button1.Text = "X";
+            this.button1.UseVisualStyleBackColor = true;
+            this.button1.Click += new System.EventHandler(this.button1_Click);
+            // 
+            // textBox1
+            // 
+            this.textBox1.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.textBox1.Location = new System.Drawing.Point(219, 3);
+            this.textBox1.Name = "textBox1";
+            this.textBox1.ReadOnly = true;
+            this.textBox1.Size = new System.Drawing.Size(89, 20);
+            this.textBox1.TabIndex = 3;
+            this.textBox1.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
+            // 
+            // comboBox2
+            // 
+            this.comboBox2.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.comboBox2.FormattingEnabled = true;
+            this.comboBox2.Location = new System.Drawing.Point(109, 2);
+            this.comboBox2.Name = "comboBox2";
+            this.comboBox2.Size = new System.Drawing.Size(109, 21);
+            this.comboBox2.TabIndex = 2;
+            // 
+            // comboBox1
+            // 
+            this.comboBox1.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.comboBox1.FormattingEnabled = true;
+            this.comboBox1.Location = new System.Drawing.Point(3, 2);
+            this.comboBox1.Name = "comboBox1";
+            this.comboBox1.Size = new System.Drawing.Size(105, 21);
+            this.comboBox1.TabIndex = 1;
+            // 
+            // imageDisplay1
+            // 
+            this.imageDisplay1.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.imageDisplay1.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.imageDisplay1.CellColor1 = System.Drawing.Color.FromArgb(((int)(((byte)(32)))), ((int)(((byte)(32)))), ((int)(((byte)(32)))));
+            this.imageDisplay1.CellColor2 = System.Drawing.Color.FromArgb(((int)(((byte)(64)))), ((int)(((byte)(64)))), ((int)(((byte)(64)))));
+            this.imageDisplay1.CellScale = 2F;
+            this.imageDisplay1.CellSize = 32;
+            this.imageDisplay1.DrawMode = WinkingCat.HelperLibs.Controls.DrawMode.FitImage;
+            this.imageDisplay1.Image = null;
+            this.imageDisplay1.InterpolationMode = System.Drawing.Drawing2D.InterpolationMode.NearestNeighbor;
+            this.imageDisplay1.Location = new System.Drawing.Point(3, 26);
+            this.imageDisplay1.Name = "imageDisplay1";
+            this.imageDisplay1.Size = new System.Drawing.Size(349, 377);
+            this.imageDisplay1.TabIndex = 0;
+            this.imageDisplay1.MouseClick += new System.Windows.Forms.MouseEventHandler(this.imageDisplay1_MouseClick);
             // 
             // tsMain
             // 
@@ -542,37 +643,78 @@
             this.tsbToolStripDropDownButton_Settings.Text = "Settings";
             this.tsbToolStripDropDownButton_Settings.Click += new System.EventHandler(this.ToolStripDropDownButton_Settings_Click);
             // 
-            // imageDisplay1
+            // imageDisplayContextMenu
             // 
-            this.imageDisplay1.CellColor1 = System.Drawing.Color.FromArgb(((int)(((byte)(32)))), ((int)(((byte)(32)))), ((int)(((byte)(32)))));
-            this.imageDisplay1.CellColor2 = System.Drawing.Color.FromArgb(((int)(((byte)(64)))), ((int)(((byte)(64)))), ((int)(((byte)(64)))));
-            this.imageDisplay1.CellScale = 2F;
-            this.imageDisplay1.CellSize = 32;
-            this.imageDisplay1.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.imageDisplay1.DrawMode = WinkingCat.HelperLibs.Controls.DrawMode.FitImage;
-            this.imageDisplay1.Image = null;
-            this.imageDisplay1.InterpolationMode = System.Drawing.Drawing2D.InterpolationMode.NearestNeighbor;
-            this.imageDisplay1.Location = new System.Drawing.Point(0, 0);
-            this.imageDisplay1.Name = "imageDisplay1";
-            this.imageDisplay1.Size = new System.Drawing.Size(296, 406);
-            this.imageDisplay1.TabIndex = 0;
+            this.imageDisplayContextMenu.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.copyImageToolStripMenuItem,
+            this.useBackColor1OnlyToolStripMenuItem,
+            this.toolStripSeparator2,
+            this.setBackColor1ToolStripMenuItem,
+            this.setBackColor2ToolStripMenuItem,
+            this.toolStripSeparator1,
+            this.resetXYOffsetToolStripMenuItem,
+            this.resetBackColorsToolStripMenuItem});
+            this.imageDisplayContextMenu.Name = "contextMenuStrip1";
+            this.imageDisplayContextMenu.Size = new System.Drawing.Size(191, 170);
             // 
-            // folderView1
+            // copyImageToolStripMenuItem
             // 
-            this.folderView1.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(42)))), ((int)(((byte)(47)))), ((int)(((byte)(56)))));
-            this.folderView1.CurrentDirectory = "C:\\";
-            this.folderView1.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.folderView1.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(235)))), ((int)(((byte)(235)))), ((int)(((byte)(235)))));
-            this.folderView1.Location = new System.Drawing.Point(0, 0);
-            this.folderView1.Name = "folderView1";
-            this.folderView1.Size = new System.Drawing.Size(600, 406);
-            this.folderView1.TabIndex = 0;
+            this.copyImageToolStripMenuItem.Name = "copyImageToolStripMenuItem";
+            this.copyImageToolStripMenuItem.Size = new System.Drawing.Size(190, 22);
+            this.copyImageToolStripMenuItem.Text = "Copy Image";
+            this.copyImageToolStripMenuItem.Click += new System.EventHandler(this.copyImageToolStripMenuItem_Click);
+            // 
+            // useBackColor1OnlyToolStripMenuItem
+            // 
+            this.useBackColor1OnlyToolStripMenuItem.CheckOnClick = true;
+            this.useBackColor1OnlyToolStripMenuItem.Name = "useBackColor1OnlyToolStripMenuItem";
+            this.useBackColor1OnlyToolStripMenuItem.Size = new System.Drawing.Size(190, 22);
+            this.useBackColor1OnlyToolStripMenuItem.Text = "Use Back Color 1 Only";
+            this.useBackColor1OnlyToolStripMenuItem.Click += new System.EventHandler(this.useBackColor1OnlyToolStripMenuItem_Click);
+            // 
+            // setBackColor1ToolStripMenuItem
+            // 
+            this.setBackColor1ToolStripMenuItem.Name = "setBackColor1ToolStripMenuItem";
+            this.setBackColor1ToolStripMenuItem.Size = new System.Drawing.Size(190, 22);
+            this.setBackColor1ToolStripMenuItem.Text = "Set Back Color 1";
+            this.setBackColor1ToolStripMenuItem.Click += new System.EventHandler(this.setBackColor1ToolStripMenuItem_Click);
+            // 
+            // setBackColor2ToolStripMenuItem
+            // 
+            this.setBackColor2ToolStripMenuItem.Name = "setBackColor2ToolStripMenuItem";
+            this.setBackColor2ToolStripMenuItem.Size = new System.Drawing.Size(190, 22);
+            this.setBackColor2ToolStripMenuItem.Text = "Set Back Color 2";
+            this.setBackColor2ToolStripMenuItem.Click += new System.EventHandler(this.setBackColor2ToolStripMenuItem_Click);
+            // 
+            // resetXYOffsetToolStripMenuItem
+            // 
+            this.resetXYOffsetToolStripMenuItem.Name = "resetXYOffsetToolStripMenuItem";
+            this.resetXYOffsetToolStripMenuItem.Size = new System.Drawing.Size(190, 22);
+            this.resetXYOffsetToolStripMenuItem.Text = "Reset XY Offset";
+            this.resetXYOffsetToolStripMenuItem.Click += new System.EventHandler(this.resetXYOffsetToolStripMenuItem_Click);
+            // 
+            // toolStripSeparator1
+            // 
+            this.toolStripSeparator1.Name = "toolStripSeparator1";
+            this.toolStripSeparator1.Size = new System.Drawing.Size(187, 6);
+            // 
+            // resetBackColorsToolStripMenuItem
+            // 
+            this.resetBackColorsToolStripMenuItem.Name = "resetBackColorsToolStripMenuItem";
+            this.resetBackColorsToolStripMenuItem.Size = new System.Drawing.Size(190, 22);
+            this.resetBackColorsToolStripMenuItem.Text = "Reset Back Colors";
+            this.resetBackColorsToolStripMenuItem.Click += new System.EventHandler(this.resetBackColorsToolStripMenuItem_Click);
+            // 
+            // toolStripSeparator2
+            // 
+            this.toolStripSeparator2.Name = "toolStripSeparator2";
+            this.toolStripSeparator2.Size = new System.Drawing.Size(187, 6);
             // 
             // ApplicationForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(1086, 406);
+            this.ClientSize = new System.Drawing.Size(1139, 406);
             this.Controls.Add(this.scMain);
             this.Controls.Add(this.tsMain);
             this.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(235)))), ((int)(((byte)(235)))), ((int)(((byte)(235)))));
@@ -584,10 +726,12 @@
             this.cmTray.ResumeLayout(false);
             this.scMain.Panel1.ResumeLayout(false);
             this.scMain.Panel2.ResumeLayout(false);
+            this.scMain.Panel2.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.scMain)).EndInit();
             this.scMain.ResumeLayout(false);
             this.tsMain.ResumeLayout(false);
             this.tsMain.PerformLayout();
+            this.imageDisplayContextMenu.ResumeLayout(false);
             this.ResumeLayout(false);
 
         }
@@ -642,6 +786,20 @@
         private HelperLibs.ToolStripEx tsMain;
         private Controls.FolderView folderView1;
         private HelperLibs.Controls.ImageDisplay imageDisplay1;
+        private System.Windows.Forms.Button button1;
+        private System.Windows.Forms.TextBox textBox1;
+        private System.Windows.Forms.ComboBox comboBox2;
+        private System.Windows.Forms.ComboBox comboBox1;
+        private System.Windows.Forms.Button button2;
+        private System.Windows.Forms.ContextMenuStrip imageDisplayContextMenu;
+        private System.Windows.Forms.ToolStripMenuItem copyImageToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem useBackColor1OnlyToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem setBackColor1ToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem setBackColor2ToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem resetXYOffsetToolStripMenuItem;
+        private System.Windows.Forms.ToolStripSeparator toolStripSeparator2;
+        private System.Windows.Forms.ToolStripSeparator toolStripSeparator1;
+        private System.Windows.Forms.ToolStripMenuItem resetBackColorsToolStripMenuItem;
     }
 }
 

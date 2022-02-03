@@ -47,6 +47,8 @@ namespace WinkingCat.HelperLibs
         public Function On_Tray_Middle_Click { get; set; } = Function.NewClipFromClipboard;
 
 
+        [DisplayName("Show Grid Color 1 Only")]
+        public bool Show_Image_Display_Color_1_Only { get; set; } = false;
 
         // visual 
         [DisplayName("Context Menu Opacity")]
@@ -56,6 +58,16 @@ namespace WinkingCat.HelperLibs
 
         [DisplayName("Force Listview Column Fill")]
         public bool forceColumnFill { get; set; } = true;
+
+        [XmlIgnore]
+        [DisplayName("Image Display Back Color 1")]
+        [Editor(typeof(ColorEditor), typeof(UITypeEditor)), TypeConverter(typeof(_ColorConverter))]
+        public Color imageDisplayBG1 { get; set; } = HelperLibs.Controls.ImageDisplay.DefaultCellColor1;
+
+        [XmlIgnore]
+        [DisplayName("Image Display Back Color 2")]
+        [Editor(typeof(ColorEditor), typeof(UITypeEditor)), TypeConverter(typeof(_ColorConverter))]
+        public Color imageDisplayBG2 { get; set; } = HelperLibs.Controls.ImageDisplay.DefaultCellColor2;
 
         [XmlIgnore]
         [DisplayName("Background Color")]
@@ -151,6 +163,21 @@ namespace WinkingCat.HelperLibs
             get { return (byte)On_Tray_Middle_Click; }
             set { On_Tray_Middle_Click = (Function)value; }
         }
+
+        [Browsable(false)]
+        public int ImageDisplayBG1_As_Int
+        {
+            get { return ColorHelper.ColorToDecimal(imageDisplayBG1, ColorFormat.ARGB); }
+            set { imageDisplayBG1 = ColorHelper.DecimalToColor(value, ColorFormat.ARGB); }
+        }
+
+        [Browsable(false)]
+        public int ImageDisplayBG2_As_Int
+        {
+            get { return ColorHelper.ColorToDecimal(imageDisplayBG2, ColorFormat.ARGB); }
+            set { imageDisplayBG2 = ColorHelper.DecimalToColor(value, ColorFormat.ARGB); }
+        }
+
 
         [Browsable(false)]
         public int backgroundColor_As_Int

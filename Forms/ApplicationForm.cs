@@ -18,16 +18,17 @@ namespace WinkingCat
 
         private Task _loadImageThread;
 
-        private System.Windows.Forms.Timer trayClickTimer;
-        private TIMER _loadImageTimer = new TIMER() { Interval = 50 };
+        private TIMER _trayClickTimer = new TIMER();
+        private TIMER _loadImageTimer = new TIMER();
 
-        private int trayClickCount = 0;
+        private int _trayClickCount = 0;
 
-        private bool forceClose = false;
-        private bool allowShowDisplay = !SettingsManager.MainFormSettings.Start_In_Tray;
-        private bool isInTrayOrMinimized = SettingsManager.MainFormSettings.Start_In_Tray;
-        private bool forceDropDownClose = false;
-        private bool preventOverflow = false;
+        private bool _forceClose = false;
+        private bool _allowShowDisplay = !SettingsManager.MainFormSettings.Start_In_Tray;
+        private bool _isInTrayOrMinimized = SettingsManager.MainFormSettings.Start_In_Tray;
+        private bool _forceDropDownClose = false;
+        private bool _preventOverflow = false;
+        private bool _showingFullscreenImage = false;
 
         public ApplicationForm()
         {
@@ -37,25 +38,39 @@ namespace WinkingCat
             folderView1.ListView_.View = View.Details;
             folderView1.ListView_.Columns.Add(new ColumnHeader() { Name = "Filename", Text = "Filename", Width=500});
             folderView1.ListView_.Columns.Add(new ColumnHeader() { Name = "Size", Text = "Size", Width =30 });
-            folderView1.CurrentDirectory = PathHelper.GetScreenshotFolder();
+            //folderView1.CurrentDirectory = PathHelper.GetScreenshotFolder();
 
-            preventOverflow = true;
-
-            trayClickTimer = new System.Windows.Forms.Timer();
+            _preventOverflow = true;
 
             tsmiToolStripMenuItem_captureCursor.Checked = SettingsManager.RegionCaptureSettings.Capture_Cursor;
             tsmiCaptureCursorToolStripMenuItem.Checked = SettingsManager.RegionCaptureSettings.Capture_Cursor;
+
+            comboBox1.Items.Add(System.Drawing.Drawing2D.InterpolationMode.NearestNeighbor);
+            comboBox1.Items.Add(System.Drawing.Drawing2D.InterpolationMode.HighQualityBicubic);
+            comboBox1.Items.Add(System.Drawing.Drawing2D.InterpolationMode.HighQualityBilinear);
+            comboBox1.SelectedItem = SettingsManager.MiscSettings.Default_Interpolation_Mode;
+
+            comboBox2.Items.Add(WinkingCat.HelperLibs.Controls.DrawMode.ActualSize);
+            comboBox2.Items.Add(WinkingCat.HelperLibs.Controls.DrawMode.FitImage);
+            comboBox2.Items.Add(WinkingCat.HelperLibs.Controls.DrawMode.ScaleImage);
+            comboBox2.SelectedItem = SettingsManager.MiscSettings.Default_Draw_Mode;
+
+            _trayClickTimer.SetInterval(SystemInformation.DoubleClickTime + 1000);
+            _loadImageTimer.SetInterval(250);
 
 #if !DEBUG
             MaximizeBox        = SettingsManager.MainFormSettings.Show_Maximize_Box;
             TopMost            = SettingsManager.MainFormSettings.Always_On_Top;
             niTrayIcon.Visible = SettingsManager.MainFormSettings.Show_In_Tray;
 #endif
-            _loadImageTimer.SetInterval(100);
+            imageDisplay1.ClearImagePathOnReplace = true;
+            imageDisplay1.DisposeImageOnReplace = true;
+            imageDisplay1.ResetOffsetOnRightClick = false;
+
 
             RegisterEvents();
 
-            preventOverflow = false;
+            _preventOverflow = false;
             ResumeLayout();
 
             // this.pbPreviewBox.previewOnClick = true;
@@ -64,7 +79,9 @@ namespace WinkingCat
         protected override void RegisterEvents()
         {
             base.RegisterEvents();
-            
+            comboBox1.SelectedIndexChanged += ComboBox1_SelectedIndexChanged;
+            comboBox2.SelectedIndexChanged += ComboBox2_SelectedIndexChanged;
+            imageDisplay1.ImageChanged += ImageDisplay1_ImageChanged;
             tsddbToolStripDropDownButton_Capture.DropDown.Closing += toolStripDropDown_Closing;
             tsddbToolStripDropDownButton_Capture.DropDownOpening += tsmiCapture_DropDownOpening;
 
@@ -112,7 +129,7 @@ namespace WinkingCat
             tsmiExitToolStripMenuItem.Click += ExitApplication_Click;
 
             // timer 
-            trayClickTimer.Tick += TrayClickTimer_Interval;
+            _trayClickTimer.Tick += TrayClickTimer_Interval;
             niTrayIcon.MouseUp += NiTrayIcon_MouseClick1Up;
             cmTray.Opening += tsmiCapture_DropDownOpening;
 
@@ -124,12 +141,38 @@ namespace WinkingCat
 
         }
 
+        private void ImageDisplay1_ImageChanged()
+        {
+            textBox1.Text = "";
+
+            if (imageDisplay1.Image == null)
+                return;
+
+            textBox1.Text = string.Format("{0} x {1}", imageDisplay1.Image.Width, imageDisplay1.Image.Height);
+        }
+
+        private void ComboBox2_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            if (_preventOverflow)
+                return;
+
+            imageDisplay1.DrawMode = (WinkingCat.HelperLibs.Controls.DrawMode)comboBox2.SelectedItem;
+        }
+
+        private void ComboBox1_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            if (_preventOverflow)
+                return;
+
+            imageDisplay1.InterpolationMode = (System.Drawing.Drawing2D.InterpolationMode)comboBox1.SelectedItem;
+        }
+
         /// <summary>
         /// Force close all the dropdowns.
         /// </summary>
         public void CloseDropDowns()
         {
-            forceDropDownClose = true;
+            _forceDropDownClose = true;
             tsddbToolStripDropDownButton_Capture.DropDown.Close();
             tsddbToolStripDropDownButton_Clips.DropDown.Close();
             tsddbToolStripDropDownButton_Tools.DropDown.Close();
@@ -159,11 +202,11 @@ namespace WinkingCat
             switch (this.WindowState)
             {
                 case FormWindowState.Minimized:
-                    isInTrayOrMinimized = true;
+                    _isInTrayOrMinimized = true;
                     break;
                 case FormWindowState.Maximized:
                 case FormWindowState.Normal:
-                    isInTrayOrMinimized = false;
+                    _isInTrayOrMinimized = false;
                     break;
             }
         }
@@ -180,7 +223,12 @@ namespace WinkingCat
             cmTray.Renderer = new ToolStripCustomRenderer();
             cmTray.Opacity = SettingsManager.MainFormSettings.contextMenuOpacity;
 
+            imageDisplayContextMenu.Renderer = new ToolStripCustomRenderer();
+            imageDisplayContextMenu.Opacity = SettingsManager.MainFormSettings.contextMenuOpacity;
+
+
             //lvListView.ForeColor = SettingsManager.MainFormSettings.textColor;
+            ApplicationStyles.ApplyCustomThemeToControl(scMain.Panel2);
             Refresh();
         }
 
@@ -197,7 +245,7 @@ namespace WinkingCat
 
         private void WindowItems_Click(object sender, EventArgs e)
         {
-            forceDropDownClose = true;
+            _forceDropDownClose = true;
             MainForm_LostFocus(null, null);
 
             ToolStripItem tsi = (ToolStripItem)sender;
@@ -224,7 +272,7 @@ namespace WinkingCat
 
         private void MonitorItems_Click(object sender, EventArgs e)
         {
-            forceDropDownClose = true;
+            _forceDropDownClose = true;
             MainForm_LostFocus(null, null);
 
             ToolStripItem tsi = (ToolStripItem)sender;
@@ -265,10 +313,10 @@ namespace WinkingCat
 
         private void CursorCapture_Click(object sender, EventArgs e)
         {
-            if (preventOverflow)
+            if (_preventOverflow)
                 return;
 
-            preventOverflow = true;
+            _preventOverflow = true;
             ToolStripMenuItem tsmi = sender as ToolStripMenuItem;
 
             if (tsmi == null)
@@ -286,7 +334,7 @@ namespace WinkingCat
                 tsmiToolStripMenuItem_captureCursor.Checked = false;
                 tsmiCaptureCursorToolStripMenuItem.Checked = false;
             }
-            preventOverflow = false;
+            _preventOverflow = false;
         }
 #endregion
 
@@ -372,10 +420,10 @@ namespace WinkingCat
 
         private void TrayClickTimer_Interval(object sender, EventArgs e)
         {
-            if (trayClickCount == 1)
+            if (_trayClickCount == 1)
             {
-                trayClickCount = 0;
-                trayClickTimer.Stop();
+                _trayClickCount = 0;
+                _trayClickTimer.Stop();
 
                 TaskHandler.ExecuteTask(SettingsManager.MainFormSettings.On_Tray_Left_Click);
             }
@@ -386,17 +434,16 @@ namespace WinkingCat
             switch (e.Button)
             {
                 case MouseButtons.Left:
-                    trayClickCount++;
+                    _trayClickCount++;
 
-                    if (trayClickCount == 1)
+                    if (_trayClickCount == 1)
                     {
-                        trayClickTimer.Interval = SystemInformation.DoubleClickTime;
-                        trayClickTimer.Start();
+                        _trayClickTimer.Start();
                     }
                     else
                     {
-                        trayClickCount = 0;
-                        trayClickTimer.Stop();
+                        _trayClickCount = 0;
+                        _trayClickTimer.Stop();
 
                         TaskHandler.ExecuteTask(SettingsManager.MainFormSettings.On_Tray_Double_Click);
                     }
@@ -409,13 +456,13 @@ namespace WinkingCat
 
         private void OpenMainWindow_Click(object sender, EventArgs e)
         {
-            isInTrayOrMinimized = false;
+            _isInTrayOrMinimized = false;
             this.ForceActivate();
         }
 
         private void ExitApplication_Click(object sender, EventArgs e)
         {
-            forceClose = true;
+            _forceClose = true;
             Close();
         }
 
@@ -448,9 +495,9 @@ namespace WinkingCat
 
         private void MainForm_FormClosing(object sender, FormClosingEventArgs e)
         {
-            if (e.CloseReason == CloseReason.UserClosing && SettingsManager.MainFormSettings.Hide_In_Tray_On_Close && !forceClose)
+            if (e.CloseReason == CloseReason.UserClosing && SettingsManager.MainFormSettings.Hide_In_Tray_On_Close && !_forceClose)
             {
-                isInTrayOrMinimized = true;
+                _isInTrayOrMinimized = true;
                 e.Cancel = true;
                 Hide();
             }
@@ -462,7 +509,6 @@ namespace WinkingCat
 
             if (folderView1.ListView_.SelectedIndex1 == -1)
                 return;
-
 
             if(folderView1.ListView_.Items[folderView1.ListView_.SelectedIndex1].Tag is FileInfo)
             {
@@ -491,6 +537,17 @@ namespace WinkingCat
             TopMost = SettingsManager.MainFormSettings.Always_On_Top;
             niTrayIcon.Visible = SettingsManager.MainFormSettings.Show_In_Tray;
             MaximizeBox = SettingsManager.MainFormSettings.Show_Maximize_Box;
+            imageDisplay1.CellColor1 = SettingsManager.MainFormSettings.imageDisplayBG1;
+            imageDisplay1.CellColor2 = SettingsManager.MainFormSettings.imageDisplayBG2;
+            imageDisplay1.InterpolationMode = SettingsManager.MiscSettings.Default_Interpolation_Mode;
+            imageDisplay1.DrawMode = SettingsManager.MiscSettings.Default_Draw_Mode;
+
+            if (SettingsManager.MainFormSettings.Show_Image_Display_Color_1_Only)
+            {
+                imageDisplay1.CellColor2 = imageDisplay1.CellColor1;
+            }
+            
+            UpdateImageDisplayContextMenuIcons();
         }
 
         #endregion
@@ -521,17 +578,17 @@ namespace WinkingCat
             switch (e.CloseReason)
             {
                 case ToolStripDropDownCloseReason.AppFocusChange:
-                    if (!forceDropDownClose)
+                    if (!_forceDropDownClose)
                         e.Cancel = true;
                     else
-                        forceDropDownClose = false;
+                        _forceDropDownClose = false;
                     break;
 
                 case ToolStripDropDownCloseReason.CloseCalled:
-                    if (!forceDropDownClose)
+                    if (!_forceDropDownClose)
                         e.Cancel = true;
                     else
-                        forceDropDownClose = false;
+                        _forceDropDownClose = false;
                     break;
             }
         }
@@ -633,13 +690,120 @@ namespace WinkingCat
         // this hides the window before its shown if requested 
         protected override void SetVisibleCore(bool value)
         {
-            base.SetVisibleCore(allowShowDisplay ? value : allowShowDisplay);
-            allowShowDisplay = true;
+            base.SetVisibleCore(_allowShowDisplay ? value : _allowShowDisplay);
+            _allowShowDisplay = true;
             UpdateTheme();
         }
 
+
         #endregion
 
-        
+        private void button1_Click(object sender, EventArgs e)
+        {
+            imageDisplay1.Image = null;
+        }
+
+        private void button2_Click(object sender, EventArgs e)
+        {
+            if (imageDisplay1.Image == null || _showingFullscreenImage)
+                return;
+
+            _showingFullscreenImage = true;
+            this.imageDisplay1.Enabled = false;
+            
+            ImageViewerForm.ShowImage(this.imageDisplay1.Image);
+
+            this.imageDisplay1.Enabled = true;
+            _showingFullscreenImage = false;
+        }
+
+        private void copyImageToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            if (imageDisplay1.Image == null)
+                return;
+
+            ClipboardHelper.CopyImage(imageDisplay1.Image);
+        }
+
+        private void useBackColor1OnlyToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            if (useBackColor1OnlyToolStripMenuItem.Checked)
+            {
+                SettingsManager.MainFormSettings.Show_Image_Display_Color_1_Only = true;
+                imageDisplay1.CellColor2 = imageDisplay1.CellColor1;
+            }
+            else
+            {
+                SettingsManager.MainFormSettings.Show_Image_Display_Color_1_Only = false;
+                imageDisplay1.CellColor2 = SettingsManager.MainFormSettings.imageDisplayBG2;
+            }
+        }
+
+        private void setBackColor1ToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            if(ColorPickerForm.PickColorDialogue(out Color newColor, SettingsManager.MainFormSettings.imageDisplayBG1))
+            {
+                SettingsManager.MainFormSettings.imageDisplayBG1 = newColor;
+                imageDisplay1.CellColor1 = newColor;
+
+                if (SettingsManager.MainFormSettings.Show_Image_Display_Color_1_Only)
+                {
+                    imageDisplay1.CellColor2 = newColor;
+                }
+
+                UpdateImageDisplayContextMenuIcons();
+            }
+        }
+
+        private void setBackColor2ToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            if (ColorPickerForm.PickColorDialogue(out Color newColor, SettingsManager.MainFormSettings.imageDisplayBG2))
+            {
+                SettingsManager.MainFormSettings.imageDisplayBG2 = newColor;
+                
+                if (!SettingsManager.MainFormSettings.Show_Image_Display_Color_1_Only)
+                {
+                    imageDisplay1.CellColor2 = newColor;
+                }
+
+                UpdateImageDisplayContextMenuIcons();
+            }
+        }
+
+        private void resetXYOffsetToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            imageDisplay1.ResetOffsets();
+        }
+
+        private void imageDisplay1_MouseClick(object sender, MouseEventArgs e)
+        {
+            if (e.Button != MouseButtons.Right)
+                return;
+
+            imageDisplayContextMenu.Show(imageDisplay1, e.Location);
+        }
+
+        private void resetBackColorsToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            SettingsManager.MainFormSettings.imageDisplayBG1 = HelperLibs.Controls.ImageDisplay.DefaultCellColor1;
+            SettingsManager.MainFormSettings.imageDisplayBG2 = HelperLibs.Controls.ImageDisplay.DefaultCellColor2;
+
+            imageDisplay1.CellColor1 = HelperLibs.Controls.ImageDisplay.DefaultCellColor1;
+            imageDisplay1.CellColor2 = HelperLibs.Controls.ImageDisplay.DefaultCellColor2;
+
+            if (SettingsManager.MainFormSettings.Show_Image_Display_Color_1_Only)
+            {
+                imageDisplay1.CellColor2 = imageDisplay1.CellColor1;
+            }
+            UpdateImageDisplayContextMenuIcons();
+        }
+
+        private void UpdateImageDisplayContextMenuIcons()
+        {
+            setBackColor1ToolStripMenuItem.Image = ImageProcessor.CreateSolidColorBitmap(
+                InternalSettings.TSMI_Generated_Icon_Size, SettingsManager.MainFormSettings.imageDisplayBG1);
+            setBackColor2ToolStripMenuItem.Image = ImageProcessor.CreateSolidColorBitmap(
+                InternalSettings.TSMI_Generated_Icon_Size, SettingsManager.MainFormSettings.imageDisplayBG2);
+        }
     }
 }

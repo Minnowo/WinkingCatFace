@@ -26,6 +26,13 @@ namespace WinkingCat.HelperLibs.Controls
     }
     public partial class ImageDisplay : UserControl
     {
+        public delegate void ImageChangedEvent();
+        public event ImageChangedEvent ImageChanged;
+
+        public static Color DefaultCellColor1 { get { return Color.FromArgb(32, 32, 32); } }
+        public static Color DefaultCellColor2 { get { return Color.FromArgb(64, 64, 64); } }
+        public bool ResetOffsetOnRightClick = true;
+
         public InterpolationMode InterpolationMode
         {
             get { return _InterpolationMode; }
@@ -78,7 +85,7 @@ namespace WinkingCat.HelperLibs.Controls
                 this.InitTileBrush((int)(this.CellSize * this.CellScale), this.CellColor1, this.CellColor2);
             }
         }
-        private Color _CellColor1 = Color.FromArgb(32, 32, 32);
+        private Color _CellColor1 = DefaultCellColor1;
 
         public Color CellColor2
         {
@@ -92,7 +99,7 @@ namespace WinkingCat.HelperLibs.Controls
                 this.InitTileBrush((int)(this.CellSize * this.CellScale), this.CellColor1, this.CellColor2);
             }
         }
-        private Color _CellColor2 = Color.FromArgb(64, 64, 64);
+        private Color _CellColor2 = DefaultCellColor2;
 
         public DrawMode DrawMode
         {
@@ -151,6 +158,8 @@ namespace WinkingCat.HelperLibs.Controls
                 this._drx = 0;
                 this._dry = 0;
                 Invalidate();
+
+                OnImageChanged();
             }
         }
         private IMAGE _Image;
@@ -182,6 +191,16 @@ namespace WinkingCat.HelperLibs.Controls
             this.Width = 50;
             this.Height = 50;
             this.InitTileBrush((int)(this.CellSize * this.CellScale), this.CellColor1, this.CellColor2);
+        }
+
+        /// <summary>
+        /// Resets the image x, y draw offset
+        /// </summary>
+        public void ResetOffsets()
+        {
+            _drx = 0;
+            _dry = 0;
+            Invalidate();
         }
 
         /// <summary>
@@ -445,7 +464,7 @@ namespace WinkingCat.HelperLibs.Controls
             }
 
             // on right click, we reset the offsets
-            if (e.Button == MouseButtons.Right)
+            if (e.Button == MouseButtons.Right && ResetOffsetOnRightClick)
             {
                 _drx = 0;
                 _dry = 0;
@@ -553,6 +572,12 @@ namespace WinkingCat.HelperLibs.Controls
             this.BackgroundTileBrush?.Dispose();
             this.BackgroundTileBrush = new TextureBrush(result);
             this.Invalidate();
+        }
+
+        private void OnImageChanged()
+        {
+            if (ImageChanged != null)
+                ImageChanged.Invoke();
         }
 
         private void OnFrameChangedHandler(object sender, EventArgs eventArgs)
