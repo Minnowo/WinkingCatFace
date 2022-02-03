@@ -32,6 +32,8 @@ namespace WinkingCat
             cbSaveImageToDisk.Checked = InternalSettings.Save_Images_To_Disk;
             cbUseDWRMOverWRM.Checked = InternalSettings.Save_WORM_As_DWORM;
             cbHideClipsOnCapture.Checked = SettingsManager.ClipSettings.Never_Hide_Clips;
+            folderSortAscendingCheckbox.Checked = SettingsManager.MainFormSettings.FolderSortOrder >= 0;
+            fileSortAscendingCheckbox.Checked = SettingsManager.MainFormSettings.FileSortOrder >= 0;
 
             foreach (Function task in Enum.GetValues(typeof(Function)))
             {
@@ -141,6 +143,7 @@ namespace WinkingCat
         private void OnFormClosing_Event(object sender, EventArgs e)
         {
             SaveSettingsToDisk();
+            SettingsManager.CallUpdateSettings();
         }
 
         #endregion
@@ -230,6 +233,33 @@ namespace WinkingCat
             if (preventUpdate) return;
             SettingsManager.ClipSettings.Never_Hide_Clips = !cbHideClipsOnCapture.Checked;
         }
+
+        private void checkBox1_CheckedChanged(object sender, EventArgs e)
+        {
+            if (preventUpdate) return;
+            if (fileSortAscendingCheckbox.Checked)
+            {
+                SettingsManager.MainFormSettings.FileSortOrder = 1;
+            }
+            else
+            {
+                SettingsManager.MainFormSettings.FileSortOrder = -1;
+            }
+        }
+
+        private void checkBox2_CheckedChanged(object sender, EventArgs e)
+        {
+            if (preventUpdate) return;
+            if (folderSortAscendingCheckbox.Checked)
+            {
+                SettingsManager.MainFormSettings.FolderSortOrder = 1;
+            }
+            else
+            {
+                SettingsManager.MainFormSettings.FolderSortOrder = -1;
+            }
+        }
+
         #endregion
 
         #region Region Capture Settings Tab

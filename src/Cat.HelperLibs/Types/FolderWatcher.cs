@@ -10,6 +10,9 @@ namespace WinkingCat.HelperLibs
 {
     public class FolderWatcher : IDisposable
     {
+        public delegate void SortOrderChangedEvent(int order);
+        public event SortOrderChangedEvent SortOrderChanged;
+
         public delegate void FileAddedEvent(string name);
         public event FileAddedEvent FileAdded;
 
@@ -34,7 +37,65 @@ namespace WinkingCat.HelperLibs
         public bool AboveDrives { get { return _AboveDrives; } }
         private bool _AboveDrives = false;
 
-        public bool GetAbsolutePaths = true;
+        /// <summary>
+        /// 1 for ascending
+        /// -1 for descending
+        /// </summary>
+        public int SortOrderFolder
+        {
+            get { return _sortOrderFolder; }
+            set
+            {
+                if (value < 0)
+                {
+                    if (_sortOrderFolder == -1)
+                        return;
+
+                    _sortOrderFolder = -1;
+                }
+                if (value >= 0)
+                {
+                    if (_sortOrderFolder == 1)
+                        return;
+
+                    _sortOrderFolder = 1;
+                }
+                
+                DirectoryCache.Reverse();
+
+                if (SortOrderChanged != null)
+                    SortOrderChanged.Invoke(_sortOrderFolder);
+            }
+        }
+        private int _sortOrderFolder = 1;
+
+        public int SortOrderFile
+        {
+            get { return _sortOrderFile; }
+            set 
+            {
+                if (value < 0)
+                {
+                    if (_sortOrderFile == -1)
+                        return;
+
+                    _sortOrderFile = -1;
+                }
+                if (value >= 0)
+                {
+                    if (_sortOrderFile == 1)
+                        return;
+
+                    _sortOrderFile = 1;
+                }
+
+                FileCache.Reverse();
+
+                if (SortOrderChanged != null)
+                    SortOrderChanged.Invoke(_sortOrderFile);
+            }
+        }
+        public int _sortOrderFile = -1;
 
         public string CurrentDirectory
         {
@@ -253,7 +314,7 @@ namespace WinkingCat.HelperLibs
         /// <param name="arr"></param>
         /// <param name="name"></param>
         /// <returns></returns>
-        private int BinarySearchItemIndex(List<string> arr, string name)
+        private int BinarySearchItemIndex(List<string> arr, string name, int sortorder = 1)
         {
             int L = 0;
             int R = arr.Count - 1;
@@ -264,7 +325,7 @@ namespace WinkingCat.HelperLibs
             {
                 mid = (L + R) / 2;
 
-                com = Helper.StringCompareNatural(arr[mid], name);
+                com = Helper.StringCompareNatural(arr[mid], name) * sortorder;
 
                 if (com == 0)
                 {
@@ -289,7 +350,7 @@ namespace WinkingCat.HelperLibs
         /// <param name="arr">The array to search.</param>
         /// <param name="name">The filename to search.</param>
         /// <returns></returns>
-        private int BinarySearchIndex(List<string> arr, string name)
+        private int BinarySearchIndex(List<string> arr, string name, int sortorder = 1)
         {
             int L = 0;
             int R = arr.Count;
@@ -299,7 +360,7 @@ namespace WinkingCat.HelperLibs
             {
                 mid = (L + R) / 2;
 
-                if (Helper.StringCompareNatural(arr[mid], name) <= 0)
+                if (sortorder * Helper.StringCompareNatural(arr[mid], name) <= 0)
                 {
                     L = mid + 1;
                 }
@@ -317,7 +378,7 @@ namespace WinkingCat.HelperLibs
             if (string.IsNullOrEmpty(name))
                 return;
 
-            int index = BinarySearchIndex(FileCache, name);
+            int index = BinarySearchIndex(FileCache, name, SortOrderFile);
             FileCache.Insert(index, name);
             if (fireEvent)
                 OnFileAdded(name);
@@ -329,7 +390,7 @@ namespace WinkingCat.HelperLibs
             if (string.IsNullOrEmpty(name))
                 return;
 
-            int index = BinarySearchIndex(DirectoryCache, name);
+            int index = BinarySearchIndex(DirectoryCache, name, SortOrderFolder);
             DirectoryCache.Insert(index, name);
             if (fireEvent)
                 OnDirectoryAdded(name);
@@ -365,14 +426,14 @@ namespace WinkingCat.HelperLibs
                 FileCache.Clear();
                 if (FilterFileExtensions == null)
                 {
-                    foreach (string i in Directory.EnumerateFiles(path).OrderByNatural(e => e))
+                    foreach (string i in Directory.EnumerateFiles(path).OrderByNatural(e => e, StringComparer.CurrentCulture, SortOrderFile != -1))
                     {
                         FileCache.Add(Path.GetFileName(i));
                     }
                 }
                 else
                 {
-                    foreach (string i in Directory.EnumerateFiles(path).OrderByNatural(e => e))
+                    foreach (string i in Directory.EnumerateFiles(path).OrderByNatural(e => e, StringComparer.CurrentCulture, SortOrderFile != -1))
                     {
                         if (FilterFileExtensions.Contains(PathHelper.GetFilenameExtension(i)))
                         {
@@ -385,7 +446,7 @@ namespace WinkingCat.HelperLibs
             DirectorySortThread = Task.Run(() =>
             {
                 DirectoryCache.Clear();
-                foreach (string i in Directory.EnumerateDirectories(path).OrderByNatural(e => e))
+                foreach (string i in Directory.EnumerateDirectories(path).OrderByNatural(e => e, StringComparer.CurrentCulture, SortOrderFolder != -1))
                 {
                     DirectoryCache.Add(Path.GetFileName(i));
                 }

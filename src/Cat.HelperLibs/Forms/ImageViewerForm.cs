@@ -27,50 +27,49 @@ namespace WinkingCat.HelperLibs
 
         public static void ShowDisposeImage(Image img)
         {
-            if (img != null)
+            if (img == null)
+                return;
+            using (Image tempImage = img)
             {
-                using (Image tempImage = img)
+                if (tempImage == null)
+                    return;
+
+                using (ImageViewerForm viewer = new ImageViewerForm(tempImage))
                 {
-                    if (tempImage != null)
-                    {
-                        using (ImageViewerForm viewer = new ImageViewerForm(tempImage))
-                        {
-                            viewer.ShowDialog();
-                        }
-                    }
+                    viewer.ShowDialog();
                 }
             }
         }
 
         public static void ShowImage(Image img)
         {
-            if (img != null)
+            if (img == null)
+                return;
+
+            using (Image tempImage = img.CloneSafe())
             {
-                using (Image tempImage = img.CloneSafe())
+                if (tempImage == null)
+                    return;
+
+                using (ImageViewerForm viewer = new ImageViewerForm(tempImage))
                 {
-                    if (tempImage != null)
-                    {
-                        using (ImageViewerForm viewer = new ImageViewerForm(tempImage))
-                        {
-                            viewer.ShowDialog();
-                        }
-                    }
+                    viewer.ShowDialog();
                 }
             }
         }
 
         public static void ShowImage(string path)
         {
-                using (Image tempImage = ImageHelper.LoadImage(path))
+            using (Image tempImage = ImageHelper.LoadImage(path))
+            {
+                if (tempImage == null)
+                    return;
+
+                using (ImageViewerForm viewer = new ImageViewerForm(tempImage))
                 {
-                    if (tempImage != null)
-                    {
-                        using (ImageViewerForm viewer = new ImageViewerForm(tempImage))
-                        {
-                            viewer.ShowDialog();
-                        }
-                    }
+                    viewer.ShowDialog();
                 }
+            }
             
         }
 
@@ -85,10 +84,9 @@ namespace WinkingCat.HelperLibs
             }
         }
 
-        private Size ResizeWidth(int newWidth)
+        private void RightClicked()
         {
-            int newHeight = (int)(newWidth * (initialSize.Height / (float)initialSize.Width));
-            return new Size(newWidth, newHeight);
+            Close();
         }
 
         #region Windows Form Designer generated code
@@ -138,14 +136,18 @@ namespace WinkingCat.HelperLibs
             ivMain.ScrollbarsVisible = false;
             ivMain.Dock = DockStyle.Fill;
             ivMain.Image = (Bitmap)this.image;
+            
             this.Controls.Add(ivMain);
 
             this.KeyDown += ImageViewerForm_KeyDown;
+            ivMain.db.RightClicked+= RightClicked;
             this.BringToFront();
             this.Activate();
             this.ResumeLayout();
 
         }
+
+        
 
         private ImageView ivMain;
         //private PictureBox pbMain;

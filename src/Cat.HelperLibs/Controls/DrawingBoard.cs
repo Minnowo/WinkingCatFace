@@ -17,6 +17,10 @@ namespace WinkingCat.HelperLibs
         public delegate void ScrollPositionChanged(object sender, EventArgs e);
         public event ScrollPositionChanged ScrollChanged;
 
+        public delegate void RightClickedEvent();
+        public event RightClickedEvent RightClicked;
+
+
         public Image Image
         {
             get
@@ -240,6 +244,10 @@ namespace WinkingCat.HelperLibs
             {
                 case MouseButtons.Left:
                     isLeftClicking = false;
+                    break;
+                case MouseButtons.Right:
+                    if (RightClicked != null)
+                        RightClicked.Invoke();
                     break;
             }
 

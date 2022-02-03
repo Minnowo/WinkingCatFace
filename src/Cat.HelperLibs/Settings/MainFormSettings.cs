@@ -36,6 +36,12 @@ namespace WinkingCat.HelperLibs
         [Browsable(false)]
         public int Image_Counter { get; set; } = 0;
 
+        [Browsable(false)]
+        public int FileSortOrder { get; set; } = -1;
+
+        [Browsable(false)]
+        public int FolderSortOrder { get; set; } = 1;
+
         [XmlIgnore]
         [Browsable(false)]
         public Function On_Tray_Left_Click { get; set; } = Function.RegionCapture;

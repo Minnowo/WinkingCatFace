@@ -15,9 +15,32 @@ namespace WinkingCat.Controls
 {
     public partial class FolderView : UserControl
     {
-        public ListViewGroupCollection Groups
+        public int FileSortOrder
         {
-            get { return this.ListView_.Groups; }
+            get { return _FolderWatcher.SortOrderFile; }
+            set {
+                Console.WriteLine("asdasdasdads");
+                _FolderWatcher.SortOrderFile = value; }
+        }
+
+        public int FolderSortOrder
+        {
+            get { return _FolderWatcher.SortOrderFolder; }
+            set { _FolderWatcher.SortOrderFolder = value; }
+        }
+
+        public int SelectedIndex
+        {
+            get
+            {
+                if (ListView_.SelectedIndex1 == -1)
+                    return -1;
+
+                if (ListView_.SelectedIndex1 >= ListView_.Items.Count)
+                    return -1;
+
+                return ListView_.SelectedIndex1;
+            }
         }
 
         /// <summary>
@@ -102,6 +125,7 @@ namespace WinkingCat.Controls
             ListView_.RetrieveVirtualItem += new RetrieveVirtualItemEventHandler(listView1_RetrieveVirtualItem);
             ListView_.CacheVirtualItems += new CacheVirtualItemsEventHandler(listView1_CacheVirtualItems);
             ListView_.ItemActivate += ListView1_ItemActivate;
+            ListView_.KeyUp += OnKeyUp;
 
             ListView_.GridLines = false;
             this.ListView_.VirtualMode = true;
@@ -120,11 +144,11 @@ namespace WinkingCat.Controls
             _FolderWatcher.DirectoryRenamed += _FolderWatcher_DirectoryRenamed;
             _FolderWatcher.FileRenamed += _FolderWatcher_FileRenamed;
             _FolderWatcher.ItemChanged += _FolderWatcher_ItemChanged;
+            _FolderWatcher.SortOrderChanged += _FolderWatcher_SortOrderChanged;
 
             ListView_.UpdateTheme();
             ListView_.AutoResizeColumns(ColumnHeaderAutoResizeStyle.ColumnContent);
             ListView_.AutoResizeColumns(ColumnHeaderAutoResizeStyle.HeaderSize);
-
             UpdateTheme();
 
             CurrentDirectory = "C:\\";// PathHelper.GetScreenshotFolder();
@@ -132,6 +156,7 @@ namespace WinkingCat.Controls
             ApplicationStyles.UpdateThemeEvent += UpdateTheme;
         }
 
+        
         public void UpdateTheme()
         {
             ApplicationStyles.ApplyCustomThemeToControl(this);
@@ -164,7 +189,7 @@ namespace WinkingCat.Controls
 
             if (string.IsNullOrEmpty(this.CurrentDirectory) || CurrentDirectory == InternalSettings.DRIVES_FOLDERNAME)
             {
-                this.LoadDirectory(InternalSettings.DRIVES_FOLDERNAME, true);
+                this.LoadDirectory(InternalSettings.DRIVES_FOLDERNAME);
                 this.UpdateTextbox();
                 return;
             }
@@ -172,12 +197,12 @@ namespace WinkingCat.Controls
             DirectoryInfo info = new DirectoryInfo(this.CurrentDirectory);
             if (info.Parent != null)
             {
-                this.UpdateDirectory(info.Parent.FullName, true);
+                this.UpdateDirectory(info.Parent.FullName);
                 this.SetLastDirectoryIndex();
             }
             else
             {
-                this.LoadDirectory(InternalSettings.DRIVES_FOLDERNAME, true);
+                this.LoadDirectory(InternalSettings.DRIVES_FOLDERNAME);
             }
 
             this.UpdateTextbox();
@@ -297,7 +322,7 @@ namespace WinkingCat.Controls
             {
                 Directory.SetCurrentDirectory(PathHelper.GetScreenshotFolder());
             }
-            Console.WriteLine(path);
+            
             _FolderWatcher.UpdateDirectory(path);
             
             this.ListView_.VirtualListSize = _FolderWatcher.GetTotalCount();
@@ -325,10 +350,7 @@ namespace WinkingCat.Controls
             }
             else if (ListView_.Items[ListView_.SelectedIndex1].Tag is DirectoryInfo)
             {
-                string p = ((DirectoryInfo)ListView_.Items[ListView_.SelectedIndex1].Tag).FullName;
-                ListView_.SelectedIndex1 = -1;
-                ListView_.SelectedIndex2 = -1;
-                UpdateDirectory(p, true); 
+                UpdateDirectory(((DirectoryInfo)ListView_.Items[ListView_.SelectedIndex1].Tag).FullName, true); 
             }
         }
 
@@ -538,27 +560,7 @@ namespace WinkingCat.Controls
 
         private void UpDirectoryLevel_Click(object sender, EventArgs e)
         {
-            if (!PathHelper.IsValidDirectoryPath(this.CurrentDirectory))
-                return;
-
-            if (string.IsNullOrEmpty(this.CurrentDirectory) || CurrentDirectory == InternalSettings.DRIVES_FOLDERNAME)
-            {
-                this.LoadDirectory(InternalSettings.DRIVES_FOLDERNAME, true);
-                this.UpdateTextbox();
-                return;
-            }
-
-            DirectoryInfo info = new DirectoryInfo(this.CurrentDirectory);
-            if (info.Parent != null)
-            {
-                this.UpdateDirectory(info.Parent.FullName, true);
-                this.SetLastDirectoryIndex();
-            }
-            else
-            {
-                this.LoadDirectory(InternalSettings.DRIVES_FOLDERNAME, true);
-            }
-            this.UpdateTextbox();
+            UpDirectoryLevel();
         }
 
         private void textBox1_PreviewKeyDown(object sender, PreviewKeyDownEventArgs e)
@@ -595,6 +597,20 @@ namespace WinkingCat.Controls
         private void textBox1_Enter(object sender, EventArgs e)
         {
             _isUsingTextbox = true;
+        }
+
+        private void OnKeyUp(object sender, KeyEventArgs e)
+        {
+            if (_isUsingTextbox)
+                return;
+
+            switch (e.KeyData)
+            {
+                case Keys.Back:
+                    UpDirectoryLevel();
+                    break;
+
+            }
         }
 
         // really need to fix this cause its SUPER slow for a large amount of files 
@@ -658,5 +674,14 @@ namespace WinkingCat.Controls
                 this.ForceListviewRedraw();
             }));
         }
+
+        private void _FolderWatcher_SortOrderChanged(int order)
+        {
+            this.InvokeSafe((Action)(() =>
+            {
+                this.ForceListviewRedraw();
+            }));
+        }
+
     }
 }

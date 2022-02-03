@@ -31,6 +31,7 @@
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(SettingsForm));
             this.tcMain = new System.Windows.Forms.TabControl();
             this.tpMain = new System.Windows.Forms.TabPage();
+            this.cbHideClipsOnCapture = new System.Windows.Forms.CheckBox();
             this.cbMaximizeBox = new System.Windows.Forms.CheckBox();
             this.cbUseDWRMOverWRM = new System.Windows.Forms.CheckBox();
             this.cbSaveImageToDisk = new System.Windows.Forms.CheckBox();
@@ -89,7 +90,8 @@
             this.btnBrowseFolders = new System.Windows.Forms.Button();
             this.tbCustomScreenshotPath = new System.Windows.Forms.TextBox();
             this.cbUseCustomScreenshotPath = new System.Windows.Forms.CheckBox();
-            this.cbHideClipsOnCapture = new System.Windows.Forms.CheckBox();
+            this.fileSortAscendingCheckbox = new System.Windows.Forms.CheckBox();
+            this.folderSortAscendingCheckbox = new System.Windows.Forms.CheckBox();
             this.tcMain.SuspendLayout();
             this.tpMain.SuspendLayout();
             this.tbRegionCapture.SuspendLayout();
@@ -120,6 +122,8 @@
             // 
             // tpMain
             // 
+            this.tpMain.Controls.Add(this.folderSortAscendingCheckbox);
+            this.tpMain.Controls.Add(this.fileSortAscendingCheckbox);
             this.tpMain.Controls.Add(this.cbHideClipsOnCapture);
             this.tpMain.Controls.Add(this.cbMaximizeBox);
             this.tpMain.Controls.Add(this.cbUseDWRMOverWRM);
@@ -143,6 +147,17 @@
             this.tpMain.TabIndex = 0;
             this.tpMain.Text = "General";
             this.tpMain.UseVisualStyleBackColor = true;
+            // 
+            // cbHideClipsOnCapture
+            // 
+            this.cbHideClipsOnCapture.AutoSize = true;
+            this.cbHideClipsOnCapture.Location = new System.Drawing.Point(8, 75);
+            this.cbHideClipsOnCapture.Name = "cbHideClipsOnCapture";
+            this.cbHideClipsOnCapture.Size = new System.Drawing.Size(130, 17);
+            this.cbHideClipsOnCapture.TabIndex = 15;
+            this.cbHideClipsOnCapture.Text = "Hide Clips On Capture";
+            this.cbHideClipsOnCapture.UseVisualStyleBackColor = true;
+            this.cbHideClipsOnCapture.CheckedChanged += new System.EventHandler(this.HideClipsOnCapture_CheckedChanged);
             // 
             // cbMaximizeBox
             // 
@@ -181,7 +196,7 @@
             // 
             this.cbDefaultImageFormat.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.cbDefaultImageFormat.FormattingEnabled = true;
-            this.cbDefaultImageFormat.Location = new System.Drawing.Point(8, 259);
+            this.cbDefaultImageFormat.Location = new System.Drawing.Point(8, 266);
             this.cbDefaultImageFormat.Name = "cbDefaultImageFormat";
             this.cbDefaultImageFormat.Size = new System.Drawing.Size(108, 21);
             this.cbDefaultImageFormat.TabIndex = 11;
@@ -190,7 +205,7 @@
             // label14
             // 
             this.label14.AutoSize = true;
-            this.label14.Location = new System.Drawing.Point(5, 243);
+            this.label14.Location = new System.Drawing.Point(5, 250);
             this.label14.Name = "label14";
             this.label14.Size = new System.Drawing.Size(111, 13);
             this.label14.TabIndex = 10;
@@ -199,7 +214,7 @@
             // label3
             // 
             this.label3.AutoSize = true;
-            this.label3.Location = new System.Drawing.Point(5, 200);
+            this.label3.Location = new System.Drawing.Point(5, 207);
             this.label3.Name = "label3";
             this.label3.Size = new System.Drawing.Size(129, 13);
             this.label3.TabIndex = 9;
@@ -208,7 +223,7 @@
             // label2
             // 
             this.label2.AutoSize = true;
-            this.label2.Location = new System.Drawing.Point(5, 173);
+            this.label2.Location = new System.Drawing.Point(5, 180);
             this.label2.Name = "label2";
             this.label2.Size = new System.Drawing.Size(132, 13);
             this.label2.TabIndex = 8;
@@ -217,7 +232,7 @@
             // label1
             // 
             this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(5, 146);
+            this.label1.Location = new System.Drawing.Point(5, 153);
             this.label1.Name = "label1";
             this.label1.Size = new System.Drawing.Size(116, 13);
             this.label1.TabIndex = 7;
@@ -227,7 +242,7 @@
             // 
             this.cbOnTrayMiddleClick.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.cbOnTrayMiddleClick.FormattingEnabled = true;
-            this.cbOnTrayMiddleClick.Location = new System.Drawing.Point(180, 197);
+            this.cbOnTrayMiddleClick.Location = new System.Drawing.Point(180, 204);
             this.cbOnTrayMiddleClick.Name = "cbOnTrayMiddleClick";
             this.cbOnTrayMiddleClick.Size = new System.Drawing.Size(261, 21);
             this.cbOnTrayMiddleClick.TabIndex = 6;
@@ -237,7 +252,7 @@
             // 
             this.cbOnTrayDoubleClick.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.cbOnTrayDoubleClick.FormattingEnabled = true;
-            this.cbOnTrayDoubleClick.Location = new System.Drawing.Point(180, 170);
+            this.cbOnTrayDoubleClick.Location = new System.Drawing.Point(180, 177);
             this.cbOnTrayDoubleClick.Name = "cbOnTrayDoubleClick";
             this.cbOnTrayDoubleClick.Size = new System.Drawing.Size(261, 21);
             this.cbOnTrayDoubleClick.TabIndex = 5;
@@ -247,7 +262,7 @@
             // 
             this.cbOnTrayLeftClick.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.cbOnTrayLeftClick.FormattingEnabled = true;
-            this.cbOnTrayLeftClick.Location = new System.Drawing.Point(180, 143);
+            this.cbOnTrayLeftClick.Location = new System.Drawing.Point(180, 150);
             this.cbOnTrayLeftClick.Name = "cbOnTrayLeftClick";
             this.cbOnTrayLeftClick.Size = new System.Drawing.Size(261, 21);
             this.cbOnTrayLeftClick.TabIndex = 4;
@@ -816,14 +831,25 @@
             // 
             // checkBox1
             // 
-            this.cbHideClipsOnCapture.AutoSize = true;
-            this.cbHideClipsOnCapture.Location = new System.Drawing.Point(8, 75);
-            this.cbHideClipsOnCapture.Name = "checkBox1";
-            this.cbHideClipsOnCapture.Size = new System.Drawing.Size(130, 17);
-            this.cbHideClipsOnCapture.TabIndex = 15;
-            this.cbHideClipsOnCapture.Text = "Hide Clips On Capture";
-            this.cbHideClipsOnCapture.UseVisualStyleBackColor = true;
-            this.cbHideClipsOnCapture.CheckedChanged += new System.EventHandler(this.HideClipsOnCapture_CheckedChanged);
+            this.fileSortAscendingCheckbox.AutoSize = true;
+            this.fileSortAscendingCheckbox.Location = new System.Drawing.Point(8, 98);
+            this.fileSortAscendingCheckbox.Name = "checkBox1";
+            this.fileSortAscendingCheckbox.Size = new System.Drawing.Size(122, 17);
+            this.fileSortAscendingCheckbox.TabIndex = 16;
+            this.fileSortAscendingCheckbox.Text = "Sort Files Ascending";
+            this.fileSortAscendingCheckbox.UseVisualStyleBackColor = true;
+            this.fileSortAscendingCheckbox.CheckedChanged += new System.EventHandler(this.checkBox1_CheckedChanged);
+            // 
+            // checkBox2
+            // 
+            this.folderSortAscendingCheckbox.AutoSize = true;
+            this.folderSortAscendingCheckbox.Location = new System.Drawing.Point(8, 121);
+            this.folderSortAscendingCheckbox.Name = "checkBox2";
+            this.folderSortAscendingCheckbox.Size = new System.Drawing.Size(135, 17);
+            this.folderSortAscendingCheckbox.TabIndex = 17;
+            this.folderSortAscendingCheckbox.Text = "Sort Folders Ascending";
+            this.folderSortAscendingCheckbox.UseVisualStyleBackColor = true;
+            this.folderSortAscendingCheckbox.CheckedChanged += new System.EventHandler(this.checkBox2_CheckedChanged);
             // 
             // SettingsForm
             // 
@@ -920,5 +946,7 @@
         private System.Windows.Forms.CheckBox cbUseDWRMOverWRM;
         private System.Windows.Forms.CheckBox cbMaximizeBox;
         private System.Windows.Forms.CheckBox cbHideClipsOnCapture;
+        private System.Windows.Forms.CheckBox folderSortAscendingCheckbox;
+        private System.Windows.Forms.CheckBox fileSortAscendingCheckbox;
     }
 }

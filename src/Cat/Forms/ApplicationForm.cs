@@ -50,7 +50,7 @@ namespace WinkingCat
             folderView1.ListView_.View = View.Details;
             folderView1.ListView_.Columns.Add(new ColumnHeader() { Name = "Filename", Text = "Filename", Width=500});
             folderView1.ListView_.Columns.Add(new ColumnHeader() { Name = "Size", Text = "Size", Width =30 });
-            //folderView1.CurrentDirectory = PathHelper.GetScreenshotFolder();
+            folderView1.CurrentDirectory = PathHelper.GetScreenshotFolder();
 
             _preventOverflow = true;
 
@@ -74,7 +74,9 @@ namespace WinkingCat
             MaximizeBox        = SettingsManager.MainFormSettings.Show_Maximize_Box;
             TopMost            = SettingsManager.MainFormSettings.Always_On_Top;
             niTrayIcon.Visible = SettingsManager.MainFormSettings.Show_In_Tray;
+            
 #endif
+            toolStripButton1.Checked = TopMost;
             imageDisplay1.ClearImagePathOnReplace = true;
             imageDisplay1.DisposeImageOnReplace = true;
             imageDisplay1.ResetOffsetOnRightClick = false;
@@ -84,7 +86,6 @@ namespace WinkingCat
 
             _preventOverflow = false;
             ResumeLayout();
-
             // this.pbPreviewBox.previewOnClick = true;
         }
 
@@ -654,12 +655,12 @@ namespace WinkingCat
         {
             _loadImageTimer.Stop();
 
-            if (folderView1.ListView_.SelectedIndex1 == -1)
+            if (folderView1.SelectedIndex == -1)
                 return;
 
-            if(folderView1.ListView_.Items[folderView1.ListView_.SelectedIndex1].Tag is FileInfo)
+            if(folderView1.ListView_.Items[folderView1.SelectedIndex].Tag is FileInfo)
             {
-                FileInfo f = folderView1.ListView_.Items[folderView1.ListView_.SelectedIndex1].Tag as FileInfo;
+                FileInfo f = folderView1.ListView_.Items[folderView1.SelectedIndex].Tag as FileInfo;
 
                 if (!File.Exists(f.FullName))
                     return;
@@ -688,6 +689,8 @@ namespace WinkingCat
             imageDisplay1.CellColor2 = SettingsManager.MainFormSettings.imageDisplayBG2;
             imageDisplay1.InterpolationMode = SettingsManager.MiscSettings.Default_Interpolation_Mode;
             imageDisplay1.DrawMode = SettingsManager.MiscSettings.Default_Draw_Mode;
+            folderView1.FileSortOrder = SettingsManager.MainFormSettings.FileSortOrder;
+            folderView1.FolderSortOrder = SettingsManager.MainFormSettings.FolderSortOrder;
 
             if (SettingsManager.MainFormSettings.Show_Image_Display_Color_1_Only)
             {
@@ -1145,6 +1148,11 @@ namespace WinkingCat
             }
 
             PathHelper.OpenExplorerAtLocation(path);
+        }
+
+        private void toolStripButton3_Click(object sender, EventArgs e)
+        {
+            folderView1.CurrentDirectory = InternalSettings.DRIVES_FOLDERNAME;
         }
     }
 }

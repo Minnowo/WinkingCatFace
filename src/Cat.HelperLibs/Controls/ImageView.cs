@@ -12,7 +12,10 @@ namespace WinkingCat.HelperLibs
 {
     public partial class ImageView : UserControl
     {
-
+        public DrawingBoard db
+        {
+            get { return this.drawingBoard1; }
+        }
         public Image Image
         {
             get
