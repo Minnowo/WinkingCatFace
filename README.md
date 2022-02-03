@@ -71,8 +71,8 @@ You can compile it yourself using [Visual Studio](https://visualstudio.microsoft
 
 ## License
 
-This project is licensed under the [GLPv3](LICENSE.md)
-GNU General Public License - see the [LICENSE.md](LICENSE.md) file for
+This project is licensed under the [GLPv3](LICENSE)
+GNU General Public License - see the [LICENSE](LICENSE) file for
 details
 
 ## Acknowledgments
