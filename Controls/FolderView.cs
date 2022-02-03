@@ -301,7 +301,7 @@ namespace WinkingCat.Controls
             _FolderWatcher.UpdateDirectory(path);
             
             this.ListView_.VirtualListSize = _FolderWatcher.GetTotalCount();
-            
+            UpdateTextbox();
             ForceListviewRedraw();
 
             GC.Collect();
@@ -324,8 +324,11 @@ namespace WinkingCat.Controls
                 return;
             }
             else if (ListView_.Items[ListView_.SelectedIndex1].Tag is DirectoryInfo)
-                    {
-                UpdateDirectory(((DirectoryInfo)ListView_.Items[ListView_.SelectedIndex1].Tag).FullName, true); 
+            {
+                string p = ((DirectoryInfo)ListView_.Items[ListView_.SelectedIndex1].Tag).FullName;
+                ListView_.SelectedIndex1 = -1;
+                ListView_.SelectedIndex2 = -1;
+                UpdateDirectory(p, true); 
             }
         }
 

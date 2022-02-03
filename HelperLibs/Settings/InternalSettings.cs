@@ -121,6 +121,7 @@ namespace WinkingCat.HelperLibs
 
         public static bool Save_Images_To_Disk = true;
 
+        public static bool Garbage_Collect_After_Image_Display_Unload = true;
         public static bool Garbage_Collect_After_Clip_Destroyed = false;
         public static bool Garbage_Collect_After_All_Clips_Destroyed = true;
         public static bool Garbage_Collect_After_Gif_Encode = true;

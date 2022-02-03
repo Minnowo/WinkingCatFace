@@ -13,6 +13,7 @@ using ZXing.QrCode;
 using ZXing.Rendering;
 using System.Diagnostics;
 using System.Text.RegularExpressions;
+using WinkingCat.HelperLibs.Enums;
 
 namespace WinkingCat.HelperLibs
 {
@@ -262,5 +263,17 @@ namespace WinkingCat.HelperLibs
             return string.Format("{0:n" + decimalPlaces + "} {1}", adjustedSize, SizeSuffixes[mag]);
         }
 
+        public static string SizeSuffix(Int64 value, FileSizeUnit fsu, int decimalPlaces = 1)
+        {
+            if (decimalPlaces < 0) { throw new ArgumentOutOfRangeException("decimalPlaces"); }
+            if (value < 0) { return "-" + SizeSuffix(-value, fsu, decimalPlaces); }
+            if (value == 0) { return string.Format("{0:n" + decimalPlaces + "} {1}", 0, SizeSuffixes[(int)fsu]); }
+
+            int mag = (int)fsu;
+            // 1L << (mag * 10) == 2 ^ (10 * mag) 
+            // [i.e. the number of bytes in the unit corresponding to mag]
+            double adjustedSize = (double)value / (1L << (mag * 10));
+            return string.Format("{0:n" + decimalPlaces + "} {1}", adjustedSize, SizeSuffixes[mag]);
+        }
     }
 }

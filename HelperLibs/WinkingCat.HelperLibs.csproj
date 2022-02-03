@@ -102,6 +102,8 @@
     </Compile>
     <Compile Include="Enums\ColorFormat.cs" />
     <Compile Include="Enums\ColorSpaceDrawStyle.cs" />
+    <Compile Include="Enums\EnumToString.cs" />
+    <Compile Include="Enums\FileSizeUnit.cs" />
     <Compile Include="Enums\HashType.cs" />
     <Compile Include="Enums\HotkeyStatus.cs" />
     <Compile Include="Enums\RegionCaptureMode.cs" />

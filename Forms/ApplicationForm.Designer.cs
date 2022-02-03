@@ -55,7 +55,6 @@
             this.tsmiOpenMainWindowToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.tsmiExitToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.scMain = new System.Windows.Forms.SplitContainer();
-            this.folderView1 = new WinkingCat.Controls.FolderView();
             this.button2 = new System.Windows.Forms.Button();
             this.button1 = new System.Windows.Forms.Button();
             this.textBox1 = new System.Windows.Forms.TextBox();
@@ -87,12 +86,26 @@
             this.imageDisplayContextMenu = new System.Windows.Forms.ContextMenuStrip(this.components);
             this.copyImageToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.useBackColor1OnlyToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.toolStripSeparator2 = new System.Windows.Forms.ToolStripSeparator();
             this.setBackColor1ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.setBackColor2ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.resetXYOffsetToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripSeparator1 = new System.Windows.Forms.ToolStripSeparator();
+            this.resetXYOffsetToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.resetBackColorsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.toolStripSeparator2 = new System.Windows.Forms.ToolStripSeparator();
+            this.listViewContextMenu = new System.Windows.Forms.ContextMenuStrip(this.components);
+            this.copyToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.fileToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.imageToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.copySizeToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.copyPathToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.fullPathToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.filenameToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.openAsClipToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.openLocationToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.toolStripSeparator3 = new System.Windows.Forms.ToolStripSeparator();
+            this.toolStripButton1 = new System.Windows.Forms.ToolStripButton();
+            this.toolStripButton2 = new System.Windows.Forms.ToolStripButton();
+            this.folderView1 = new WinkingCat.Controls.FolderView();
             this.cmTray.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.scMain)).BeginInit();
             this.scMain.Panel1.SuspendLayout();
@@ -100,6 +113,7 @@
             this.scMain.SuspendLayout();
             this.tsMain.SuspendLayout();
             this.imageDisplayContextMenu.SuspendLayout();
+            this.listViewContextMenu.SuspendLayout();
             this.SuspendLayout();
             // 
             // niTrayIcon
@@ -336,21 +350,10 @@
             this.scMain.SplitterWidth = 6;
             this.scMain.TabIndex = 2;
             // 
-            // folderView1
-            // 
-            this.folderView1.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(42)))), ((int)(((byte)(47)))), ((int)(((byte)(56)))));
-            this.folderView1.CurrentDirectory = "C:\\";
-            this.folderView1.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.folderView1.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(235)))), ((int)(((byte)(235)))), ((int)(((byte)(235)))));
-            this.folderView1.Location = new System.Drawing.Point(0, 0);
-            this.folderView1.Name = "folderView1";
-            this.folderView1.Size = new System.Drawing.Size(590, 406);
-            this.folderView1.TabIndex = 0;
-            // 
             // button2
             // 
-            this.button2.Anchor = System.Windows.Forms.AnchorStyles.Right;
-            this.button2.Location = new System.Drawing.Point(308, 2);
+            this.button2.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.button2.Location = new System.Drawing.Point(300, 2);
             this.button2.Name = "button2";
             this.button2.Size = new System.Drawing.Size(23, 23);
             this.button2.TabIndex = 5;
@@ -361,7 +364,7 @@
             // button1
             // 
             this.button1.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.button1.Location = new System.Drawing.Point(330, 2);
+            this.button1.Location = new System.Drawing.Point(322, 2);
             this.button1.Name = "button1";
             this.button1.Size = new System.Drawing.Size(23, 23);
             this.button1.TabIndex = 4;
@@ -376,7 +379,7 @@
             this.textBox1.Location = new System.Drawing.Point(219, 3);
             this.textBox1.Name = "textBox1";
             this.textBox1.ReadOnly = true;
-            this.textBox1.Size = new System.Drawing.Size(89, 20);
+            this.textBox1.Size = new System.Drawing.Size(81, 20);
             this.textBox1.TabIndex = 3;
             this.textBox1.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
             // 
@@ -413,7 +416,7 @@
             this.imageDisplay1.InterpolationMode = System.Drawing.Drawing2D.InterpolationMode.NearestNeighbor;
             this.imageDisplay1.Location = new System.Drawing.Point(3, 26);
             this.imageDisplay1.Name = "imageDisplay1";
-            this.imageDisplay1.Size = new System.Drawing.Size(349, 377);
+            this.imageDisplay1.Size = new System.Drawing.Size(341, 377);
             this.imageDisplay1.TabIndex = 0;
             this.imageDisplay1.MouseClick += new System.Windows.Forms.MouseEventHandler(this.imageDisplay1_MouseClick);
             // 
@@ -430,7 +433,9 @@
             this.tsddbToolStripDropDownButton_Tools,
             this.tssToolStripSeparator1,
             this.tsbToolStripButton_Style,
-            this.tsbToolStripDropDownButton_Settings});
+            this.tsbToolStripDropDownButton_Settings,
+            this.toolStripButton2,
+            this.toolStripButton1});
             this.tsMain.LayoutStyle = System.Windows.Forms.ToolStripLayoutStyle.VerticalStackWithOverflow;
             this.tsMain.Location = new System.Drawing.Point(0, 0);
             this.tsMain.Name = "tsMain";
@@ -655,7 +660,7 @@
             this.resetXYOffsetToolStripMenuItem,
             this.resetBackColorsToolStripMenuItem});
             this.imageDisplayContextMenu.Name = "contextMenuStrip1";
-            this.imageDisplayContextMenu.Size = new System.Drawing.Size(191, 170);
+            this.imageDisplayContextMenu.Size = new System.Drawing.Size(191, 148);
             // 
             // copyImageToolStripMenuItem
             // 
@@ -672,6 +677,11 @@
             this.useBackColor1OnlyToolStripMenuItem.Text = "Use Back Color 1 Only";
             this.useBackColor1OnlyToolStripMenuItem.Click += new System.EventHandler(this.useBackColor1OnlyToolStripMenuItem_Click);
             // 
+            // toolStripSeparator2
+            // 
+            this.toolStripSeparator2.Name = "toolStripSeparator2";
+            this.toolStripSeparator2.Size = new System.Drawing.Size(187, 6);
+            // 
             // setBackColor1ToolStripMenuItem
             // 
             this.setBackColor1ToolStripMenuItem.Name = "setBackColor1ToolStripMenuItem";
@@ -686,17 +696,17 @@
             this.setBackColor2ToolStripMenuItem.Text = "Set Back Color 2";
             this.setBackColor2ToolStripMenuItem.Click += new System.EventHandler(this.setBackColor2ToolStripMenuItem_Click);
             // 
+            // toolStripSeparator1
+            // 
+            this.toolStripSeparator1.Name = "toolStripSeparator1";
+            this.toolStripSeparator1.Size = new System.Drawing.Size(187, 6);
+            // 
             // resetXYOffsetToolStripMenuItem
             // 
             this.resetXYOffsetToolStripMenuItem.Name = "resetXYOffsetToolStripMenuItem";
             this.resetXYOffsetToolStripMenuItem.Size = new System.Drawing.Size(190, 22);
             this.resetXYOffsetToolStripMenuItem.Text = "Reset XY Offset";
             this.resetXYOffsetToolStripMenuItem.Click += new System.EventHandler(this.resetXYOffsetToolStripMenuItem_Click);
-            // 
-            // toolStripSeparator1
-            // 
-            this.toolStripSeparator1.Name = "toolStripSeparator1";
-            this.toolStripSeparator1.Size = new System.Drawing.Size(187, 6);
             // 
             // resetBackColorsToolStripMenuItem
             // 
@@ -705,10 +715,120 @@
             this.resetBackColorsToolStripMenuItem.Text = "Reset Back Colors";
             this.resetBackColorsToolStripMenuItem.Click += new System.EventHandler(this.resetBackColorsToolStripMenuItem_Click);
             // 
-            // toolStripSeparator2
+            // listViewContextMenu
             // 
-            this.toolStripSeparator2.Name = "toolStripSeparator2";
-            this.toolStripSeparator2.Size = new System.Drawing.Size(187, 6);
+            this.listViewContextMenu.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.copyToolStripMenuItem,
+            this.copySizeToolStripMenuItem,
+            this.copyPathToolStripMenuItem,
+            this.openAsClipToolStripMenuItem,
+            this.openLocationToolStripMenuItem,
+            this.toolStripSeparator3});
+            this.listViewContextMenu.Name = "contextMenuStrip1";
+            this.listViewContextMenu.Size = new System.Drawing.Size(181, 142);
+            // 
+            // copyToolStripMenuItem
+            // 
+            this.copyToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.fileToolStripMenuItem,
+            this.imageToolStripMenuItem});
+            this.copyToolStripMenuItem.Name = "copyToolStripMenuItem";
+            this.copyToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.copyToolStripMenuItem.Text = "Copy";
+            // 
+            // fileToolStripMenuItem
+            // 
+            this.fileToolStripMenuItem.Name = "fileToolStripMenuItem";
+            this.fileToolStripMenuItem.Size = new System.Drawing.Size(107, 22);
+            this.fileToolStripMenuItem.Text = "File";
+            this.fileToolStripMenuItem.Click += new System.EventHandler(this.fileToolStripMenuItem_Click);
+            // 
+            // imageToolStripMenuItem
+            // 
+            this.imageToolStripMenuItem.Name = "imageToolStripMenuItem";
+            this.imageToolStripMenuItem.Size = new System.Drawing.Size(107, 22);
+            this.imageToolStripMenuItem.Text = "Image";
+            this.imageToolStripMenuItem.Click += new System.EventHandler(this.imageToolStripMenuItem_Click);
+            // 
+            // copySizeToolStripMenuItem
+            // 
+            this.copySizeToolStripMenuItem.Name = "copySizeToolStripMenuItem";
+            this.copySizeToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.copySizeToolStripMenuItem.Text = "Copy Size";
+            // 
+            // copyPathToolStripMenuItem
+            // 
+            this.copyPathToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.fullPathToolStripMenuItem,
+            this.filenameToolStripMenuItem});
+            this.copyPathToolStripMenuItem.Name = "copyPathToolStripMenuItem";
+            this.copyPathToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.copyPathToolStripMenuItem.Text = "Copy Path";
+            // 
+            // fullPathToolStripMenuItem
+            // 
+            this.fullPathToolStripMenuItem.Name = "fullPathToolStripMenuItem";
+            this.fullPathToolStripMenuItem.Size = new System.Drawing.Size(122, 22);
+            this.fullPathToolStripMenuItem.Text = "Full Path";
+            this.fullPathToolStripMenuItem.Click += new System.EventHandler(this.fullPathToolStripMenuItem_Click);
+            // 
+            // filenameToolStripMenuItem
+            // 
+            this.filenameToolStripMenuItem.Name = "filenameToolStripMenuItem";
+            this.filenameToolStripMenuItem.Size = new System.Drawing.Size(122, 22);
+            this.filenameToolStripMenuItem.Text = "Filename";
+            this.filenameToolStripMenuItem.Click += new System.EventHandler(this.filenameToolStripMenuItem_Click);
+            // 
+            // openAsClipToolStripMenuItem
+            // 
+            this.openAsClipToolStripMenuItem.Name = "openAsClipToolStripMenuItem";
+            this.openAsClipToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.openAsClipToolStripMenuItem.Text = "Open As Clip";
+            this.openAsClipToolStripMenuItem.Click += new System.EventHandler(this.openAsClipToolStripMenuItem_Click);
+            // 
+            // openLocationToolStripMenuItem
+            // 
+            this.openLocationToolStripMenuItem.Name = "openLocationToolStripMenuItem";
+            this.openLocationToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.openLocationToolStripMenuItem.Text = "Open Location";
+            this.openLocationToolStripMenuItem.Click += new System.EventHandler(this.openLocationToolStripMenuItem_Click);
+            // 
+            // toolStripSeparator3
+            // 
+            this.toolStripSeparator3.Name = "toolStripSeparator3";
+            this.toolStripSeparator3.Size = new System.Drawing.Size(177, 6);
+            // 
+            // toolStripButton1
+            // 
+            this.toolStripButton1.CheckOnClick = true;
+            this.toolStripButton1.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text;
+            this.toolStripButton1.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.toolStripButton1.Name = "toolStripButton1";
+            this.toolStripButton1.Size = new System.Drawing.Size(182, 19);
+            this.toolStripButton1.Text = "Always On Top";
+            this.toolStripButton1.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            this.toolStripButton1.Click += new System.EventHandler(this.toolStripButton1_Click);
+            // 
+            // toolStripButton2
+            // 
+            this.toolStripButton2.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text;
+            this.toolStripButton2.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.toolStripButton2.Name = "toolStripButton2";
+            this.toolStripButton2.Size = new System.Drawing.Size(182, 19);
+            this.toolStripButton2.Text = "Open Screenshot Folder";
+            this.toolStripButton2.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            this.toolStripButton2.Click += new System.EventHandler(this.toolStripButton2_Click);
+            // 
+            // folderView1
+            // 
+            this.folderView1.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(42)))), ((int)(((byte)(47)))), ((int)(((byte)(56)))));
+            this.folderView1.CurrentDirectory = "C:\\";
+            this.folderView1.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.folderView1.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(235)))), ((int)(((byte)(235)))), ((int)(((byte)(235)))));
+            this.folderView1.Location = new System.Drawing.Point(0, 0);
+            this.folderView1.Name = "folderView1";
+            this.folderView1.Size = new System.Drawing.Size(590, 406);
+            this.folderView1.TabIndex = 0;
             // 
             // ApplicationForm
             // 
@@ -732,6 +852,7 @@
             this.tsMain.ResumeLayout(false);
             this.tsMain.PerformLayout();
             this.imageDisplayContextMenu.ResumeLayout(false);
+            this.listViewContextMenu.ResumeLayout(false);
             this.ResumeLayout(false);
 
         }
@@ -800,6 +921,19 @@
         private System.Windows.Forms.ToolStripSeparator toolStripSeparator2;
         private System.Windows.Forms.ToolStripSeparator toolStripSeparator1;
         private System.Windows.Forms.ToolStripMenuItem resetBackColorsToolStripMenuItem;
+        private System.Windows.Forms.ContextMenuStrip listViewContextMenu;
+        private System.Windows.Forms.ToolStripMenuItem copyToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem fileToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem imageToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem copySizeToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem copyPathToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem fullPathToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem filenameToolStripMenuItem;
+        private System.Windows.Forms.ToolStripButton toolStripButton1;
+        private System.Windows.Forms.ToolStripMenuItem openAsClipToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem openLocationToolStripMenuItem;
+        private System.Windows.Forms.ToolStripSeparator toolStripSeparator3;
+        private System.Windows.Forms.ToolStripButton toolStripButton2;
     }
 }
 

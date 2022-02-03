@@ -8,6 +8,8 @@ using System.IO;
 using System.Threading;
 using WinkingCat.HelperLibs;
 using WinkingCat.Uploaders;
+using System.Text;
+using WinkingCat.HelperLibs.Enums;
 
 namespace WinkingCat
 {
@@ -34,6 +36,16 @@ namespace WinkingCat
         {
             InitializeComponent();
             SuspendLayout();
+
+            for(int i = 0; i < 7; i++)
+            {
+                FileSizeUnit fsu = (FileSizeUnit)i;
+                ToolStripItem tsi = new ToolStripMenuItem();
+                tsi.Text = EnumToString.FileSizeUnitToString(fsu);
+                tsi.Tag = fsu;
+                tsi.Click += FileSizeUnit_Click;
+                copySizeToolStripMenuItem.DropDownItems.Add(tsi);
+            }
 
             folderView1.ListView_.View = View.Details;
             folderView1.ListView_.Columns.Add(new ColumnHeader() { Name = "Filename", Text = "Filename", Width=500});
@@ -79,6 +91,9 @@ namespace WinkingCat
         protected override void RegisterEvents()
         {
             base.RegisterEvents();
+
+            folderView1.ListView_.MouseClick += ListView__MouseClick;
+
             comboBox1.SelectedIndexChanged += ComboBox1_SelectedIndexChanged;
             comboBox2.SelectedIndexChanged += ComboBox2_SelectedIndexChanged;
             imageDisplay1.ImageChanged += ImageDisplay1_ImageChanged;
@@ -139,6 +154,136 @@ namespace WinkingCat
             //lvListView.ItemSelectionChanged += LvListView_ItemSelectionChanged;
             // pbPreviewBox.pbMain.MouseClick += PbPreviewBox_MouseClick;
 
+        }
+
+        
+        public void CopySelectedItemFilename()
+        {
+            if (folderView1.ListView_.SelectedIndices.Count < 2)
+            {
+                if (folderView1.ListView_.FocusedItem != null)
+                {
+                    if (folderView1.ListView_.FocusedItem.Tag is DirectoryInfo)
+                    {
+                        ClipboardHelper.CopyStringDefault(((DirectoryInfo)(folderView1.ListView_.FocusedItem.Tag)).Name);
+                    }
+                    else if (folderView1.ListView_.FocusedItem.Tag is FileInfo)
+                    {
+                        ClipboardHelper.CopyStringDefault(((FileInfo)(folderView1.ListView_.FocusedItem.Tag)).Name);
+                    }
+                }
+                return;
+            }
+
+            StringBuilder paths = new StringBuilder();
+
+            int i = 0;
+            foreach (int ii in folderView1.ListView_.SelectedIndices)
+            {
+                if (folderView1.ListView_.Items[ii].Tag is DirectoryInfo)
+                {
+                    paths.AppendLine(((DirectoryInfo)(folderView1.ListView_.Items[ii].Tag)).Name);
+                }
+                else if (folderView1.ListView_.Items[ii].Tag is FileInfo)
+                {
+                    paths.AppendLine(((FileInfo)(folderView1.ListView_.Items[ii].Tag)).Name);
+                }
+                i++;
+            }
+            ClipboardHelper.CopyStringDefault(paths.ToString());
+        }
+        public void CopySelectedItemPath()
+        {
+            if (folderView1.ListView_.SelectedIndices.Count < 2)
+            {
+                if (folderView1.ListView_.FocusedItem != null)
+                {
+                    if (folderView1.ListView_.FocusedItem.Tag is DirectoryInfo)
+                    {
+                        ClipboardHelper.CopyStringDefault(((DirectoryInfo)(folderView1.ListView_.FocusedItem.Tag)).FullName);
+                    }
+                    else if (folderView1.ListView_.FocusedItem.Tag is FileInfo)
+                    {
+                        ClipboardHelper.CopyStringDefault(((FileInfo)(folderView1.ListView_.FocusedItem.Tag)).FullName);
+                    }
+                }
+                return;
+            }
+
+            StringBuilder paths = new StringBuilder();
+
+            int i = 0;
+            foreach (int ii in folderView1.ListView_.SelectedIndices)
+            {
+                if (folderView1.ListView_.Items[ii].Tag is DirectoryInfo)
+                {
+                    paths.AppendLine(((DirectoryInfo)(folderView1.ListView_.Items[ii].Tag)).FullName);
+                }
+                else if (folderView1.ListView_.Items[ii].Tag is FileInfo)
+                {
+                    paths.AppendLine(((FileInfo)(folderView1.ListView_.Items[ii].Tag)).FullName);
+                }
+                i++;
+            }
+            ClipboardHelper.CopyStringDefault(paths.ToString());
+        }
+
+        /// <summary>
+        /// Copies the file size in the given unit for all selected listview items.
+        /// </summary>
+        /// <param name="size">The size unit.</param>
+        /// <param name="decimalPlaces">The number of decimal places.</param>
+        public void CopySelectedItemsSize(FileSizeUnit size, int decimalPlaces = 1)
+        {
+            FileInfo info;
+
+            if (folderView1.ListView_.SelectedIndices.Count < 2)
+            {
+                if (folderView1.ListView_.FocusedItem != null)
+                {
+                    if (folderView1.ListView_.FocusedItem.Tag is DirectoryInfo)
+                    {
+                        ClipboardHelper.CopyStringDefault("Unknown Folder Size");
+                        return;
+                    }
+                    else if (folderView1.ListView_.FocusedItem.Tag is FileInfo)
+                    {
+                        info = (FileInfo)(folderView1.ListView_.FocusedItem.Tag);
+                        ClipboardHelper.CopyStringDefault(Helper.SizeSuffix(info.Length, size, decimalPlaces));
+                    }
+                }
+                return;
+            }
+
+            StringBuilder paths = new StringBuilder();
+
+            int i = 0;
+            foreach (int ii in folderView1.ListView_.SelectedIndices)
+            {
+                if (folderView1.ListView_.Items[ii].Tag is DirectoryInfo)
+                {
+                    paths.AppendLine("Unknown Folder Size");
+                    return;
+                }
+                else if (folderView1.ListView_.Items[ii].Tag is FileInfo)
+                {
+                    info = (FileInfo)(folderView1.ListView_.Items[ii].Tag);
+                    ClipboardHelper.CopyStringDefault(Helper.SizeSuffix(info.Length, size, decimalPlaces));
+                    paths.AppendLine(Helper.SizeSuffix(info.Length, size, decimalPlaces));
+                }
+                i++;
+            }
+            ClipboardHelper.CopyStringDefault(paths.ToString());
+        }
+
+        private void ListView__MouseClick(object sender, MouseEventArgs e)
+        {
+            switch (e.Button)
+            {
+                case MouseButtons.Right:
+                    listViewContextMenu.Show(folderView1.ListView_, e.Location);
+                    break;
+            }
         }
 
         private void ImageDisplay1_ImageChanged()
@@ -226,6 +371,8 @@ namespace WinkingCat
             imageDisplayContextMenu.Renderer = new ToolStripCustomRenderer();
             imageDisplayContextMenu.Opacity = SettingsManager.MainFormSettings.contextMenuOpacity;
 
+            listViewContextMenu.Renderer = new ToolStripCustomRenderer();
+            listViewContextMenu.Opacity = SettingsManager.MainFormSettings.contextMenuOpacity;
 
             //lvListView.ForeColor = SettingsManager.MainFormSettings.textColor;
             ApplicationStyles.ApplyCustomThemeToControl(scMain.Panel2);
@@ -554,18 +701,6 @@ namespace WinkingCat
 
         #region Control Events
 
-        private void PbPreviewBox_MouseClick(object sender, MouseEventArgs e)
-        {
-            switch (e.Button)
-            {
-                case MouseButtons.Right:
-                    //this.lvListView.DeselectAll();
-                    this.scMain.Panel2Collapsed = true;
-                    this.scMain.Panel2.Hide();
-                    // this.pbPreviewBox.Reset();
-                    break;
-            }
-        }
 
         private void LvListView_ItemSelectionChanged(object sender, EventArgs e)
         {
@@ -804,6 +939,212 @@ namespace WinkingCat
                 InternalSettings.TSMI_Generated_Icon_Size, SettingsManager.MainFormSettings.imageDisplayBG1);
             setBackColor2ToolStripMenuItem.Image = ImageProcessor.CreateSolidColorBitmap(
                 InternalSettings.TSMI_Generated_Icon_Size, SettingsManager.MainFormSettings.imageDisplayBG2);
+        }
+
+        private void fileToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            if (folderView1.ListView_.FocusedItem == null)
+                return;
+
+            if (folderView1.ListView_.FocusedItem.Tag is DirectoryInfo)
+                return;
+
+            if (folderView1.ListView_.FocusedItem.Tag is FileInfo)
+            {
+                ClipboardHelper.CopyFile(((FileInfo)(folderView1.ListView_.FocusedItem.Tag)).FullName);
+            }
+        }
+
+        private async void imageToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            string path;
+
+            if (folderView1.ListView_.FocusedItem == null)
+                return;
+
+            if (folderView1.ListView_.FocusedItem.Tag is DirectoryInfo)
+                return;
+
+            if (folderView1.ListView_.FocusedItem.Tag is FileInfo)
+            {
+                path = ((FileInfo)(folderView1.ListView_.FocusedItem.Tag)).FullName;
+
+                if (imageDisplay1.ImagePath != null && path == imageDisplay1.ImagePath.FullName)
+                {
+                    if (_loadImageThread != null && !_loadImageThread.IsCompleted)
+                    {
+                        await _loadImageThread;
+                        imageDisplay1.CopyImage();
+                    }
+                    else
+                    {
+                        imageDisplay1.CopyImage();
+                    }
+                }
+                else
+                {
+                    if (_loadImageThread != null && _loadImageThread.IsCompleted) 
+                    {
+                        _loadImageThread?.Dispose();
+                        _loadImageThread = Task.Run(() => {
+                            using (Image i = ImageHelper.LoadImageAsBitmap(path))
+                            {
+                                this.InvokeSafe(() => { ClipboardHelper.CopyImage(i); });
+                            }
+                        });
+                    }
+                    else
+                    {
+                        await _loadImageThread;
+                        _loadImageThread?.Dispose();
+                        _loadImageThread = Task.Run(() => { 
+                            using(Image i = ImageHelper.LoadImageAsBitmap(path)) 
+                            {
+                                this.InvokeSafe(() => { ClipboardHelper.CopyImage(i); });
+                            }
+                                });
+                    }
+                }
+            }
+        }
+
+        private void fullPathToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            CopySelectedItemPath();
+        }
+
+        private void filenameToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            CopySelectedItemFilename();
+        }
+
+        private void FileSizeUnit_Click(object sender, EventArgs e)
+        {
+            FileSizeUnit fsu = (FileSizeUnit)((ToolStripItem)sender).Tag;
+
+            switch (fsu)
+            {
+                case FileSizeUnit.Byte:
+                    CopySelectedItemsSize(fsu, 0);
+                    return;
+                case FileSizeUnit.Kilobyte:
+                    CopySelectedItemsSize(fsu, 0);
+                    return;
+                case FileSizeUnit.Megabyte:
+                    CopySelectedItemsSize(fsu, 1);
+                    return;
+                case FileSizeUnit.Gigabyte:
+                    CopySelectedItemsSize(fsu, 2);
+                    return;
+                case FileSizeUnit.Terabyte:
+                    CopySelectedItemsSize(fsu, 3);
+                    return;
+                case FileSizeUnit.Petabyte:
+                    CopySelectedItemsSize(fsu, 4);
+                    return;
+                case FileSizeUnit.Exabyte:
+                    CopySelectedItemsSize(fsu, 5);
+                    return;
+                case FileSizeUnit.Zettabyte:
+                    CopySelectedItemsSize(fsu, 6);
+                    return;
+            }
+        }
+
+        private void toolStripButton1_Click(object sender, EventArgs e)
+        {
+            if (toolStripButton1.Checked)
+            {
+                this.TopMost = true;
+                SettingsManager.MainFormSettings.Always_On_Top = true;
+            }
+            else
+            {
+                this.TopMost = false;
+                SettingsManager.MainFormSettings.Always_On_Top = false;
+            }
+        }
+
+        private void toolStripButton2_Click(object sender, EventArgs e)
+        {
+            folderView1.CurrentDirectory = PathHelper.GetScreenshotFolder();
+        }
+
+        private async void openAsClipToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            if (folderView1.ListView_.FocusedItem == null)
+                return;
+
+            if (folderView1.ListView_.FocusedItem == null)
+                return;
+
+            if (folderView1.ListView_.FocusedItem.Tag is DirectoryInfo)
+                return;
+
+            if (folderView1.ListView_.FocusedItem.Tag is FileInfo)
+            {
+                string path = ((FileInfo)(folderView1.ListView_.FocusedItem.Tag)).FullName;
+
+                if (imageDisplay1.ImagePath != null && path == imageDisplay1.ImagePath.FullName)
+                {
+                    if (_loadImageThread != null && !_loadImageThread.IsCompleted)
+                    {
+                        await _loadImageThread;
+                        ClipManager.Clips[ClipManager.CreateClipAtCursor(imageDisplay1.Image, true)].Options.FilePath = imageDisplay1.ImagePath.FullName;
+                    }
+                    else
+                    {
+                        ClipManager.Clips[ClipManager.CreateClipAtCursor(imageDisplay1.Image, true)].Options.FilePath = imageDisplay1.ImagePath.FullName;
+                    }
+                }
+                else
+                {
+                    if (_loadImageThread != null && _loadImageThread.IsCompleted)
+                    {
+                        _loadImageThread?.Dispose();
+                        _loadImageThread = Task.Run(() => {
+                            Image i = ImageHelper.LoadImageAsBitmap(path);
+                                this.InvokeSafe(() => {
+                                    ClipManager.Clips[ClipManager.CreateClipAtCursor(i, false)].Options.FilePath = imageDisplay1.ImagePath.FullName;
+                                });
+                        });
+                    }
+                    else
+                    {
+                        await _loadImageThread;
+                        _loadImageThread?.Dispose();
+                        _loadImageThread = Task.Run(() => {
+                            Image i = ImageHelper.LoadImageAsBitmap(path);
+                            this.InvokeSafe(() => {
+                                ClipManager.Clips[ClipManager.CreateClipAtCursor(i, false)].Options.FilePath = imageDisplay1.ImagePath.FullName;
+                            });
+                        });
+                    }
+                }
+            }
+        }
+
+        private void openLocationToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            if (folderView1.ListView_.FocusedItem == null)
+                return;
+
+            string path;
+
+            if (folderView1.ListView_.FocusedItem.Tag is DirectoryInfo)
+            {
+                path = ((DirectoryInfo)(folderView1.ListView_.FocusedItem.Tag)).FullName;
+            }
+            else if (folderView1.ListView_.FocusedItem.Tag is FileInfo)
+            {
+                path = ((FileInfo)(folderView1.ListView_.FocusedItem.Tag)).FullName;
+            }
+            else
+            {
+                return;
+            }
+
+            PathHelper.OpenExplorerAtLocation(path);
         }
     }
 }
