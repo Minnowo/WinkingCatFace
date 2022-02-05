@@ -33,7 +33,6 @@ namespace WinkingCat.HelperLibs.Controls
         public static Color DefaultCellColor2 { get { return Color.FromArgb(64, 64, 64); } }
         public bool ResetOffsetOnRightClick = true;
 
-        public bool IsImageLoading { get; private set; } = false;
 
         public InterpolationMode InterpolationMode
         {
@@ -248,14 +247,10 @@ namespace WinkingCat.HelperLibs.Controls
             if (this.ImagePath == null || !this.ImagePath.Exists)
                 return;
 
-            IsImageLoading = true;
             IMAGE i = ImageHelper.LoadImage(this.ImagePath.FullName);
 
             if (i == null)
-            {
-                IsImageLoading = false;
                 return;
-            }
 
             bool _ = this.DisposeImageOnReplace;
             bool __ = this.ClearImagePathOnReplace;
@@ -268,7 +263,6 @@ namespace WinkingCat.HelperLibs.Controls
             this.DisposeImageOnReplace = _;
             this.ClearImagePathOnReplace = __;
             Invalidate();
-            IsImageLoading = false;
         }
 
         /// <summary>
@@ -281,14 +275,10 @@ namespace WinkingCat.HelperLibs.Controls
             if (!File.Exists(path))
                 return false;
 
-            IsImageLoading = true;
             IMAGE i = ImageHelper.LoadImage(path);
 
             if (i == null)
-            {
-                IsImageLoading = false;
                 return false;
-            }
 
             bool _ = this.DisposeImageOnReplace;
             this.DisposeImageOnReplace = true;
@@ -297,8 +287,6 @@ namespace WinkingCat.HelperLibs.Controls
             this.ImagePath = new FileInfo(path);
 
             this.DisposeImageOnReplace = _;
-            Invalidate();
-            IsImageLoading = false;
             return true;
         }
 
@@ -307,14 +295,10 @@ namespace WinkingCat.HelperLibs.Controls
             if (!File.Exists(path))
                 return false;
 
-            IsImageLoading = true;
             IMAGE i = await ImageHelper.LoadImageAsync(path);
 
             if (i == null)
-            {
-                IsImageLoading = false;
                 return false;
-            }
 
             bool _ = this.DisposeImageOnReplace;
             this.DisposeImageOnReplace = true;
@@ -323,8 +307,6 @@ namespace WinkingCat.HelperLibs.Controls
             this.ImagePath = new FileInfo(path);
 
             this.DisposeImageOnReplace = _;
-            Invalidate();
-            IsImageLoading = true;
             return true;
         }
 

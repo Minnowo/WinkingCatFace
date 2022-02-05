@@ -18,9 +18,7 @@ namespace WinkingCat.Controls
         public int FileSortOrder
         {
             get { return _FolderWatcher.SortOrderFile; }
-            set {
-                Console.WriteLine("asdasdasdads");
-                _FolderWatcher.SortOrderFile = value; }
+            set {_FolderWatcher.SortOrderFile = value; }
         }
 
         public int FolderSortOrder
@@ -128,11 +126,11 @@ namespace WinkingCat.Controls
             ListView_.KeyUp += OnKeyUp;
 
             ListView_.GridLines = false;
-            this.ListView_.VirtualMode = true;
-            this.ListView_.VirtualListSize = 0;
-            this.ListView_.Sorting = SortOrder.None;
-            this.ListView_.FullRowSelect = true;
-            this.ListView_.AllowDrop = true;
+            ListView_.VirtualMode = true;
+            ListView_.VirtualListSize = 0;
+            ListView_.Sorting = SortOrder.None;
+            ListView_.FullRowSelect = true;
+            ListView_.AllowDrop = true;
 
             _FolderWatcher = new FolderWatcher(PathHelper.GetScreenshotFolder());
             _FolderWatcher.WatcherNotifyFilter = NotifyFilters.FileName;

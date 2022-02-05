@@ -5,11 +5,12 @@ using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.Linq;
 using System.IO;
-using System.Threading;
-using WinkingCat.HelperLibs;
-using WinkingCat.Uploaders;
 using System.Text;
+using System.Drawing.Drawing2D;
+
+using WinkingCat.HelperLibs;
 using WinkingCat.HelperLibs.Enums;
+using WinkingCat.Uploaders;
 
 namespace WinkingCat
 {
@@ -27,7 +28,6 @@ namespace WinkingCat
 
         private bool _forceClose = false;
         private bool _allowShowDisplay = !SettingsManager.MainFormSettings.Start_In_Tray;
-        private bool _isInTrayOrMinimized = SettingsManager.MainFormSettings.Start_In_Tray;
         private bool _forceDropDownClose = false;
         private bool _preventOverflow = false;
         private bool _showingFullscreenImage = false;
@@ -43,7 +43,7 @@ namespace WinkingCat
                 ToolStripItem tsi = new ToolStripMenuItem();
                 tsi.Text = EnumToString.FileSizeUnitToString(fsu);
                 tsi.Tag = fsu;
-                tsi.Click += FileSizeUnit_Click;
+                tsi.Click += CopySelectedFileSize_Click;
                 copySizeToolStripMenuItem.DropDownItems.Add(tsi);
             }
 
@@ -54,18 +54,18 @@ namespace WinkingCat
 
             _preventOverflow = true;
 
-            tsmiToolStripMenuItem_captureCursor.Checked = SettingsManager.RegionCaptureSettings.Capture_Cursor;
-            tsmiCaptureCursorToolStripMenuItem.Checked = SettingsManager.RegionCaptureSettings.Capture_Cursor;
+            tsmiCaptureCursor.Checked = SettingsManager.RegionCaptureSettings.Capture_Cursor;
+            tsmiCaptureCursorTray.Checked = SettingsManager.RegionCaptureSettings.Capture_Cursor;
 
-            comboBox1.Items.Add(System.Drawing.Drawing2D.InterpolationMode.NearestNeighbor);
-            comboBox1.Items.Add(System.Drawing.Drawing2D.InterpolationMode.HighQualityBicubic);
-            comboBox1.Items.Add(System.Drawing.Drawing2D.InterpolationMode.HighQualityBilinear);
-            comboBox1.SelectedItem = SettingsManager.MiscSettings.Default_Interpolation_Mode;
+            cbInterpolationMode.Items.Add(InterpolationMode.NearestNeighbor);
+            cbInterpolationMode.Items.Add(InterpolationMode.HighQualityBicubic);
+            cbInterpolationMode.Items.Add(InterpolationMode.HighQualityBilinear);
+            cbInterpolationMode.SelectedItem = SettingsManager.MiscSettings.Default_Interpolation_Mode;
 
-            comboBox2.Items.Add(WinkingCat.HelperLibs.Controls.DrawMode.ActualSize);
-            comboBox2.Items.Add(WinkingCat.HelperLibs.Controls.DrawMode.FitImage);
-            comboBox2.Items.Add(WinkingCat.HelperLibs.Controls.DrawMode.ScaleImage);
-            comboBox2.SelectedItem = SettingsManager.MiscSettings.Default_Draw_Mode;
+            cbDrawMode.Items.Add(WinkingCat.HelperLibs.Controls.DrawMode.ActualSize);
+            cbDrawMode.Items.Add(WinkingCat.HelperLibs.Controls.DrawMode.FitImage);
+            cbDrawMode.Items.Add(WinkingCat.HelperLibs.Controls.DrawMode.ScaleImage);
+            cbDrawMode.SelectedItem = SettingsManager.MiscSettings.Default_Draw_Mode;
 
             _trayClickTimer.SetInterval(SystemInformation.DoubleClickTime + 1000);
             _loadImageTimer.SetInterval(250);
@@ -76,7 +76,7 @@ namespace WinkingCat
             niTrayIcon.Visible = SettingsManager.MainFormSettings.Show_In_Tray;
             
 #endif
-            toolStripButton1.Checked = TopMost;
+            tsmiAlwaysOnTop.Checked = TopMost;
             imageDisplay1.ClearImagePathOnReplace = true;
             imageDisplay1.DisposeImageOnReplace = true;
             imageDisplay1.ResetOffsetOnRightClick = false;
@@ -89,89 +89,79 @@ namespace WinkingCat
             // this.pbPreviewBox.previewOnClick = true;
         }
 
-        protected override void RegisterEvents()
+        /// <summary>
+        /// Opens the application settings.
+        /// </summary>
+        public void OpenSettings()
         {
-            base.RegisterEvents();
-
-            folderView1.ListView_.MouseClick += ListView__MouseClick;
-
-            comboBox1.SelectedIndexChanged += ComboBox1_SelectedIndexChanged;
-            comboBox2.SelectedIndexChanged += ComboBox2_SelectedIndexChanged;
-            imageDisplay1.ImageChanged += ImageDisplay1_ImageChanged;
-            tsddbToolStripDropDownButton_Capture.DropDown.Closing += toolStripDropDown_Closing;
-            tsddbToolStripDropDownButton_Capture.DropDownOpening += tsmiCapture_DropDownOpening;
-
-            tsmiToolStripMenuItem_region.Click += RegionCapture_Click;
-            tsmiToolStripMenuItem_fullscreen.Click += FullscreenCapture_Click;
-            tsmiToolStripMenuItem_lastRegion.Click += LastRegionCapture_Click;
-            tsmiToolStripMenuItem_captureCursor.Click += CursorCapture_Click;
-
-            tsddbToolStripDropDownButton_Clips.DropDown.Closing += toolStripDropDown_Closing;
-
-            tsmiToolStripMenuItem_newClip.Click += NewClip_Click;
-            tsmiToolStripMenuItem_clipFromClipboard.Click += ClipFromClipboard_Click;
-            tsmiToolStripMenuItem_clipFromFile.Click += ClipFromFile_Click;
-
-            tsddbToolStripDropDownButton_Tools.DropDown.Closing += toolStripDropDown_Closing;
-
-            tsmiToolStripDropDownButton_screenColorPicker.Click += ScreenColorPicker_Click;
-            tsmiToolStripDropDownButton_ColorPicker.Click += ColorPicker_Click;
-            tsmiToolStripDropDownButton_QrCode.Click += QrCode_Click;
-            tsmiToolStripDropDownButton_HashCheck.Click += HashCheck_Click;
-            tsmiToolStripDropDownButton_Regex.Click += Regex_Click;
-
-            // system tray stuff // 
-            // capture 
-            tsmiRegionToolStripMenuItem.Click += RegionCapture_Click;
-            tsmiFullscreenToolStripMenuItem.Click += FullscreenCapture_Click;
-            tsmiLastRegionToolStripMenuItem.Click += LastRegionCapture_Click;
-            tsmiCaptureCursorToolStripMenuItem.Click += CursorCapture_Click;
-
-            // clip
-            tsmiNewClipToolStripMenuItem.Click += NewClip_Click;
-            tsmiClipFromClipboardToolStripMenuItem.Click += ClipFromClipboard_Click;
-            tsmiClipFromFileToolStripMenuItem.Click += ClipFromFile_Click;
-
-            // tools
-            tsmiTrayScreenColorPicker.Click += ScreenColorPicker_Click;
-            tsmiTrayColorWheel.Click += ColorPicker_Click;
-            tsmiTrayHashCheck.Click += HashCheck_Click;
-            tsmiTrayQrCodeScan.Click += QrCode_Click;
-
-            // other
-            tsmiStylesToolStripMenuItem.Click += ToolStripDropDownButton_Styles_Click;
-            tsmiSettingsToolStripMenuItem.Click += ToolStripDropDownButton_Settings_Click;
-            tsmiOpenMainWindowToolStripMenuItem.Click += OpenMainWindow_Click;
-            tsmiExitToolStripMenuItem.Click += ExitApplication_Click;
-
-            // timer 
-            _trayClickTimer.Tick += TrayClickTimer_Interval;
-            niTrayIcon.MouseUp += NiTrayIcon_MouseClick1Up;
-            cmTray.Opening += tsmiCapture_DropDownOpening;
-
-            _loadImageTimer.Tick += LoadImageTimer_Tick;
-            folderView1.ListView_.SelectedIndexChanged += LvListView_ItemSelectionChanged;
-
-            //lvListView.ItemSelectionChanged += LvListView_ItemSelectionChanged;
-            // pbPreviewBox.pbMain.MouseClick += PbPreviewBox_MouseClick;
-
+            using (SettingsForm sf = new SettingsForm())
+            {
+                sf.Owner = this;
+                sf.TopMost = SettingsManager.MainFormSettings.Always_On_Top;
+                sf.StartPosition = FormStartPosition.CenterScreen;
+                sf.ShowDialog();
+            }
         }
 
-        
+        /// <summary>
+        /// Opens the application styles editor.
+        /// </summary>
+        public void OpenStyles()
+        {
+            using (StylesForm sf = new StylesForm())
+            {
+                sf.Owner = this;
+                sf.TopMost = SettingsManager.MainFormSettings.Always_On_Top;
+                sf.StartPosition = FormStartPosition.CenterScreen;
+                sf.ShowDialog();
+            }
+        }
+
+        /// <summary>
+        /// Force close all the dropdowns.
+        /// </summary>
+        public void CloseDropDowns()
+        {
+            _forceDropDownClose = true;
+            tsddbCapture.DropDown.Close();
+            tsddbClips.DropDown.Close();
+            tsddbTools.DropDown.Close();
+        }
+
+        /// <summary>
+        /// Sets the image display interpolation mode.
+        /// </summary>
+        public void SetInterpolationMode(InterpolationMode mode)
+        {
+            imageDisplay1.InterpolationMode = mode;
+        }
+
+        /// <summary>
+        /// Sets the imagae display draw mode.
+        /// </summary>
+        /// <param name="mode"></param>
+        public void SetDrawMode(HelperLibs.Controls.DrawMode mode)
+        {
+            imageDisplay1.DrawMode = mode;
+        }
+
+        /// <summary>
+        /// Copies the filename of all selected listview items.
+        /// </summary>
         public void CopySelectedItemFilename()
         {
             if (folderView1.ListView_.SelectedIndices.Count < 2)
             {
-                if (folderView1.ListView_.FocusedItem != null)
+                if (folderView1.ListView_.FocusedItem == null)
+                    return;
+
+                if (folderView1.ListView_.FocusedItem.Tag is DirectoryInfo)
                 {
-                    if (folderView1.ListView_.FocusedItem.Tag is DirectoryInfo)
-                    {
-                        ClipboardHelper.CopyStringDefault(((DirectoryInfo)(folderView1.ListView_.FocusedItem.Tag)).Name);
-                    }
-                    else if (folderView1.ListView_.FocusedItem.Tag is FileInfo)
-                    {
-                        ClipboardHelper.CopyStringDefault(((FileInfo)(folderView1.ListView_.FocusedItem.Tag)).Name);
-                    }
+                    ClipboardHelper.CopyStringDefault(((DirectoryInfo)(folderView1.ListView_.FocusedItem.Tag)).Name);
+                }
+                else if (folderView1.ListView_.FocusedItem.Tag is FileInfo)
+                {
+                    ClipboardHelper.CopyStringDefault(((FileInfo)(folderView1.ListView_.FocusedItem.Tag)).Name);
                 }
                 return;
             }
@@ -193,20 +183,24 @@ namespace WinkingCat
             }
             ClipboardHelper.CopyStringDefault(paths.ToString());
         }
+        
+        /// <summary>
+        /// Copies the path of all selected listview items.
+        /// </summary>
         public void CopySelectedItemPath()
         {
             if (folderView1.ListView_.SelectedIndices.Count < 2)
             {
-                if (folderView1.ListView_.FocusedItem != null)
+                if (folderView1.ListView_.FocusedItem == null)
+                    return;
+
+                if (folderView1.ListView_.FocusedItem.Tag is DirectoryInfo)
                 {
-                    if (folderView1.ListView_.FocusedItem.Tag is DirectoryInfo)
-                    {
-                        ClipboardHelper.CopyStringDefault(((DirectoryInfo)(folderView1.ListView_.FocusedItem.Tag)).FullName);
-                    }
-                    else if (folderView1.ListView_.FocusedItem.Tag is FileInfo)
-                    {
-                        ClipboardHelper.CopyStringDefault(((FileInfo)(folderView1.ListView_.FocusedItem.Tag)).FullName);
-                    }
+                    ClipboardHelper.CopyStringDefault(((DirectoryInfo)(folderView1.ListView_.FocusedItem.Tag)).FullName);
+                }
+                else if (folderView1.ListView_.FocusedItem.Tag is FileInfo)
+                {
+                    ClipboardHelper.CopyStringDefault(((FileInfo)(folderView1.ListView_.FocusedItem.Tag)).FullName);
                 }
                 return;
             }
@@ -230,28 +224,26 @@ namespace WinkingCat
         }
 
         /// <summary>
-        /// Copies the file size in the given unit for all selected listview items.
+        /// Copies the file size of all selected listview items.
         /// </summary>
-        /// <param name="size">The size unit.</param>
-        /// <param name="decimalPlaces">The number of decimal places.</param>
         public void CopySelectedItemsSize(FileSizeUnit size, int decimalPlaces = 1)
         {
             FileInfo info;
 
             if (folderView1.ListView_.SelectedIndices.Count < 2)
             {
-                if (folderView1.ListView_.FocusedItem != null)
+                if (folderView1.ListView_.FocusedItem == null)
+                    return;
+
+                if (folderView1.ListView_.FocusedItem.Tag is DirectoryInfo)
                 {
-                    if (folderView1.ListView_.FocusedItem.Tag is DirectoryInfo)
-                    {
-                        ClipboardHelper.CopyStringDefault("Unknown Folder Size");
-                        return;
-                    }
-                    else if (folderView1.ListView_.FocusedItem.Tag is FileInfo)
-                    {
-                        info = (FileInfo)(folderView1.ListView_.FocusedItem.Tag);
-                        ClipboardHelper.CopyStringDefault(Helper.SizeSuffix(info.Length, size, decimalPlaces));
-                    }
+                    ClipboardHelper.CopyStringDefault("Unknown Folder Size");
+                    return;
+                }
+                else if (folderView1.ListView_.FocusedItem.Tag is FileInfo)
+                {
+                    info = (FileInfo)(folderView1.ListView_.FocusedItem.Tag);
+                    ClipboardHelper.CopyStringDefault(Helper.SizeSuffix(info.Length, size, decimalPlaces));
                 }
                 return;
             }
@@ -264,7 +256,6 @@ namespace WinkingCat
                 if (folderView1.ListView_.Items[ii].Tag is DirectoryInfo)
                 {
                     paths.AppendLine("Unknown Folder Size");
-                    return;
                 }
                 else if (folderView1.ListView_.Items[ii].Tag is FileInfo)
                 {
@@ -277,115 +268,248 @@ namespace WinkingCat
             ClipboardHelper.CopyStringDefault(paths.ToString());
         }
 
-        private void ListView__MouseClick(object sender, MouseEventArgs e)
+        /// <summary>
+        /// Copies the selected files / folders to the clipboard
+        /// </summary>
+        public void CopySelectedFiles()
         {
-            switch (e.Button)
+            if (folderView1.ListView_.SelectedIndices.Count < 2)
             {
-                case MouseButtons.Right:
-                    listViewContextMenu.Show(folderView1.ListView_, e.Location);
-                    break;
+                if (folderView1.ListView_.FocusedItem == null)
+                    return;
+
+                if (folderView1.ListView_.FocusedItem.Tag is DirectoryInfo)
+                {
+                    ClipboardHelper.CopyFile(((DirectoryInfo)folderView1.ListView_.FocusedItem.Tag).FullName);
+                }
+                else if (folderView1.ListView_.FocusedItem.Tag is FileInfo)
+                {
+                    ClipboardHelper.CopyFile(((FileInfo)folderView1.ListView_.FocusedItem.Tag).FullName);
+                }
+                return;
             }
+
+            string[] files = new string[folderView1.ListView_.SelectedIndices.Count];
+
+            int i = 0;
+            foreach (int ii in folderView1.ListView_.SelectedIndices)
+            {
+                if (folderView1.ListView_.Items[ii].Tag is DirectoryInfo)
+                {
+                    files[i] = ((DirectoryInfo)folderView1.ListView_.Items[ii].Tag).FullName;
+                }
+                else if (folderView1.ListView_.Items[ii].Tag is FileInfo)
+                {
+                    files[i] = ((FileInfo)folderView1.ListView_.Items[ii].Tag).FullName;
+                }
+                i++;
+            }
+            ClipboardHelper.CopyFile(files);
         }
 
-        private void ImageDisplay1_ImageChanged()
+        /// <summary>
+        /// Copies the selected image to the clipboard
+        /// </summary>
+        /// <returns></returns>
+        public async Task CopySelectedImage()
         {
-            textBox1.Text = "";
+            if (folderView1.ListView_.FocusedItem == null)
+                return;
+
+            if (!(folderView1.ListView_.FocusedItem.Tag is FileInfo))
+                return;
+
+            string path = ((FileInfo)(folderView1.ListView_.FocusedItem.Tag)).FullName;
+
+            if (imageDisplay1.ImagePath != null && path == imageDisplay1.ImagePath.FullName)
+            {
+                if (_loadImageThread != null && _loadImageThread.Status == TaskStatus.Running)
+                    await _loadImageThread;
+
+                imageDisplay1.CopyImage();
+                return;
+            }
+
+            if (_loadImageThread != null)
+            {
+                if (_loadImageThread.Status == TaskStatus.Running)
+                    await _loadImageThread;
+
+                _loadImageThread?.Dispose();
+            }
+
+            _loadImageThread = Task.Run(() =>
+            {
+                using (Image i = ImageHelper.LoadImageAsBitmap(path))
+                {
+                    this.InvokeSafe(() => { ClipboardHelper.CopyImage(i); });
+                }
+            });
+        }
+
+        /// <summary>
+        /// Copies the image shown in the ImageDisplay
+        /// </summary>
+        public void CopyShownImage()
+        {
+            if (imageDisplay1.Image == null)
+                return;
+
+            ClipboardHelper.CopyImage(imageDisplay1.Image);
+        }
+
+        /// <summary>
+        /// Loads the selected item as a clip
+        /// </summary>
+        /// <returns></returns>
+        public async Task LoadSelectedImageAsClip()
+        {
+            if (folderView1.ListView_.FocusedItem == null)
+                return;
+
+            if (!(folderView1.ListView_.FocusedItem.Tag is FileInfo))
+                return;
+
+            string path = ((FileInfo)(folderView1.ListView_.FocusedItem.Tag)).FullName;
+            string clip;
+
+            if (imageDisplay1.ImagePath != null && path == imageDisplay1.ImagePath.FullName)
+            {
+                if (_loadImageThread != null && _loadImageThread.Status == TaskStatus.Running)
+                    await _loadImageThread;
+
+                clip = ClipManager.CreateClipAtCursor(imageDisplay1.Image, true);
+                ClipManager.Clips[clip].Options.FilePath = imageDisplay1.ImagePath.FullName;
+                return;
+            }
+
+            if (_loadImageThread != null)
+            {
+                if (_loadImageThread.Status == TaskStatus.Running)
+                    await _loadImageThread;
+
+                _loadImageThread?.Dispose();
+            }
+
+            _loadImageThread = Task.Run(() =>
+            {
+                Image i = ImageHelper.LoadImageAsBitmap(path);
+
+                if (i == null)
+                    return;
+
+                this.InvokeSafe(() =>
+                {
+                    clip = ClipManager.CreateClipAtCursor(imageDisplay1.Image, false);
+                    ClipManager.Clips[clip].Options.FilePath = imageDisplay1.ImagePath.FullName;
+                });
+            });
+        }
+
+        /// <summary>
+        /// Open explorer at location of selected item
+        /// </summary>
+        public void OpenExplorerAtSelectedItem()
+        {
+            if (folderView1.ListView_.FocusedItem == null)
+                return;
+
+            string path;
+
+            if (folderView1.ListView_.FocusedItem.Tag is DirectoryInfo)
+            {
+                path = ((DirectoryInfo)(folderView1.ListView_.FocusedItem.Tag)).FullName;
+            }
+            else if (folderView1.ListView_.FocusedItem.Tag is FileInfo)
+            {
+                path = ((FileInfo)(folderView1.ListView_.FocusedItem.Tag)).FullName;
+            }
+            else
+            {
+                return;
+            }
+
+            PathHelper.OpenExplorerAtLocation(path);
+        }
+
+        /// <summary>
+        /// Loads the selected item in the listview
+        /// </summary>
+        public void LoadSelectedImage()
+        {
+            _loadImageTimer.Stop();
+
+            if (folderView1.SelectedIndex == -1)
+                return;
+
+            if (!(folderView1.ListView_.Items[folderView1.SelectedIndex].Tag is FileInfo))
+                return;
+
+            FileInfo f = folderView1.ListView_.Items[folderView1.SelectedIndex].Tag as FileInfo;
+
+            if (!File.Exists(f.FullName))
+                return;
+
+            if (imageDisplay1.ImagePath != null && f.FullName == imageDisplay1.ImagePath.FullName)
+                return;
+
+            if (_loadImageThread != null && _loadImageThread.Status == TaskStatus.Running)
+                return;
+
+            _loadImageThread?.Dispose();
+            _loadImageThread = imageDisplay1.TryLoadImageAsync(f.FullName);
+        }
+
+        /// <summary>
+        /// Updates the colored icons in the ImageDisplay context menu.
+        /// </summary>
+        public void UpdateImageDisplayContextMenuIcons()
+        {
+            setBackColor1ToolStripMenuItem.Image = ImageProcessor.CreateSolidColorBitmap(
+                InternalSettings.TSMI_Generated_Icon_Size, SettingsManager.MainFormSettings.imageDisplayBG1);
+            setBackColor2ToolStripMenuItem.Image = ImageProcessor.CreateSolidColorBitmap(
+                InternalSettings.TSMI_Generated_Icon_Size, SettingsManager.MainFormSettings.imageDisplayBG2);
+        }
+
+        private void ListView__MouseClick(object sender, MouseEventArgs e)
+        {
+            if (e.Button != MouseButtons.Right)
+                return;
+            
+            listViewContextMenu.Show(folderView1.ListView_, e.Location);
+        }
+
+        private void ImageDisplay_ImageChanged()
+        {
+            tbImageDimensionsDisplay.Text = "";
 
             if (imageDisplay1.Image == null)
                 return;
 
-            textBox1.Text = string.Format("{0} x {1}", imageDisplay1.Image.Width, imageDisplay1.Image.Height);
+            tbImageDimensionsDisplay.Text = string.Format("{0} x {1}", imageDisplay1.Image.Width, imageDisplay1.Image.Height);
         }
 
-        private void ComboBox2_SelectedIndexChanged(object sender, EventArgs e)
+        private void ImageDrawMode_SelectedIndexChanged(object sender, EventArgs e)
         {
             if (_preventOverflow)
                 return;
 
-            imageDisplay1.DrawMode = (WinkingCat.HelperLibs.Controls.DrawMode)comboBox2.SelectedItem;
+            SetDrawMode((HelperLibs.Controls.DrawMode)cbDrawMode.SelectedItem);
         }
 
-        private void ComboBox1_SelectedIndexChanged(object sender, EventArgs e)
+        private void ImageInterpolationMode_SelectedIndexChanged(object sender, EventArgs e)
         {
             if (_preventOverflow)
                 return;
 
-            imageDisplay1.InterpolationMode = (System.Drawing.Drawing2D.InterpolationMode)comboBox1.SelectedItem;
+            SetInterpolationMode((InterpolationMode)cbInterpolationMode.SelectedItem);
         }
-
-        /// <summary>
-        /// Force close all the dropdowns.
-        /// </summary>
-        public void CloseDropDowns()
-        {
-            _forceDropDownClose = true;
-            tsddbToolStripDropDownButton_Capture.DropDown.Close();
-            tsddbToolStripDropDownButton_Clips.DropDown.Close();
-            tsddbToolStripDropDownButton_Tools.DropDown.Close();
-        }
-
-        /// <summary>
-        /// Hide the main, settings, and styles form.
-        /// </summary>
-        public void HideAll()
-        {
-            Hide();
-        }
-
-        /// <summary>
-        /// Show the main, settings, and styles form.
-        /// </summary>
-        public void ShowAll()
-        {
-            Show();
-        }
-
-        /// <summary>
-        /// Updates the isInTrayOrMinimized variable.
-        /// </summary>
-        public void CheckWindowState()
-        {
-            switch (this.WindowState)
-            {
-                case FormWindowState.Minimized:
-                    _isInTrayOrMinimized = true;
-                    break;
-                case FormWindowState.Maximized:
-                case FormWindowState.Normal:
-                    _isInTrayOrMinimized = false;
-                    break;
-            }
-        }
-
-        /// <summary>
-        /// Updates the theme.
-        /// </summary>
-        public override void UpdateTheme()
-        {
-            SettingsManager.ApplyImmersiveDarkTheme(this, IsHandleCreated);
-
-            tsMain.Renderer = new ToolStripCustomRenderer();
-
-            cmTray.Renderer = new ToolStripCustomRenderer();
-            cmTray.Opacity = SettingsManager.MainFormSettings.contextMenuOpacity;
-
-            imageDisplayContextMenu.Renderer = new ToolStripCustomRenderer();
-            imageDisplayContextMenu.Opacity = SettingsManager.MainFormSettings.contextMenuOpacity;
-
-            listViewContextMenu.Renderer = new ToolStripCustomRenderer();
-            listViewContextMenu.Opacity = SettingsManager.MainFormSettings.contextMenuOpacity;
-
-            //lvListView.ForeColor = SettingsManager.MainFormSettings.textColor;
-            ApplicationStyles.ApplyCustomThemeToControl(scMain.Panel2);
-            Refresh();
-        }
-
 
         #region Capture dropdown buttons
 
-        private async void tsmiCapture_DropDownOpening(object sender, EventArgs e)
+        private async void Capture_DropDownOpening(object sender, EventArgs e)
         {
-            if(sender.GetType().Name == "ToolStripDropDownButton") 
+            if(sender is ToolStripDropDownButton) 
                 await PrepareCaptureMenuAsync(tsmiToolStripMenuItem_window, WindowItems_Click, tsmiToolStripMenuItem_monitor, MonitorItems_Click);
             else
                 await PrepareCaptureMenuAsync(tsmiWindowToolStripMenuItem, WindowItems_Click, tsmiMonitorToolStripMenuItem, MonitorItems_Click);
@@ -393,9 +517,6 @@ namespace WinkingCat
 
         private void WindowItems_Click(object sender, EventArgs e)
         {
-            _forceDropDownClose = true;
-            MainForm_LostFocus(null, null);
-
             ToolStripItem tsi = (ToolStripItem)sender;
             WindowInfo win = (WindowInfo)tsi.Tag;
 
@@ -420,9 +541,6 @@ namespace WinkingCat
 
         private void MonitorItems_Click(object sender, EventArgs e)
         {
-            _forceDropDownClose = true;
-            MainForm_LostFocus(null, null);
-
             ToolStripItem tsi = (ToolStripItem)sender;
 
             RegionCaptureHelper.RequestFormsHide(false, true);
@@ -473,14 +591,14 @@ namespace WinkingCat
             if (tsmi.Checked)
             {
                 ScreenshotHelper.CaptureCursor = true;
-                tsmiToolStripMenuItem_captureCursor.Checked = true;
-                tsmiCaptureCursorToolStripMenuItem.Checked = true;
+                tsmiCaptureCursor.Checked = true;
+                tsmiCaptureCursorTray.Checked = true;
             }
             else
             {
                 ScreenshotHelper.CaptureCursor = false;
-                tsmiToolStripMenuItem_captureCursor.Checked = false;
-                tsmiCaptureCursorToolStripMenuItem.Checked = false;
+                tsmiCaptureCursor.Checked = false;
+                tsmiCaptureCursorTray.Checked = false;
             }
             _preventOverflow = false;
         }
@@ -604,7 +722,6 @@ namespace WinkingCat
 
         private void OpenMainWindow_Click(object sender, EventArgs e)
         {
-            _isInTrayOrMinimized = false;
             this.ForceActivate();
         }
 
@@ -621,23 +738,11 @@ namespace WinkingCat
         private void MainForm_Shown(object sender, EventArgs e)
         {
             UpdateTheme();
-        }
-
-        private void MainForm_Resize(object sender, EventArgs e)
-        {
-            CheckWindowState();
             CloseDropDowns();
         }
 
-        private void MainForm_LostFocus(object sender, EventArgs e)
+        private void MainForm_Resize_LostFocus_GotFocus(object sender, EventArgs e)
         {
-            CheckWindowState();
-            CloseDropDowns();
-        }
-
-        private void MainForm_GotFocus(object sender, EventArgs e)
-        {
-            CheckWindowState();
             CloseDropDowns();
         }
 
@@ -645,7 +750,6 @@ namespace WinkingCat
         {
             if (e.CloseReason == CloseReason.UserClosing && SettingsManager.MainFormSettings.Hide_In_Tray_On_Close && !_forceClose)
             {
-                _isInTrayOrMinimized = true;
                 e.Cancel = true;
                 Hide();
             }
@@ -653,56 +757,11 @@ namespace WinkingCat
 
         private void LoadImageTimer_Tick(object sender, EventArgs e)
         {
-            _loadImageTimer.Stop();
-
-            if (folderView1.SelectedIndex == -1)
-                return;
-
-            if(folderView1.ListView_.Items[folderView1.SelectedIndex].Tag is FileInfo)
-            {
-                FileInfo f = folderView1.ListView_.Items[folderView1.SelectedIndex].Tag as FileInfo;
-
-                if (!File.Exists(f.FullName))
-                    return;
-
-                if (imageDisplay1.ImagePath != null && f.FullName == imageDisplay1.ImagePath.FullName)
-                    return;
-
-                if (_loadImageThread != null && _loadImageThread.Status == TaskStatus.Running)
-                    return;
-
-                _loadImageThread?.Dispose();
-                _loadImageThread = imageDisplay1.TryLoadImageAsync(f.FullName);
-            }
+            LoadSelectedImage();
         }
 
         #endregion
 
-        #region Settings / Styles events
-
-        public override void UpdateSettings()
-        {
-            TopMost = SettingsManager.MainFormSettings.Always_On_Top;
-            niTrayIcon.Visible = SettingsManager.MainFormSettings.Show_In_Tray;
-            MaximizeBox = SettingsManager.MainFormSettings.Show_Maximize_Box;
-            imageDisplay1.CellColor1 = SettingsManager.MainFormSettings.imageDisplayBG1;
-            imageDisplay1.CellColor2 = SettingsManager.MainFormSettings.imageDisplayBG2;
-            imageDisplay1.InterpolationMode = SettingsManager.MiscSettings.Default_Interpolation_Mode;
-            imageDisplay1.DrawMode = SettingsManager.MiscSettings.Default_Draw_Mode;
-            folderView1.FileSortOrder = SettingsManager.MainFormSettings.FileSortOrder;
-            folderView1.FolderSortOrder = SettingsManager.MainFormSettings.FolderSortOrder;
-
-            if (SettingsManager.MainFormSettings.Show_Image_Display_Color_1_Only)
-            {
-                imageDisplay1.CellColor2 = imageDisplay1.CellColor1;
-            }
-            
-            UpdateImageDisplayContextMenuIcons();
-        }
-
-        #endregion
-
-        #region Control Events
 
 
         private void LvListView_ItemSelectionChanged(object sender, EventArgs e)
@@ -711,58 +770,42 @@ namespace WinkingCat
             _loadImageTimer.Start();
         }
 
-        private void toolStripDropDown_Closing(object sender, ToolStripDropDownClosingEventArgs e)
+        private void DropDownClosing_Closing(object sender, ToolStripDropDownClosingEventArgs e)
         {
-            switch (e.CloseReason)
-            {
-                case ToolStripDropDownCloseReason.AppFocusChange:
-                    if (!_forceDropDownClose)
-                        e.Cancel = true;
-                    else
-                        _forceDropDownClose = false;
-                    break;
+            if (e.CloseReason != ToolStripDropDownCloseReason.AppFocusChange &&
+                e.CloseReason != ToolStripDropDownCloseReason.CloseCalled)
+                return;
 
-                case ToolStripDropDownCloseReason.CloseCalled:
-                    if (!_forceDropDownClose)
-                        e.Cancel = true;
-                    else
-                        _forceDropDownClose = false;
-                    break;
+            if (_forceDropDownClose)
+            {
+                _forceDropDownClose = false;
+            }
+            else
+            {
+                e.Cancel = true;
             }
         }
 
-        #endregion
 
-        #region ChildForms
 
         private void ToolStripDropDownButton_Settings_Click(object sender, EventArgs e)
         {
-            using (SettingsForm sf = new SettingsForm())
-            {
-                sf.Owner = this;
-                sf.TopMost = SettingsManager.MainFormSettings.Always_On_Top;
-                sf.StartPosition = FormStartPosition.CenterScreen;
-                sf.ShowDialog();
-            }
+            OpenSettings();
         }
 
         private void ToolStripDropDownButton_Styles_Click(object sender, EventArgs e)
         {
-            using (StylesForm sf = new StylesForm())
-            {
-                sf.Owner = this;
-                sf.TopMost = SettingsManager.MainFormSettings.Always_On_Top;
-                sf.StartPosition = FormStartPosition.CenterScreen;
-                sf.ShowDialog();
-            }
+            OpenStyles();
         }
-
-        #endregion
 
         
 
-        private async Task PrepareCaptureMenuAsync(ToolStripMenuItem tsmiWindow, EventHandler handlerWindow, ToolStripMenuItem tsmiMonitor, EventHandler handlerMonitor)
-        {// taken from sharex source code
+        private async Task PrepareCaptureMenuAsync(
+                                                    ToolStripMenuItem tsmiWindow, 
+                                                    EventHandler handlerWindow, 
+                                                    ToolStripMenuItem tsmiMonitor, 
+                                                    EventHandler handlerMonitor)
+        {
             tsmiWindow.DropDownItems.Clear();
 
             WindowsList windowsList = new WindowsList();
@@ -823,25 +866,20 @@ namespace WinkingCat
         }
 
 
-        #region overrides
 
-        // this hides the window before its shown if requested 
-        protected override void SetVisibleCore(bool value)
+
+        private void CopyShownImage_Click(object sender, EventArgs e)
         {
-            base.SetVisibleCore(_allowShowDisplay ? value : _allowShowDisplay);
-            _allowShowDisplay = true;
-            UpdateTheme();
+            CopyShownImage();
         }
 
 
-        #endregion
-
-        private void button1_Click(object sender, EventArgs e)
+        private void CloseShownImage_Click(object sender, EventArgs e)
         {
             imageDisplay1.Image = null;
         }
 
-        private void button2_Click(object sender, EventArgs e)
+        private void ShownFullscreenImage_Click(object sender, EventArgs e)
         {
             if (imageDisplay1.Image == null || _showingFullscreenImage)
                 return;
@@ -855,15 +893,8 @@ namespace WinkingCat
             _showingFullscreenImage = false;
         }
 
-        private void copyImageToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            if (imageDisplay1.Image == null)
-                return;
 
-            ClipboardHelper.CopyImage(imageDisplay1.Image);
-        }
-
-        private void useBackColor1OnlyToolStripMenuItem_Click(object sender, EventArgs e)
+        private void ShowOnlyGridColor1_Click(object sender, EventArgs e)
         {
             if (useBackColor1OnlyToolStripMenuItem.Checked)
             {
@@ -877,7 +908,7 @@ namespace WinkingCat
             }
         }
 
-        private void setBackColor1ToolStripMenuItem_Click(object sender, EventArgs e)
+        private void SetGridColor1_Click(object sender, EventArgs e)
         {
             if(ColorPickerForm.PickColorDialogue(out Color newColor, SettingsManager.MainFormSettings.imageDisplayBG1))
             {
@@ -893,7 +924,7 @@ namespace WinkingCat
             }
         }
 
-        private void setBackColor2ToolStripMenuItem_Click(object sender, EventArgs e)
+        private void SetGridColor2_Click(object sender, EventArgs e)
         {
             if (ColorPickerForm.PickColorDialogue(out Color newColor, SettingsManager.MainFormSettings.imageDisplayBG2))
             {
@@ -908,20 +939,7 @@ namespace WinkingCat
             }
         }
 
-        private void resetXYOffsetToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            imageDisplay1.ResetOffsets();
-        }
-
-        private void imageDisplay1_MouseClick(object sender, MouseEventArgs e)
-        {
-            if (e.Button != MouseButtons.Right)
-                return;
-
-            imageDisplayContextMenu.Show(imageDisplay1, e.Location);
-        }
-
-        private void resetBackColorsToolStripMenuItem_Click(object sender, EventArgs e)
+        private void ResetGridColors_Click(object sender, EventArgs e)
         {
             SettingsManager.MainFormSettings.imageDisplayBG1 = HelperLibs.Controls.ImageDisplay.DefaultCellColor1;
             SettingsManager.MainFormSettings.imageDisplayBG2 = HelperLibs.Controls.ImageDisplay.DefaultCellColor2;
@@ -936,92 +954,40 @@ namespace WinkingCat
             UpdateImageDisplayContextMenuIcons();
         }
 
-        private void UpdateImageDisplayContextMenuIcons()
+        private void ResetImageXYOffsets_Click(object sender, EventArgs e)
         {
-            setBackColor1ToolStripMenuItem.Image = ImageProcessor.CreateSolidColorBitmap(
-                InternalSettings.TSMI_Generated_Icon_Size, SettingsManager.MainFormSettings.imageDisplayBG1);
-            setBackColor2ToolStripMenuItem.Image = ImageProcessor.CreateSolidColorBitmap(
-                InternalSettings.TSMI_Generated_Icon_Size, SettingsManager.MainFormSettings.imageDisplayBG2);
+            imageDisplay1.ResetOffsets();
         }
 
-        private void fileToolStripMenuItem_Click(object sender, EventArgs e)
+        private void ImageDisplay_MouseClick(object sender, MouseEventArgs e)
         {
-            if (folderView1.ListView_.FocusedItem == null)
+            if (e.Button != MouseButtons.Right)
                 return;
 
-            if (folderView1.ListView_.FocusedItem.Tag is DirectoryInfo)
-                return;
-
-            if (folderView1.ListView_.FocusedItem.Tag is FileInfo)
-            {
-                ClipboardHelper.CopyFile(((FileInfo)(folderView1.ListView_.FocusedItem.Tag)).FullName);
-            }
+            imageDisplayContextMenu.Show(imageDisplay1, e.Location);
         }
 
-        private async void imageToolStripMenuItem_Click(object sender, EventArgs e)
+        private void CopySelectedFiles_Click(object sender, EventArgs e)
         {
-            string path;
-
-            if (folderView1.ListView_.FocusedItem == null)
-                return;
-
-            if (folderView1.ListView_.FocusedItem.Tag is DirectoryInfo)
-                return;
-
-            if (folderView1.ListView_.FocusedItem.Tag is FileInfo)
-            {
-                path = ((FileInfo)(folderView1.ListView_.FocusedItem.Tag)).FullName;
-
-                if (imageDisplay1.ImagePath != null && path == imageDisplay1.ImagePath.FullName)
-                {
-                    if (_loadImageThread != null && !_loadImageThread.IsCompleted)
-                    {
-                        await _loadImageThread;
-                        imageDisplay1.CopyImage();
-                    }
-                    else
-                    {
-                        imageDisplay1.CopyImage();
-                    }
-                }
-                else
-                {
-                    if (_loadImageThread != null && _loadImageThread.IsCompleted) 
-                    {
-                        _loadImageThread?.Dispose();
-                        _loadImageThread = Task.Run(() => {
-                            using (Image i = ImageHelper.LoadImageAsBitmap(path))
-                            {
-                                this.InvokeSafe(() => { ClipboardHelper.CopyImage(i); });
-                            }
-                        });
-                    }
-                    else
-                    {
-                        await _loadImageThread;
-                        _loadImageThread?.Dispose();
-                        _loadImageThread = Task.Run(() => { 
-                            using(Image i = ImageHelper.LoadImageAsBitmap(path)) 
-                            {
-                                this.InvokeSafe(() => { ClipboardHelper.CopyImage(i); });
-                            }
-                                });
-                    }
-                }
-            }
+            CopySelectedFiles();
         }
 
-        private void fullPathToolStripMenuItem_Click(object sender, EventArgs e)
+        private async void CopySelectedItemImage_Click(object sender, EventArgs e)
+        {
+            await CopySelectedImage();
+        }
+
+        private void CopySelectedItemPath_Click(object sender, EventArgs e)
         {
             CopySelectedItemPath();
         }
 
-        private void filenameToolStripMenuItem_Click(object sender, EventArgs e)
+        private void CopySelectedItemFilename_Click(object sender, EventArgs e)
         {
             CopySelectedItemFilename();
         }
 
-        private void FileSizeUnit_Click(object sender, EventArgs e)
+        private void CopySelectedFileSize_Click(object sender, EventArgs e)
         {
             FileSizeUnit fsu = (FileSizeUnit)((ToolStripItem)sender).Tag;
 
@@ -1054,9 +1020,9 @@ namespace WinkingCat
             }
         }
 
-        private void toolStripButton1_Click(object sender, EventArgs e)
+        private void AlwaysOnTop_Click(object sender, EventArgs e)
         {
-            if (toolStripButton1.Checked)
+            if (tsmiAlwaysOnTop.Checked)
             {
                 this.TopMost = true;
                 SettingsManager.MainFormSettings.Always_On_Top = true;
@@ -1067,92 +1033,153 @@ namespace WinkingCat
                 SettingsManager.MainFormSettings.Always_On_Top = false;
             }
         }
-
-        private void toolStripButton2_Click(object sender, EventArgs e)
-        {
-            folderView1.CurrentDirectory = PathHelper.GetScreenshotFolder();
-        }
-
+        
         private async void openAsClipToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            if (folderView1.ListView_.FocusedItem == null)
-                return;
-
-            if (folderView1.ListView_.FocusedItem == null)
-                return;
-
-            if (folderView1.ListView_.FocusedItem.Tag is DirectoryInfo)
-                return;
-
-            if (folderView1.ListView_.FocusedItem.Tag is FileInfo)
-            {
-                string path = ((FileInfo)(folderView1.ListView_.FocusedItem.Tag)).FullName;
-
-                if (imageDisplay1.ImagePath != null && path == imageDisplay1.ImagePath.FullName)
-                {
-                    if (_loadImageThread != null && !_loadImageThread.IsCompleted)
-                    {
-                        await _loadImageThread;
-                        ClipManager.Clips[ClipManager.CreateClipAtCursor(imageDisplay1.Image, true)].Options.FilePath = imageDisplay1.ImagePath.FullName;
-                    }
-                    else
-                    {
-                        ClipManager.Clips[ClipManager.CreateClipAtCursor(imageDisplay1.Image, true)].Options.FilePath = imageDisplay1.ImagePath.FullName;
-                    }
-                }
-                else
-                {
-                    if (_loadImageThread != null && _loadImageThread.IsCompleted)
-                    {
-                        _loadImageThread?.Dispose();
-                        _loadImageThread = Task.Run(() => {
-                            Image i = ImageHelper.LoadImageAsBitmap(path);
-                                this.InvokeSafe(() => {
-                                    ClipManager.Clips[ClipManager.CreateClipAtCursor(i, false)].Options.FilePath = imageDisplay1.ImagePath.FullName;
-                                });
-                        });
-                    }
-                    else
-                    {
-                        await _loadImageThread;
-                        _loadImageThread?.Dispose();
-                        _loadImageThread = Task.Run(() => {
-                            Image i = ImageHelper.LoadImageAsBitmap(path);
-                            this.InvokeSafe(() => {
-                                ClipManager.Clips[ClipManager.CreateClipAtCursor(i, false)].Options.FilePath = imageDisplay1.ImagePath.FullName;
-                            });
-                        });
-                    }
-                }
-            }
+            await LoadSelectedImageAsClip();
         }
 
         private void openLocationToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            if (folderView1.ListView_.FocusedItem == null)
-                return;
-
-            string path;
-
-            if (folderView1.ListView_.FocusedItem.Tag is DirectoryInfo)
-            {
-                path = ((DirectoryInfo)(folderView1.ListView_.FocusedItem.Tag)).FullName;
-            }
-            else if (folderView1.ListView_.FocusedItem.Tag is FileInfo)
-            {
-                path = ((FileInfo)(folderView1.ListView_.FocusedItem.Tag)).FullName;
-            }
-            else
-            {
-                return;
-            }
-
-            PathHelper.OpenExplorerAtLocation(path);
+            OpenExplorerAtSelectedItem();
         }
 
-        private void toolStripButton3_Click(object sender, EventArgs e)
+        private void SetCurrentFolderToScreenshotFolder_Click(object sender, EventArgs e)
+        {
+            folderView1.CurrentDirectory = PathHelper.GetScreenshotFolder();
+        }
+
+        private void SetCurrentFolderToDrivesFolder_Click(object sender, EventArgs e)
         {
             folderView1.CurrentDirectory = InternalSettings.DRIVES_FOLDERNAME;
+        }
+
+
+
+        public override void UpdateSettings()
+        {
+            TopMost = SettingsManager.MainFormSettings.Always_On_Top;
+            niTrayIcon.Visible = SettingsManager.MainFormSettings.Show_In_Tray;
+            MaximizeBox = SettingsManager.MainFormSettings.Show_Maximize_Box;
+            imageDisplay1.CellColor1 = SettingsManager.MainFormSettings.imageDisplayBG1;
+            imageDisplay1.CellColor2 = SettingsManager.MainFormSettings.imageDisplayBG2;
+            imageDisplay1.InterpolationMode = SettingsManager.MiscSettings.Default_Interpolation_Mode;
+            imageDisplay1.DrawMode = SettingsManager.MiscSettings.Default_Draw_Mode;
+            folderView1.FileSortOrder = SettingsManager.MainFormSettings.FileSortOrder;
+            folderView1.FolderSortOrder = SettingsManager.MainFormSettings.FolderSortOrder;
+
+            if (SettingsManager.MainFormSettings.Show_Image_Display_Color_1_Only)
+            {
+                imageDisplay1.CellColor2 = imageDisplay1.CellColor1;
+            }
+
+            UpdateImageDisplayContextMenuIcons();
+        }
+
+
+        public override void UpdateTheme()
+        {
+            SettingsManager.ApplyImmersiveDarkTheme(this, IsHandleCreated);
+
+            tsMain.Renderer = new ToolStripCustomRenderer();
+
+            cmTray.Renderer = new ToolStripCustomRenderer();
+            cmTray.Opacity = SettingsManager.MainFormSettings.contextMenuOpacity;
+
+            imageDisplayContextMenu.Renderer = new ToolStripCustomRenderer();
+            imageDisplayContextMenu.Opacity = SettingsManager.MainFormSettings.contextMenuOpacity;
+
+            listViewContextMenu.Renderer = new ToolStripCustomRenderer();
+            listViewContextMenu.Opacity = SettingsManager.MainFormSettings.contextMenuOpacity;
+
+            ApplicationStyles.ApplyCustomThemeToControl(scMain.Panel2);
+            Refresh();
+        }
+
+
+        protected override void SetVisibleCore(bool value)
+        {
+            base.SetVisibleCore(_allowShowDisplay ? value : _allowShowDisplay);
+            _allowShowDisplay = true;
+            UpdateTheme();
+        }
+
+
+        protected override void RegisterEvents()
+        {
+            base.RegisterEvents();
+
+            this.Resize += MainForm_Resize_LostFocus_GotFocus;
+            this.LostFocus += MainForm_Resize_LostFocus_GotFocus;
+            this.GotFocus += MainForm_Resize_LostFocus_GotFocus;
+
+
+            folderView1.ListView_.MouseClick += ListView__MouseClick;
+            folderView1.ListView_.SelectedIndexChanged += LvListView_ItemSelectionChanged;
+
+            cbInterpolationMode.SelectedIndexChanged += ImageInterpolationMode_SelectedIndexChanged;
+            cbDrawMode.SelectedIndexChanged += ImageDrawMode_SelectedIndexChanged;
+            imageDisplay1.ImageChanged += ImageDisplay_ImageChanged;
+
+
+            // timer 
+            _trayClickTimer.Tick += TrayClickTimer_Interval;
+            _loadImageTimer.Tick += LoadImageTimer_Tick;
+
+
+            // left toolstrip // 
+            // capture drop down
+            tsddbCapture.DropDown.Closing += DropDownClosing_Closing;
+            tsddbCapture.DropDownOpening  += Capture_DropDownOpening;
+
+            tsmiRegionCapture.Click     += RegionCapture_Click;
+            tsmiFullscreenCapture.Click += FullscreenCapture_Click;
+            tsmiLastRegionCapture.Click += LastRegionCapture_Click;
+            tsmiCaptureCursor.Click     += CursorCapture_Click;
+
+            // clips drop down 
+            tsddbClips.DropDown.Closing += DropDownClosing_Closing;
+
+            tsmiNewClip.Click              += NewClip_Click;
+            tsmiNewClipFromClipboard.Click += ClipFromClipboard_Click;
+            tsmiNewClipFromFile.Click      += ClipFromFile_Click;
+
+            // tools drop down
+            tsddbTools.DropDown.Closing += DropDownClosing_Closing;
+
+            tsmiScreenColorPicker.Click += ScreenColorPicker_Click;
+            tsmiColorPicker.Click       += ColorPicker_Click;
+            tsmiQrCode.Click            += QrCode_Click;
+            tsmiHashCheck.Click         += HashCheck_Click;
+            tsmiRegex.Click             += Regex_Click;
+
+
+            // system tray stuff // 
+            // capture 
+            cmTray.Opening += Capture_DropDownOpening;
+            niTrayIcon.MouseUp += NiTrayIcon_MouseClick1Up;
+
+            tsmiRegionCaptureTray.Click += RegionCapture_Click;
+            tsmiFullscreenCaptureTray.Click += FullscreenCapture_Click;
+            tsmiLastRegionCaptureTray.Click += LastRegionCapture_Click;
+            tsmiCaptureCursorTray.Click += CursorCapture_Click;
+
+            // clip
+            tsmiNewClipTray.Click += NewClip_Click;
+            tsmiNewClipFromClipboardTray.Click += ClipFromClipboard_Click;
+            tsmiNewClipFromFileTray.Click += ClipFromFile_Click;
+
+            // tools
+            tsmiScreenColorPickerTray.Click += ScreenColorPicker_Click;
+            tsmiColorPickerTray.Click += ColorPicker_Click;
+            tsmiHashCheckTray.Click += HashCheck_Click;
+            tsmiQrCodeTray.Click += QrCode_Click;
+
+            // other
+            tsmiStylesTray.Click += ToolStripDropDownButton_Styles_Click;
+            tsmiSettingsTray.Click += ToolStripDropDownButton_Settings_Click;
+            tsmiOpenMainWindowTray.Click += OpenMainWindow_Click;
+            tsmiExitTray.Click += ExitApplication_Click;
         }
     }
 }
