@@ -426,7 +426,7 @@
             this.imageDisplay1.CellColor2 = System.Drawing.Color.FromArgb(((int)(((byte)(64)))), ((int)(((byte)(64)))), ((int)(((byte)(64)))));
             this.imageDisplay1.CellScale = 2F;
             this.imageDisplay1.CellSize = 32;
-            this.imageDisplay1.DrawMode = WinkingCat.HelperLibs.Controls.DrawMode.FitImage;
+            this.imageDisplay1.DrawMode = WinkingCat.HelperLibs.Controls.ImageDrawMode.FitImage;
             this.imageDisplay1.Image = null;
             this.imageDisplay1.InterpolationMode = System.Drawing.Drawing2D.InterpolationMode.NearestNeighbor;
             this.imageDisplay1.Location = new System.Drawing.Point(3, 26);

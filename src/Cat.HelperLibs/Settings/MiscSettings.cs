@@ -40,6 +40,6 @@ namespace WinkingCat.HelperLibs
         public ImgFormat Default_Image_Format { get; set; } = ImgFormat.png;
         public ColorFormat Default_Color_Format { get; set; } = ColorFormat.RGB;
         public InterpolationMode Default_Interpolation_Mode { get; set; } = InterpolationMode.NearestNeighbor;
-        public HelperLibs.Controls.DrawMode Default_Draw_Mode { get; set; } = Controls.DrawMode.FitImage;
+        public HelperLibs.Controls.ImageDrawMode Default_Draw_Mode { get; set; } = Controls.ImageDrawMode.FitImage;
     }
 }

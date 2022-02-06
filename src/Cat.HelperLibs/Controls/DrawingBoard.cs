@@ -49,6 +49,7 @@ namespace WinkingCat.HelperLibs
                 originalImage = new Bitmap(value.Width, value.Height, PixelFormat.Format24bppRgb);
                 using (Graphics g = Graphics.FromImage(originalImage))
                 {
+                    g.PixelOffsetMode = PixelOffsetMode.HighQuality;
                     g.DrawImage(value, new Point(0, 0));
                 }
                 Invalidate();

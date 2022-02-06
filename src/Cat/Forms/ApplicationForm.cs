@@ -62,9 +62,10 @@ namespace WinkingCat
             cbInterpolationMode.Items.Add(InterpolationMode.HighQualityBilinear);
             cbInterpolationMode.SelectedItem = SettingsManager.MiscSettings.Default_Interpolation_Mode;
 
-            cbDrawMode.Items.Add(WinkingCat.HelperLibs.Controls.DrawMode.ActualSize);
-            cbDrawMode.Items.Add(WinkingCat.HelperLibs.Controls.DrawMode.FitImage);
-            cbDrawMode.Items.Add(WinkingCat.HelperLibs.Controls.DrawMode.ScaleImage);
+            cbDrawMode.Items.Add(WinkingCat.HelperLibs.Controls.ImageDrawMode.ActualSize);
+            cbDrawMode.Items.Add(WinkingCat.HelperLibs.Controls.ImageDrawMode.FitImage);
+            cbDrawMode.Items.Add(WinkingCat.HelperLibs.Controls.ImageDrawMode.DownscaleImage);
+            cbDrawMode.Items.Add(WinkingCat.HelperLibs.Controls.ImageDrawMode.Resizeable);
             cbDrawMode.SelectedItem = SettingsManager.MiscSettings.Default_Draw_Mode;
 
             _trayClickTimer.SetInterval(SystemInformation.DoubleClickTime + 1000);
@@ -79,7 +80,7 @@ namespace WinkingCat
             tsmiAlwaysOnTop.Checked = TopMost;
             imageDisplay1.ClearImagePathOnReplace = true;
             imageDisplay1.DisposeImageOnReplace = true;
-            imageDisplay1.ResetOffsetOnRightClick = false;
+            imageDisplay1.ResetOffsetButton = MouseButtons.None;
 
 
             RegisterEvents();
@@ -140,7 +141,7 @@ namespace WinkingCat
         /// Sets the imagae display draw mode.
         /// </summary>
         /// <param name="mode"></param>
-        public void SetDrawMode(HelperLibs.Controls.DrawMode mode)
+        public void SetDrawMode(HelperLibs.Controls.ImageDrawMode mode)
         {
             imageDisplay1.DrawMode = mode;
         }
@@ -486,7 +487,15 @@ namespace WinkingCat
             if (imageDisplay1.Image == null)
                 return;
 
-            tbImageDimensionsDisplay.Text = string.Format("{0} x {1}", imageDisplay1.Image.Width, imageDisplay1.Image.Height);
+            tbImageDimensionsDisplay.Text = string.Format("{0} x {1} : {2}%", 
+                imageDisplay1.Image.Width, 
+                imageDisplay1.Image.Height, 
+                imageDisplay1.ZoomPercent);
+        }
+
+        private void ImageDisplay_ZoomLevelChanged(int zoomLevelPercent)
+        {
+            ImageDisplay_ImageChanged();
         }
 
         private void ImageDrawMode_SelectedIndexChanged(object sender, EventArgs e)
@@ -494,7 +503,7 @@ namespace WinkingCat
             if (_preventOverflow)
                 return;
 
-            SetDrawMode((HelperLibs.Controls.DrawMode)cbDrawMode.SelectedItem);
+            SetDrawMode((HelperLibs.Controls.ImageDrawMode)cbDrawMode.SelectedItem);
         }
 
         private void ImageInterpolationMode_SelectedIndexChanged(object sender, EventArgs e)
@@ -1120,6 +1129,7 @@ namespace WinkingCat
             cbInterpolationMode.SelectedIndexChanged += ImageInterpolationMode_SelectedIndexChanged;
             cbDrawMode.SelectedIndexChanged += ImageDrawMode_SelectedIndexChanged;
             imageDisplay1.ImageChanged += ImageDisplay_ImageChanged;
+            imageDisplay1.ZoomLevelChanged += ImageDisplay_ZoomLevelChanged; ;
 
 
             // timer 
@@ -1181,5 +1191,7 @@ namespace WinkingCat
             tsmiOpenMainWindowTray.Click += OpenMainWindow_Click;
             tsmiExitTray.Click += ExitApplication_Click;
         }
+
+        
     }
 }
