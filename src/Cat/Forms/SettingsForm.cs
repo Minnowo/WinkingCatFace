@@ -34,6 +34,7 @@ namespace WinkingCat
             cbHideClipsOnCapture.Checked = SettingsManager.ClipSettings.Never_Hide_Clips;
             folderSortAscendingCheckbox.Checked = SettingsManager.MainFormSettings.FolderSortOrder >= 0;
             fileSortAscendingCheckbox.Checked = SettingsManager.MainFormSettings.FileSortOrder >= 0;
+            cbMaximizeBox.Checked = SettingsManager.MainFormSettings.Show_Maximize_Box;
 
             foreach (Function task in Enum.GetValues(typeof(Function)))
             {

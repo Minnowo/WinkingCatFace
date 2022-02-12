@@ -157,7 +157,11 @@ namespace WinkingCat.HelperLibs
             updateMaxSizeTimer.Start();
         }
 
-        
+        // https://github.com/Minnowo/WinkingCatFace/issues/3
+        // override the update settings because the BaseForm sets topmost upon setting update
+        public override void UpdateSettings()
+        {
+        }
 
         /// <summary>
         /// Checks if the window should adjust its size to match a newly rotated image.
