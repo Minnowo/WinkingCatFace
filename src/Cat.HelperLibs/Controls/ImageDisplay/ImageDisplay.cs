@@ -7,26 +7,6 @@ using System.Threading.Tasks;
 
 namespace WinkingCat.HelperLibs.Controls
 {
-    public enum ImageDrawMode
-    {
-        /// <summary>
-        /// Always scale the image to fit the maximum possible size.
-        /// </summary>
-        FitImage,
-
-        /// <summary>
-        /// Only show the image as default size.
-        /// </summary>
-        ActualSize,
-
-        /// <summary>
-        /// Scale the image when it doesn't fit on the control, otherwise show the default image size
-        /// </summary>
-        DownscaleImage,
-
-        Resizeable
-    }
-
     public partial class ImageDisplay : UserControl
     {
         /// <summary>
@@ -212,6 +192,7 @@ namespace WinkingCat.HelperLibs.Controls
 
         /// <summary>
         /// The image display in the control.
+        /// The image is NOT disposed with the control.
         /// </summary>
         public IMAGE Image
         {
@@ -274,6 +255,11 @@ namespace WinkingCat.HelperLibs.Controls
         /// The <see cref="FileInfo"/> of the image displayed in the control (if available).
         /// </summary>
         public FileInfo ImagePath { get; set; }
+
+        /// <summary>
+        /// Controls how the zoom of the image is done.
+        /// </summary>
+        public ZoomMode ZoomMode = ZoomMode.IntoMouse;
 
         /// <summary>
         /// The button used to drag the image.
@@ -349,12 +335,64 @@ namespace WinkingCat.HelperLibs.Controls
 
         public ImageDisplay()
         {
-            this.SetStyle(ControlStyles.AllPaintingInWmPaint | ControlStyles.UserPaint |ControlStyles.OptimizedDoubleBuffer | ControlStyles.ResizeRedraw, true);
+            this.SetStyle(ControlStyles.AllPaintingInWmPaint | 
+                          ControlStyles.UserPaint |
+                          ControlStyles.OptimizedDoubleBuffer | 
+                          ControlStyles.ResizeRedraw, true);
 
-            InitializeComponent();
-            this.Width = 50;
-            this.Height = 50;
+            this.AutoScaleMode = AutoScaleMode.Font;
+
+            this.Width = 250;
+            this.Height = 250;
+
             this.InitTileBrush((int)(this.CellSize * this.CellScale), this.CellColor1, this.CellColor2);
+        }
+
+
+
+
+
+
+
+
+
+
+
+        /// <summary>
+        /// Sets the tile brush used to drag the background grid.
+        /// </summary>
+        /// <param name="cellSize">The size of each square.</param>
+        /// <param name="cellColor">The color of half the squares.</param>
+        /// <param name="alternateCellColor">The other color of the squares.</param>
+        public void InitTileBrush(int cellSize, Color cellColor, Color alternateCellColor)
+        {
+            Bitmap result;
+            int width;
+            int height;
+
+            // draw the tile
+            width = cellSize * 2;
+            height = cellSize * 2;
+            result = new Bitmap(width, height);
+
+            using (Graphics g = Graphics.FromImage(result))
+            {
+                using (Brush brush = new SolidBrush(cellColor))
+                {
+                    g.FillRectangle(brush, new Rectangle(cellSize, 0, cellSize, cellSize));
+                    g.FillRectangle(brush, new Rectangle(0, cellSize, cellSize, cellSize));
+                }
+
+                using (Brush brush = new SolidBrush(alternateCellColor))
+                {
+                    g.FillRectangle(brush, new Rectangle(0, 0, cellSize, cellSize));
+                    g.FillRectangle(brush, new Rectangle(cellSize, cellSize, cellSize, cellSize));
+                }
+            }
+
+            this.BackgroundTileBrush?.Dispose();
+            this.BackgroundTileBrush = new TextureBrush(result);
+            this.Invalidate();
         }
 
         /// <summary>
@@ -531,6 +569,16 @@ namespace WinkingCat.HelperLibs.Controls
             return true;
         }
 
+
+
+
+
+
+
+
+
+
+
         /// <summary>
         /// Gets the control size.
         /// </summary>
@@ -596,7 +644,6 @@ namespace WinkingCat.HelperLibs.Controls
             this._Zoom = zoom;
             OnZoomLevelChanged((int)(zoom * 100));
         }
-
 
         /// <summary>
         /// Gets the destination rectangle to draw the image
@@ -730,52 +777,6 @@ namespace WinkingCat.HelperLibs.Controls
         }
 
         /// <summary>
-        ///   Converts the given client size point to represent a coordinate on the source image.
-        /// </summary>
-        /// <param name="point">The source point.</param>
-        /// <param name="fitToBounds">
-        ///   if set to <c>true</c> and the point is outside the bounds of the source image, it will be mapped to the nearest edge.
-        /// </param>
-        /// <returns><c>Point.Empty</c> if the point could not be matched to the source image, otherwise the new translated point</returns>
-        public virtual Point PointToImage(Point point, bool fitToBounds)
-        {
-            Rectangle viewport = this.GetImageViewPort();
-
-            if (fitToBounds && !viewport.Contains(point))
-                return new Point(0, 0);
-
-            if (this.AutoScrollPosition != Point.Empty)
-                point = new Point(point.X - this.AutoScrollPosition.X, point.Y - this.AutoScrollPosition.Y);
-            
-
-            int x = (int)((point.X - viewport.X) / this._Zoom);
-            int y = (int)((point.Y - viewport.Y) / this._Zoom);
-
-            if (!fitToBounds)
-                return new Point(x, y);
-
-            if (x < 0)
-            {
-                x = 0;
-            }
-            else if (x > this._Image.Width)
-            {
-                x = this._Image.Width;
-            }
-
-            if (y < 0)
-            {
-                y = 0;
-            }
-            else if (y > this._Image.Height)
-            {
-                y = this._Image.Height;
-            }
-
-            return new Point(x, y);
-        }
-
-        /// <summary>
         /// Gets a <see cref="RectangleF"/> formatted with X, Y, Width, Height = 0, 0, Image.Width, Image.Height
         /// </summary>
         private RectangleF GetSourceImageRegion()
@@ -786,9 +787,10 @@ namespace WinkingCat.HelperLibs.Controls
             return new RectangleF(0, 0, this._Image.Width, this._Image.Height);
         }
 
-
-        
-
+        /// <summary>
+        /// Draws the image.
+        /// </summary>
+        /// <param name="g"></param>
         private void DrawImage(Graphics g)
         {
             InterpolationMode currentInterpolationMode = g.InterpolationMode;
@@ -819,66 +821,20 @@ namespace WinkingCat.HelperLibs.Controls
             }
         }
 
+        /// <summary>
+        /// Draws the background texture.
+        /// </summary>
+        /// <param name="g"></param>
         private void DrawBackground(Graphics g)
         {
             g.FillRectangle(this.BackgroundTileBrush, this.GetInsideViewPort(false));
         }
 
-        public void InitTileBrush(int cellSize, Color cellColor, Color alternateCellColor)
-        {
-            Bitmap result;
-            int width;
-            int height;
-
-            // draw the tile
-            width = cellSize * 2;
-            height = cellSize * 2;
-            result = new Bitmap(width, height);
-
-            using (Graphics g = Graphics.FromImage(result))
-            {
-                using (Brush brush = new SolidBrush(cellColor))
-                {
-                    g.FillRectangle(brush, new Rectangle(cellSize, 0, cellSize, cellSize));
-                    g.FillRectangle(brush, new Rectangle(0, cellSize, cellSize, cellSize));
-                }
-
-                using (Brush brush = new SolidBrush(alternateCellColor))
-                {
-                    g.FillRectangle(brush, new Rectangle(0, 0, cellSize, cellSize));
-                    g.FillRectangle(brush, new Rectangle(cellSize, cellSize, cellSize, cellSize));
-                }
-            }
-
-            this.BackgroundTileBrush?.Dispose();
-            this.BackgroundTileBrush = new TextureBrush(result);
-            this.Invalidate();
-        }
-
-        
-
-        private void OnImageChanged()
-        {
-            if (ImageChanged != null)
-                ImageChanged.Invoke();
-        }
-
-        private void OnZoomLevelChanged(int zoomLevelPercent)
-        {
-            if (ZoomLevelChanged != null)
-                ZoomLevelChanged.Invoke(zoomLevelPercent);
-        }
-
-
-        private void OnFrameChangedHandler(object sender, EventArgs eventArgs)
-        {
-            if (this.AnimationPaused)
-                return;
-
-            this.Invalidate();
-        }
-
-        private void MouseZoom(bool isZoomIn, Point location)
+        /// <summary>
+        /// Handles mouse adjusting of the zoomlevel for zooming in and out.
+        /// </summary>
+        /// <param name="isZoomIn">Is the zoom in or out.</param>
+        private void MouseZoom(bool isZoomIn)
         {
             int newZoom;
             int currentZoom = this.ZoomPercent;
@@ -898,9 +854,131 @@ namespace WinkingCat.HelperLibs.Controls
             this.ZoomPercent = newZoom;
         }
 
+        /// <summary>
+        /// Zooms the image into the point of the mouse position
+        /// 
+        /// credits to: https://stackoverflow.com/a/61964222
+        /// </summary>
+        private void ZoomIntoMousePosition(double beforeZoom, double afterZoom, Point mousePosition)
+        {
+            /*
+                        double oldWidth = _Image.Width * beforeZoom;
+                        double newWidth = _Image.Width * afterZoom;
+
+                        double scaleRatio = oldWidth / newWidth;
+
+                        double mouseOffsetX = mousePosition.X - _drx;
+                        double mouseOffsetY = mousePosition.Y - _dry;
+
+                        double scaledOffsetX = mouseOffsetX / scaleRatio;
+                        double scaledOffsetY = mouseOffsetY / scaleRatio;
+
+                        double x = _drx - (scaledOffsetX - mouseOffsetX);
+                        double y = _dry - (scaledOffsetY - mouseOffsetY);
+
+                        _drx = (int)Math.Round(x);
+                        _dry = (int)Math.Round(y);
+            */
+
+            double scaleRatio = (_Image.Width * beforeZoom) / (_Image.Width * afterZoom);
+
+            double mouseOffsetX = mousePosition.X - _drx;
+            double mouseOffsetY = mousePosition.Y - _dry;
+
+            _drx = (int)Math.Round(_drx - ((mouseOffsetX / scaleRatio) - mouseOffsetX));
+            _dry = (int)Math.Round(_dry - ((mouseOffsetY / scaleRatio) - mouseOffsetY));
+        }
+
+        /// <summary>
+        /// Zooms the image at the bottom right corner.
+        /// </summary>
+        private void ZoomBottomRightImage(double beforeZoom, double afterZoom)
+        {
+            double beforeZoomWidth = _Image.Width * beforeZoom;
+            double beforeZoomHeight = _Image.Height * beforeZoom;
+
+            double afterZoomWidth = _Image.Width * afterZoom;
+            double afterZoomHeight = _Image.Height * afterZoom;
+
+            this._drx -= (int)Math.Round(afterZoomWidth - beforeZoomWidth);
+            this._dry -= (int)Math.Round(afterZoomHeight - beforeZoomHeight);
+        }
+
+        /// <summary>
+        /// Zooms at the center image.
+        /// </summary>
+        private void ZoomCenterImage(double beforeZoom, double afterZoom)
+        {
+            double beforeZoomWidth = _Image.Width * beforeZoom;
+            double beforeZoomHeight = _Image.Height * beforeZoom;
+
+            double afterZoomWidth = _Image.Width * afterZoom;
+            double afterZoomHeight = _Image.Height * afterZoom;
+
+            this._drx -= (int)Math.Round(afterZoomWidth - beforeZoomWidth) >> 1;
+            this._dry -= (int)Math.Round(afterZoomHeight - beforeZoomHeight) >> 1;
+        }
+
+        /// <summary>
+        /// ZoomCenterImage but at the mouse position.
+        /// </summary>
+        private void ZoomCenterMouse(double afterZoom, Point mousePosition)
+        {
+            double afterZoomWidth = _Image.Width * afterZoom;
+            double afterZoomHeight = _Image.Height * afterZoom;
+
+            this._drx = (int)Math.Round(mousePosition.X - (afterZoomWidth / 2));
+            this._dry = (int)Math.Round(mousePosition.Y - (afterZoomHeight / 2));
+        }
+
+
+
+
+
+
+
+
+
+        private void OnImageChanged()
+        {
+            if (ImageChanged != null)
+                ImageChanged.Invoke();
+        }
+
+        private void OnZoomLevelChanged(int zoomLevelPercent)
+        {
+            if (ZoomLevelChanged != null)
+                ZoomLevelChanged.Invoke(zoomLevelPercent);
+        }
+
+        private void OnFrameChangedHandler(object sender, EventArgs eventArgs)
+        {
+            if (this.AnimationPaused)
+                return;
+
+            this.Invalidate();
+        }
+
+
+
+
+
+
+
+
+
+
+
+        
+
+       
+
         protected override void OnMouseWheel(MouseEventArgs e)
         {
             base.OnMouseWheel(e);
+
+            if (this._Image == null)
+                return;
 
             if (this.DrawMode != ImageDrawMode.Resizeable)
                 return;
@@ -912,17 +990,31 @@ namespace WinkingCat.HelperLibs.Controls
             // TODO: Really should update the source method to handle multiple increments rather than calling it multiple times
             for (int i = 0; i < spins; i++)
             {
-                int beforeZoomWidth  = (int)Math.Round(this._Image.Width  * this._Zoom);
-                int beforeZoomHeight = (int)Math.Round(this._Image.Height * this._Zoom);
+                double beforeZoom = this._Zoom;
 
-                this.MouseZoom(e.Delta > 0, e.Location);
+                this.MouseZoom(e.Delta > 0);
 
-                int afterZoomWidth  = (int)Math.Round(this._Image.Width  * this._Zoom);
-                int afterZoomHeight = (int)Math.Round(this._Image.Height * this._Zoom);
+                switch (ZoomMode)
+                {
+                    case ZoomMode.TopLeftImage:
+                        break;
 
-                // zoom center image cause i cannot get it to zoom on mouse pos, please send help 
-                this._drx -= (int)((afterZoomWidth  - beforeZoomWidth)  >> 1);
-                this._dry -= (int)((afterZoomHeight - beforeZoomHeight) >> 1);
+                    case ZoomMode.BottomRightImage:
+                        ZoomBottomRightImage(beforeZoom, this._Zoom);
+                        break;
+
+                    case ZoomMode.IntoMouse:
+                        ZoomIntoMousePosition(beforeZoom, this._Zoom, e.Location);
+                        break;
+
+                    case ZoomMode.CenterImage:
+                        ZoomCenterImage(beforeZoom, this._Zoom);
+                        break;
+
+                    case ZoomMode.CenterMouse:
+                        ZoomCenterMouse(this._Zoom, e.Location);
+                        break;
+                }
             }
 
             Invalidate();
@@ -945,8 +1037,8 @@ namespace WinkingCat.HelperLibs.Controls
 
             if (e.Button == this.DragButton)
             {
-                this._lastClickedPoint = e.Location; // set last position
-                this._isDragButtonDown = true;       // enable drag
+                this._lastClickedPoint = e.Location;     // set last position
+                this._isDragButtonDown = true;           // enable drag
             }
         }
 
@@ -982,6 +1074,7 @@ namespace WinkingCat.HelperLibs.Controls
 
             // set the new last click pos and redraw the image
             _lastClickedPoint = e.Location;
+
             Invalidate();
         }
 
@@ -994,5 +1087,14 @@ namespace WinkingCat.HelperLibs.Controls
             }
             base.OnPaint(e);
         }
+
+        protected override void Dispose(bool disposing)
+        {
+            
+            BackgroundTileBrush?.Dispose();
+            
+            base.Dispose(disposing);
+        }
+
     }
 }
