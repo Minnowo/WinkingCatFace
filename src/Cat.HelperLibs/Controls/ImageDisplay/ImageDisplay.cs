@@ -245,9 +245,19 @@ namespace WinkingCat.HelperLibs.Controls
                 {
                     this.ImagePath = null;
                 }
+
                 this._Image = value;
-                this._drx = 0;
-                this._dry = 0;
+
+                if (this.CenterImage)
+                {
+                    this.CenterCurrentImage();
+                }
+                else
+                {
+                    this._drx = 0;
+                    this._dry = 0;
+                }
+
                 Invalidate();
 
                 OnImageChanged();

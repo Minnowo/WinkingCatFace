@@ -148,6 +148,11 @@ namespace WinkingCat
         public void SetDrawMode(HelperLibs.Controls.ImageDrawMode mode)
         {
             imageDisplay1.DrawMode = mode;
+
+            if(mode == HelperLibs.Controls.ImageDrawMode.Resizeable)
+            {
+                imageDisplay1.CenterCurrentImage();
+            }
         }
 
         /// <summary>
@@ -899,12 +904,27 @@ namespace WinkingCat
             imageDisplay1.Image = null;
         }
 
+        private void CloseImageDisplayClick_Click(object sender, EventArgs e)
+        {
+            if (_showingFullscreenImage)
+            {
+                if(_fullscreenImageForm != null)
+                {
+                    _fullscreenImageForm.Close();
+                }
+                return;
+            }
+         
+            imageDisplay1.Image = null;
+        }
+
         private void ShownFullscreenImage_Click(object sender, EventArgs e)
         {
             if (imageDisplay1.Image == null || _showingFullscreenImage)
                 return;
 
             ShowFullScreenImage();
+            imageDisplay1.CenterCurrentImage();
         }
 
         private void ShowFullScreenImage()
@@ -914,9 +934,14 @@ namespace WinkingCat
 
             Control ctl = this.imageDisplay1;
 
-            Point     og_loc  = ctl.Location;
-            DockStyle og_dock = ctl.Dock;
-            Control   parent  = ctl.Parent;
+            Point        og_loc  = ctl.Location;
+            Size         og_size = ctl.Size;
+            DockStyle    og_dock = ctl.Dock;
+            AnchorStyles og_anch = ctl.Anchor;
+            Control      parent  = ctl.Parent;
+
+            HelperLibs.Controls.ImageDrawMode d = imageDisplay1.DrawMode;
+            imageDisplay1.DrawMode = HelperLibs.Controls.ImageDrawMode.Resizeable;
 
             _fullscreenImageForm = new Form()
             {
@@ -931,6 +956,13 @@ namespace WinkingCat
                 ctl.Parent   = parent;
                 ctl.Location = og_loc;
                 ctl.Dock     = og_dock;
+                ctl.Anchor   = og_anch;
+                ctl.Size     = og_size;
+                imageDisplay1.DrawMode = d;
+
+                if (d == HelperLibs.Controls.ImageDrawMode.Resizeable)
+                    imageDisplay1.CenterCurrentImage();
+
                 this._showingFullscreenImage = false;
                 this.Show();
             };
