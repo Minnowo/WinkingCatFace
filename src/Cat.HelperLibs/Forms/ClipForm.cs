@@ -141,7 +141,6 @@ namespace WinkingCat.HelperLibs
             if (_IsResizable) tsmiAllowResizeToolStripMenuItem.Checked = true;
             #endregion
 
-            TopMost = true;
             Text = ClipName;
 
             ResumeLayout(true);
@@ -149,6 +148,8 @@ namespace WinkingCat.HelperLibs
             Show();
 
             UpdateTheme();
+            
+            TopMost = true;
 
             //for some reason if the clip is on a display that is scaled it makes it bigger than its supposed to be
             //so only allow it to be resized after 1000 ms

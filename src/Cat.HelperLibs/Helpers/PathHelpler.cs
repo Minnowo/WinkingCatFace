@@ -270,6 +270,27 @@ namespace WinkingCat.HelperLibs
             return 0;
         }
 
+        public static bool DeleteFileOrPath(string path)
+        {
+            try
+            {
+                if (File.Exists(path))
+                {
+                    File.Delete(path);
+                    return true;
+                }
+                else if (Directory.Exists(path))
+                {
+                    Directory.Delete(path, true);
+                    return true;
+                }
+            }
+            catch
+            {
+            }
+            return false;
+        }
+
         /// <summary>
         /// Tries to create a <see cref="DirectoryInfo"/> for the given path.
         /// </summary>

@@ -113,7 +113,7 @@ namespace WinkingCat.HelperLibs
                     if (previewOnClick)
                     {
                         this.pbMain.Enabled = false;
-                        ImageViewerForm.ShowImage(this.Image);
+                        //ImageViewerForm.ShowImage(this.Image);
 
                         this.pbMain.Enabled = true;
                     }

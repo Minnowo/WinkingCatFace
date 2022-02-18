@@ -7,6 +7,7 @@ using System.Text;
 using System.Xml.Serialization;
 using System.Threading.Tasks;
 using System.Drawing.Design;
+using System.Windows.Forms;
 
 namespace WinkingCat.HelperLibs
 {
@@ -33,6 +34,13 @@ namespace WinkingCat.HelperLibs
 
         [Browsable(false)]
         public int Wait_Hide_Time { get; set; } = 300;
+        
+        [Browsable(false)]
+        public int Tray_Double_Click_Time { get; set; } = SystemInformation.DoubleClickTime + 1000;
+
+        [Browsable(false)]
+        public int Load_Image_Delay { get; set; } = 250;
+
         [Browsable(false)]
         public int Image_Counter { get; set; } = 0;
 

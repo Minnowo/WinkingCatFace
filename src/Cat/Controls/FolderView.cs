@@ -15,6 +15,7 @@ namespace WinkingCat.Controls
 {
     public partial class FolderView : UserControl
     {
+        public bool AskConfirmationOnDelete { get; set; } = true;
         public int FileSortOrder
         {
             get { return _FolderWatcher.SortOrderFile; }
@@ -64,6 +65,8 @@ namespace WinkingCat.Controls
             }
         }
         private string _CurrentDirectory = "";
+
+        private TIMER _ListviewRefreshTimer = new TIMER();
 
         /// <summary>
         /// Is the textbox active
@@ -147,6 +150,10 @@ namespace WinkingCat.Controls
             ListView_.UpdateTheme();
             ListView_.AutoResizeColumns(ColumnHeaderAutoResizeStyle.ColumnContent);
             ListView_.AutoResizeColumns(ColumnHeaderAutoResizeStyle.HeaderSize);
+
+            _ListviewRefreshTimer.Tick += _ListviewRefreshTimer_Tick;
+            _ListviewRefreshTimer.SetInterval(1000);
+
             UpdateTheme();
 
             CurrentDirectory = "C:\\";// PathHelper.GetScreenshotFolder();
@@ -154,7 +161,12 @@ namespace WinkingCat.Controls
             ApplicationStyles.UpdateThemeEvent += UpdateTheme;
         }
 
-        
+        private void _ListviewRefreshTimer_Tick(object sender, EventArgs e)
+        {
+            ForceListviewRedraw();
+            _ListviewRefreshTimer.Stop();
+        }
+
         public void UpdateTheme()
         {
             ApplicationStyles.ApplyCustomThemeToControl(this);
@@ -175,6 +187,58 @@ namespace WinkingCat.Controls
             this._PreventOverflow = true;
             this.textBox1.Text = $"{_CurrentDirectory}";
             this._PreventOverflow = false;
+        }
+
+        public void DeleteSelectedItems()
+        {
+            if (ListView_.SelectedIndices.Count < 2)
+            {
+                if (ListView_.FocusedItem != null)
+                {
+                    if (ListView_.FocusedItem.Tag is DirectoryInfo)
+                    {
+                        PathHelper.DeleteFileOrPath(((DirectoryInfo)ListView_.FocusedItem.Tag).FullName);
+                    }
+                    else if (ListView_.FocusedItem.Tag is FileInfo)
+                    {
+                        PathHelper.DeleteFileOrPath(((DirectoryInfo)ListView_.FocusedItem.Tag).FullName);
+                    }
+                }
+                return;
+            }
+
+            if (AskConfirmationOnDelete)
+            {
+                if (MessageBox.Show(this,
+                    $"Are you sure you want to delete {ListView_.SelectedIndices.Count} items?\n",
+                    "Delete Files?",
+                    MessageBoxButtons.YesNo) == DialogResult.No)
+                    return;
+            }
+
+            string[] del = new string[ListView_.SelectedIndices.Count];
+            int c = 0;
+            foreach (int i in ListView_.SelectedIndices)
+            {
+                if (ListView_.Items[i].Tag is DirectoryInfo)
+                {
+                    del[c++] = ((DirectoryInfo)ListView_.Items[i].Tag).FullName;
+                }
+                else if (ListView_.Items[i].Tag is FileInfo)
+                {
+                    del[c++] = ((FileInfo)ListView_.Items[i].Tag).FullName;
+                }
+            }
+
+            ListView_.DeselectAll();
+
+            Task.Run(() =>
+            {
+                foreach (string i in del)
+                {
+                    PathHelper.DeleteFileOrPath(i);
+                }
+            });
         }
 
         /// <summary>
@@ -608,6 +672,9 @@ namespace WinkingCat.Controls
                     UpDirectoryLevel();
                     break;
 
+                case Keys.Delete:
+                    DeleteSelectedItems();
+                    break;
             }
         }
 
@@ -618,7 +685,8 @@ namespace WinkingCat.Controls
             this.ListView_.InvokeSafe((Action)(() =>
             {
                 this.ListView_.VirtualListSize++;
-                this.ForceListviewRedraw();
+                // this.ForceListviewRedraw();
+                _ListviewRefreshTimer.Start();
             }));
         }
 
@@ -627,7 +695,8 @@ namespace WinkingCat.Controls
             this.ListView_.InvokeSafe((Action)(() =>
             {
                 this.ListView_.VirtualListSize++;
-                this.ForceListviewRedraw();
+                _ListviewRefreshTimer.Start();
+                // this.ForceListviewRedraw();
             }));
         }
 
@@ -636,7 +705,8 @@ namespace WinkingCat.Controls
             this.ListView_.InvokeSafe((Action)(() =>
             {
                 this.ListView_.VirtualListSize--;
-                this.ForceListviewRedraw();
+                _ListviewRefreshTimer.Start();
+                // this.ForceListviewRedraw();
             }));
         }
 
@@ -645,7 +715,8 @@ namespace WinkingCat.Controls
             this.ListView_.InvokeSafe((Action)(() =>
             {
                 this.ListView_.VirtualListSize--;
-                this.ForceListviewRedraw();
+                _ListviewRefreshTimer.Start();
+                // this.ForceListviewRedraw();
             }));
         }
 
@@ -653,7 +724,9 @@ namespace WinkingCat.Controls
         {
             this.InvokeSafe((Action)(() =>
             {
-                this.ForceListviewRedraw();
+                _ListviewRefreshTimer.Start();
+
+                // this.ForceListviewRedraw();
             }));
         }
 
@@ -661,7 +734,8 @@ namespace WinkingCat.Controls
         {
             this.InvokeSafe((Action)(() =>
             {
-                this.ForceListviewRedraw();
+                _ListviewRefreshTimer.Start();
+                //this.ForceListviewRedraw();
             }));
         }
 
@@ -669,7 +743,8 @@ namespace WinkingCat.Controls
         {
             this.InvokeSafe((Action)(() =>
             {
-                this.ForceListviewRedraw();
+                _ListviewRefreshTimer.Start();
+                // this.ForceListviewRedraw();
             }));
         }
 

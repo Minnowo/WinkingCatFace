@@ -66,6 +66,7 @@ namespace WinkingCat.HelperLibs.Controls
             {
                 if (this._DrawMode == value)
                     return;
+
                 this._DrawMode = value;
                 Invalidate();
             }
@@ -344,6 +345,60 @@ namespace WinkingCat.HelperLibs.Controls
             this.Width = 50;
             this.Height = 50;
             this.InitTileBrush((int)(this.CellSize * this.CellScale), this.CellColor1, this.CellColor2);
+        }
+
+        /// <summary>
+        /// Centers the image based off the drawmode of the control
+        /// </summary>
+        public void CenterCurrentImage()
+        {
+            if (this.Image == null)
+                return;
+
+            int width = this._Image.Width;
+            int height = this._Image.Height;
+
+            switch (this.DrawMode)
+            {
+                case ImageDrawMode.FitImage:
+                case ImageDrawMode.Resizeable:
+
+                    this.FitImage();
+                    width  = (int)Math.Round(width  * this._Zoom);
+                    height = (int)Math.Round(height * this._Zoom);
+
+                    this._drx = (this.ClientSize.Width >> 1) - (width >> 1);
+                    this._dry = (this.ClientSize.Height >> 1) - (height >> 1);
+                    break;
+
+                case ImageDrawMode.ActualSize:
+
+                    if (width < this.ClientSize.Width)
+                    {
+                        this._drx = (this.ClientSize.Width >> 1) - (width >> 1);
+                    }
+
+                    if (height < this.ClientSize.Height)
+                    {
+                        this._dry = (this.ClientSize.Height >> 1) - (height >> 1);
+                    }
+                    break;
+
+                case ImageDrawMode.DownscaleImage:
+                    if (width > this.ClientSize.Width || height > this.ClientSize.Height)
+                    {
+                        this.FitImage();
+
+                        width = (int)Math.Round(this._Image.Width * this._Zoom);
+                        height = (int)Math.Round(this._Image.Height * this._Zoom);
+                    }
+
+                    this._drx = (this.Width >> 1) - (width >> 1);
+                    this._dry = (this.Height >> 1) - (height >> 1);
+                    break;
+            }
+
+            Invalidate();
         }
 
         /// <summary>
@@ -639,18 +694,18 @@ namespace WinkingCat.HelperLibs.Controls
 
                 case ImageDrawMode.DownscaleImage:
 
-                    if (this._Image.Width > this.Width || this._Image.Height > this.Height)
+                    if (width > this.ClientSize.Width || height > this.ClientSize.Height)
                     {
                         FitImage();
 
-                        width  = (int)Math.Round(this._Image.Width * this._Zoom);
-                        height = (int)Math.Round(this._Image.Height * this._Zoom);
+                        width  = (int)Math.Round(width  * this._Zoom);
+                        height = (int)Math.Round(height * this._Zoom);
                     }
 
                     if (this.CenterImage)
                     {
-                        xPos = (this.Width  >> 1) - (width  >> 1);
-                        yPos = (this.Height >> 1) - (height >> 1);
+                        xPos = (this.ClientSize.Width  >> 1) - (width  >> 1);
+                        yPos = (this.ClientSize.Height >> 1) - (height >> 1);
                     }
                     else
                     {
@@ -790,25 +845,7 @@ namespace WinkingCat.HelperLibs.Controls
             this.Invalidate();
         }
 
-        private void MouseZoom(bool isZoomIn, Point location)
-        {
-            int newZoom;
-            int currentZoom = this.ZoomPercent;
-
-            if (isZoomIn)
-            {
-                newZoom = this.ZoomLevels.NextZoom(currentZoom);
-            }
-            else
-            {
-                newZoom = this.ZoomLevels.PreviousZoom(currentZoom);
-            }
-
-            if (newZoom == currentZoom)
-                return;
-
-            this.ZoomPercent = newZoom;
-        }
+        
 
         private void OnImageChanged()
         {
@@ -831,6 +868,25 @@ namespace WinkingCat.HelperLibs.Controls
             this.Invalidate();
         }
 
+        private void MouseZoom(bool isZoomIn, Point location)
+        {
+            int newZoom;
+            int currentZoom = this.ZoomPercent;
+
+            if (isZoomIn)
+            {
+                newZoom = this.ZoomLevels.NextZoom(currentZoom);
+            }
+            else
+            {
+                newZoom = this.ZoomLevels.PreviousZoom(currentZoom);
+            }
+
+            if (newZoom == currentZoom)
+                return;
+
+            this.ZoomPercent = newZoom;
+        }
 
         protected override void OnMouseWheel(MouseEventArgs e)
         {
@@ -839,21 +895,33 @@ namespace WinkingCat.HelperLibs.Controls
             if (this.DrawMode != ImageDrawMode.Resizeable)
                 return;
 
+            
             // The MouseWheel event can contain multiple "spins" of the wheel so we need to adjust accordingly
             int spins = Math.Abs(e.Delta / SystemInformation.MouseWheelScrollDelta);
 
             // TODO: Really should update the source method to handle multiple increments rather than calling it multiple times
             for (int i = 0; i < spins; i++)
             {
+                int beforeZoomWidth  = (int)Math.Round(this._Image.Width  * this._Zoom);
+                int beforeZoomHeight = (int)Math.Round(this._Image.Height * this._Zoom);
+
                 this.MouseZoom(e.Delta > 0, e.Location);
+
+                int afterZoomWidth  = (int)Math.Round(this._Image.Width  * this._Zoom);
+                int afterZoomHeight = (int)Math.Round(this._Image.Height * this._Zoom);
+
+                // zoom center image cause i cannot get it to zoom on mouse pos, please send help 
+                this._drx -= (int)((afterZoomWidth  - beforeZoomWidth)  >> 1);
+                this._dry -= (int)((afterZoomHeight - beforeZoomHeight) >> 1);
             }
+
             Invalidate();
         }
 
         protected override void OnMouseDown(MouseEventArgs e)
         {
             base.OnMouseDown(e);
-
+            
             if (e.Button == this.ResetOffsetButton)
             {
                 this._drx = 0;

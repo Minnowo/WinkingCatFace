@@ -9,58 +9,60 @@ using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.Drawing.Drawing2D;
 
+using WinkingCat.HelperLibs.Controls;
+
 namespace WinkingCat.HelperLibs
 {
     public partial class ImageViewerForm : Form
     {
-        public Image image { get; private set; }
-        public Size initialSize { get; private set; }
-        public float zoomScale { get; set; } = 1.2f;
 
-        public ImageViewerForm(Image img)
+        public ImageViewerForm(IMAGE img)
         {
             SetStyle(ControlStyles.OptimizedDoubleBuffer | ControlStyles.UserPaint | ControlStyles.AllPaintingInWmPaint, true);
-            this.image = img;
-            initialSize = img.Size;
             InitializeComponent();
+
+            ivMain.Image = img;
+            ivMain.DrawMode = ImageDrawMode.Resizeable;
+            ivMain.CenterCurrentImage();
         }
 
-        public static void ShowDisposeImage(Image img)
+        public static void ShowDisposeImage(IMAGE img)
         {
             if (img == null)
                 return;
-            using (Image tempImage = img)
+
+           /* using (Image tempImage = img)
             {
                 if (tempImage == null)
-                    return;
+                    return;*/
 
-                using (ImageViewerForm viewer = new ImageViewerForm(tempImage))
+                using (ImageViewerForm viewer = new ImageViewerForm(img))
                 {
                     viewer.ShowDialog();
                 }
-            }
+           /* }*/
         }
 
-        public static void ShowImage(Image img)
+        public static void ShowImage(IMAGE img)
         {
             if (img == null)
                 return;
-
+/*
             using (Image tempImage = img.CloneSafe())
             {
                 if (tempImage == null)
                     return;
-
-                using (ImageViewerForm viewer = new ImageViewerForm(tempImage))
+*/
+                using (ImageViewerForm viewer = new ImageViewerForm(img))
                 {
                     viewer.ShowDialog();
                 }
-            }
+            //}
         }
 
         public static void ShowImage(string path)
         {
-            using (Image tempImage = ImageHelper.LoadImage(path))
+            using (IMAGE tempImage = ImageHelper.LoadImage(path))
             {
                 if (tempImage == null)
                     return;
@@ -106,11 +108,6 @@ namespace WinkingCat.HelperLibs
                 components.Dispose();
             }
 
-            if(this.image != null)
-            {
-                image.Dispose();
-            }
-
             base.Dispose(disposing);
         }
 
@@ -132,15 +129,14 @@ namespace WinkingCat.HelperLibs
             this.BackColor = Color.Black;
 
 
-            ivMain = new ImageView();
-            ivMain.ScrollbarsVisible = false;
+            ivMain = new ImageDisplay();
             ivMain.Dock = DockStyle.Fill;
-            ivMain.Image = (Bitmap)this.image;
-            
+
+            ivMain.DisposeImageOnReplace = false;
+
             this.Controls.Add(ivMain);
 
             this.KeyDown += ImageViewerForm_KeyDown;
-            ivMain.db.RightClicked+= RightClicked;
             this.BringToFront();
             this.Activate();
             this.ResumeLayout();
@@ -149,7 +145,7 @@ namespace WinkingCat.HelperLibs
 
         
 
-        private ImageView ivMain;
+        private ImageDisplay ivMain;
         //private PictureBox pbMain;
         #endregion
     }

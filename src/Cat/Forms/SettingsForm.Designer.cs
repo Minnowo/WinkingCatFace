@@ -31,6 +31,8 @@
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(SettingsForm));
             this.tcMain = new System.Windows.Forms.TabControl();
             this.tpMain = new System.Windows.Forms.TabPage();
+            this.folderSortAscendingCheckbox = new System.Windows.Forms.CheckBox();
+            this.fileSortAscendingCheckbox = new System.Windows.Forms.CheckBox();
             this.cbHideClipsOnCapture = new System.Windows.Forms.CheckBox();
             this.cbMaximizeBox = new System.Windows.Forms.CheckBox();
             this.cbUseDWRMOverWRM = new System.Windows.Forms.CheckBox();
@@ -90,8 +92,13 @@
             this.btnBrowseFolders = new System.Windows.Forms.Button();
             this.tbCustomScreenshotPath = new System.Windows.Forms.TextBox();
             this.cbUseCustomScreenshotPath = new System.Windows.Forms.CheckBox();
-            this.fileSortAscendingCheckbox = new System.Windows.Forms.CheckBox();
-            this.folderSortAscendingCheckbox = new System.Windows.Forms.CheckBox();
+            this.tpDelay = new System.Windows.Forms.TabPage();
+            this.label17 = new System.Windows.Forms.Label();
+            this.label16 = new System.Windows.Forms.Label();
+            this.label15 = new System.Windows.Forms.Label();
+            this.numericUpDown3 = new System.Windows.Forms.NumericUpDown();
+            this.numericUpDown2 = new System.Windows.Forms.NumericUpDown();
+            this.numericUpDown1 = new System.Windows.Forms.NumericUpDown();
             this.tcMain.SuspendLayout();
             this.tpMain.SuspendLayout();
             this.tbRegionCapture.SuspendLayout();
@@ -103,6 +110,10 @@
             this.tpClipboard.SuspendLayout();
             this.tbHotkeys.SuspendLayout();
             this.tabPage6.SuspendLayout();
+            this.tpDelay.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.numericUpDown3)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.numericUpDown2)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.numericUpDown1)).BeginInit();
             this.SuspendLayout();
             // 
             // tcMain
@@ -113,6 +124,7 @@
             this.tcMain.Controls.Add(this.tpClipboard);
             this.tcMain.Controls.Add(this.tbHotkeys);
             this.tcMain.Controls.Add(this.tabPage6);
+            this.tcMain.Controls.Add(this.tpDelay);
             this.tcMain.Dock = System.Windows.Forms.DockStyle.Fill;
             this.tcMain.Location = new System.Drawing.Point(0, 0);
             this.tcMain.Name = "tcMain";
@@ -147,6 +159,28 @@
             this.tpMain.TabIndex = 0;
             this.tpMain.Text = "General";
             this.tpMain.UseVisualStyleBackColor = true;
+            // 
+            // folderSortAscendingCheckbox
+            // 
+            this.folderSortAscendingCheckbox.AutoSize = true;
+            this.folderSortAscendingCheckbox.Location = new System.Drawing.Point(8, 121);
+            this.folderSortAscendingCheckbox.Name = "folderSortAscendingCheckbox";
+            this.folderSortAscendingCheckbox.Size = new System.Drawing.Size(135, 17);
+            this.folderSortAscendingCheckbox.TabIndex = 17;
+            this.folderSortAscendingCheckbox.Text = "Sort Folders Ascending";
+            this.folderSortAscendingCheckbox.UseVisualStyleBackColor = true;
+            this.folderSortAscendingCheckbox.CheckedChanged += new System.EventHandler(this.checkBox2_CheckedChanged);
+            // 
+            // fileSortAscendingCheckbox
+            // 
+            this.fileSortAscendingCheckbox.AutoSize = true;
+            this.fileSortAscendingCheckbox.Location = new System.Drawing.Point(8, 98);
+            this.fileSortAscendingCheckbox.Name = "fileSortAscendingCheckbox";
+            this.fileSortAscendingCheckbox.Size = new System.Drawing.Size(122, 17);
+            this.fileSortAscendingCheckbox.TabIndex = 16;
+            this.fileSortAscendingCheckbox.Text = "Sort Files Ascending";
+            this.fileSortAscendingCheckbox.UseVisualStyleBackColor = true;
+            this.fileSortAscendingCheckbox.CheckedChanged += new System.EventHandler(this.checkBox1_CheckedChanged);
             // 
             // cbHideClipsOnCapture
             // 
@@ -829,27 +863,88 @@
             this.cbUseCustomScreenshotPath.UseVisualStyleBackColor = true;
             this.cbUseCustomScreenshotPath.CheckedChanged += new System.EventHandler(this.UseCustomScreenshotFolder_CheckChanged);
             // 
-            // checkBox1
+            // tpDelay
             // 
-            this.fileSortAscendingCheckbox.AutoSize = true;
-            this.fileSortAscendingCheckbox.Location = new System.Drawing.Point(8, 98);
-            this.fileSortAscendingCheckbox.Name = "checkBox1";
-            this.fileSortAscendingCheckbox.Size = new System.Drawing.Size(122, 17);
-            this.fileSortAscendingCheckbox.TabIndex = 16;
-            this.fileSortAscendingCheckbox.Text = "Sort Files Ascending";
-            this.fileSortAscendingCheckbox.UseVisualStyleBackColor = true;
-            this.fileSortAscendingCheckbox.CheckedChanged += new System.EventHandler(this.checkBox1_CheckedChanged);
+            this.tpDelay.AutoScroll = true;
+            this.tpDelay.Controls.Add(this.label17);
+            this.tpDelay.Controls.Add(this.label16);
+            this.tpDelay.Controls.Add(this.label15);
+            this.tpDelay.Controls.Add(this.numericUpDown3);
+            this.tpDelay.Controls.Add(this.numericUpDown2);
+            this.tpDelay.Controls.Add(this.numericUpDown1);
+            this.tpDelay.Location = new System.Drawing.Point(4, 22);
+            this.tpDelay.Name = "tpDelay";
+            this.tpDelay.Padding = new System.Windows.Forms.Padding(3);
+            this.tpDelay.Size = new System.Drawing.Size(452, 413);
+            this.tpDelay.TabIndex = 6;
+            this.tpDelay.Text = "Delay";
+            this.tpDelay.UseVisualStyleBackColor = true;
             // 
-            // checkBox2
+            // label17
             // 
-            this.folderSortAscendingCheckbox.AutoSize = true;
-            this.folderSortAscendingCheckbox.Location = new System.Drawing.Point(8, 121);
-            this.folderSortAscendingCheckbox.Name = "checkBox2";
-            this.folderSortAscendingCheckbox.Size = new System.Drawing.Size(135, 17);
-            this.folderSortAscendingCheckbox.TabIndex = 17;
-            this.folderSortAscendingCheckbox.Text = "Sort Folders Ascending";
-            this.folderSortAscendingCheckbox.UseVisualStyleBackColor = true;
-            this.folderSortAscendingCheckbox.CheckedChanged += new System.EventHandler(this.checkBox2_CheckedChanged);
+            this.label17.AutoSize = true;
+            this.label17.Location = new System.Drawing.Point(8, 105);
+            this.label17.Name = "label17";
+            this.label17.Size = new System.Drawing.Size(112, 13);
+            this.label17.TabIndex = 5;
+            this.label17.Text = "Hide Forms Delay (ms)";
+            // 
+            // label16
+            // 
+            this.label16.AutoSize = true;
+            this.label16.Location = new System.Drawing.Point(8, 61);
+            this.label16.Name = "label16";
+            this.label16.Size = new System.Drawing.Size(143, 13);
+            this.label16.TabIndex = 4;
+            this.label16.Text = "Tray Double Click Delay (ms)";
+            // 
+            // label15
+            // 
+            this.label15.AutoSize = true;
+            this.label15.Location = new System.Drawing.Point(8, 17);
+            this.label15.Name = "label15";
+            this.label15.Size = new System.Drawing.Size(115, 13);
+            this.label15.TabIndex = 3;
+            this.label15.Text = "Load Image Delay (ms)";
+            // 
+            // numericUpDown3
+            // 
+            this.numericUpDown3.Location = new System.Drawing.Point(3, 121);
+            this.numericUpDown3.Maximum = new decimal(new int[] {
+            5000,
+            0,
+            0,
+            0});
+            this.numericUpDown3.Name = "numericUpDown3";
+            this.numericUpDown3.Size = new System.Drawing.Size(120, 20);
+            this.numericUpDown3.TabIndex = 2;
+            this.numericUpDown3.ValueChanged += new System.EventHandler(this.HideFormsDelayNumericUpDown_ValueChanged);
+            // 
+            // numericUpDown2
+            // 
+            this.numericUpDown2.Location = new System.Drawing.Point(3, 77);
+            this.numericUpDown2.Maximum = new decimal(new int[] {
+            5000,
+            0,
+            0,
+            0});
+            this.numericUpDown2.Name = "numericUpDown2";
+            this.numericUpDown2.Size = new System.Drawing.Size(120, 20);
+            this.numericUpDown2.TabIndex = 1;
+            this.numericUpDown2.ValueChanged += new System.EventHandler(this.TrayDoubleClickDelayNumericUpDown_ValueChanged);
+            // 
+            // numericUpDown1
+            // 
+            this.numericUpDown1.Location = new System.Drawing.Point(3, 33);
+            this.numericUpDown1.Maximum = new decimal(new int[] {
+            5000,
+            0,
+            0,
+            0});
+            this.numericUpDown1.Name = "numericUpDown1";
+            this.numericUpDown1.Size = new System.Drawing.Size(120, 20);
+            this.numericUpDown1.TabIndex = 0;
+            this.numericUpDown1.ValueChanged += new System.EventHandler(this.LoadImageDelayNumericUpDown_ValueChanged);
             // 
             // SettingsForm
             // 
@@ -879,6 +974,11 @@
             this.tbHotkeys.ResumeLayout(false);
             this.tabPage6.ResumeLayout(false);
             this.tabPage6.PerformLayout();
+            this.tpDelay.ResumeLayout(false);
+            this.tpDelay.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.numericUpDown3)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.numericUpDown2)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.numericUpDown1)).EndInit();
             this.ResumeLayout(false);
 
         }
@@ -948,5 +1048,12 @@
         private System.Windows.Forms.CheckBox cbHideClipsOnCapture;
         private System.Windows.Forms.CheckBox folderSortAscendingCheckbox;
         private System.Windows.Forms.CheckBox fileSortAscendingCheckbox;
+        private System.Windows.Forms.TabPage tpDelay;
+        private System.Windows.Forms.Label label17;
+        private System.Windows.Forms.Label label16;
+        private System.Windows.Forms.Label label15;
+        private System.Windows.Forms.NumericUpDown numericUpDown3;
+        private System.Windows.Forms.NumericUpDown numericUpDown2;
+        private System.Windows.Forms.NumericUpDown numericUpDown1;
     }
 }

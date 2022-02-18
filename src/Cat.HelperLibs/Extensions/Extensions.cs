@@ -30,6 +30,8 @@ namespace WinkingCat.HelperLibs
             return items.OrderByDescending(i => regex.Replace(selector(i), match => match.Value.PadLeft(maxDigits, '0')), stringComparer ?? StringComparer.CurrentCulture);
         }
 
+       
+
         public static Bitmap Copy(this Image image)
         {
             return ImageProcessor.DeepClone(image, PixelFormat.Format32bppArgb);

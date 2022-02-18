@@ -100,6 +100,11 @@ namespace WinkingCat
             // hotkey settings
             UpdateHotkeyControls();
 
+            // delay settings
+            numericUpDown1.Value = SettingsManager.MainFormSettings.Load_Image_Delay.Clamp(0, (int)numericUpDown1.Maximum);
+            numericUpDown2.Value = SettingsManager.MainFormSettings.Tray_Double_Click_Time.Clamp(0, (int)numericUpDown2.Maximum); ;
+            numericUpDown3.Value = SettingsManager.MainFormSettings.Wait_Hide_Time.Clamp(0, (int)numericUpDown3.Maximum); ;
+
             preventUpdate = false;
 
             this.FormClosing += new FormClosingEventHandler(OnFormClosing_Event);
@@ -456,7 +461,20 @@ namespace WinkingCat
             SettingsManager.MiscSettings.Use_Custom_Screenshot_Folder = cbUseCustomScreenshotPath.Checked;
         }
 
-        
+        private void LoadImageDelayNumericUpDown_ValueChanged(object sender, EventArgs e)
+        {
+            SettingsManager.MainFormSettings.Load_Image_Delay = (int)numericUpDown1.Value;
+        }
+
+        private void TrayDoubleClickDelayNumericUpDown_ValueChanged(object sender, EventArgs e)
+        {
+            SettingsManager.MainFormSettings.Tray_Double_Click_Time = (int)numericUpDown2.Value;
+        }
+
+        private void HideFormsDelayNumericUpDown_ValueChanged(object sender, EventArgs e)
+        {
+            SettingsManager.MainFormSettings.Wait_Hide_Time = (int)numericUpDown3.Value;
+        }
     }
 
 }

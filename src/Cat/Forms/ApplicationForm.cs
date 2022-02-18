@@ -21,6 +21,8 @@ namespace WinkingCat
 
         private Task _loadImageThread;
 
+        private Form _fullscreenImageForm;
+
         private TIMER _trayClickTimer = new TIMER();
         private TIMER _loadImageTimer = new TIMER();
 
@@ -54,6 +56,8 @@ namespace WinkingCat
 
             _preventOverflow = true;
 
+            tsMain.ClickThrough = true;
+
             tsmiCaptureCursor.Checked = SettingsManager.RegionCaptureSettings.Capture_Cursor;
             tsmiCaptureCursorTray.Checked = SettingsManager.RegionCaptureSettings.Capture_Cursor;
 
@@ -68,8 +72,8 @@ namespace WinkingCat
             cbDrawMode.Items.Add(WinkingCat.HelperLibs.Controls.ImageDrawMode.Resizeable);
             cbDrawMode.SelectedItem = SettingsManager.MiscSettings.Default_Draw_Mode;
 
-            _trayClickTimer.SetInterval(SystemInformation.DoubleClickTime + 1000);
-            _loadImageTimer.SetInterval(250);
+            _trayClickTimer.SetInterval(SettingsManager.MainFormSettings.Tray_Double_Click_Time);
+            _loadImageTimer.SetInterval(SettingsManager.MainFormSettings.Load_Image_Delay);
 
 #if !DEBUG
             MaximizeBox        = SettingsManager.MainFormSettings.Show_Maximize_Box;
@@ -324,8 +328,10 @@ namespace WinkingCat
 
             if (imageDisplay1.ImagePath != null && path == imageDisplay1.ImagePath.FullName)
             {
-                if (_loadImageThread != null && _loadImageThread.Status == TaskStatus.Running)
-                    await _loadImageThread;
+                if (_loadImageThread != null)
+                    if(_loadImageThread.Status == TaskStatus.Running ||
+                       _loadImageThread.Status == TaskStatus.WaitingForActivation)
+                        await _loadImageThread;
 
                 imageDisplay1.CopyImage();
                 return;
@@ -333,7 +339,8 @@ namespace WinkingCat
 
             if (_loadImageThread != null)
             {
-                if (_loadImageThread.Status == TaskStatus.Running)
+                if (_loadImageThread.Status == TaskStatus.Running ||
+                    _loadImageThread.Status == TaskStatus.WaitingForActivation)
                     await _loadImageThread;
 
                 _loadImageThread?.Dispose();
@@ -376,7 +383,8 @@ namespace WinkingCat
 
             if (imageDisplay1.ImagePath != null && path == imageDisplay1.ImagePath.FullName)
             {
-                if (_loadImageThread != null && _loadImageThread.Status == TaskStatus.Running)
+                if (_loadImageThread != null && _loadImageThread.Status == TaskStatus.Running || 
+                    _loadImageThread.Status == TaskStatus.WaitingForActivation)
                     await _loadImageThread;
 
                 clip = ClipManager.CreateClipAtCursor(imageDisplay1.Image, true);
@@ -386,7 +394,8 @@ namespace WinkingCat
 
             if (_loadImageThread != null)
             {
-                if (_loadImageThread.Status == TaskStatus.Running)
+                if (_loadImageThread.Status == TaskStatus.Running || 
+                    _loadImageThread.Status == TaskStatus.WaitingForActivation)
                     await _loadImageThread;
 
                 _loadImageThread?.Dispose();
@@ -454,8 +463,10 @@ namespace WinkingCat
             if (imageDisplay1.ImagePath != null && f.FullName == imageDisplay1.ImagePath.FullName)
                 return;
 
-            if (_loadImageThread != null && _loadImageThread.Status == TaskStatus.Running)
-                return;
+            if (_loadImageThread != null) 
+                if (_loadImageThread.Status == TaskStatus.Running ||
+                    _loadImageThread.Status == TaskStatus.WaitingForActivation)
+                    return;
 
             _loadImageThread?.Dispose();
             _loadImageThread = imageDisplay1.TryLoadImageAsync(f.FullName);
@@ -893,15 +904,63 @@ namespace WinkingCat
             if (imageDisplay1.Image == null || _showingFullscreenImage)
                 return;
 
-            _showingFullscreenImage = true;
-            this.imageDisplay1.Enabled = false;
-            
-            ImageViewerForm.ShowImage(this.imageDisplay1.Image);
-
-            this.imageDisplay1.Enabled = true;
-            _showingFullscreenImage = false;
+            ShowFullScreenImage();
         }
 
+        private void ShowFullScreenImage()
+        {
+            if (this._showingFullscreenImage)
+                return;
+
+            Control ctl = this.imageDisplay1;
+
+            Point     og_loc  = ctl.Location;
+            DockStyle og_dock = ctl.Dock;
+            Control   parent  = ctl.Parent;
+
+            _fullscreenImageForm = new Form()
+            {
+                FormBorderStyle = FormBorderStyle.None,
+                WindowState = FormWindowState.Maximized,
+                ShowInTaskbar = false,
+                KeyPreview = true
+            };
+
+            _fullscreenImageForm.FormClosing += delegate
+            {
+                ctl.Parent   = parent;
+                ctl.Location = og_loc;
+                ctl.Dock     = og_dock;
+                this._showingFullscreenImage = false;
+                this.Show();
+            };
+
+            _fullscreenImageForm.KeyUp += (KeyEventHandler)((s, e) =>
+            {
+                switch (e.KeyData)
+                {
+                    case Keys.End:
+                    case Keys.Back:
+                    case Keys.Control | Keys.W:
+                    case Keys.Alt | Keys.F4:
+                    case Keys.Escape:
+                        _fullscreenImageForm.Close();
+                        break;
+                }
+            });
+
+
+            // Move control to host
+            ctl.Parent   = _fullscreenImageForm;
+            ctl.Location = Point.Empty;
+            ctl.Dock     = DockStyle.Fill;
+
+            // And go full screen
+            _fullscreenImageForm.Show();
+
+            this._showingFullscreenImage = true;
+            this.Hide();
+        }
 
         private void ShowOnlyGridColor1_Click(object sender, EventArgs e)
         {
@@ -1076,6 +1135,9 @@ namespace WinkingCat
             imageDisplay1.DrawMode = SettingsManager.MiscSettings.Default_Draw_Mode;
             folderView1.FileSortOrder = SettingsManager.MainFormSettings.FileSortOrder;
             folderView1.FolderSortOrder = SettingsManager.MainFormSettings.FolderSortOrder;
+
+            _trayClickTimer.SetInterval(SettingsManager.MainFormSettings.Tray_Double_Click_Time);
+            _loadImageTimer.SetInterval(SettingsManager.MainFormSettings.Load_Image_Delay);
 
             if (SettingsManager.MainFormSettings.Show_Image_Display_Color_1_Only)
             {
