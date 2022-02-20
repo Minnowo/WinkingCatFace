@@ -141,7 +141,7 @@ namespace WinkingCat.HelperLibs
         }
         private NotifyFilters _watcherNotifyFilter = NotifyFilters.FileName | NotifyFilters.DirectoryName;
 
-        public string[] FilterFileExtensions = null;
+        public string[] FilterFileExtensions = new string[0] { };
 
         public List<string> DirectoryCache;        // list of sorted directories for the current directory
         public List<string> FileCache;             // list of sorted files for the current directory
@@ -222,37 +222,50 @@ namespace WinkingCat.HelperLibs
         {
             FileSystemEventArgs e = item as FileSystemEventArgs;
 
-            if (!FilterFileExtensions.Contains(PathHelper.GetFilenameExtension(e.Name)))
-                return;
-
             switch (e.ChangeType)
             {
                 case WatcherChangeTypes.Changed:
+                    
+                    if (!FilterFileExtensions.Contains(PathHelper.GetFilenameExtension(e.Name)))
+                        return;
+
                     OnItemChanged(e.Name);
                     break;
 
                 case WatcherChangeTypes.Created:
+                    
+                    if (Directory.Exists(e.FullPath))
+                    {
+                        BinaryInsertDirectoryCache(e.Name);
+                        return;
+                    }
+
+                    if (!FilterFileExtensions.Contains(PathHelper.GetFilenameExtension(e.Name)))
+                        return;
+
                     if (File.Exists(e.FullPath))
                     {
                         BinaryInsertFileCache(e.Name);
                     }
-                    if (Directory.Exists(e.FullPath))
-                    {
-                        BinaryInsertDirectoryCache(e.Name);
-                    }
+                    
                     break;
 
                 case WatcherChangeTypes.Deleted:
+
+                    if (DirectoryCache.Remove(e.Name))
+                    {
+                        OnDirectoryRemoved(e.Name);
+                        return;
+                    }
+
+                    if (!FilterFileExtensions.Contains(PathHelper.GetFilenameExtension(e.Name)))
+                        return;
 
                     if (FileCache.Remove(e.Name))
                     {
                         OnFileRemoved(e.Name);
                     }
 
-                    if (DirectoryCache.Remove(e.Name))
-                    {
-                        OnDirectoryRemoved(e.Name);
-                    }
                     break;
 
                 case WatcherChangeTypes.Renamed:
@@ -263,16 +276,41 @@ namespace WinkingCat.HelperLibs
 
         private void Process_ItemRenamed(RenamedEventArgs e)
         {
-            if (FileCache.Remove(e.OldName))
-            {
-                BinaryInsertFileCache(e.Name, false);
-                OnFileRenamed(e.Name, e.OldName);
-            }
-
             if (DirectoryCache.Remove(e.OldName))
             {
                 BinaryInsertDirectoryCache(e.Name, false);
                 OnDirectoryRenamed(e.Name, e.OldName);
+                return;
+            }
+
+            if (FilterFileExtensions != null)
+            {
+                // issue #4 -> files that are renamed are not added/removed from listview with extension filter
+                string extOld = PathHelper.GetFilenameExtension(e.OldName);
+                string extNew = PathHelper.GetFilenameExtension(e.Name);
+
+                if (FilterFileExtensions.Contains(extOld) && !FilterFileExtensions.Contains(extNew))
+                {
+                    if (FileCache.Remove(e.Name))
+                    {
+                        OnFileRemoved(e.Name);
+                    }
+                    return;
+                }
+                else if(!FilterFileExtensions.Contains(extOld) && FilterFileExtensions.Contains(extNew))
+                {
+                    if (File.Exists(e.FullPath))
+                    {
+                        BinaryInsertFileCache(e.Name);
+                    }
+                    return;
+                }
+            }
+
+            if (FileCache.Remove(e.OldName))
+            {
+                BinaryInsertFileCache(e.Name, false);
+                OnFileRenamed(e.Name, e.OldName);
             }
         }
 

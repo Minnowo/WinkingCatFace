@@ -136,7 +136,7 @@ namespace WinkingCat.Controls
             ListView_.AllowDrop = true;
 
             _FolderWatcher = new FolderWatcher(PathHelper.GetScreenshotFolder());
-            _FolderWatcher.WatcherNotifyFilter = NotifyFilters.FileName;
+            _FolderWatcher.WatcherNotifyFilter = NotifyFilters.FileName | NotifyFilters.DirectoryName;
             _FolderWatcher.FilterFileExtensions = InternalSettings.Readable_Image_Formats.ToArray();
             _FolderWatcher.FileRemoved += _FolderWatcher_FileRemoved;
             _FolderWatcher.DirectoryRemoved += _FolderWatcher_DirectoryRemoved;
@@ -201,7 +201,7 @@ namespace WinkingCat.Controls
                     }
                     else if (ListView_.FocusedItem.Tag is FileInfo)
                     {
-                        PathHelper.DeleteFileOrPath(((DirectoryInfo)ListView_.FocusedItem.Tag).FullName);
+                        PathHelper.DeleteFileOrPath(((FileInfo)ListView_.FocusedItem.Tag).FullName);
                     }
                 }
                 return;
