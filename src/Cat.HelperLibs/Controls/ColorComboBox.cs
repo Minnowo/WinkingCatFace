@@ -15,14 +15,9 @@ namespace WinkingCat.HelperLibs
     {
         public event ColorEventHandler ColorChanged;
 
-        public COLOR CurrentColor
-        {
-            get
-            {
-                return GetColor();
-            }
-        }
-
+        /// <summary>
+        /// The current values in the numeric up down.
+        /// </summary>
         public decimal[] Values
         {
             get
@@ -38,6 +33,10 @@ namespace WinkingCat.HelperLibs
                 }
             }
         }
+
+        /// <summary>
+        /// The minimum allowed values in the numeric up down.
+        /// </summary>
         public decimal[] MinValues
         {
             get
@@ -53,6 +52,10 @@ namespace WinkingCat.HelperLibs
                 }
             }
         }
+
+        /// <summary>
+        /// The maximum allowed values in the numberic up down.
+        /// </summary>
         public decimal[] MaxValues
         {
             get
@@ -69,6 +72,9 @@ namespace WinkingCat.HelperLibs
             }
         }
 
+        /// <summary>
+        /// The color space.
+        /// </summary>
         public ColorFormat ColorFormat
         {
             get
@@ -85,6 +91,9 @@ namespace WinkingCat.HelperLibs
             }
         }
 
+        /// <summary>
+        /// The number of decimal places.
+        /// </summary>
         public byte DecimalPlaces
         {
             get
@@ -107,6 +116,7 @@ namespace WinkingCat.HelperLibs
 
         [DefaultValue(true)]
         private ColorFormat colorFormat = ColorFormat.RGB;
+
         public ColorComboBox()
         {
             InitializeComponent();
@@ -156,6 +166,7 @@ namespace WinkingCat.HelperLibs
         {
             OnColorChanged(GetColor());
         }
+
         public void OnColorChanged(COLOR color)
         {
             if (ColorChanged != null)
@@ -207,6 +218,9 @@ namespace WinkingCat.HelperLibs
             preventOverflow = false;
         }
 
+        /// <summary>
+        /// Updates the minimum values for the numeric up downs.
+        /// </summary>
         public void UpdateMin()
         {
             if (this.minValues == null)
@@ -219,6 +233,9 @@ namespace WinkingCat.HelperLibs
 
         }
 
+        /// <summary>
+        /// Updates the maximum values for the numeric up downs.
+        /// </summary>
         public void UpdateMax()
         {
             if (this.minValues == null)
@@ -230,6 +247,9 @@ namespace WinkingCat.HelperLibs
             }
         }
 
+        /// <summary>
+        /// Updates the values shown in the numeric up downs.
+        /// </summary>
         public void UpdateValues()
         {
             if (this.values == null)
@@ -241,6 +261,9 @@ namespace WinkingCat.HelperLibs
             }
         }
 
+        /// <summary>
+        /// Updates the decimal places in the numeric up downs.
+        /// </summary>
         public void UpdateDecimalPlaces()
         {
             foreach (NumericUpDown control in this.Controls.OfType<NumericUpDown>())
@@ -255,26 +278,29 @@ namespace WinkingCat.HelperLibs
             {
                 case ColorFormat.RGB:
                     ResizeValues(3);
-                    values = new decimal[] { 1M, 1M, 1M };
+                    values    = new decimal[] { 1M, 1M, 1M };
                     minValues = new decimal[] { 0, 0, 0 };
                     maxValues = new decimal[] { 255M, 255M, 255M };
                     ColorComboBox_ClientSizeChanged(null, EventArgs.Empty);
                     break;
+
                 case ColorFormat.ARGB:
                     ResizeValues(4);
-                    values = new decimal[] { 1M, 1M, 1M, 1M };
+                    values    = new decimal[] { 1M, 1M, 1M, 1M };
                     minValues = new decimal[] { 0, 0, 0, 0 };
                     maxValues = new decimal[] { 255M, 255M, 255M, 255M };
                     ColorComboBox_ClientSizeChanged(null, EventArgs.Empty);
                     break;
+
                 case ColorFormat.HSB:
                 case ColorFormat.HSV:
                     ResizeValues(3);
-                    values = new decimal[] { 1M, 1M, 1M };
+                    values    = new decimal[] { 1M, 1M, 1M };
                     minValues = new decimal[] { 0, 0, 0 };
                     maxValues = new decimal[] { 360M, 100M, 100M };
                     ColorComboBox_ClientSizeChanged(null, EventArgs.Empty);
                     break;
+
                 case ColorFormat.HSL:
                     ResizeValues(3);
                     values = new decimal[] { 1M, 1M, 1M };
@@ -282,9 +308,10 @@ namespace WinkingCat.HelperLibs
                     maxValues = new decimal[] { 360M, 100M, 100M };
                     ColorComboBox_ClientSizeChanged(null, EventArgs.Empty);
                     break;
+
                 case ColorFormat.CMYK:
                     ResizeValues(4);
-                    values = new decimal[] { 1M, 1M, 1M, 1M };
+                    values    = new decimal[] { 1M, 1M, 1M, 1M };
                     minValues = new decimal[] { 0M, 0M, 0M, 0M };
                     maxValues = new decimal[] { 100M, 100M, 100M, 100M };
                     ColorComboBox_ClientSizeChanged(null, EventArgs.Empty);
@@ -334,14 +361,19 @@ namespace WinkingCat.HelperLibs
 
             for (int i = 0; i < values.Length; i++)
             {
-                NumericUpDown n = new NumericUpDown() { Text = "", Width = controlWidth, Height = this.Height };
-                n.Margin = new Padding(0);
-                n.Location = new Point(i * controlWidth, 0);
-                n.AutoSize = true;
-                n.DecimalPlaces = this.decimalPlaces;
-                n.Minimum = minValues[i];
-                n.Maximum = maxValues[i];
-                n.Value = values[i];
+                NumericUpDown n = new NumericUpDown()
+                {
+                    Width         = controlWidth,
+                    Height        = this.Height,
+                    Margin        = new Padding(0),
+                    Location      = new Point(i * controlWidth, 0),
+                    DecimalPlaces = this.decimalPlaces,
+                    Minimum       = minValues[i],
+                    Maximum       = maxValues[i],
+                    Value         = values[i],
+                    AutoSize      = true
+                };
+                
                 n.ValueChanged += NumericUpDown_ValueChanged;
                 this.Controls.Add(n);
             }

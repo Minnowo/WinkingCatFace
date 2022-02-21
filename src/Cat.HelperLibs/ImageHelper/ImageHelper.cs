@@ -492,7 +492,7 @@ namespace WinkingCat.HelperLibs
         /// </summary>
         /// <param name="path"> The path to the image. </param>
         /// <returns> A bitmap object if the image is loaded, otherwise null. </returns>
-        public static Bitmap LoadImageAsBitmap(string path)
+        public static Bitmap LoadImageAsBitmap(string path, bool showError = false)
         {
             if (string.IsNullOrEmpty(path) || !File.Exists(path))
                 return null;
@@ -543,11 +543,13 @@ namespace WinkingCat.HelperLibs
                         result.Tag = ImgFormat.wrm;
                         return result;
                 }
-
             }
             catch (Exception e)
             {
-                e.ShowError();
+                if (showError)
+                {
+                    e.ShowError();
+                }
             }
             return null;
         }
@@ -557,7 +559,7 @@ namespace WinkingCat.HelperLibs
             return await Task.Run(() => { return LoadImage(path); });
         }
 
-        public static IMAGE LoadImage(string path)
+        public static IMAGE LoadImage(string path, bool showError = false)
         {
             if (string.IsNullOrEmpty(path) || !File.Exists(path))
                 return null;
@@ -610,7 +612,10 @@ namespace WinkingCat.HelperLibs
             }
             catch (Exception e)
             {
-                e.ShowError();
+                if (showError)
+                {
+                    e.ShowError();
+                }
             }
             return null;
         }

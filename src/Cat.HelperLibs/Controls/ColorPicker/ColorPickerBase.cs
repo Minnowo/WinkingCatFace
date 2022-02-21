@@ -14,6 +14,9 @@ namespace WinkingCat.HelperLibs
     {
         public event ColorEventHandler ColorChanged;
 
+        /// <summary>
+        /// Is the crosshair visible.
+        /// </summary>
         public bool CrosshairVisible
         {
             get
@@ -27,6 +30,9 @@ namespace WinkingCat.HelperLibs
             }
         }
 
+        /// <summary>
+        /// The current color.
+        /// </summary>
         public COLOR SelectedColor
         {
             get
@@ -51,7 +57,9 @@ namespace WinkingCat.HelperLibs
             }
         }
 
-
+        /// <summary>
+        /// The color space being drawn.
+        /// </summary>
         public ColorSpaceDrawStyle DrawStyle
         {
             get
@@ -155,39 +163,28 @@ namespace WinkingCat.HelperLibs
 
         private void MouseDown_Event(object sender, MouseEventArgs e)
         {
-            switch (e.Button)
+            if(e.Button == MouseButtons.Left)
             {
-                case MouseButtons.Left:
-                    crosshairVisible = true;
-                    isLeftClicking = true;
-                    mouseMoveTimer.Start();
-
-                    break;
-                case MouseButtons.Right:
-                    break;
-                case MouseButtons.Middle:
-                    break;
+                crosshairVisible = true;
+                isLeftClicking = true;
+                mouseMoveTimer.Start();
             }
         }
 
         private void MouseUp_Event(object sender, MouseEventArgs e)
         {
-            switch (e.Button)
+            if(e.Button == MouseButtons.Left)
             {
-                case MouseButtons.Left:
-                    isLeftClicking = false;
-                    mouseMoveTimer.Stop();
-                    break;
-                case MouseButtons.Right:
-                    break;
-                case MouseButtons.Middle:
-                    break;
+                isLeftClicking = false;
+                mouseMoveTimer.Stop();
             }
         }
+
         private void MouseEnter_Event(object sender, EventArgs e)
         {
 
         }
+
         public static Bitmap CreateCheckerPattern(int width, int height, Color checkerColor1, Color checkerColor2)
         {
             Bitmap bmp = new Bitmap(width * 2, height * 2);
@@ -204,6 +201,7 @@ namespace WinkingCat.HelperLibs
 
             return bmp;
         }
+
         private void Paint_Event(object sender, PaintEventArgs e)
         {
             Graphics g = e.Graphics;
@@ -217,7 +215,7 @@ namespace WinkingCat.HelperLibs
 
                     bmp = new Bitmap(clientWidth, clientHeight, PixelFormat.Format24bppRgb);
 
-                    ImageProcessor.DrawCheckers(bmp,32, 
+                    ImageProcessor.DrawCheckers(bmp, 32, 
                         SystemColors.ControlLight,
                         SystemColors.ControlLightLight);
 

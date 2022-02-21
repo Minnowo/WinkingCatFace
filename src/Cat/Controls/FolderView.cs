@@ -113,6 +113,10 @@ namespace WinkingCat.Controls
         /// </summary>
         private bool _PreventOverflow = false;
 
+        private int _lastRetrieveVirtualItemIndex = -1;
+
+        private ListViewItem _lastRetrieveVirtualItem = null;
+
         public FolderView()
         {
             InitializeComponent();
@@ -418,59 +422,71 @@ namespace WinkingCat.Controls
 
         private void listView1_RetrieveVirtualItem(object sender, RetrieveVirtualItemEventArgs e)
         {
-            //Caching is not required but improves performance on large sets.
-            //To leave out caching, don't connect the CacheVirtualItems event 
-            //and make sure myCache is null.
-            //check to see if the requested item is currently in the cache
-            if (_ListViewItemCache != null && e.ItemIndex >= _CahceItem1 && e.ItemIndex < _CahceItem1 + _ListViewItemCache.Length)
+            int iIndex = e.ItemIndex;
+
+            if (_lastRetrieveVirtualItemIndex == iIndex)
             {
-                //A cache hit, so get the ListViewItem from the cache instead of making a new one.
-                e.Item = _ListViewItemCache[e.ItemIndex - _CahceItem1];
+                e.Item = _lastRetrieveVirtualItem;
+                return;
             }
-            else
+
+            _lastRetrieveVirtualItemIndex = iIndex;
+
+            if (iIndex >= _CahceItem1 && iIndex < _CahceItem1 + _ListViewItemCache.Length)
             {
-                if (e.ItemIndex < _FolderWatcher.DirectoryCache.Count)
+                _lastRetrieveVirtualItem = _ListViewItemCache[iIndex - _CahceItem1];
+
+                e.Item = _lastRetrieveVirtualItem;
+                return;
+            }
+
+            int dirCount = _FolderWatcher.DirectoryCache.Count;
+            int fileCount = _FolderWatcher.FileCache.Count;
+
+            if (iIndex < dirCount)
+            {
+                _FolderWatcher.WaitThreadsFinished(false);
+                DirectoryInfo dinfo = new DirectoryInfo(_FolderWatcher.DirectoryCache[e.ItemIndex]);
+                ListViewItem ditem = new ListViewItem(dinfo.Name);
+                ditem.SubItems.Add("");
+                ditem.Tag = dinfo;
+
+                _lastRetrieveVirtualItem = ditem;
+                e.Item = ditem;
+                return;
+            }
+
+            _FolderWatcher.WaitThreadsFinished();
+
+            int index = iIndex - dirCount;
+
+            FileInfo finfo;
+            ListViewItem fitem;
+
+            if (index < fileCount)
+            {
+                finfo = new FileInfo(_FolderWatcher.FileCache[index]);
+                fitem = new ListViewItem(finfo.Name);
+
+                if (finfo.Exists)
                 {
-                    _FolderWatcher.WaitThreadsFinished(false);
-                    DirectoryInfo dinfo = new DirectoryInfo(_FolderWatcher.DirectoryCache[e.ItemIndex]);
-                    ListViewItem ditem = new ListViewItem(dinfo.Name);
-                    ditem.SubItems.Add("");
-                    ditem.Tag = dinfo;
-
-                    e.Item = ditem;
-                    return;
-                }
-                _FolderWatcher.WaitThreadsFinished();
-
-                int index = e.ItemIndex - _FolderWatcher.DirectoryCache.Count;
-
-                FileInfo finfo;
-                ListViewItem fitem;
-
-                if (index < _FolderWatcher.FileCache.Count)
-                {
-                    finfo = new FileInfo(_FolderWatcher.FileCache[index]);
-                    fitem = new ListViewItem(finfo.Name);
-
-                    if (finfo.Exists)
-                    {
-                        fitem.SubItems.Add(Helper.SizeSuffix(finfo.Length, 2));
-                    }
-                    else
-                    {
-                        fitem.SubItems.Add(Helper.SizeSuffix(0, 2));
-                    }
-
-                    fitem.Tag = finfo;
+                    fitem.SubItems.Add(Helper.SizeSuffix(finfo.Length, 2));
                 }
                 else
                 {
-                    fitem = new ListViewItem();
-                    fitem.SubItems.Add("");
+                    fitem.SubItems.Add(Helper.SizeSuffix(0, 2));
                 }
 
-                e.Item = fitem;
+                fitem.Tag = finfo;
             }
+            else
+            {
+                fitem = new ListViewItem();
+                fitem.SubItems.Add("");
+            }
+
+            _lastRetrieveVirtualItem = fitem;
+            e.Item = fitem;
         }
 
 
