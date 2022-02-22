@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 
 
@@ -146,13 +147,20 @@ namespace WinkingCat.HelperLibs
         public List<string> DirectoryCache;        // list of sorted directories for the current directory
         public List<string> FileCache;             // list of sorted files for the current directory
 
+        private readonly object _folderLock = new object();
+        private readonly object _fileLock = new object();
+
+
         private WorkerQueue _ProcessFileSystemChange = new WorkerQueue();
 
         private List<FileSystemWatcher> watchers = new List<FileSystemWatcher>();
         private string directory;
 
-        private Task DirectorySortThread;
-        private Task FileSortThread;
+        Task _sortThread;
+
+        EventWaitHandle _EventWaitHandle = new EventWaitHandle(false, EventResetMode.ManualReset);
+
+
         public FolderWatcher()
         {
             _ProcessFileSystemChange.ProcessFile += Process;
@@ -161,7 +169,7 @@ namespace WinkingCat.HelperLibs
             CreateWatchers(Directory.GetCurrentDirectory(), false);
             FileCache = new List<string>();
             DirectoryCache = new List<string>();
-            UpdateDirectory("");
+            _sortThread = UpdateDirectory("");
         }
 
 
@@ -181,7 +189,10 @@ namespace WinkingCat.HelperLibs
             }
 
             CreateWatchers(path, true);
-            SetFiles(path);
+
+            _sortThread = SetFiles(path);
+            /*_sortThread.Wait();
+            _sortThread.Dispose();*/
         }
 
         public string GetFile(int index)
@@ -208,19 +219,21 @@ namespace WinkingCat.HelperLibs
 
         public int GetFileIndex(string filename)
         {
-            WaitThreadsFinished(true);
             return BinarySearchItemIndex(this.FileCache, filename);
         }
 
         public int GetFolderIndex(string foldername)
         {
-            WaitThreadsFinished(false);
             return BinarySearchItemIndex(this.DirectoryCache, foldername);
         }
 
         private void Process(object item)
         {
+            _EventWaitHandle.WaitOne();
+
             FileSystemEventArgs e = item as FileSystemEventArgs;
+
+            Console.WriteLine(e.ChangeType);
 
             switch (e.ChangeType)
             {
@@ -314,37 +327,6 @@ namespace WinkingCat.HelperLibs
             }
         }
 
-
-
-        /// <summary>
-        /// blocks the thread until the Sortthread is completed
-        /// </summary>
-        public void WaitThreadsFinished(bool isFileThread)
-        {
-            if (isFileThread)
-            {
-                if (FileSortThread == null)
-                    return;
-
-                if (!FileSortThread.IsCompleted)
-                {
-                    FileSortThread.Wait();
-                }
-            }
-            else
-            {
-                if (DirectorySortThread == null)
-                    return;
-                if (!DirectorySortThread.IsCompleted)
-                    DirectorySortThread.Wait();
-            }
-        }
-
-        public void WaitThreadsFinished()
-        {
-            WaitThreadsFinished(true);
-            WaitThreadsFinished(false);
-        }
 
         /// <summary>
         /// Returns the index of the given filename.
@@ -455,40 +437,57 @@ namespace WinkingCat.HelperLibs
             _ProcessFileSystemChange.EnqueueItem(e);
         }
 
-        private void SetFiles(string path)
+        private async Task SetFiles(string path)
         {
-            WaitThreadsFinished();
+            _EventWaitHandle.Reset();
 
-            FileSortThread = Task.Run(() =>
+            Task files = Task.Run(() =>
             {
-                FileCache.Clear();
-                if (FilterFileExtensions == null)
+                lock (_fileLock)
                 {
-                    foreach (string i in Directory.EnumerateFiles(path).OrderByNatural(e => e, StringComparer.CurrentCulture, SortOrderFile != -1))
+                    FileCache.Clear();
+                    if (FilterFileExtensions == null)
                     {
-                        FileCache.Add(Path.GetFileName(i));
-                    }
-                }
-                else
-                {
-                    foreach (string i in Directory.EnumerateFiles(path).OrderByNatural(e => e, StringComparer.CurrentCulture, SortOrderFile != -1))
-                    {
-                        if (FilterFileExtensions.Contains(PathHelper.GetFilenameExtension(i)))
+                        foreach (string i in Directory.EnumerateFiles(path).OrderByNatural(e => e, StringComparer.CurrentCulture, SortOrderFile != -1))
                         {
-                            FileCache.Add(Path.GetFileName(i));
+                                FileCache.Add(Path.GetFileName(i));
+                        }
+                    }
+                    else
+                    {
+                        foreach (string i in Directory.EnumerateFiles(path).OrderByNatural(e => e, StringComparer.CurrentCulture, SortOrderFile != -1))
+                        {
+                            if (FilterFileExtensions.Contains(PathHelper.GetFilenameExtension(i)))
+                            {
+                                FileCache.Add(Path.GetFileName(i));
+                            }
                         }
                     }
                 }
             });
 
-            DirectorySortThread = Task.Run(() =>
+            Task folders = Task.Run(() =>
             {
-                DirectoryCache.Clear();
-                foreach (string i in Directory.EnumerateDirectories(path).OrderByNatural(e => e, StringComparer.CurrentCulture, SortOrderFolder != -1))
+                lock (_folderLock)
                 {
-                    DirectoryCache.Add(Path.GetFileName(i));
+
+                    DirectoryCache.Clear();
+
+                    foreach(string i in Directory.EnumerateDirectories(path).OrderByNatural(e => 
+                        e, StringComparer.CurrentCulture, SortOrderFolder != -1))
+                    {
+                        DirectoryCache.Add(Path.GetFileName(i));
+                    }
                 }
             });
+
+            await files;
+            await folders;
+
+            files.Dispose();
+            folders.Dispose();
+
+            _EventWaitHandle.Set();
         }
 
 
@@ -520,30 +519,26 @@ namespace WinkingCat.HelperLibs
 
         public int GetTotalCount()
         {
-            WaitThreadsFinished();
             return FileCache.Count + DirectoryCache.Count;
         }
 
         public int GetFileCount()
         {
-            WaitThreadsFinished();
             return FileCache.Count;
         }
 
         public int GetDirectoryCount()
         {
-            WaitThreadsFinished();
             return DirectoryCache.Count();
         }
 
-        public void UpdateDirectory(string path)
+        public async Task UpdateDirectory(string path)
         {
             _AboveDrives = false;
             directory = path;
 
             if (!Directory.Exists(path))
             {
-                WaitThreadsFinished();
 
                 DirectoryCache.Clear();
                 FileCache.Clear();
@@ -563,7 +558,7 @@ namespace WinkingCat.HelperLibs
             }
 
             UpdateWatchers(path, true);
-            SetFiles(directory);
+            await SetFiles(directory);
         }
 
         private void OnFileAdded(string name)
@@ -574,6 +569,7 @@ namespace WinkingCat.HelperLibs
 
         private void OnFileRemoved(string name)
         {
+            Console.WriteLine("removed " + name);
             if (FileRemoved != null)
                 FileRemoved.Invoke(name);
         }
@@ -618,16 +614,13 @@ namespace WinkingCat.HelperLibs
                 fsw.Dispose();
             }
 
-            WaitThreadsFinished();
             this.watchers.Clear();
 
             this._ProcessFileSystemChange.ProcessFile -= Process;
             this._ProcessFileSystemChange?.Dispose();
 
             this.FileCache.Clear();
-            this.FileSortThread?.Dispose();
             this.DirectoryCache.Clear();
-            this.DirectorySortThread?.Dispose();
 
             GC.SuppressFinalize(this);
         }

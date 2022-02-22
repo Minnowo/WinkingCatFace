@@ -18,6 +18,11 @@ namespace WinkingCat.HelperLibs
     {
         public static IEnumerable<T> OrderByNatural<T>(this IEnumerable<T> items, Func<T, string> selector, StringComparer stringComparer = null, bool ascendingOrder = true)
         {
+            if(stringComparer == null)
+            {
+                stringComparer = StringComparer.CurrentCulture;
+            }
+
             Regex regex = new Regex(@"\d+", RegexOptions.Compiled);
 
             int maxDigits = items
@@ -25,9 +30,9 @@ namespace WinkingCat.HelperLibs
                           .Max() ?? 0;
 
             if(ascendingOrder)
-                return items.OrderBy(i => regex.Replace(selector(i), match => match.Value.PadLeft(maxDigits, '0')), stringComparer ?? StringComparer.CurrentCulture);
+                return items.OrderBy(i => regex.Replace(selector(i), match => match.Value.PadLeft(maxDigits, '0')), stringComparer);
 
-            return items.OrderByDescending(i => regex.Replace(selector(i), match => match.Value.PadLeft(maxDigits, '0')), stringComparer ?? StringComparer.CurrentCulture);
+            return items.OrderByDescending(i => regex.Replace(selector(i), match => match.Value.PadLeft(maxDigits, '0')), stringComparer);
         }
 
        

@@ -122,6 +122,7 @@ namespace WinkingCat.Controls
             InitializeComponent();
 
             this.textBox1.ShortcutsEnabled = true;
+            _ListViewItemCache = new ListViewItem[0];
 
             // SuggestAppend is nice, but if you hit ctrl + A while its suggesting it just empties the textbox
             this.textBox1.AutoCompleteMode = AutoCompleteMode.Suggest;
@@ -156,7 +157,7 @@ namespace WinkingCat.Controls
             ListView_.AutoResizeColumns(ColumnHeaderAutoResizeStyle.HeaderSize);
 
             _ListviewRefreshTimer.Tick += _ListviewRefreshTimer_Tick;
-            _ListviewRefreshTimer.SetInterval(1000);
+            _ListviewRefreshTimer.SetInterval(500);
 
             UpdateTheme();
 
@@ -167,6 +168,8 @@ namespace WinkingCat.Controls
 
         private void _ListviewRefreshTimer_Tick(object sender, EventArgs e)
         {
+            ListView_.VirtualListSize += changeVirtualSizeBy;
+            changeVirtualSizeBy = 0;
             ForceListviewRedraw();
             _ListviewRefreshTimer.Stop();
         }
@@ -372,7 +375,7 @@ namespace WinkingCat.Controls
             this._PreventOverflow = false;
         }
 
-        public void LoadDirectory(string path, bool update = false)
+        public async Task LoadDirectory(string path, bool update = false)
         {
             if (_CurrentDirectory != path && !update)
             {
@@ -389,7 +392,7 @@ namespace WinkingCat.Controls
                 Directory.SetCurrentDirectory(PathHelper.GetScreenshotFolder());
             }
             
-            _FolderWatcher.UpdateDirectory(path);
+            await _FolderWatcher.UpdateDirectory(path);
             
             this.ListView_.VirtualListSize = _FolderWatcher.GetTotalCount();
             UpdateTextbox();
@@ -445,7 +448,6 @@ namespace WinkingCat.Controls
 
             if (iIndex < dirCount)
             {
-                _FolderWatcher.WaitThreadsFinished(false);
                 DirectoryInfo dinfo = new DirectoryInfo(_FolderWatcher.DirectoryCache[e.ItemIndex]);
                 ListViewItem ditem = new ListViewItem(dinfo.Name);
                 ditem.SubItems.Add("");
@@ -455,8 +457,6 @@ namespace WinkingCat.Controls
                 e.Item = ditem;
                 return;
             }
-
-            _FolderWatcher.WaitThreadsFinished();
 
             int index = iIndex - dirCount;
 
@@ -515,7 +515,6 @@ namespace WinkingCat.Controls
             // start and ends in directory cache
             if (end < dirCount)
             {
-                _FolderWatcher.WaitThreadsFinished(false);
                 for (int index = start; index <= end; index++)
                 {
                     DirectoryInfo dinfo;
@@ -543,7 +542,6 @@ namespace WinkingCat.Controls
             // starts in directory cache, ends in file cache
             if (start < dirCount)
             {
-                _FolderWatcher.WaitThreadsFinished(false);
                 for (int index = start; index < _FolderWatcher.DirectoryCache.Count; index++)
                 {
                     DirectoryInfo dinfo;
@@ -567,7 +565,6 @@ namespace WinkingCat.Controls
                     count++;
                 }
 
-                _FolderWatcher.WaitThreadsFinished(true);
                 for (int index = 0; count < length; index++)
                 {
                     FileInfo finfo;
@@ -602,7 +599,6 @@ namespace WinkingCat.Controls
             }
 
             // starts and ends in file cache
-            _FolderWatcher.WaitThreadsFinished(true);
             for (int index = start - dirCount; count < length; index++)
             {
                 FileInfo finfo;
@@ -694,82 +690,96 @@ namespace WinkingCat.Controls
             }
         }
 
+        int changeVirtualSizeBy = 0;
+
         // really need to fix this cause its SUPER slow for a large amount of files 
         // probably gonna just use a timer to redraw the listview after 500ms or smth
         private void _FolderWatcher_DirectoryAdded(string name)
         {
-            this.ListView_.InvokeSafe((Action)(() =>
+            changeVirtualSizeBy++;
+            _ListviewRefreshTimer.Start();
+            /*this.ListView_.InvokeSafe((Action)(() =>
             {
                 this.ListView_.VirtualListSize++;
                 // this.ForceListviewRedraw();
                 _ListviewRefreshTimer.Start();
-            }));
+            }));*/
         }
 
         private void _FolderWatcher_FileAdded(string name)
         {
-            this.ListView_.InvokeSafe((Action)(() =>
+            changeVirtualSizeBy++;
+            _ListviewRefreshTimer.Start();
+            /*this.ListView_.InvokeSafe((Action)(() =>
             {
                 this.ListView_.VirtualListSize++;
                 _ListviewRefreshTimer.Start();
                 // this.ForceListviewRedraw();
-            }));
+            }));*/
         }
 
         private void _FolderWatcher_DirectoryRemoved(string name)
         {
-            this.ListView_.InvokeSafe((Action)(() =>
+            changeVirtualSizeBy++;
+                _ListviewRefreshTimer.Start();
+            /*this.ListView_.InvokeSafe((Action)(() =>
             {
                 this.ListView_.VirtualListSize--;
                 _ListviewRefreshTimer.Start();
                 // this.ForceListviewRedraw();
-            }));
+            }));*/
         }
 
         private void _FolderWatcher_FileRemoved(string name)
         {
-            this.ListView_.InvokeSafe((Action)(() =>
+            changeVirtualSizeBy--;
+                _ListviewRefreshTimer.Start();
+            /*this.ListView_.InvokeSafe((Action)(() =>
             {
                 this.ListView_.VirtualListSize--;
                 _ListviewRefreshTimer.Start();
                 // this.ForceListviewRedraw();
-            }));
+            }));*/
         }
 
         private void _FolderWatcher_FileRenamed(string newName, string oldName)
         {
-            this.InvokeSafe((Action)(() =>
+                _ListviewRefreshTimer.Start();
+            /*this.InvokeSafe((Action)(() =>
             {
                 _ListviewRefreshTimer.Start();
 
                 // this.ForceListviewRedraw();
-            }));
+            }));*/
         }
 
         private void _FolderWatcher_DirectoryRenamed(string newName, string oldName)
         {
-            this.InvokeSafe((Action)(() =>
+                _ListviewRefreshTimer.Start();
+            /*this.InvokeSafe((Action)(() =>
             {
                 _ListviewRefreshTimer.Start();
                 //this.ForceListviewRedraw();
-            }));
+            }));*/
         }
 
         private void _FolderWatcher_ItemChanged(string name)
         {
-            this.InvokeSafe((Action)(() =>
+                _ListviewRefreshTimer.Start();
+            /*this.InvokeSafe((Action)(() =>
             {
                 _ListviewRefreshTimer.Start();
                 // this.ForceListviewRedraw();
-            }));
+            }));*/
         }
 
         private void _FolderWatcher_SortOrderChanged(int order)
         {
-            this.InvokeSafe((Action)(() =>
+                _ListviewRefreshTimer.Start();
+            /*this.InvokeSafe((Action)(() =>
             {
                 this.ForceListviewRedraw();
-            }));
+            }));*/
         }
 
     }

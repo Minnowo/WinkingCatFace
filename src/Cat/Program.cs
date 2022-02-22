@@ -22,6 +22,13 @@ namespace WinkingCat
         static void Main(string[] args)
         {
             Directory.SetCurrentDirectory(AppContext.BaseDirectory);
+
+            if(File.Exists(".MultiInstance"))
+            {
+                Run();
+                return;
+            }
+
             using (InstanceManager instanceManager = new InstanceManager(true, args, SingleInstanceCallback))
             {
                 Run();
