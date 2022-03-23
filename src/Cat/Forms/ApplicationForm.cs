@@ -53,7 +53,7 @@ namespace WinkingCat
             folderView1.ListView_.View = View.Details;
             folderView1.ListView_.Columns.Add(new ColumnHeader() { Name = "Filename", Text = "Filename", Width=500});
             folderView1.ListView_.Columns.Add(new ColumnHeader() { Name = "Size", Text = "Size", Width =30 });
-            folderView1.CurrentDirectory = PathHelper.GetScreenshotFolder();
+            folderView1.SetCurrentDirectory(PathHelper.GetScreenshotFolder());
 
             _preventOverflow = true;
 
@@ -1169,14 +1169,14 @@ namespace WinkingCat
             OpenExplorerAtSelectedItem();
         }
 
-        private void SetCurrentFolderToScreenshotFolder_Click(object sender, EventArgs e)
+        private async void SetCurrentFolderToScreenshotFolder_Click(object sender, EventArgs e)
         {
-            folderView1.CurrentDirectory = PathHelper.GetScreenshotFolder();
+            await folderView1.SetCurrentDirectory(PathHelper.GetScreenshotFolder());
         }
 
-        private void SetCurrentFolderToDrivesFolder_Click(object sender, EventArgs e)
+        private async void SetCurrentFolderToDrivesFolder_Click(object sender, EventArgs e)
         {
-            folderView1.CurrentDirectory = InternalSettings.DRIVES_FOLDERNAME;
+            await folderView1.SetCurrentDirectory(InternalSettings.DRIVES_FOLDERNAME);
         }
 
 

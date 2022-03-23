@@ -48,21 +48,6 @@ namespace WinkingCat.Controls
         public string CurrentDirectory
         {
             get { return _CurrentDirectory; }
-            set
-            {
-                if (this._CurrentDirectory == value)
-                    return;
-
-                if (!_Undo)
-                {
-                    _FolderUndoHistory.Push(this._CurrentDirectory);
-                    _FolderRedoHistory.Clear();
-                }
-
-                this.DirectorySelectedIndexCache[_CurrentDirectory] = ListView_.SelectedIndex1;
-                this._CurrentDirectory = value;
-                this.LoadDirectory(value);
-            }
         }
         private string _CurrentDirectory = "";
 
@@ -168,11 +153,70 @@ namespace WinkingCat.Controls
             _ListviewRefreshTimer.SetInterval(500);
 
             UpdateTheme();
-
-            CurrentDirectory = "C:\\";// PathHelper.GetScreenshotFolder();
-
             ApplicationStyles.UpdateThemeEvent += UpdateTheme;
         }
+
+
+
+
+
+
+
+
+
+        public async Task SetCurrentDirectory(string path)
+        {
+            if (this._CurrentDirectory == path)
+                return;
+
+            if (!_Undo)
+            {
+                _FolderUndoHistory.Push(this._CurrentDirectory);
+                _FolderRedoHistory.Clear();
+                this.DirectorySelectedIndexCache[_CurrentDirectory] = ListView_.SelectedIndex1;
+            }
+
+            this._CurrentDirectory = path;
+            await this.LoadDirectoryAsync(path);
+        }
+
+        public async Task LoadDirectoryAsync(string path)
+        {
+            if (!string.IsNullOrEmpty(path) && path != InternalSettings.DRIVES_FOLDERNAME)
+            {
+                Directory.SetCurrentDirectory(path);
+            }
+            else
+            {
+                Directory.SetCurrentDirectory(PathHelper.GetScreenshotFolder());
+            }
+
+            await _FolderWatcher.UpdateDirectory(path);
+
+            this.ListView_.VirtualListSize = _FolderWatcher.GetTotalCount();
+            UpdateTextbox();
+            ForceListviewRedraw();
+
+            GC.Collect();
+        }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
         private void _ListviewRefreshTimer_Tick(object sender, EventArgs e)
         {
@@ -259,27 +303,26 @@ namespace WinkingCat.Controls
         /// <summary>
         /// Moves the current directory to its parent.
         /// </summary>
-        public void UpDirectoryLevel()
+        public async Task UpDirectoryLevel()
         {
             if (!PathHelper.IsValidDirectoryPath(this.CurrentDirectory))
                 return;
 
             if (string.IsNullOrEmpty(this.CurrentDirectory) || CurrentDirectory == InternalSettings.DRIVES_FOLDERNAME)
             {
-                this.LoadDirectory(InternalSettings.DRIVES_FOLDERNAME);
-                this.UpdateTextbox();
+                await this.SetCurrentDirectory(InternalSettings.DRIVES_FOLDERNAME);
                 return;
             }
 
             DirectoryInfo info = new DirectoryInfo(this.CurrentDirectory);
             if (info.Parent != null)
             {
-                this.UpdateDirectory(info.Parent.FullName);
+                await this.SetCurrentDirectory(info.Parent.FullName);
                 this.SetLastDirectoryIndex();
             }
             else
             {
-                this.LoadDirectory(InternalSettings.DRIVES_FOLDERNAME);
+                await this.SetCurrentDirectory(InternalSettings.DRIVES_FOLDERNAME);
             }
 
             this.UpdateTextbox();
@@ -303,7 +346,7 @@ namespace WinkingCat.Controls
                 return;
             }
             this._FolderUndoHistory.Push(this._CurrentDirectory);
-            await this.LoadDirectory(newDir);
+            await this.SetCurrentDirectory(newDir);
             this.SetLastDirectoryIndex();
             this.UpdateTextbox();
 
@@ -330,7 +373,7 @@ namespace WinkingCat.Controls
             }
 
             this._FolderRedoHistory.Push(this._CurrentDirectory);
-            await this.LoadDirectory(newDir);
+            await this.SetCurrentDirectory(newDir);
             this.SetLastDirectoryIndex();
             this.UpdateTextbox();
 
@@ -344,7 +387,7 @@ namespace WinkingCat.Controls
                 return;
 
             int index = this.DirectorySelectedIndexCache[_CurrentDirectory];
-
+            
             if (this.ListView_.Items.Count <= index || index < 0)
                 return;
 
@@ -358,58 +401,10 @@ namespace WinkingCat.Controls
             this.ListView_.Invalidate();
         }
 
-        /// <summary>
-        /// Changes the current directory to the given path and loads the new directory
-        /// </summary>
-        /// <param name="path">The new directory path.</param>
-        /// <param name="updateTextbox">Should the textbox at the top be changed.</param>
-        public void UpdateDirectory(string path, bool updateTextbox = false)
-        {
-            if (!Directory.Exists(path))
-                return;
+        
 
-            this._PreventOverflow = true;
-            path = new DirectoryInfo(path).FullName;
 
-            if (!path.EndsWith("\\"))
-                path += '\\';
-
-            this.CurrentDirectory = path;
-
-            if (updateTextbox)
-            {
-                UpdateTextbox();
-            }
-            this._PreventOverflow = false;
-        }
-
-        public async Task LoadDirectory(string path, bool update = false)
-        {
-            if (_CurrentDirectory != path && !update)
-            {
-                CurrentDirectory = path;
-                return;
-            }
-
-            if (!string.IsNullOrEmpty(path) && path != InternalSettings.DRIVES_FOLDERNAME)
-            {
-                Directory.SetCurrentDirectory(path);
-            }
-            else
-            {
-                Directory.SetCurrentDirectory(PathHelper.GetScreenshotFolder());
-            }
-
-            await _FolderWatcher.UpdateDirectory(path);
-
-            this.ListView_.VirtualListSize = _FolderWatcher.GetTotalCount();
-            UpdateTextbox();
-            ForceListviewRedraw();
-
-            GC.Collect();
-        }
-
-        private void ListView1_ItemActivate(object sender, EventArgs e)
+        private async void ListView1_ItemActivate(object sender, EventArgs e)
         {
             if (_PreventOverflow || ListView_.SelectedIndex1 == -1)
                 return;
@@ -426,7 +421,7 @@ namespace WinkingCat.Controls
             }
             else if (ListView_.Items[ListView_.SelectedIndex1].Tag is DirectoryInfo)
             {
-                UpdateDirectory(((DirectoryInfo)ListView_.Items[ListView_.SelectedIndex1].Tag).FullName, true);
+                await SetCurrentDirectory(((DirectoryInfo)ListView_.Items[ListView_.SelectedIndex1].Tag).FullName);
             }
         }
 
@@ -639,9 +634,9 @@ namespace WinkingCat.Controls
             }
         }
 
-        private void UpDirectoryLevel_Click(object sender, EventArgs e)
+        private async void UpDirectoryLevel_Click(object sender, EventArgs e)
         {
-            UpDirectoryLevel();
+            await UpDirectoryLevel();
         }
 
         private void textBox1_PreviewKeyDown(object sender, PreviewKeyDownEventArgs e)
@@ -652,22 +647,29 @@ namespace WinkingCat.Controls
             }
         }
 
-        private void textBox1_TextChanged(object sender, EventArgs e)
+        private async void textBox1_TextChanged(object sender, EventArgs e)
         {
             if (_PreventOverflow)
                 return;
+
+            this._PreventOverflow = true;
 
             string text = textBox1.Text.Trim();
 
             if (string.IsNullOrEmpty(text) || text == InternalSettings.DRIVES_FOLDERNAME)
             {
-                LoadDirectory(InternalSettings.DRIVES_FOLDERNAME, true);
+                await SetCurrentDirectory(InternalSettings.DRIVES_FOLDERNAME);
+                this.textBox1.Text = "";
             }
-
-            if (PathHelper.IsValidDirectoryPath(text))
+            else if (PathHelper.IsValidDirectoryPath(text))
             {
-                UpdateDirectory(text);
+                if (Directory.Exists(text))
+                {
+                    await SetCurrentDirectory(text);
+                }
             }
+         
+            this._PreventOverflow = false;
         }
 
         private void textBox1_Leave(object sender, EventArgs e)
@@ -693,6 +695,14 @@ namespace WinkingCat.Controls
 
                 case Keys.Delete:
                     DeleteSelectedItems();
+                    break;
+
+                case Keys.Control | Keys.Z:
+                    PreviousDirectory();
+                    break;
+
+                case Keys.Control | Keys.Y:
+                    UndoPreviousDirectory();
                     break;
             }
         }

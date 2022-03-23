@@ -359,7 +359,6 @@
             this.folderView1.AskConfirmationOnDelete = true;
             this.folderView1.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
             this.folderView1.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(42)))), ((int)(((byte)(47)))), ((int)(((byte)(56)))));
-            this.folderView1.CurrentDirectory = "C:\\";
             this.folderView1.Dock = System.Windows.Forms.DockStyle.Fill;
             this.folderView1.FileSortOrder = -1;
             this.folderView1.FolderSortOrder = 1;
