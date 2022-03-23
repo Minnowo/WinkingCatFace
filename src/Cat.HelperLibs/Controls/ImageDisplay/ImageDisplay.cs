@@ -7,6 +7,9 @@ using System.Threading.Tasks;
 
 namespace WinkingCat.HelperLibs.Controls
 {
+    // regards to https://github.com/cyotek/Cyotek.Windows.Forms.ImageBox
+    // some of this code has been taken from the above repository and has been modified
+
     public partial class ImageDisplay : UserControl
     {
         /// <summary>
@@ -24,6 +27,7 @@ namespace WinkingCat.HelperLibs.Controls
 
         public delegate void ImageChangedEvent();
         public delegate void ZoomLevelChangedEvent(int zoomLevelPercent);
+        public delegate void ImageLoadFailed_(string path);
 
         /// <summary>
         /// Called when the image is changed.
@@ -34,6 +38,20 @@ namespace WinkingCat.HelperLibs.Controls
         /// Invoked when the zoom level is changed.
         /// </summary>
         public event ZoomLevelChangedEvent ZoomLevelChanged;
+
+        /// <summary>
+        /// Invoked when <see cref="TryLoadImage(string)"/> or <see cref="TryLoadImageAsync(string)"/> cannot load an image.
+        /// </summary>
+        public event ImageLoadFailed_ ImageLoadFailed;
+
+        /// <summary>
+        /// Text to be drawn in the viewport.
+        /// </summary>
+        public override string Text
+        {
+            get { return TextArgs.Text; }
+            set { this._textArgs.Text = value; }
+        }
 
 
         /// <summary>
@@ -252,6 +270,15 @@ namespace WinkingCat.HelperLibs.Controls
         public ZoomLevelCollection ZoomLevels = ZoomLevelCollection.Default;
 
         /// <summary>
+        /// Text to be drawn in the viewport.
+        /// </summary>
+        public TextArgs TextArgs
+        {
+            get { return this._textArgs; }
+        }
+        private TextArgs _textArgs = new TextArgs();
+
+        /// <summary>
         /// The <see cref="FileInfo"/> of the image displayed in the control (if available).
         /// </summary>
         public FileInfo ImagePath { get; set; }
@@ -275,6 +302,11 @@ namespace WinkingCat.HelperLibs.Controls
         /// Should the control draw anything.
         /// </summary>
         public bool Display                 { get; set; } = true;
+
+        /// <summary>
+        /// Should <see cref=""/> be drawn.
+        /// </summary>
+        public bool DisplayText             { get; set; } = true;
 
         /// <summary>
         /// Is the current image animating.
@@ -532,7 +564,10 @@ namespace WinkingCat.HelperLibs.Controls
             IMAGE i = ImageHelper.LoadImage(path);
 
             if (i == null)
+            {
+                this.OnLoadFailed(path);
                 return false;
+            }
 
             bool _ = this.DisposeImageOnReplace;
             this.DisposeImageOnReplace = true;
@@ -557,7 +592,10 @@ namespace WinkingCat.HelperLibs.Controls
             IMAGE i = await ImageHelper.LoadImageAsync(path);
 
             if (i == null)
+            {
+                this.OnLoadFailed(path);
                 return false;
+            }
 
             bool _ = this.DisposeImageOnReplace;
             this.DisposeImageOnReplace = true;
@@ -584,7 +622,7 @@ namespace WinkingCat.HelperLibs.Controls
         /// </summary>
         /// <param name="includePadding">Should padding be subtracted from the client size.</param>
         /// <returns>The size of the control with or without padding.</returns>
-        private Rectangle GetInsideViewPort(bool includePadding)
+        protected Rectangle GetInsideViewPort(bool includePadding)
         {
             int left = 0;
             int top  = 0;
@@ -605,7 +643,7 @@ namespace WinkingCat.HelperLibs.Controls
         /// <summary>
         /// sets the zoom level to fit the image within the control, while keeping aspect ratio
         /// </summary>
-        private void FitImage()
+        protected void FitImage()
         {
             if (this._Image == null)
                 return;
@@ -649,7 +687,7 @@ namespace WinkingCat.HelperLibs.Controls
         /// Gets the destination rectangle to draw the image
         /// </summary>
         /// <returns></returns>
-        private Rectangle GetImageViewPort()
+        protected Rectangle GetImageViewPort()
         {
             if (this._Image == null)
                 return Rectangle.Empty;
@@ -779,7 +817,7 @@ namespace WinkingCat.HelperLibs.Controls
         /// <summary>
         /// Gets a <see cref="RectangleF"/> formatted with X, Y, Width, Height = 0, 0, Image.Width, Image.Height
         /// </summary>
-        private RectangleF GetSourceImageRegion()
+        protected RectangleF GetSourceImageRegion()
         {
             if (this._Image == null)
                 return RectangleF.Empty;
@@ -791,7 +829,7 @@ namespace WinkingCat.HelperLibs.Controls
         /// Draws the image.
         /// </summary>
         /// <param name="g"></param>
-        private void DrawImage(Graphics g)
+        protected void DrawImage(Graphics g)
         {
             InterpolationMode currentInterpolationMode = g.InterpolationMode;
             PixelOffsetMode currentPixelOffsetMode = g.PixelOffsetMode;
@@ -825,16 +863,49 @@ namespace WinkingCat.HelperLibs.Controls
         /// Draws the background texture.
         /// </summary>
         /// <param name="g"></param>
-        private void DrawBackground(Graphics g)
+        protected void DrawBackground(Graphics g)
         {
             g.FillRectangle(this.BackgroundTileBrush, this.GetInsideViewPort(false));
+        }
+
+        /// <summary>
+        /// Draws text.
+        /// </summary>
+        protected virtual void DrawText(Graphics g, TextArgs text)
+        {
+            if (text.AutoBounds)
+                text.Bounds = this.GetInsideViewPort(true);
+
+            DrawText(g, text.Text, text.Font, text.ForeColor, text.BackColor, text.Bounds, text.ScaleText);
+        }
+
+        /// <summary>
+        /// Draws text.
+        /// </summary>
+        protected virtual void DrawText(Graphics g, string text, Font font, Color foreColor, Color backColor, Rectangle bounds, bool scaleText)
+        {
+            if (scaleText)
+            {
+                font = new Font(font.FontFamily, (float)(font.Size * this._Zoom), font.Style);
+            }
+
+            TextRenderer.DrawText(g, text, font, bounds, foreColor, backColor, 
+                TextFormatFlags.NoPrefix | 
+                TextFormatFlags.WordEllipsis | 
+                TextFormatFlags.WordBreak | 
+                TextFormatFlags.NoPadding);
+
+            if (scaleText)
+            {
+                font.Dispose();
+            }
         }
 
         /// <summary>
         /// Handles mouse adjusting of the zoomlevel for zooming in and out.
         /// </summary>
         /// <param name="isZoomIn">Is the zoom in or out.</param>
-        private void MouseZoom(bool isZoomIn)
+        protected void MouseZoom(bool isZoomIn)
         {
             int newZoom;
             int currentZoom = this.ZoomPercent;
@@ -859,7 +930,7 @@ namespace WinkingCat.HelperLibs.Controls
         /// 
         /// credits to: https://stackoverflow.com/a/61964222
         /// </summary>
-        private void ZoomIntoMousePosition(double beforeZoom, double afterZoom, Point mousePosition)
+        protected void ZoomIntoMousePosition(double beforeZoom, double afterZoom, Point mousePosition)
         {
             /*
                         double oldWidth = _Image.Width * beforeZoom;
@@ -892,7 +963,7 @@ namespace WinkingCat.HelperLibs.Controls
         /// <summary>
         /// Zooms the image at the bottom right corner.
         /// </summary>
-        private void ZoomBottomRightImage(double beforeZoom, double afterZoom)
+        protected void ZoomBottomRightImage(double beforeZoom, double afterZoom)
         {
             double beforeZoomWidth = _Image.Width * beforeZoom;
             double beforeZoomHeight = _Image.Height * beforeZoom;
@@ -907,7 +978,7 @@ namespace WinkingCat.HelperLibs.Controls
         /// <summary>
         /// Zooms at the center image.
         /// </summary>
-        private void ZoomCenterImage(double beforeZoom, double afterZoom)
+        protected void ZoomCenterImage(double beforeZoom, double afterZoom)
         {
             double beforeZoomWidth = _Image.Width * beforeZoom;
             double beforeZoomHeight = _Image.Height * beforeZoom;
@@ -922,7 +993,7 @@ namespace WinkingCat.HelperLibs.Controls
         /// <summary>
         /// ZoomCenterImage but at the mouse position.
         /// </summary>
-        private void ZoomCenterMouse(double afterZoom, Point mousePosition)
+        protected void ZoomCenterMouse(double afterZoom, Point mousePosition)
         {
             double afterZoomWidth = _Image.Width * afterZoom;
             double afterZoomHeight = _Image.Height * afterZoom;
@@ -959,6 +1030,11 @@ namespace WinkingCat.HelperLibs.Controls
             this.Invalidate();
         }
 
+        private void OnLoadFailed(string path)
+        {
+            if (this.ImageLoadFailed != null)
+                this.ImageLoadFailed.Invoke(path);
+        }
 
 
 
@@ -1084,6 +1160,11 @@ namespace WinkingCat.HelperLibs.Controls
             {
                 this.DrawBackground(e.Graphics);
                 this.DrawImage(e.Graphics);
+
+                if(this.DisplayText)
+                {
+                    this.DrawText(e.Graphics, this.TextArgs);
+                }
             }
             base.OnPaint(e);
         }

@@ -102,8 +102,9 @@ namespace WinkingCat
 
             // delay settings
             numericUpDown1.Value = SettingsManager.MainFormSettings.Load_Image_Delay.Clamp(0, (int)numericUpDown1.Maximum);
-            numericUpDown2.Value = SettingsManager.MainFormSettings.Tray_Double_Click_Time.Clamp(0, (int)numericUpDown2.Maximum); ;
-            numericUpDown3.Value = SettingsManager.MainFormSettings.Wait_Hide_Time.Clamp(0, (int)numericUpDown3.Maximum); ;
+            numericUpDown2.Value = SettingsManager.MainFormSettings.Tray_Double_Click_Time.Clamp(0, (int)numericUpDown2.Maximum); 
+            numericUpDown3.Value = SettingsManager.MainFormSettings.Wait_Hide_Time.Clamp(0, (int)numericUpDown3.Maximum);
+            numericUpDown4.Value = SettingsManager.MainFormSettings.Image_Failed_To_Load_Message_Time.Clamp(0, (int)numericUpDown4.Maximum);
 
             preventUpdate = false;
 
@@ -474,6 +475,12 @@ namespace WinkingCat
         private void HideFormsDelayNumericUpDown_ValueChanged(object sender, EventArgs e)
         {
             SettingsManager.MainFormSettings.Wait_Hide_Time = (int)numericUpDown3.Value;
+        }
+
+        private void numericUpDown4_ValueChanged(object sender, EventArgs e)
+        {
+            SettingsManager.MainFormSettings.Image_Failed_To_Load_Message_Time = (int)numericUpDown4.Value;
+
         }
     }
 

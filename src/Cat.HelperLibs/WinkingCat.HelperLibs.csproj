@@ -98,6 +98,7 @@
       <SubType>UserControl</SubType>
     </Compile>
     <Compile Include="Controls\ImageDisplay\ImageDrawMode.cs" />
+    <Compile Include="Controls\ImageDisplay\TextArgs.cs" />
     <Compile Include="Controls\ImageDisplay\ZoomLevelCollection.cs" />
     <Compile Include="Controls\ImageDisplay\ZoomMode.cs" />
     <Compile Include="Controls\ToolStripClickThrough.cs">
@@ -147,6 +148,7 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
+    <Compile Include="Resources\ResourceGrabber.cs" />
     <Compile Include="Settings\ClipOptions.cs" />
     <Compile Include="Colors\ColorConverter.cs" />
     <Compile Include="Colors\ColorEditor.cs" />
@@ -392,6 +394,9 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="Resources\stock_up_one_dir.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\NewFolder16.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

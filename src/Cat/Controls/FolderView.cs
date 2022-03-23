@@ -19,7 +19,7 @@ namespace WinkingCat.Controls
         public int FileSortOrder
         {
             get { return _FolderWatcher.SortOrderFile; }
-            set {_FolderWatcher.SortOrderFile = value; }
+            set { _FolderWatcher.SortOrderFile = value; }
         }
 
         public int FolderSortOrder
@@ -117,6 +117,8 @@ namespace WinkingCat.Controls
 
         private ListViewItem _lastRetrieveVirtualItem = null;
 
+        private ImageList _iconList16 = new ImageList();
+
         public FolderView()
         {
             InitializeComponent();
@@ -128,11 +130,17 @@ namespace WinkingCat.Controls
             this.textBox1.AutoCompleteMode = AutoCompleteMode.Suggest;
             this.textBox1.AutoCompleteSource = AutoCompleteSource.FileSystemDirectories;
 
+            _iconList16.ImageSize = new Size(16, 16);
+            _iconList16.ColorDepth = ColorDepth.Depth24Bit;
+
+            _iconList16.Images.Add(ApplicationStyles.Resources.Folder16);
+
             ListView_.RetrieveVirtualItem += new RetrieveVirtualItemEventHandler(listView1_RetrieveVirtualItem);
             ListView_.CacheVirtualItems += new CacheVirtualItemsEventHandler(listView1_CacheVirtualItems);
             ListView_.ItemActivate += ListView1_ItemActivate;
-            ListView_.KeyUp += OnKeyUp;
+            ListView_.KeyUp        += OnKeyUp;
 
+            ListView_.SmallImageList = _iconList16;
             ListView_.GridLines = false;
             ListView_.VirtualMode = true;
             ListView_.VirtualListSize = 0;
@@ -141,15 +149,15 @@ namespace WinkingCat.Controls
             ListView_.AllowDrop = true;
 
             _FolderWatcher = new FolderWatcher(PathHelper.GetScreenshotFolder());
-            _FolderWatcher.WatcherNotifyFilter = NotifyFilters.FileName | NotifyFilters.DirectoryName;
+            _FolderWatcher.WatcherNotifyFilter  = NotifyFilters.FileName | NotifyFilters.DirectoryName;
             _FolderWatcher.FilterFileExtensions = InternalSettings.Readable_Image_Formats.ToArray();
-            _FolderWatcher.FileRemoved += _FolderWatcher_FileRemoved;
+            _FolderWatcher.FileRemoved      += _FolderWatcher_FileRemoved;
             _FolderWatcher.DirectoryRemoved += _FolderWatcher_DirectoryRemoved;
-            _FolderWatcher.FileAdded += _FolderWatcher_FileAdded;
-            _FolderWatcher.DirectoryAdded += _FolderWatcher_DirectoryAdded;
+            _FolderWatcher.FileAdded        += _FolderWatcher_FileAdded;
+            _FolderWatcher.DirectoryAdded   += _FolderWatcher_DirectoryAdded;
             _FolderWatcher.DirectoryRenamed += _FolderWatcher_DirectoryRenamed;
-            _FolderWatcher.FileRenamed += _FolderWatcher_FileRenamed;
-            _FolderWatcher.ItemChanged += _FolderWatcher_ItemChanged;
+            _FolderWatcher.FileRenamed      += _FolderWatcher_FileRenamed;
+            _FolderWatcher.ItemChanged      += _FolderWatcher_ItemChanged;
             _FolderWatcher.SortOrderChanged += _FolderWatcher_SortOrderChanged;
 
             ListView_.UpdateTheme();
@@ -280,7 +288,7 @@ namespace WinkingCat.Controls
         /// <summary>
         /// Takes the user back to the directory before the previous directory
         /// </summary>
-        public void UndoPreviousDirectory()
+        public async Task UndoPreviousDirectory()
         {
             if (_FolderRedoHistory.Count < 1)
                 return;
@@ -290,12 +298,12 @@ namespace WinkingCat.Controls
 
             if (newDir != "" && newDir != InternalSettings.DRIVES_FOLDERNAME && !Directory.Exists(newDir))
             {
-                UndoPreviousDirectory();
+                await UndoPreviousDirectory();
                 this._Undo = false;
                 return;
             }
             this._FolderUndoHistory.Push(this._CurrentDirectory);
-            this.LoadDirectory(newDir);
+            await this.LoadDirectory(newDir);
             this.SetLastDirectoryIndex();
             this.UpdateTextbox();
 
@@ -306,7 +314,7 @@ namespace WinkingCat.Controls
         /// <summary>
         /// Takes the user back to the previous directory
         /// </summary>
-        public void PreviousDirectory()
+        public async Task PreviousDirectory()
         {
             if (_FolderUndoHistory.Count < 1)
                 return;
@@ -316,13 +324,13 @@ namespace WinkingCat.Controls
 
             if (newDir != "" && newDir != InternalSettings.DRIVES_FOLDERNAME && !Directory.Exists(newDir))
             {
-                PreviousDirectory();
+                await PreviousDirectory();
                 this._Undo = false;
                 return;
             }
 
             this._FolderRedoHistory.Push(this._CurrentDirectory);
-            this.LoadDirectory(newDir);
+            await this.LoadDirectory(newDir);
             this.SetLastDirectoryIndex();
             this.UpdateTextbox();
 
@@ -391,9 +399,9 @@ namespace WinkingCat.Controls
             {
                 Directory.SetCurrentDirectory(PathHelper.GetScreenshotFolder());
             }
-            
+
             await _FolderWatcher.UpdateDirectory(path);
-            
+
             this.ListView_.VirtualListSize = _FolderWatcher.GetTotalCount();
             UpdateTextbox();
             ForceListviewRedraw();
@@ -415,11 +423,10 @@ namespace WinkingCat.Controls
                 {
                     PathHelper.OpenWithDefaultProgram(((FileInfo)ListView_.Items[ListView_.SelectedIndex1].Tag).FullName);
                 }
-                return;
             }
             else if (ListView_.Items[ListView_.SelectedIndex1].Tag is DirectoryInfo)
             {
-                UpdateDirectory(((DirectoryInfo)ListView_.Items[ListView_.SelectedIndex1].Tag).FullName, true); 
+                UpdateDirectory(((DirectoryInfo)ListView_.Items[ListView_.SelectedIndex1].Tag).FullName, true);
             }
         }
 
@@ -449,7 +456,7 @@ namespace WinkingCat.Controls
             if (iIndex < dirCount)
             {
                 DirectoryInfo dinfo = new DirectoryInfo(_FolderWatcher.DirectoryCache[e.ItemIndex]);
-                ListViewItem ditem = new ListViewItem(dinfo.Name);
+                ListViewItem ditem = new ListViewItem(dinfo.Name, 0);
                 ditem.SubItems.Add("");
                 ditem.Tag = dinfo;
 
@@ -523,7 +530,7 @@ namespace WinkingCat.Controls
                     if (index < _FolderWatcher.DirectoryCache.Count)
                     {
                         dinfo = new DirectoryInfo(_FolderWatcher.DirectoryCache[index]);
-                        ditem = new ListViewItem(dinfo.Name);
+                        ditem = new ListViewItem(dinfo.Name, 0);
 
                         ditem.SubItems.Add("");
                         ditem.Tag = dinfo;
@@ -550,7 +557,7 @@ namespace WinkingCat.Controls
                     if (index < _FolderWatcher.DirectoryCache.Count)
                     {
                         dinfo = new DirectoryInfo(_FolderWatcher.DirectoryCache[index]);
-                        ditem = new ListViewItem(dinfo.Name);
+                        ditem = new ListViewItem(dinfo.Name, 0);
 
                         ditem.SubItems.Add("");
                         ditem.Tag = dinfo;
@@ -698,88 +705,44 @@ namespace WinkingCat.Controls
         {
             changeVirtualSizeBy++;
             _ListviewRefreshTimer.Start();
-            /*this.ListView_.InvokeSafe((Action)(() =>
-            {
-                this.ListView_.VirtualListSize++;
-                // this.ForceListviewRedraw();
-                _ListviewRefreshTimer.Start();
-            }));*/
         }
 
         private void _FolderWatcher_FileAdded(string name)
         {
             changeVirtualSizeBy++;
             _ListviewRefreshTimer.Start();
-            /*this.ListView_.InvokeSafe((Action)(() =>
-            {
-                this.ListView_.VirtualListSize++;
-                _ListviewRefreshTimer.Start();
-                // this.ForceListviewRedraw();
-            }));*/
         }
 
         private void _FolderWatcher_DirectoryRemoved(string name)
         {
             changeVirtualSizeBy++;
-                _ListviewRefreshTimer.Start();
-            /*this.ListView_.InvokeSafe((Action)(() =>
-            {
-                this.ListView_.VirtualListSize--;
-                _ListviewRefreshTimer.Start();
-                // this.ForceListviewRedraw();
-            }));*/
+            _ListviewRefreshTimer.Start();
         }
 
         private void _FolderWatcher_FileRemoved(string name)
         {
             changeVirtualSizeBy--;
-                _ListviewRefreshTimer.Start();
-            /*this.ListView_.InvokeSafe((Action)(() =>
-            {
-                this.ListView_.VirtualListSize--;
-                _ListviewRefreshTimer.Start();
-                // this.ForceListviewRedraw();
-            }));*/
+            _ListviewRefreshTimer.Start();
         }
 
         private void _FolderWatcher_FileRenamed(string newName, string oldName)
         {
-                _ListviewRefreshTimer.Start();
-            /*this.InvokeSafe((Action)(() =>
-            {
-                _ListviewRefreshTimer.Start();
-
-                // this.ForceListviewRedraw();
-            }));*/
+            _ListviewRefreshTimer.Start();
         }
 
         private void _FolderWatcher_DirectoryRenamed(string newName, string oldName)
         {
-                _ListviewRefreshTimer.Start();
-            /*this.InvokeSafe((Action)(() =>
-            {
-                _ListviewRefreshTimer.Start();
-                //this.ForceListviewRedraw();
-            }));*/
+            _ListviewRefreshTimer.Start();
         }
 
         private void _FolderWatcher_ItemChanged(string name)
         {
-                _ListviewRefreshTimer.Start();
-            /*this.InvokeSafe((Action)(() =>
-            {
-                _ListviewRefreshTimer.Start();
-                // this.ForceListviewRedraw();
-            }));*/
+            _ListviewRefreshTimer.Start();
         }
 
         private void _FolderWatcher_SortOrderChanged(int order)
         {
-                _ListviewRefreshTimer.Start();
-            /*this.InvokeSafe((Action)(() =>
-            {
-                this.ForceListviewRedraw();
-            }));*/
+            _ListviewRefreshTimer.Start();
         }
 
     }

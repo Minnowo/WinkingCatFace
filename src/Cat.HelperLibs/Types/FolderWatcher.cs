@@ -39,6 +39,16 @@ namespace WinkingCat.HelperLibs
         private bool _AboveDrives = false;
 
         /// <summary>
+        /// The directory used when above drives or when the folder watchers are disabled
+        /// </summary>
+        public string IDLE_DIRECTORY = "C:\\";
+
+        /// <summary>
+        /// The path that determines if drives should be counted as directories 
+        /// </summary>
+        public string DRIVES_FOLDERNAME = InternalSettings.DRIVES_FOLDERNAME;
+
+        /// <summary>
         /// 1 for ascending
         /// -1 for descending
         /// </summary>
@@ -70,6 +80,10 @@ namespace WinkingCat.HelperLibs
         }
         private int _sortOrderFolder = 1;
 
+        /// <summary>
+        /// 1 for ascending
+        /// -1 for descending
+        /// </summary>
         public int SortOrderFile
         {
             get { return _sortOrderFile; }
@@ -166,7 +180,7 @@ namespace WinkingCat.HelperLibs
             _ProcessFileSystemChange.ProcessFile += Process;
 
             directory = "";
-            CreateWatchers(Directory.GetCurrentDirectory(), false);
+            CreateWatchers(IDLE_DIRECTORY, false);
             FileCache = new List<string>();
             DirectoryCache = new List<string>();
             _sortThread = UpdateDirectory("");
@@ -184,7 +198,7 @@ namespace WinkingCat.HelperLibs
 
             if (!Directory.Exists(path))
             {
-                CreateWatchers(Directory.GetCurrentDirectory(), false);
+                CreateWatchers(IDLE_DIRECTORY, false);
                 return;
             }
 
@@ -232,8 +246,6 @@ namespace WinkingCat.HelperLibs
             _EventWaitHandle.WaitOne();
 
             FileSystemEventArgs e = item as FileSystemEventArgs;
-
-            Console.WriteLine(e.ChangeType);
 
             switch (e.ChangeType)
             {
@@ -537,28 +549,26 @@ namespace WinkingCat.HelperLibs
             _AboveDrives = false;
             directory = path;
 
-            if (!Directory.Exists(path))
+            if (Directory.Exists(path))
             {
-
-                DirectoryCache.Clear();
-                FileCache.Clear();
-                if (!string.IsNullOrEmpty(path) && path != InternalSettings.DRIVES_FOLDERNAME)
-                {
-                    UpdateWatchers(path, false);
-                }
-                else
-                {
-                    foreach (DriveInfo di in DriveInfo.GetDrives())
-                    {
-                        DirectoryCache.Add(di.Name);
-                    }
-                    _AboveDrives = true;
-                }
+                UpdateWatchers(path, true);
+                await SetFiles(directory);
                 return;
             }
 
-            UpdateWatchers(path, true);
-            await SetFiles(directory);
+            DirectoryCache.Clear();
+            FileCache.Clear();
+
+            UpdateWatchers(IDLE_DIRECTORY, false);
+
+            if (string.IsNullOrEmpty(path) || path == this.DRIVES_FOLDERNAME)
+            {
+                foreach (DriveInfo di in DriveInfo.GetDrives())
+                {
+                    DirectoryCache.Add(di.Name);
+                }
+                _AboveDrives = true;
+            }
         }
 
         private void OnFileAdded(string name)
@@ -569,7 +579,6 @@ namespace WinkingCat.HelperLibs
 
         private void OnFileRemoved(string name)
         {
-            Console.WriteLine("removed " + name);
             if (FileRemoved != null)
                 FileRemoved.Invoke(name);
         }

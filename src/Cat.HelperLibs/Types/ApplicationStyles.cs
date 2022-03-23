@@ -16,6 +16,16 @@ namespace WinkingCat.HelperLibs
         public static event ThemeUpdated UpdateThemeEvent;
         public static ApplicationStyles currentStyle { get; set; } = new ApplicationStyles();
 
+        public static class Resources
+        {
+            public static Image Folder16
+            {
+                get
+                {
+                    return Properties.Resources.NewFolder16;
+                }
+            }
+        }
 
         public static Icon blackIcon 
         { 

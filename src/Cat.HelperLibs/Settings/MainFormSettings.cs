@@ -39,6 +39,9 @@ namespace WinkingCat.HelperLibs
         public int Tray_Double_Click_Time { get; set; } = SystemInformation.DoubleClickTime + 1000;
 
         [Browsable(false)]
+        public int Image_Failed_To_Load_Message_Time { get; set; } = 5000;
+
+        [Browsable(false)]
         public int Load_Image_Delay { get; set; } = 250;
 
         [Browsable(false)]

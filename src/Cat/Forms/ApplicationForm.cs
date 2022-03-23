@@ -25,6 +25,7 @@ namespace WinkingCat
 
         private TIMER _trayClickTimer = new TIMER();
         private TIMER _loadImageTimer = new TIMER();
+        private TIMER _imageLoadFailedTimer = new TIMER();
 
         private int _trayClickCount = 0;
 
@@ -74,6 +75,7 @@ namespace WinkingCat
 
             _trayClickTimer.SetInterval(SettingsManager.MainFormSettings.Tray_Double_Click_Time);
             _loadImageTimer.SetInterval(SettingsManager.MainFormSettings.Load_Image_Delay);
+            _imageLoadFailedTimer.SetInterval(SettingsManager.MainFormSettings.Image_Failed_To_Load_Message_Time);
 
 #if !DEBUG
             MaximizeBox        = SettingsManager.MainFormSettings.Show_Maximize_Box;
@@ -85,6 +87,7 @@ namespace WinkingCat
             imageDisplay1.ClearImagePathOnReplace = true;
             imageDisplay1.DisposeImageOnReplace = true;
             imageDisplay1.ResetOffsetButton = MouseButtons.None;
+            imageDisplay1.TextArgs.AutoBounds = true;
 
 
             RegisterEvents();
@@ -503,10 +506,21 @@ namespace WinkingCat
             if (imageDisplay1.Image == null)
                 return;
 
-            tbImageDimensionsDisplay.Text = string.Format("{0} x {1} : {2}%", 
+            _imageLoadFailedTimer.Stop();
+            _imageLoadFailedTimer.Start();
+            tbImageDimensionsDisplay.Text = string.Format("{0} x {1} : {2}%",
                 imageDisplay1.Image.Width, 
                 imageDisplay1.Image.Height, 
                 imageDisplay1.ZoomPercent);
+        }
+
+        private void ImageDisplay1_ImageLoadFailed(string path)
+        {
+            this.imageDisplay1.Text = "Failed to load: " + path;
+            this.imageDisplay1.DisplayText = true;
+            this.imageDisplay1.Invalidate();
+            _imageLoadFailedTimer.Stop();
+            _imageLoadFailedTimer.Start();
         }
 
         private void ImageDisplay_ZoomLevelChanged(int zoomLevelPercent)
@@ -785,6 +799,14 @@ namespace WinkingCat
             LoadSelectedImage();
         }
 
+        private void _imageLoadFailedTimer_Tick(object sender, EventArgs e)
+        {
+            _imageLoadFailedTimer.Stop();
+            this.imageDisplay1.Text = "";
+            this.imageDisplay1.DisplayText = false;
+            this.imageDisplay1.Invalidate();
+        }
+
         #endregion
 
 
@@ -927,6 +949,9 @@ namespace WinkingCat
             imageDisplay1.CenterCurrentImage();
         }
 
+        /// <summary>
+        /// lifts the image display onto a new form and fullscreens it 
+        /// </summary>
         private void ShowFullScreenImage()
         {
             if (this._showingFullscreenImage)
@@ -1170,6 +1195,7 @@ namespace WinkingCat
 
             _trayClickTimer.SetInterval(SettingsManager.MainFormSettings.Tray_Double_Click_Time);
             _loadImageTimer.SetInterval(SettingsManager.MainFormSettings.Load_Image_Delay);
+            _imageLoadFailedTimer.SetInterval(SettingsManager.MainFormSettings.Image_Failed_To_Load_Message_Time);
 
             if (SettingsManager.MainFormSettings.Show_Image_Display_Color_1_Only)
             {
@@ -1223,12 +1249,14 @@ namespace WinkingCat
             cbInterpolationMode.SelectedIndexChanged += ImageInterpolationMode_SelectedIndexChanged;
             cbDrawMode.SelectedIndexChanged += ImageDrawMode_SelectedIndexChanged;
             imageDisplay1.ImageChanged += ImageDisplay_ImageChanged;
-            imageDisplay1.ZoomLevelChanged += ImageDisplay_ZoomLevelChanged; ;
+            imageDisplay1.ZoomLevelChanged += ImageDisplay_ZoomLevelChanged;
+            imageDisplay1.ImageLoadFailed += ImageDisplay1_ImageLoadFailed;
 
 
             // timer 
             _trayClickTimer.Tick += TrayClickTimer_Interval;
             _loadImageTimer.Tick += LoadImageTimer_Tick;
+            _imageLoadFailedTimer.Tick += _imageLoadFailedTimer_Tick;
 
 
             // left toolstrip // 
