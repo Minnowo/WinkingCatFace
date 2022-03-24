@@ -108,12 +108,6 @@
     <Compile Include="Controls\LISTVIEW.cs">
       <SubType>Component</SubType>
     </Compile>
-    <Compile Include="Controls\_SplitContainer.cs">
-      <SubType>UserControl</SubType>
-    </Compile>
-    <Compile Include="Controls\_SplitContainer.Designer.cs">
-      <DependentUpon>_SplitContainer.cs</DependentUpon>
-    </Compile>
     <Compile Include="Events\CheckboxCheckedEvent.cs" />
     <Compile Include="Controls\HotkeyInputControl.cs">
       <SubType>UserControl</SubType>
@@ -173,9 +167,6 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Controls\HotkeyInputControl.resx">
       <DependentUpon>HotkeyInputControl.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Controls\_SplitContainer.resx">
-      <DependentUpon>_SplitContainer.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\ApplicationForm.resx">
       <DependentUpon>ApplicationForm.cs</DependentUpon>

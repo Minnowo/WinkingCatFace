@@ -1222,7 +1222,7 @@ namespace WinkingCat
             listViewContextMenu.Opacity = SettingsManager.MainFormSettings.contextMenuOpacity;
 
             ApplicationStyles.ApplyCustomThemeToControl(this.panel1);
-            ApplicationStyles.ApplyCustomThemeToControl(this.panel2);
+            // ApplicationStyles.ApplyCustomThemeToControl(this.panel2);
             // ApplicationStyles.ApplyCustomThemeToControl(scMain.Panel2);
             Refresh();
         }
