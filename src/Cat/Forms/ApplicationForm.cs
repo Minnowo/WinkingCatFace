@@ -1221,7 +1221,9 @@ namespace WinkingCat
             listViewContextMenu.Renderer = new ToolStripCustomRenderer();
             listViewContextMenu.Opacity = SettingsManager.MainFormSettings.contextMenuOpacity;
 
-            ApplicationStyles.ApplyCustomThemeToControl(scMain.Panel2);
+            ApplicationStyles.ApplyCustomThemeToControl(this.panel1);
+            ApplicationStyles.ApplyCustomThemeToControl(this.panel2);
+            // ApplicationStyles.ApplyCustomThemeToControl(scMain.Panel2);
             Refresh();
         }
 
@@ -1258,6 +1260,9 @@ namespace WinkingCat
             _loadImageTimer.Tick += LoadImageTimer_Tick;
             _imageLoadFailedTimer.Tick += _imageLoadFailedTimer_Tick;
 
+            //
+            button1.Click += CloseShownImage_Click;
+            button2.Click += ShownFullscreenImage_Click;
 
             // left toolstrip // 
             // capture drop down

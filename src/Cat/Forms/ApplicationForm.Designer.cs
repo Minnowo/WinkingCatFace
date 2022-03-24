@@ -54,14 +54,6 @@
             this.tssToolStripSeparator3 = new System.Windows.Forms.ToolStripSeparator();
             this.tsmiOpenMainWindowTray = new System.Windows.Forms.ToolStripMenuItem();
             this.tsmiExitTray = new System.Windows.Forms.ToolStripMenuItem();
-            this.scMain = new System.Windows.Forms.SplitContainer();
-            this.folderView1 = new WinkingCat.Controls.FolderView();
-            this.button2 = new System.Windows.Forms.Button();
-            this.button1 = new System.Windows.Forms.Button();
-            this.tbImageDimensionsDisplay = new System.Windows.Forms.TextBox();
-            this.cbDrawMode = new System.Windows.Forms.ComboBox();
-            this.cbInterpolationMode = new System.Windows.Forms.ComboBox();
-            this.imageDisplay1 = new WinkingCat.HelperLibs.Controls.ImageDisplay();
             this.tsMain = new WinkingCat.HelperLibs.ToolStripEx();
             this.tsddbCapture = new System.Windows.Forms.ToolStripDropDownButton();
             this.tsmiRegionCapture = new System.Windows.Forms.ToolStripMenuItem();
@@ -97,6 +89,8 @@
             this.toolStripSeparator1 = new System.Windows.Forms.ToolStripSeparator();
             this.resetXYOffsetToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.resetBackColorsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.toolStripSeparator5 = new System.Windows.Forms.ToolStripSeparator();
+            this.closeToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.listViewContextMenu = new System.Windows.Forms.ContextMenuStrip(this.components);
             this.copyToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.fileToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -108,16 +102,22 @@
             this.openAsClipToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.openLocationToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripSeparator3 = new System.Windows.Forms.ToolStripSeparator();
-            this.closeToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.toolStripSeparator5 = new System.Windows.Forms.ToolStripSeparator();
+            this.panel1 = new System.Windows.Forms.Panel();
+            this.splitter1 = new System.Windows.Forms.Splitter();
+            this.panel2 = new System.Windows.Forms.Panel();
+            this.folderView1 = new WinkingCat.Controls.FolderView();
+            this.imageDisplay1 = new WinkingCat.HelperLibs.Controls.ImageDisplay();
+            this.cbDrawMode = new System.Windows.Forms.ComboBox();
+            this.cbInterpolationMode = new System.Windows.Forms.ComboBox();
+            this.button2 = new System.Windows.Forms.Button();
+            this.button1 = new System.Windows.Forms.Button();
+            this.tbImageDimensionsDisplay = new System.Windows.Forms.TextBox();
             this.cmTray.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.scMain)).BeginInit();
-            this.scMain.Panel1.SuspendLayout();
-            this.scMain.Panel2.SuspendLayout();
-            this.scMain.SuspendLayout();
             this.tsMain.SuspendLayout();
             this.imageDisplayContextMenu.SuspendLayout();
             this.listViewContextMenu.SuspendLayout();
+            this.panel1.SuspendLayout();
+            this.panel2.SuspendLayout();
             this.SuspendLayout();
             // 
             // niTrayIcon
@@ -330,126 +330,6 @@
             this.tsmiExitTray.Name = "tsmiExitTray";
             this.tsmiExitTray.Size = new System.Drawing.Size(196, 38);
             this.tsmiExitTray.Text = "Exit";
-            // 
-            // scMain
-            // 
-            this.scMain.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.scMain.Location = new System.Drawing.Point(184, 0);
-            this.scMain.Name = "scMain";
-            // 
-            // scMain.Panel1
-            // 
-            this.scMain.Panel1.Controls.Add(this.folderView1);
-            // 
-            // scMain.Panel2
-            // 
-            this.scMain.Panel2.Controls.Add(this.button2);
-            this.scMain.Panel2.Controls.Add(this.button1);
-            this.scMain.Panel2.Controls.Add(this.tbImageDimensionsDisplay);
-            this.scMain.Panel2.Controls.Add(this.cbDrawMode);
-            this.scMain.Panel2.Controls.Add(this.cbInterpolationMode);
-            this.scMain.Panel2.Controls.Add(this.imageDisplay1);
-            this.scMain.Size = new System.Drawing.Size(955, 406);
-            this.scMain.SplitterDistance = 590;
-            this.scMain.SplitterWidth = 6;
-            this.scMain.TabIndex = 2;
-            // 
-            // folderView1
-            // 
-            this.folderView1.AskConfirmationOnDelete = true;
-            this.folderView1.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
-            this.folderView1.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(42)))), ((int)(((byte)(47)))), ((int)(((byte)(56)))));
-            this.folderView1.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.folderView1.FileSortOrder = -1;
-            this.folderView1.FolderSortOrder = 1;
-            this.folderView1.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(235)))), ((int)(((byte)(235)))), ((int)(((byte)(235)))));
-            this.folderView1.Location = new System.Drawing.Point(0, 0);
-            this.folderView1.Name = "folderView1";
-            this.folderView1.Size = new System.Drawing.Size(590, 406);
-            this.folderView1.TabIndex = 0;
-            // 
-            // button2
-            // 
-            this.button2.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.button2.Location = new System.Drawing.Point(308, 2);
-            this.button2.Name = "button2";
-            this.button2.Size = new System.Drawing.Size(23, 23);
-            this.button2.TabIndex = 5;
-            this.button2.Text = "^";
-            this.button2.UseVisualStyleBackColor = true;
-            this.button2.Click += new System.EventHandler(this.ShownFullscreenImage_Click);
-            // 
-            // button1
-            // 
-            this.button1.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.button1.Location = new System.Drawing.Point(330, 2);
-            this.button1.Name = "button1";
-            this.button1.Size = new System.Drawing.Size(23, 23);
-            this.button1.TabIndex = 4;
-            this.button1.Text = "X";
-            this.button1.UseVisualStyleBackColor = true;
-            this.button1.Click += new System.EventHandler(this.CloseShownImage_Click);
-            // 
-            // tbImageDimensionsDisplay
-            // 
-            this.tbImageDimensionsDisplay.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.tbImageDimensionsDisplay.Location = new System.Drawing.Point(219, 3);
-            this.tbImageDimensionsDisplay.Name = "tbImageDimensionsDisplay";
-            this.tbImageDimensionsDisplay.ReadOnly = true;
-            this.tbImageDimensionsDisplay.Size = new System.Drawing.Size(89, 20);
-            this.tbImageDimensionsDisplay.TabIndex = 3;
-            this.tbImageDimensionsDisplay.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
-            // 
-            // cbDrawMode
-            // 
-            this.cbDrawMode.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            this.cbDrawMode.FormattingEnabled = true;
-            this.cbDrawMode.Location = new System.Drawing.Point(109, 2);
-            this.cbDrawMode.Name = "cbDrawMode";
-            this.cbDrawMode.Size = new System.Drawing.Size(109, 21);
-            this.cbDrawMode.TabIndex = 2;
-            // 
-            // cbInterpolationMode
-            // 
-            this.cbInterpolationMode.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            this.cbInterpolationMode.FormattingEnabled = true;
-            this.cbInterpolationMode.Location = new System.Drawing.Point(3, 2);
-            this.cbInterpolationMode.Name = "cbInterpolationMode";
-            this.cbInterpolationMode.Size = new System.Drawing.Size(105, 21);
-            this.cbInterpolationMode.TabIndex = 1;
-            // 
-            // imageDisplay1
-            // 
-            this.imageDisplay1.AllowDrag = true;
-            this.imageDisplay1.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.imageDisplay1.AnimationPaused = false;
-            this.imageDisplay1.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
-            this.imageDisplay1.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.imageDisplay1.CellColor1 = System.Drawing.Color.FromArgb(((int)(((byte)(32)))), ((int)(((byte)(32)))), ((int)(((byte)(32)))));
-            this.imageDisplay1.CellColor2 = System.Drawing.Color.FromArgb(((int)(((byte)(64)))), ((int)(((byte)(64)))), ((int)(((byte)(64)))));
-            this.imageDisplay1.CellScale = 2F;
-            this.imageDisplay1.CellSize = 32;
-            this.imageDisplay1.CenterImage = true;
-            this.imageDisplay1.ClearImagePathOnReplace = true;
-            this.imageDisplay1.Display = true;
-            this.imageDisplay1.DisposeImageOnReplace = true;
-            this.imageDisplay1.DrawMode = WinkingCat.HelperLibs.Controls.ImageDrawMode.FitImage;
-            this.imageDisplay1.Image = null;
-            this.imageDisplay1.ImagePath = null;
-            this.imageDisplay1.InterpolationMode = System.Drawing.Drawing2D.InterpolationMode.NearestNeighbor;
-            this.imageDisplay1.IsAnimating = false;
-            this.imageDisplay1.Location = new System.Drawing.Point(3, 26);
-            this.imageDisplay1.MaxZoomPercent = 20000;
-            this.imageDisplay1.MinZoomPercent = 1;
-            this.imageDisplay1.Name = "imageDisplay1";
-            this.imageDisplay1.Size = new System.Drawing.Size(350, 377);
-            this.imageDisplay1.TabIndex = 0;
-            this.imageDisplay1.Zoom = 1D;
-            this.imageDisplay1.ZoomPercent = 100;
-            this.imageDisplay1.MouseClick += new System.Windows.Forms.MouseEventHandler(this.ImageDisplay_MouseClick);
             // 
             // tsMain
             // 
@@ -732,7 +612,7 @@
             this.toolStripSeparator5,
             this.closeToolStripMenuItem});
             this.imageDisplayContextMenu.Name = "contextMenuStrip1";
-            this.imageDisplayContextMenu.Size = new System.Drawing.Size(191, 198);
+            this.imageDisplayContextMenu.Size = new System.Drawing.Size(191, 176);
             // 
             // copyImageToolStripMenuItem
             // 
@@ -786,6 +666,18 @@
             this.resetBackColorsToolStripMenuItem.Size = new System.Drawing.Size(190, 22);
             this.resetBackColorsToolStripMenuItem.Text = "Reset Back Colors";
             this.resetBackColorsToolStripMenuItem.Click += new System.EventHandler(this.ResetGridColors_Click);
+            // 
+            // toolStripSeparator5
+            // 
+            this.toolStripSeparator5.Name = "toolStripSeparator5";
+            this.toolStripSeparator5.Size = new System.Drawing.Size(187, 6);
+            // 
+            // closeToolStripMenuItem
+            // 
+            this.closeToolStripMenuItem.Name = "closeToolStripMenuItem";
+            this.closeToolStripMenuItem.Size = new System.Drawing.Size(190, 22);
+            this.closeToolStripMenuItem.Text = "Close";
+            this.closeToolStripMenuItem.Click += new System.EventHandler(this.CloseImageDisplayClick_Click);
             // 
             // listViewContextMenu
             // 
@@ -870,24 +762,140 @@
             this.toolStripSeparator3.Name = "toolStripSeparator3";
             this.toolStripSeparator3.Size = new System.Drawing.Size(149, 6);
             // 
-            // closeToolStripMenuItem
+            // panel1
             // 
-            this.closeToolStripMenuItem.Name = "closeToolStripMenuItem";
-            this.closeToolStripMenuItem.Size = new System.Drawing.Size(190, 22);
-            this.closeToolStripMenuItem.Text = "Close";
-            this.closeToolStripMenuItem.Click += new System.EventHandler(this.CloseImageDisplayClick_Click);
+            this.panel1.Controls.Add(this.folderView1);
+            this.panel1.Dock = System.Windows.Forms.DockStyle.Left;
+            this.panel1.Location = new System.Drawing.Point(184, 0);
+            this.panel1.Name = "panel1";
+            this.panel1.Size = new System.Drawing.Size(448, 406);
+            this.panel1.TabIndex = 3;
             // 
-            // toolStripSeparator5
+            // splitter1
             // 
-            this.toolStripSeparator5.Name = "toolStripSeparator5";
-            this.toolStripSeparator5.Size = new System.Drawing.Size(187, 6);
+            this.splitter1.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.splitter1.Location = new System.Drawing.Point(632, 0);
+            this.splitter1.Name = "splitter1";
+            this.splitter1.Size = new System.Drawing.Size(8, 406);
+            this.splitter1.TabIndex = 4;
+            this.splitter1.TabStop = false;
+            // 
+            // panel2
+            // 
+            this.panel2.Controls.Add(this.tbImageDimensionsDisplay);
+            this.panel2.Controls.Add(this.button2);
+            this.panel2.Controls.Add(this.button1);
+            this.panel2.Controls.Add(this.cbDrawMode);
+            this.panel2.Controls.Add(this.cbInterpolationMode);
+            this.panel2.Controls.Add(this.imageDisplay1);
+            this.panel2.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.panel2.Location = new System.Drawing.Point(640, 0);
+            this.panel2.Name = "panel2";
+            this.panel2.Size = new System.Drawing.Size(499, 406);
+            this.panel2.TabIndex = 5;
+            // 
+            // folderView1
+            // 
+            this.folderView1.AskConfirmationOnDelete = true;
+            this.folderView1.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
+            this.folderView1.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(42)))), ((int)(((byte)(47)))), ((int)(((byte)(56)))));
+            this.folderView1.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.folderView1.FileSortOrder = -1;
+            this.folderView1.FolderSortOrder = 1;
+            this.folderView1.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(235)))), ((int)(((byte)(235)))), ((int)(((byte)(235)))));
+            this.folderView1.Location = new System.Drawing.Point(0, 0);
+            this.folderView1.Name = "folderView1";
+            this.folderView1.Size = new System.Drawing.Size(448, 406);
+            this.folderView1.TabIndex = 1;
+            // 
+            // imageDisplay1
+            // 
+            this.imageDisplay1.AllowDrag = true;
+            this.imageDisplay1.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.imageDisplay1.AnimationPaused = false;
+            this.imageDisplay1.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
+            this.imageDisplay1.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.imageDisplay1.CellColor1 = System.Drawing.Color.FromArgb(((int)(((byte)(32)))), ((int)(((byte)(32)))), ((int)(((byte)(32)))));
+            this.imageDisplay1.CellColor2 = System.Drawing.Color.FromArgb(((int)(((byte)(64)))), ((int)(((byte)(64)))), ((int)(((byte)(64)))));
+            this.imageDisplay1.CellScale = 2F;
+            this.imageDisplay1.CellSize = 32;
+            this.imageDisplay1.CenterImage = true;
+            this.imageDisplay1.ClearImagePathOnReplace = true;
+            this.imageDisplay1.ContextMenuStrip = this.imageDisplayContextMenu;
+            this.imageDisplay1.Display = true;
+            this.imageDisplay1.DisplayText = true;
+            this.imageDisplay1.DisposeImageOnReplace = true;
+            this.imageDisplay1.DrawMode = WinkingCat.HelperLibs.Controls.ImageDrawMode.FitImage;
+            this.imageDisplay1.Image = null;
+            this.imageDisplay1.ImagePath = null;
+            this.imageDisplay1.InterpolationMode = System.Drawing.Drawing2D.InterpolationMode.NearestNeighbor;
+            this.imageDisplay1.IsAnimating = false;
+            this.imageDisplay1.Location = new System.Drawing.Point(3, 28);
+            this.imageDisplay1.MaxZoomPercent = 20000;
+            this.imageDisplay1.MinZoomPercent = 1;
+            this.imageDisplay1.Name = "imageDisplay1";
+            this.imageDisplay1.Size = new System.Drawing.Size(493, 375);
+            this.imageDisplay1.TabIndex = 1;
+            this.imageDisplay1.Zoom = 1D;
+            this.imageDisplay1.ZoomPercent = 100;
+            // 
+            // cbDrawMode
+            // 
+            this.cbDrawMode.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.cbDrawMode.FormattingEnabled = true;
+            this.cbDrawMode.Location = new System.Drawing.Point(109, 3);
+            this.cbDrawMode.Name = "cbDrawMode";
+            this.cbDrawMode.Size = new System.Drawing.Size(109, 21);
+            this.cbDrawMode.TabIndex = 9;
+            // 
+            // cbInterpolationMode
+            // 
+            this.cbInterpolationMode.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.cbInterpolationMode.FormattingEnabled = true;
+            this.cbInterpolationMode.Location = new System.Drawing.Point(3, 3);
+            this.cbInterpolationMode.Name = "cbInterpolationMode";
+            this.cbInterpolationMode.Size = new System.Drawing.Size(105, 21);
+            this.cbInterpolationMode.TabIndex = 8;
+            // 
+            // button2
+            // 
+            this.button2.Location = new System.Drawing.Point(218, 2);
+            this.button2.Name = "button2";
+            this.button2.Size = new System.Drawing.Size(23, 23);
+            this.button2.TabIndex = 12;
+            this.button2.Text = "^";
+            this.button2.UseVisualStyleBackColor = true;
+            // 
+            // button1
+            // 
+            this.button1.Location = new System.Drawing.Point(240, 2);
+            this.button1.Name = "button1";
+            this.button1.Size = new System.Drawing.Size(23, 23);
+            this.button1.TabIndex = 11;
+            this.button1.Text = "X";
+            this.button1.UseVisualStyleBackColor = true;
+            // 
+            // tbImageDimensionsDisplay
+            // 
+            this.tbImageDimensionsDisplay.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.tbImageDimensionsDisplay.Location = new System.Drawing.Point(263, 4);
+            this.tbImageDimensionsDisplay.Name = "tbImageDimensionsDisplay";
+            this.tbImageDimensionsDisplay.ReadOnly = true;
+            this.tbImageDimensionsDisplay.Size = new System.Drawing.Size(233, 20);
+            this.tbImageDimensionsDisplay.TabIndex = 13;
+            this.tbImageDimensionsDisplay.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
             // 
             // ApplicationForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(1139, 406);
-            this.Controls.Add(this.scMain);
+            this.Controls.Add(this.panel2);
+            this.Controls.Add(this.splitter1);
+            this.Controls.Add(this.panel1);
             this.Controls.Add(this.tsMain);
             this.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(235)))), ((int)(((byte)(235)))), ((int)(((byte)(235)))));
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
@@ -896,15 +904,13 @@
             this.TopMost = true;
             this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.MainForm_FormClosing);
             this.cmTray.ResumeLayout(false);
-            this.scMain.Panel1.ResumeLayout(false);
-            this.scMain.Panel2.ResumeLayout(false);
-            this.scMain.Panel2.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.scMain)).EndInit();
-            this.scMain.ResumeLayout(false);
             this.tsMain.ResumeLayout(false);
             this.tsMain.PerformLayout();
             this.imageDisplayContextMenu.ResumeLayout(false);
             this.listViewContextMenu.ResumeLayout(false);
+            this.panel1.ResumeLayout(false);
+            this.panel2.ResumeLayout(false);
+            this.panel2.PerformLayout();
             this.ResumeLayout(false);
 
         }
@@ -930,7 +936,6 @@
         private System.Windows.Forms.ToolStripMenuItem tsmiNewClipTray;
         private System.Windows.Forms.ToolStripMenuItem tsmiNewClipFromClipboardTray;
         private System.Windows.Forms.ToolStripMenuItem tsmiNewClipFromFileTray;
-        private System.Windows.Forms.SplitContainer scMain;
         private System.Windows.Forms.ToolStripDropDownButton tsddbCapture;
         private System.Windows.Forms.ToolStripMenuItem tsmiRegionCapture;
         private System.Windows.Forms.ToolStripMenuItem tsmiToolStripMenuItem_monitor;
@@ -957,13 +962,6 @@
         private System.Windows.Forms.ToolStripMenuItem tsmiRegex;
         private System.Windows.Forms.ToolStripMenuItem oCRToolStripMenuItem;
         private HelperLibs.ToolStripEx tsMain;
-        private Controls.FolderView folderView1;
-        private HelperLibs.Controls.ImageDisplay imageDisplay1;
-        private System.Windows.Forms.Button button1;
-        private System.Windows.Forms.TextBox tbImageDimensionsDisplay;
-        private System.Windows.Forms.ComboBox cbDrawMode;
-        private System.Windows.Forms.ComboBox cbInterpolationMode;
-        private System.Windows.Forms.Button button2;
         private System.Windows.Forms.ContextMenuStrip imageDisplayContextMenu;
         private System.Windows.Forms.ToolStripMenuItem copyImageToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem useBackColor1OnlyToolStripMenuItem;
@@ -990,6 +988,16 @@
         private System.Windows.Forms.ToolStripButton toolStripButton3;
         private System.Windows.Forms.ToolStripSeparator toolStripSeparator5;
         private System.Windows.Forms.ToolStripMenuItem closeToolStripMenuItem;
+        private System.Windows.Forms.Panel panel1;
+        private System.Windows.Forms.Splitter splitter1;
+        private System.Windows.Forms.Panel panel2;
+        private Controls.FolderView folderView1;
+        private HelperLibs.Controls.ImageDisplay imageDisplay1;
+        private System.Windows.Forms.TextBox tbImageDimensionsDisplay;
+        private System.Windows.Forms.Button button2;
+        private System.Windows.Forms.Button button1;
+        private System.Windows.Forms.ComboBox cbDrawMode;
+        private System.Windows.Forms.ComboBox cbInterpolationMode;
     }
 }
 
