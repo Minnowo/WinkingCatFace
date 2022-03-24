@@ -835,7 +835,7 @@
             this.imageDisplay1.MaxZoomPercent = 20000;
             this.imageDisplay1.MinZoomPercent = 1;
             this.imageDisplay1.Name = "imageDisplay1";
-            this.imageDisplay1.Size = new System.Drawing.Size(678, 574);
+            this.imageDisplay1.Size = new System.Drawing.Size(578, 375);
             this.imageDisplay1.TabIndex = 1;
             this.imageDisplay1.Zoom = 1D;
             this.imageDisplay1.ZoomPercent = 100;
