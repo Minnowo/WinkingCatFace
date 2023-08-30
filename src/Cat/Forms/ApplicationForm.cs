@@ -582,7 +582,8 @@ namespace WinkingCat
         {
             ToolStripItem tsi = (ToolStripItem)sender;
 
-            RegionCaptureHelper.RequestFormsHide(false, true);
+            if (!SettingsManager.MainFormSettings.Never_Hide_Windows)
+                RegionCaptureHelper.RequestFormsHide(false, true);
 
             using (Bitmap img = ScreenshotHelper.CaptureRectangle((Rectangle)tsi.Tag))
             {
@@ -593,7 +594,8 @@ namespace WinkingCat
                 }
             }
 
-            RegionCaptureHelper.RequestFormsHide(true, false);
+            if (!SettingsManager.MainFormSettings.Never_Hide_Windows)
+                RegionCaptureHelper.RequestFormsHide(true, false);
         }
 
         private void RegionCapture_Click(object sender, EventArgs e)
@@ -819,6 +821,7 @@ namespace WinkingCat
 
         private void DropDownClosing_Closing(object sender, ToolStripDropDownClosingEventArgs e)
         {
+            return;
             if (e.CloseReason != ToolStripDropDownCloseReason.AppFocusChange &&
                 e.CloseReason != ToolStripDropDownCloseReason.CloseCalled)
                 return;

@@ -93,14 +93,15 @@
             this.tbCustomScreenshotPath = new System.Windows.Forms.TextBox();
             this.cbUseCustomScreenshotPath = new System.Windows.Forms.CheckBox();
             this.tpDelay = new System.Windows.Forms.TabPage();
+            this.numericUpDown4 = new System.Windows.Forms.NumericUpDown();
+            this.label18 = new System.Windows.Forms.Label();
             this.label17 = new System.Windows.Forms.Label();
             this.label16 = new System.Windows.Forms.Label();
             this.label15 = new System.Windows.Forms.Label();
             this.numericUpDown3 = new System.Windows.Forms.NumericUpDown();
             this.numericUpDown2 = new System.Windows.Forms.NumericUpDown();
             this.numericUpDown1 = new System.Windows.Forms.NumericUpDown();
-            this.label18 = new System.Windows.Forms.Label();
-            this.numericUpDown4 = new System.Windows.Forms.NumericUpDown();
+            this.neverHideWindowsCheckbox = new System.Windows.Forms.CheckBox();
             this.tcMain.SuspendLayout();
             this.tpMain.SuspendLayout();
             this.tbRegionCapture.SuspendLayout();
@@ -113,10 +114,10 @@
             this.tbHotkeys.SuspendLayout();
             this.tabPage6.SuspendLayout();
             this.tpDelay.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.numericUpDown4)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDown3)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDown2)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDown1)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.numericUpDown4)).BeginInit();
             this.SuspendLayout();
             // 
             // tcMain
@@ -137,6 +138,7 @@
             // 
             // tpMain
             // 
+            this.tpMain.Controls.Add(this.neverHideWindowsCheckbox);
             this.tpMain.Controls.Add(this.folderSortAscendingCheckbox);
             this.tpMain.Controls.Add(this.fileSortAscendingCheckbox);
             this.tpMain.Controls.Add(this.cbHideClipsOnCapture);
@@ -885,6 +887,28 @@
             this.tpDelay.Text = "Delay";
             this.tpDelay.UseVisualStyleBackColor = true;
             // 
+            // numericUpDown4
+            // 
+            this.numericUpDown4.Location = new System.Drawing.Point(3, 160);
+            this.numericUpDown4.Maximum = new decimal(new int[] {
+            5000,
+            0,
+            0,
+            0});
+            this.numericUpDown4.Name = "numericUpDown4";
+            this.numericUpDown4.Size = new System.Drawing.Size(120, 20);
+            this.numericUpDown4.TabIndex = 7;
+            this.numericUpDown4.ValueChanged += new System.EventHandler(this.numericUpDown4_ValueChanged);
+            // 
+            // label18
+            // 
+            this.label18.AutoSize = true;
+            this.label18.Location = new System.Drawing.Point(0, 144);
+            this.label18.Name = "label18";
+            this.label18.Size = new System.Drawing.Size(172, 13);
+            this.label18.TabIndex = 6;
+            this.label18.Text = "Failed To Load Message Time (ms)";
+            // 
             // label17
             // 
             this.label17.AutoSize = true;
@@ -951,27 +975,16 @@
             this.numericUpDown1.TabIndex = 0;
             this.numericUpDown1.ValueChanged += new System.EventHandler(this.LoadImageDelayNumericUpDown_ValueChanged);
             // 
-            // label18
+            // checkBox1
             // 
-            this.label18.AutoSize = true;
-            this.label18.Location = new System.Drawing.Point(0, 144);
-            this.label18.Name = "label18";
-            this.label18.Size = new System.Drawing.Size(172, 13);
-            this.label18.TabIndex = 6;
-            this.label18.Text = "Failed To Load Message Time (ms)";
-            // 
-            // numericUpDown4
-            // 
-            this.numericUpDown4.Location = new System.Drawing.Point(3, 160);
-            this.numericUpDown4.Maximum = new decimal(new int[] {
-            5000,
-            0,
-            0,
-            0});
-            this.numericUpDown4.Name = "numericUpDown4";
-            this.numericUpDown4.Size = new System.Drawing.Size(120, 20);
-            this.numericUpDown4.TabIndex = 7;
-            this.numericUpDown4.ValueChanged += new System.EventHandler(this.numericUpDown4_ValueChanged);
+            this.neverHideWindowsCheckbox.AutoSize = true;
+            this.neverHideWindowsCheckbox.Location = new System.Drawing.Point(183, 98);
+            this.neverHideWindowsCheckbox.Name = "checkBox1";
+            this.neverHideWindowsCheckbox.Size = new System.Drawing.Size(127, 17);
+            this.neverHideWindowsCheckbox.TabIndex = 18;
+            this.neverHideWindowsCheckbox.Text = "Never Hide Windows";
+            this.neverHideWindowsCheckbox.UseVisualStyleBackColor = true;
+            this.neverHideWindowsCheckbox.CheckedChanged += new System.EventHandler(this.checkBox1_CheckedChanged_1);
             // 
             // SettingsForm
             // 
@@ -1003,10 +1016,10 @@
             this.tabPage6.PerformLayout();
             this.tpDelay.ResumeLayout(false);
             this.tpDelay.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.numericUpDown4)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDown3)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDown2)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDown1)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.numericUpDown4)).EndInit();
             this.ResumeLayout(false);
 
         }
@@ -1085,5 +1098,6 @@
         private System.Windows.Forms.NumericUpDown numericUpDown1;
         private System.Windows.Forms.NumericUpDown numericUpDown4;
         private System.Windows.Forms.Label label18;
+        private System.Windows.Forms.CheckBox neverHideWindowsCheckbox;
     }
 }

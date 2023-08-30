@@ -35,6 +35,7 @@ namespace WinkingCat
             folderSortAscendingCheckbox.Checked = SettingsManager.MainFormSettings.FolderSortOrder >= 0;
             fileSortAscendingCheckbox.Checked = SettingsManager.MainFormSettings.FileSortOrder >= 0;
             cbMaximizeBox.Checked = SettingsManager.MainFormSettings.Show_Maximize_Box;
+            neverHideWindowsCheckbox.Checked = SettingsManager.MainFormSettings.Never_Hide_Windows;
 
             foreach (Function task in Enum.GetValues(typeof(Function)))
             {
@@ -481,6 +482,11 @@ namespace WinkingCat
         {
             SettingsManager.MainFormSettings.Image_Failed_To_Load_Message_Time = (int)numericUpDown4.Value;
 
+        }
+
+        private void checkBox1_CheckedChanged_1(object sender, EventArgs e)
+        {
+            SettingsManager.MainFormSettings.Never_Hide_Windows = neverHideWindowsCheckbox.Checked;
         }
     }
 

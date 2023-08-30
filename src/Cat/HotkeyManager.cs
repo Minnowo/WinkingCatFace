@@ -121,6 +121,7 @@ namespace WinkingCat
                 new Hotkey(Keys.Control | Keys.PrintScreen, Function.CaptureActiveMonitor),
                 new Hotkey(Keys.Alt | Keys.PrintScreen, Function.CaptureActiveWindow),
                 new Hotkey(Keys.PrintScreen, Function.CaptureFullScreen),
+                new Hotkey(Keys.Alt | Keys.Z, Function.NewClipFromRegionCapture),
             };
         }
     }

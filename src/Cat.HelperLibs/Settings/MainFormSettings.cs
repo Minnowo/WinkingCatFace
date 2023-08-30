@@ -33,6 +33,9 @@ namespace WinkingCat.HelperLibs
         public bool Always_On_Top { get; set; } = true;
 
         [Browsable(false)]
+        public bool Never_Hide_Windows { get; set; } = true;
+
+        [Browsable(false)]
         public int Wait_Hide_Time { get; set; } = 300;
         
         [Browsable(false)]
@@ -55,7 +58,7 @@ namespace WinkingCat.HelperLibs
 
         [XmlIgnore]
         [Browsable(false)]
-        public Function On_Tray_Left_Click { get; set; } = Function.RegionCapture;
+        public Function On_Tray_Left_Click { get; set; } = Function.OpenMainForm;
         [XmlIgnore]
         [Browsable(false)]
         public Function On_Tray_Double_Click { get; set; } = Function.OpenMainForm;

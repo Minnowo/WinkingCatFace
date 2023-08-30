@@ -57,9 +57,9 @@ namespace WinkingCat.HelperLibs
         [Browsable(false)]
         public bool Draw_Screen_Wide_Crosshair { get; set; } = true;
         [Browsable(false)]
-        public bool Draw_Info_Text { get; set; } = true;
+        public bool Draw_Info_Text { get; set; } = false;
         [Browsable(false)]
-        public bool Draw_Marching_Ants { get; set; } = true;
+        public bool Draw_Marching_Ants { get; set; } = false;
 
         [Browsable(false)]
         public bool Create_Clip_After_Region_Capture { get; set; } = false;

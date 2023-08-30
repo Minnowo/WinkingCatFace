@@ -80,7 +80,8 @@ namespace WinkingCat
             if (!IsReady)
                 return;
 
-            RegionCaptureHelper.RequestFormsHide(false, true);
+            if(!SettingsManager.MainFormSettings.Never_Hide_Windows)
+                RegionCaptureHelper.RequestFormsHide(false, true);
 
             if (RegionCaptureHelper.GetRegionResultImage(out Image i))
             {
@@ -94,7 +95,8 @@ namespace WinkingCat
                 this.ForceActivate();
             }
 
-            RegionCaptureHelper.RequestFormsHide(true, false);
+            if (!SettingsManager.MainFormSettings.Never_Hide_Windows)
+                RegionCaptureHelper.RequestFormsHide(true, false);
         }
 
         private void bFromFile_Click(object sender, EventArgs e)
