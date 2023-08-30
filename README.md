@@ -48,9 +48,9 @@ The default hotkey to make a new clip is `Alt + Z`.
 
 <details>
 
-  <summary>Clip Showcase Video:</summary>
+  <summary>Clip Showcase:</summary>
 
-![Clip preview video](./preview/clips.mp4)
+![Clip preview](./preview/clips.gif)
 
 </details>
 
@@ -65,7 +65,7 @@ The color picker supports conversions between 4 different color spaces, can visu
 
   <summary>Color Picker Preview:</summary>
 
-![Color Picker Window Preview](./preview/colorpicker.mp4)
+![Color Picker Window Preview](./preview/colorpicker.gif)
 
 </details>
 
