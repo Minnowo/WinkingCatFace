@@ -1,19 +1,15 @@
 ﻿using System;
 using System.ComponentModel;
-using System.Diagnostics;
 using System.Drawing;
-using System.Windows.Forms;
 using System.IO;
-using System.Text;
-using System.Threading;
-using System.Threading.Tasks;
-using System.Collections.Generic;
 using System.Linq;
-
+using System.Text;
+using System.Threading.Tasks;
+using System.Windows.Forms;
 using WinkingCat.HelperLibs;
-using WinkingCat.Uploaders;
-
-namespace WinkingCat
+using WinkingCat.Native;
+using WinkingCat.Settings;
+namespace WinkingCat.Controls
 {
     public class NoCheckboxListView : ListView
     {
@@ -80,7 +76,7 @@ namespace WinkingCat
 
             string curDir = PathHelper.CurrentDirectory;
             ItemsPath = Path.Combine(curDir, InternalSettings.List_View_Items_IO_Path);
-            
+
             if (File.Exists(ItemsPath))
             {
                 const Int32 BufferSize = 128;
@@ -99,20 +95,20 @@ namespace WinkingCat
                             dimensions = ImageHelper.GetImageDimensionsFromFile(info.FullName);
 
                             if (dimensions == Size.Empty)
-                                row = new string[4]{ info.Extension, 
-                                    "", 
-                                    Helper.SizeSuffix(info.Length), 
+                                row = new string[4]{ info.Extension,
+                                    "",
+                                    Helper.SizeSuffix(info.Length),
                                     File.GetLastWriteTime(info.FullName).ToString()};
                             else
-                                row = new string[4] { info.Extension, 
+                                row = new string[4] { info.Extension,
                                     $"{dimensions.Width}, " +
-                                    $"{dimensions.Height}", 
+                                    $"{dimensions.Height}",
                                     Helper.SizeSuffix(info.Length), File.GetLastWriteTime(info.FullName).ToString() };
 
                             ListViewItem item = new ListViewItem() { Text = info.Name, Tag = info.FullName };
                             item.SubItems.AddRange(row);
 
-                            if(this.Items.Count <= 0)
+                            if (this.Items.Count <= 0)
                             {
                                 this.Items.Add(item);
                             }
@@ -142,22 +138,22 @@ namespace WinkingCat
             toolStripMenuItemAlwaysOnTop.Click += ToolStripMenuItemAlwaysOnTop_Click;
             toolStripMenuItemRemoveFromList.Click += ToolStripMenuItemRemoveFromList_Click;
 
-#region cmsOpen Events
+            #region cmsOpen Events
             toolStripMenuItemOpenFile.Click += ToolStripMenuItemOpenFile_Click;
             toolStripMenuItemOpenFolder.Click += ToolStripMenuItemOpenFolder_Click;
             toolStripMenuItemOpenAsClip.Click += ToolStripMenuItemOpenAsClip_Click;
-#endregion
+            #endregion
 
-#region cmsCopy Events
+            #region cmsCopy Events
             toolStripMenuItemCopyImage.Click += ToolStripMenuItemCopyImage_Click;
             toolStripMenuItemCopyDimensions.Click += ToolStripMenuItemCopyDimensions_Click;
             toolStripMenuItemFile.Click += ToolStripMenuItemCopyFile_Click;
             toolStripMenuItemFileName.Click += ToolStripMenuItemCopyFileName_Click;
             toolStripMenuItemPath.Click += ToolStripMenuItemCopyPath_Click;
             toolStripMenuItemDirectory.Click += ToolStripMenuItemCopyDirectory_Click;
-#endregion
+            #endregion
 
-#endregion
+            #endregion
 
             MouseDoubleClick += MouseDoubleClick_Event;
 
@@ -191,7 +187,7 @@ namespace WinkingCat
                     supressIndexChangeEvent = true;
                     break;
             }
-                
+
             base.OnMouseDown(e);
         }
 
@@ -220,10 +216,10 @@ namespace WinkingCat
             cmsCopy.Opacity = SettingsManager.MainFormSettings.contextMenuOpacity;
             Refresh();
         }
-        
-#region cmsMain
 
-#region cmsOpen
+        #region cmsMain
+
+        #region cmsOpen
         private void ToolStripMenuItemOpenFile_Click(object sender, EventArgs e)
         {
             if (SelectedIndex == -1)
@@ -261,7 +257,7 @@ namespace WinkingCat
                 Items.Remove(Items[SelectedIndex]);
                 SelectedIndex = -1;
             }
-            else 
+            else
             {
                 MessageBox.Show("The file path has changed or the file has been deleted");
                 Items.Remove(Items[SelectedIndex]);
@@ -273,7 +269,7 @@ namespace WinkingCat
         {
             if (SelectedIndex == -1)
                 return;
-            
+
             string path = Items[SelectedIndex].Tag.ToString();
 
             if (!File.Exists(path))
@@ -282,9 +278,9 @@ namespace WinkingCat
                 Items.Remove(Items[SelectedIndex]);
                 SelectedIndex = -1;
             }
-            
+
             try
-            {                        
+            {
                 using (Bitmap image = ImageHelper.LoadImage(path))
                 {
                     ClipManager.Clips[ClipManager.CreateClipAtCursor(image)].Options.FilePath = path;
@@ -295,14 +291,14 @@ namespace WinkingCat
                 MessageBox.Show("The file is either not an image or is corrupt");
             }
         }
-#endregion
+        #endregion
 
-#region cmsCopy
+        #region cmsCopy
         private void ToolStripMenuItemCopyImage_Click(object sender, EventArgs e)
         {
             if (SelectedIndex == -1)
                 return;
-            
+
             string path = Items[SelectedIndex].Tag.ToString();
 
             if (File.Exists(path))
@@ -342,7 +338,7 @@ namespace WinkingCat
         {
             if (SelectedIndex == -1)
                 return;
-            
+
             string path = Items[SelectedIndex].Tag.ToString();
 
             if (File.Exists(path))
@@ -413,7 +409,7 @@ namespace WinkingCat
                 SelectedIndex = -1;
             }
         }
-#endregion
+        #endregion
 
         private void ToolStripMenuItemOCR_Click(object sender, EventArgs e)
         {
@@ -422,13 +418,13 @@ namespace WinkingCat
             form.TopMost = SettingsManager.MainFormSettings.Always_On_Top;
             form.Show();
         }
-        
+
 
         private async void ToolStripMenuItemDelete_Click(object sender, EventArgs e)
         {
             if (SelectedIndex == -1)
                 return;
-            
+
             foreach (ListViewItem item in SelectedItems)
             {
                 if (PathHelper.DeleteFile(item.Tag.ToString()))
@@ -456,22 +452,22 @@ namespace WinkingCat
 
         private async void ToolStripMenuItemRemoveFromList_Click(object sender, EventArgs e)
         {
-            if(SelectedItems.Count > 0)
+            if (SelectedItems.Count > 0)
             {
-                foreach(ListViewItem item in SelectedItems)
+                foreach (ListViewItem item in SelectedItems)
                 {
                     this.Items.Remove(item);
                 }
                 await ListViewDumpAsync((ListViewItem[])this.Items.OfType<ListViewItem>().ToArray().Clone());
             }
         }
-#endregion
+        #endregion
 
         public async Task ListViewDumpAsync(ListViewItem[] items)
         {
             if (!File.Exists(ItemsPath))
                 return;
-            
+
             await Task.Run(() =>
             {
                 System.IO.File.WriteAllText(ItemsPath, "");
@@ -487,7 +483,7 @@ namespace WinkingCat
 
         public void AddItem(ListViewItem item)
         {
-            using(StreamWriter w = File.AppendText(ItemsPath))
+            using (StreamWriter w = File.AppendText(ItemsPath))
             {
                 w.WriteLine(item.Tag.ToString());
             }
@@ -518,23 +514,23 @@ namespace WinkingCat
             {
                 PathHelper.OpenWithDefaultProgram(path);
             }
-            else 
+            else
             {
                 MessageBox.Show("The file path has changed or the file has been deleted");
                 Items.Remove(Items[SelectedIndex]);
                 SelectedIndex = -1;
-            }                    
+            }
         }
 
         private void ContextMenuStrip_Opening(object sender, CancelEventArgs e)
         {
-            if (SelectedIndex != -1) 
+            if (SelectedIndex != -1)
             {
                 foreach (ToolStripMenuItem a in buttonOnlyItems)
                 {
                     a.Enabled = true;
                 }
-            } 
+            }
             else
             {
                 foreach (ToolStripMenuItem a in buttonOnlyItems)
@@ -549,7 +545,7 @@ namespace WinkingCat
             if (autoFillColumn && m.Msg == (int)WindowsMessages.PAINT && !DesignMode)
             {
                 if (Columns.Count != 0) // sizes the columns to fill the rest of the list box
-                { 
+                {
                     this.Columns[this.Columns.Count - 1].Width = -2;
                 }
             }

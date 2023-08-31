@@ -1,8 +1,9 @@
 ﻿using System;
 using System.IO;
 using System.Windows.Forms;
-
 using WinkingCat.HelperLibs;
+using WinkingCat.Native;
+using WinkingCat.Settings;
 
 namespace WinkingCat.Controls
 {
@@ -100,9 +101,9 @@ namespace WinkingCat.Controls
                 case MouseButtons.Left:
                     _isLeftClick = true;
                     break;
-                /*case MouseButtons.Right:
-                    _isRightClick = true;
-                    break;*/
+                    /*case MouseButtons.Right:
+                        _isRightClick = true;
+                        break;*/
             }
         }
 
@@ -116,9 +117,9 @@ namespace WinkingCat.Controls
                     _isLeftClick = false;
                     AdjustSelectedIndex();
                     break;
-                /*case MouseButtons.Right:
-                    _isRightClick = false;
-                    break;*/
+                    /*case MouseButtons.Right:
+                        _isRightClick = false;
+                        break;*/
             }
         }
 
@@ -128,7 +129,7 @@ namespace WinkingCat.Controls
 
             if (!_isLeftClick)
                 return;
-            
+
             int count = this.SelectedIndices.Count;
 
             if (SelectedItemsCount == count)

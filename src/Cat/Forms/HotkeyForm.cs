@@ -1,11 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Diagnostics;
 using System.Windows.Forms;
-using System.Diagnostics;
 using WinkingCat.HelperLibs;
+using WinkingCat.Native;
 
 namespace WinkingCat
 {
@@ -28,7 +24,7 @@ namespace WinkingCat
         {
             if (hotkeyInfo == null || hotkeyInfo.Status == HotkeyStatus.Registered)
                 return;
-            
+
             if (!hotkeyInfo.IsValidHotkey)
             {
                 hotkeyInfo.Status = HotkeyStatus.NotSet;
@@ -62,7 +58,7 @@ namespace WinkingCat
         {
             if (hotkeyInfo == null)
                 return false;
-            
+
             if (hotkeyInfo.ID > 0)
             {
                 bool result = NativeMethods.UnregisterHotKey(Handle, hotkeyInfo.ID);
@@ -77,13 +73,13 @@ namespace WinkingCat
             }
 
             hotkeyInfo.Status = HotkeyStatus.Failed;
-            
+
             return false;
         }
 
         public void KeyPressed(ushort id, Keys key, Modifiers modifier)
         {
-            if(repeatLimitTimer.ElapsedMilliseconds > hotKeyRepeatLimit)
+            if (repeatLimitTimer.ElapsedMilliseconds > hotKeyRepeatLimit)
             {
                 repeatLimitTimer.Restart();
                 HotkeyPress(id, key, modifier);

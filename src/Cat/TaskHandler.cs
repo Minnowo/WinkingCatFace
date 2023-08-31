@@ -1,13 +1,9 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using WinkingCat.HelperLibs;
-using System.Drawing.Imaging;
 using System.Drawing;
-using System.Windows.Forms;
-
+using System.IO;
+using WinkingCat.HelperLibs;
+using WinkingCat.Native;
+using WinkingCat.Settings;
 namespace WinkingCat
 {
 
@@ -30,7 +26,7 @@ namespace WinkingCat
             if (!Helper.IsValidCropArea(window.Rectangle))
                 return false;
 
-            if(!SettingsManager.MainFormSettings.Never_Hide_Windows) 
+            if (!SettingsManager.MainFormSettings.Never_Hide_Windows)
                 RegionCaptureHelper.RequestFormsHide(false, true);
 
             using (Image img = ScreenshotHelper.CaptureRectangle(window.Rectangle))
@@ -50,7 +46,36 @@ namespace WinkingCat
                     RegionCaptureHelper.RequestFormsHide(true, false);
 
                 return true;
-            } 
+            }
+        }
+
+        public static bool ExecuteTask(Function task, String path)
+        {
+            OnTaskExecuted(task);
+
+            Image image;
+
+            switch (task)
+            {
+                case Function.NewOCRCapture:
+
+                    if (String.IsNullOrEmpty(path))
+                        return false;
+
+                    if (File.Exists(path))
+                    {
+                        OCRForm form = new OCRForm(path);
+                        form.TopMost = true;
+                        form.Show();
+                        return true;
+                    }
+
+
+
+                    return false;
+
+            }
+            return false;
         }
 
         public static bool ExecuteTask(Function task)
@@ -94,7 +119,7 @@ namespace WinkingCat
                         return false;
 
                     image = ImageHelper.LoadImage(path[0]);
-                    
+
                     if (image == null)
                         return false;
 
@@ -103,7 +128,7 @@ namespace WinkingCat
 
                 case Function.NewClipFromClipboard:
                     image = ClipboardHelper.GetImage();
-                    
+
                     if (image == null)
                         return false;
 

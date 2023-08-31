@@ -1,33 +1,29 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
+using System.Diagnostics;
 using System.Drawing;
-using System.Linq;
-using System.Text;
+using System.IO;
+using System.Security.Cryptography;
+using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Forms;
-using System.Security.Cryptography;
 using WinkingCat.HelperLibs;
-using System.Threading;
-using System.IO;
-using System.Diagnostics;
+using WinkingCat.Settings;
 
 namespace WinkingCat
 {
     public partial class HashCheckForm : BaseForm
     {
         private HashCheck hashCheck;
-        
+
         public HashCheckForm()
         {
             InitializeComponent();
 
-            foreach(HashType i in Enum.GetValues(typeof(HashType)))
+            foreach (HashType i in Enum.GetValues(typeof(HashType)))
             {
                 cbHashType.Items.Add(EnumHelper.HashTypeToString(i));
             }
-            
+
             cbHashType.SelectedIndex = 0;
             hashCheck = new HashCheck();
             hashCheck.FileCheckProgressChanged += HashCheck_FileCheckProgressChanged;
@@ -231,7 +227,7 @@ namespace WinkingCat
                     }
                 }
 
-                
+
                 if (!string.IsNullOrEmpty(tbFilePathInput2.Text))
                 {
                     pbProgressDone.Value = 0;

@@ -1,16 +1,16 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Drawing;
+using System.Drawing.Drawing2D;
+using System.IO;
+using System.Linq;
+using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
-using System.Linq;
-using System.IO;
-using System.Text;
-using System.Drawing.Drawing2D;
-
+using WinkingCat.Controls;
 using WinkingCat.HelperLibs;
 using WinkingCat.HelperLibs.Enums;
-using WinkingCat.Uploaders;
+using WinkingCat.Settings;
 
 namespace WinkingCat
 {
@@ -40,7 +40,7 @@ namespace WinkingCat
             InitializeComponent();
             SuspendLayout();
 
-            for(int i = 0; i < 7; i++)
+            for (int i = 0; i < 7; i++)
             {
                 FileSizeUnit fsu = (FileSizeUnit)i;
                 ToolStripItem tsi = new ToolStripMenuItem();
@@ -51,8 +51,8 @@ namespace WinkingCat
             }
 
             folderView1.ListView_.View = View.Details;
-            folderView1.ListView_.Columns.Add(new ColumnHeader() { Name = "Filename", Text = "Filename", Width=500});
-            folderView1.ListView_.Columns.Add(new ColumnHeader() { Name = "Size", Text = "Size", Width =30 });
+            folderView1.ListView_.Columns.Add(new ColumnHeader() { Name = "Filename", Text = "Filename", Width = 500 });
+            folderView1.ListView_.Columns.Add(new ColumnHeader() { Name = "Size", Text = "Size", Width = 30 });
             folderView1.SetCurrentDirectory(PathHelper.GetScreenshotFolder());
 
             _preventOverflow = true;
@@ -67,10 +67,10 @@ namespace WinkingCat
             cbInterpolationMode.Items.Add(InterpolationMode.HighQualityBilinear);
             cbInterpolationMode.SelectedItem = SettingsManager.MiscSettings.Default_Interpolation_Mode;
 
-            cbDrawMode.Items.Add(WinkingCat.HelperLibs.Controls.ImageDrawMode.ActualSize);
-            cbDrawMode.Items.Add(WinkingCat.HelperLibs.Controls.ImageDrawMode.FitImage);
-            cbDrawMode.Items.Add(WinkingCat.HelperLibs.Controls.ImageDrawMode.DownscaleImage);
-            cbDrawMode.Items.Add(WinkingCat.HelperLibs.Controls.ImageDrawMode.Resizeable);
+            cbDrawMode.Items.Add(ImageDrawMode.ActualSize);
+            cbDrawMode.Items.Add(ImageDrawMode.FitImage);
+            cbDrawMode.Items.Add(ImageDrawMode.DownscaleImage);
+            cbDrawMode.Items.Add(ImageDrawMode.Resizeable);
             cbDrawMode.SelectedItem = SettingsManager.MiscSettings.Default_Draw_Mode;
 
             _trayClickTimer.SetInterval(SettingsManager.MainFormSettings.Tray_Double_Click_Time);
@@ -148,11 +148,11 @@ namespace WinkingCat
         /// Sets the imagae display draw mode.
         /// </summary>
         /// <param name="mode"></param>
-        public void SetDrawMode(HelperLibs.Controls.ImageDrawMode mode)
+        public void SetDrawMode(ImageDrawMode mode)
         {
             imageDisplay1.DrawMode = mode;
 
-            if(mode == HelperLibs.Controls.ImageDrawMode.Resizeable)
+            if (mode == ImageDrawMode.Resizeable)
             {
                 imageDisplay1.CenterCurrentImage();
             }
@@ -196,7 +196,7 @@ namespace WinkingCat
             }
             ClipboardHelper.CopyStringDefault(paths.ToString());
         }
-        
+
         /// <summary>
         /// Copies the path of all selected listview items.
         /// </summary>
@@ -337,7 +337,7 @@ namespace WinkingCat
             if (imageDisplay1.ImagePath != null && path == imageDisplay1.ImagePath.FullName)
             {
                 if (_loadImageThread != null)
-                    if(_loadImageThread.Status == TaskStatus.Running ||
+                    if (_loadImageThread.Status == TaskStatus.Running ||
                        _loadImageThread.Status == TaskStatus.WaitingForActivation)
                         await _loadImageThread;
 
@@ -391,7 +391,7 @@ namespace WinkingCat
 
             if (imageDisplay1.ImagePath != null && path == imageDisplay1.ImagePath.FullName)
             {
-                if (_loadImageThread != null && _loadImageThread.Status == TaskStatus.Running || 
+                if (_loadImageThread != null && _loadImageThread.Status == TaskStatus.Running ||
                     _loadImageThread.Status == TaskStatus.WaitingForActivation)
                     await _loadImageThread;
 
@@ -402,7 +402,7 @@ namespace WinkingCat
 
             if (_loadImageThread != null)
             {
-                if (_loadImageThread.Status == TaskStatus.Running || 
+                if (_loadImageThread.Status == TaskStatus.Running ||
                     _loadImageThread.Status == TaskStatus.WaitingForActivation)
                     await _loadImageThread;
 
@@ -471,7 +471,7 @@ namespace WinkingCat
             if (imageDisplay1.ImagePath != null && f.FullName == imageDisplay1.ImagePath.FullName)
                 return;
 
-            if (_loadImageThread != null) 
+            if (_loadImageThread != null)
                 if (_loadImageThread.Status == TaskStatus.Running ||
                     _loadImageThread.Status == TaskStatus.WaitingForActivation)
                     return;
@@ -495,7 +495,7 @@ namespace WinkingCat
         {
             if (e.Button != MouseButtons.Right)
                 return;
-            
+
             listViewContextMenu.Show(folderView1.ListView_, e.Location);
         }
 
@@ -509,8 +509,8 @@ namespace WinkingCat
             _imageLoadFailedTimer.Stop();
             _imageLoadFailedTimer.Start();
             tbImageDimensionsDisplay.Text = string.Format("{0} x {1} : {2}%",
-                imageDisplay1.Image.Width, 
-                imageDisplay1.Image.Height, 
+                imageDisplay1.Image.Width,
+                imageDisplay1.Image.Height,
                 imageDisplay1.ZoomPercent);
         }
 
@@ -533,7 +533,7 @@ namespace WinkingCat
             if (_preventOverflow)
                 return;
 
-            SetDrawMode((HelperLibs.Controls.ImageDrawMode)cbDrawMode.SelectedItem);
+            SetDrawMode((ImageDrawMode)cbDrawMode.SelectedItem);
         }
 
         private void ImageInterpolationMode_SelectedIndexChanged(object sender, EventArgs e)
@@ -548,7 +548,7 @@ namespace WinkingCat
 
         private async void Capture_DropDownOpening(object sender, EventArgs e)
         {
-            if(sender is ToolStripDropDownButton) 
+            if (sender is ToolStripDropDownButton)
                 await PrepareCaptureMenuAsync(tsmiToolStripMenuItem_window, WindowItems_Click, tsmiToolStripMenuItem_monitor, MonitorItems_Click);
             else
                 await PrepareCaptureMenuAsync(tsmiWindowToolStripMenuItem, WindowItems_Click, tsmiMonitorToolStripMenuItem, MonitorItems_Click);
@@ -559,7 +559,7 @@ namespace WinkingCat
             ToolStripItem tsi = (ToolStripItem)sender;
             WindowInfo win = (WindowInfo)tsi.Tag;
 
-            if(Handle != win.Handle)
+            if (Handle != win.Handle)
             {
                 win.Activate();
                 if (win.IsMinimized)
@@ -569,7 +569,7 @@ namespace WinkingCat
 
                 BaseForm bf = this._childrenHandles.FirstOrDefault(x => x.Handle == win.Handle);
 
-                if(bf != null)
+                if (bf != null)
                 {
                     bf.PreventHideNext = true;
                 }
@@ -643,7 +643,7 @@ namespace WinkingCat
             }
             _preventOverflow = false;
         }
-#endregion
+        #endregion
 
         #region Clips dropdown buttons
         private void NewClip_Click(object sender, EventArgs e)
@@ -658,7 +658,7 @@ namespace WinkingCat
         {
             TaskHandler.ExecuteTask(Function.NewClipFromFile);
         }
-#endregion
+        #endregion
 
         #region Tools dropdown buttons
 
@@ -677,7 +677,7 @@ namespace WinkingCat
             _childrenHandles.Add(cpf);
         }
 
-        internal void QrCode_Click(object sender, EventArgs e) 
+        internal void QrCode_Click(object sender, EventArgs e)
         {
             BarcodeForm cpf = new BarcodeForm();
             cpf.FormClosing += Childform_Closing;
@@ -848,12 +848,12 @@ namespace WinkingCat
             OpenStyles();
         }
 
-        
+
 
         private async Task PrepareCaptureMenuAsync(
-                                                    ToolStripMenuItem tsmiWindow, 
-                                                    EventHandler handlerWindow, 
-                                                    ToolStripMenuItem tsmiMonitor, 
+                                                    ToolStripMenuItem tsmiWindow,
+                                                    EventHandler handlerWindow,
+                                                    ToolStripMenuItem tsmiMonitor,
                                                     EventHandler handlerMonitor)
         {
             tsmiWindow.DropDownItems.Clear();
@@ -885,10 +885,11 @@ namespace WinkingCat
                                     tsmi.Image = icon.ToBitmap();
                                 }
                             }
-                        }catch
+                        }
+                        catch
                         {
                         }
-                        
+
 
                         tsmiWindow.DropDownItems.Add(tsmi);
                     }
@@ -933,13 +934,13 @@ namespace WinkingCat
         {
             if (_showingFullscreenImage)
             {
-                if(_fullscreenImageForm != null)
+                if (_fullscreenImageForm != null)
                 {
                     _fullscreenImageForm.Close();
                 }
                 return;
             }
-         
+
             imageDisplay1.Image = null;
         }
 
@@ -962,14 +963,14 @@ namespace WinkingCat
 
             Control ctl = this.imageDisplay1;
 
-            Point        og_loc  = ctl.Location;
-            Size         og_size = ctl.Size;
-            DockStyle    og_dock = ctl.Dock;
+            Point og_loc = ctl.Location;
+            Size og_size = ctl.Size;
+            DockStyle og_dock = ctl.Dock;
             AnchorStyles og_anch = ctl.Anchor;
-            Control      parent  = ctl.Parent;
+            Control parent = ctl.Parent;
 
-            HelperLibs.Controls.ImageDrawMode d = imageDisplay1.DrawMode;
-            imageDisplay1.DrawMode = HelperLibs.Controls.ImageDrawMode.Resizeable;
+            ImageDrawMode d = imageDisplay1.DrawMode;
+            imageDisplay1.DrawMode = ImageDrawMode.Resizeable;
 
             _fullscreenImageForm = new Form()
             {
@@ -981,14 +982,14 @@ namespace WinkingCat
 
             _fullscreenImageForm.FormClosing += delegate
             {
-                ctl.Parent   = parent;
+                ctl.Parent = parent;
                 ctl.Location = og_loc;
-                ctl.Dock     = og_dock;
-                ctl.Anchor   = og_anch;
-                ctl.Size     = og_size;
+                ctl.Dock = og_dock;
+                ctl.Anchor = og_anch;
+                ctl.Size = og_size;
                 imageDisplay1.DrawMode = d;
 
-                if (d == HelperLibs.Controls.ImageDrawMode.Resizeable)
+                if (d == ImageDrawMode.Resizeable)
                     imageDisplay1.CenterCurrentImage();
 
                 this._showingFullscreenImage = false;
@@ -1011,9 +1012,9 @@ namespace WinkingCat
 
 
             // Move control to host
-            ctl.Parent   = _fullscreenImageForm;
+            ctl.Parent = _fullscreenImageForm;
             ctl.Location = Point.Empty;
-            ctl.Dock     = DockStyle.Fill;
+            ctl.Dock = DockStyle.Fill;
 
             // And go full screen
             _fullscreenImageForm.Show();
@@ -1038,7 +1039,7 @@ namespace WinkingCat
 
         private void SetGridColor1_Click(object sender, EventArgs e)
         {
-            if(ColorPickerForm.PickColorDialogue(out Color newColor, SettingsManager.MainFormSettings.imageDisplayBG1))
+            if (ColorPickerForm.PickColorDialogue(out Color newColor, SettingsManager.MainFormSettings.imageDisplayBG1))
             {
                 SettingsManager.MainFormSettings.imageDisplayBG1 = newColor;
                 imageDisplay1.CellColor1 = newColor;
@@ -1057,7 +1058,7 @@ namespace WinkingCat
             if (ColorPickerForm.PickColorDialogue(out Color newColor, SettingsManager.MainFormSettings.imageDisplayBG2))
             {
                 SettingsManager.MainFormSettings.imageDisplayBG2 = newColor;
-                
+
                 if (!SettingsManager.MainFormSettings.Show_Image_Display_Color_1_Only)
                 {
                     imageDisplay1.CellColor2 = newColor;
@@ -1069,11 +1070,11 @@ namespace WinkingCat
 
         private void ResetGridColors_Click(object sender, EventArgs e)
         {
-            SettingsManager.MainFormSettings.imageDisplayBG1 = HelperLibs.Controls.ImageDisplay.DefaultCellColor1;
-            SettingsManager.MainFormSettings.imageDisplayBG2 = HelperLibs.Controls.ImageDisplay.DefaultCellColor2;
+            SettingsManager.MainFormSettings.imageDisplayBG1 = ImageDisplay.DefaultCellColor1;
+            SettingsManager.MainFormSettings.imageDisplayBG2 = ImageDisplay.DefaultCellColor2;
 
-            imageDisplay1.CellColor1 = HelperLibs.Controls.ImageDisplay.DefaultCellColor1;
-            imageDisplay1.CellColor2 = HelperLibs.Controls.ImageDisplay.DefaultCellColor2;
+            imageDisplay1.CellColor1 = ImageDisplay.DefaultCellColor1;
+            imageDisplay1.CellColor2 = ImageDisplay.DefaultCellColor2;
 
             if (SettingsManager.MainFormSettings.Show_Image_Display_Color_1_Only)
             {
@@ -1161,7 +1162,7 @@ namespace WinkingCat
                 SettingsManager.MainFormSettings.Always_On_Top = false;
             }
         }
-        
+
         private async void openAsClipToolStripMenuItem_Click(object sender, EventArgs e)
         {
             await LoadSelectedImageAsClip();
@@ -1270,28 +1271,28 @@ namespace WinkingCat
             // left toolstrip // 
             // capture drop down
             tsddbCapture.DropDown.Closing += DropDownClosing_Closing;
-            tsddbCapture.DropDownOpening  += Capture_DropDownOpening;
+            tsddbCapture.DropDownOpening += Capture_DropDownOpening;
 
-            tsmiRegionCapture.Click     += RegionCapture_Click;
+            tsmiRegionCapture.Click += RegionCapture_Click;
             tsmiFullscreenCapture.Click += FullscreenCapture_Click;
             tsmiLastRegionCapture.Click += LastRegionCapture_Click;
-            tsmiCaptureCursor.Click     += CursorCapture_Click;
+            tsmiCaptureCursor.Click += CursorCapture_Click;
 
             // clips drop down 
             tsddbClips.DropDown.Closing += DropDownClosing_Closing;
 
-            tsmiNewClip.Click              += NewClip_Click;
+            tsmiNewClip.Click += NewClip_Click;
             tsmiNewClipFromClipboard.Click += ClipFromClipboard_Click;
-            tsmiNewClipFromFile.Click      += ClipFromFile_Click;
+            tsmiNewClipFromFile.Click += ClipFromFile_Click;
 
             // tools drop down
             tsddbTools.DropDown.Closing += DropDownClosing_Closing;
 
             tsmiScreenColorPicker.Click += ScreenColorPicker_Click;
-            tsmiColorPicker.Click       += ColorPicker_Click;
-            tsmiQrCode.Click            += QrCode_Click;
-            tsmiHashCheck.Click         += HashCheck_Click;
-            tsmiRegex.Click             += Regex_Click;
+            tsmiColorPicker.Click += ColorPicker_Click;
+            tsmiQrCode.Click += QrCode_Click;
+            tsmiHashCheck.Click += HashCheck_Click;
+            tsmiRegex.Click += Regex_Click;
 
 
             // system tray stuff // 
@@ -1322,6 +1323,6 @@ namespace WinkingCat
             tsmiExitTray.Click += ExitApplication_Click;
         }
 
-        
+
     }
 }

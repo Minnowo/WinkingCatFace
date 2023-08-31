@@ -1,16 +1,9 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
 using System.Drawing;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
 using WinkingCat.HelperLibs;
+using WinkingCat.Settings;
 using ZXing;
-using System.Threading;
-
 namespace WinkingCat
 {
     public partial class BarcodeForm : BaseForm
@@ -48,7 +41,7 @@ namespace WinkingCat
         {
             if (!IsReady)
                 return;
-            
+
             ClearQRCode();
 
             int size = Math.Min(pbQRDisplay.Width, pbQRDisplay.Height);
@@ -80,7 +73,7 @@ namespace WinkingCat
             if (!IsReady)
                 return;
 
-            if(!SettingsManager.MainFormSettings.Never_Hide_Windows)
+            if (!SettingsManager.MainFormSettings.Never_Hide_Windows)
                 RegionCaptureHelper.RequestFormsHide(false, true);
 
             if (RegionCaptureHelper.GetRegionResultImage(out Image i))
@@ -103,7 +96,7 @@ namespace WinkingCat
         {
             if (!IsReady)
                 return;
-            
+
             string[] res = ImageHelper.OpenImageFileDialog(false, Program.MainForm);
             if (res == null || res.Length < 1)
                 return;
@@ -122,7 +115,7 @@ namespace WinkingCat
         {
             if (!IsReady)
                 return;
-            
+
             if (Clipboard.ContainsImage())
             {
                 using (Bitmap img = ClipboardHelper.GetImage())

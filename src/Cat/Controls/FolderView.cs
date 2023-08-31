@@ -1,15 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
 using System.Drawing;
-using System.Linq;
-using System.Text;
+using System.IO;
 using System.Threading.Tasks;
 using System.Windows.Forms;
-using System.IO;
-
 using WinkingCat.HelperLibs;
+using WinkingCat.Settings;
 
 namespace WinkingCat.Controls
 {
@@ -123,7 +119,7 @@ namespace WinkingCat.Controls
             ListView_.RetrieveVirtualItem += new RetrieveVirtualItemEventHandler(listView1_RetrieveVirtualItem);
             ListView_.CacheVirtualItems += new CacheVirtualItemsEventHandler(listView1_CacheVirtualItems);
             ListView_.ItemActivate += ListView1_ItemActivate;
-            ListView_.KeyUp        += OnKeyUp;
+            ListView_.KeyUp += OnKeyUp;
 
             ListView_.SmallImageList = _iconList16;
             ListView_.GridLines = false;
@@ -134,15 +130,15 @@ namespace WinkingCat.Controls
             ListView_.AllowDrop = true;
 
             _FolderWatcher = new FolderWatcher(PathHelper.GetScreenshotFolder());
-            _FolderWatcher.WatcherNotifyFilter  = NotifyFilters.FileName | NotifyFilters.DirectoryName;
+            _FolderWatcher.WatcherNotifyFilter = NotifyFilters.FileName | NotifyFilters.DirectoryName;
             _FolderWatcher.FilterFileExtensions = InternalSettings.Readable_Image_Formats.ToArray();
-            _FolderWatcher.FileRemoved      += _FolderWatcher_FileRemoved;
+            _FolderWatcher.FileRemoved += _FolderWatcher_FileRemoved;
             _FolderWatcher.DirectoryRemoved += _FolderWatcher_DirectoryRemoved;
-            _FolderWatcher.FileAdded        += _FolderWatcher_FileAdded;
-            _FolderWatcher.DirectoryAdded   += _FolderWatcher_DirectoryAdded;
+            _FolderWatcher.FileAdded += _FolderWatcher_FileAdded;
+            _FolderWatcher.DirectoryAdded += _FolderWatcher_DirectoryAdded;
             _FolderWatcher.DirectoryRenamed += _FolderWatcher_DirectoryRenamed;
-            _FolderWatcher.FileRenamed      += _FolderWatcher_FileRenamed;
-            _FolderWatcher.ItemChanged      += _FolderWatcher_ItemChanged;
+            _FolderWatcher.FileRenamed += _FolderWatcher_FileRenamed;
+            _FolderWatcher.ItemChanged += _FolderWatcher_ItemChanged;
             _FolderWatcher.SortOrderChanged += _FolderWatcher_SortOrderChanged;
 
             ListView_.UpdateTheme();
@@ -387,7 +383,7 @@ namespace WinkingCat.Controls
                 return;
 
             int index = this.DirectorySelectedIndexCache[_CurrentDirectory];
-            
+
             if (this.ListView_.Items.Count <= index || index < 0)
                 return;
 
@@ -401,7 +397,7 @@ namespace WinkingCat.Controls
             this.ListView_.Invalidate();
         }
 
-        
+
 
 
         private async void ListView1_ItemActivate(object sender, EventArgs e)
@@ -668,7 +664,7 @@ namespace WinkingCat.Controls
                     await SetCurrentDirectory(text);
                 }
             }
-         
+
             this._PreventOverflow = false;
         }
 

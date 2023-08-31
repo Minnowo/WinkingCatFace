@@ -1,10 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using WinkingCat.HelperLibs;
 using System.Windows.Forms;
+using WinkingCat.HelperLibs;
+using WinkingCat.Native;
+using WinkingCat.Settings;
 
 namespace WinkingCat
 {
@@ -94,7 +93,7 @@ namespace WinkingCat
         {
             if (hotKeys == null)
                 return;
-            
+
             foreach (Hotkey hotkey in hotKeys.ToArray())
             {
                 UnRegisterHotkey(hotkey, removeFromList);
@@ -107,7 +106,7 @@ namespace WinkingCat
 
             if (failedHotkeysList.Count > 0)
             {
-                foreach(Hotkey hotkey in failedHotkeysList)
+                foreach (Hotkey hotkey in failedHotkeysList)
                 {
                     MessageBox.Show(hotkey.ToString());
                 }

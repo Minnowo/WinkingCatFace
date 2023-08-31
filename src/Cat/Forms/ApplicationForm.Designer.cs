@@ -54,7 +54,7 @@
             this.tssToolStripSeparator3 = new System.Windows.Forms.ToolStripSeparator();
             this.tsmiOpenMainWindowTray = new System.Windows.Forms.ToolStripMenuItem();
             this.tsmiExitTray = new System.Windows.Forms.ToolStripMenuItem();
-            this.tsMain = new WinkingCat.HelperLibs.ToolStripEx();
+            this.tsMain = new WinkingCat.Controls.ToolStripEx();
             this.tsddbCapture = new System.Windows.Forms.ToolStripDropDownButton();
             this.tsmiRegionCapture = new System.Windows.Forms.ToolStripMenuItem();
             this.tsmiToolStripMenuItem_monitor = new System.Windows.Forms.ToolStripMenuItem();
@@ -107,7 +107,7 @@
             this.button1 = new System.Windows.Forms.Button();
             this.cbDrawMode = new System.Windows.Forms.ComboBox();
             this.cbInterpolationMode = new System.Windows.Forms.ComboBox();
-            this.imageDisplay1 = new WinkingCat.HelperLibs.Controls.ImageDisplay();
+            this.imageDisplay1 = new WinkingCat.Controls.ImageDisplay();
             this.splitter1 = new System.Windows.Forms.Splitter();
             this.panel1 = new System.Windows.Forms.Panel();
             this.folderView1 = new WinkingCat.Controls.FolderView();
@@ -833,7 +833,7 @@
             this.imageDisplay1.Display = true;
             this.imageDisplay1.DisplayText = true;
             this.imageDisplay1.DisposeImageOnReplace = true;
-            this.imageDisplay1.DrawMode = WinkingCat.HelperLibs.Controls.ImageDrawMode.FitImage;
+            this.imageDisplay1.DrawMode = WinkingCat.Controls.ImageDrawMode.FitImage;
             this.imageDisplay1.Image = null;
             this.imageDisplay1.ImagePath = null;
             this.imageDisplay1.InterpolationMode = System.Drawing.Drawing2D.InterpolationMode.NearestNeighbor;
@@ -959,7 +959,7 @@
         private System.Windows.Forms.ToolStripMenuItem tsmiQrCodeTray;
         private System.Windows.Forms.ToolStripMenuItem tsmiRegex;
         private System.Windows.Forms.ToolStripMenuItem oCRToolStripMenuItem;
-        private HelperLibs.ToolStripEx tsMain;
+        private Controls.ToolStripEx tsMain;
         private System.Windows.Forms.ContextMenuStrip imageDisplayContextMenu;
         private System.Windows.Forms.ToolStripMenuItem copyImageToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem useBackColor1OnlyToolStripMenuItem;
@@ -986,7 +986,7 @@
         private System.Windows.Forms.ToolStripButton toolStripButton3;
         private System.Windows.Forms.ToolStripSeparator toolStripSeparator5;
         private System.Windows.Forms.ToolStripMenuItem closeToolStripMenuItem;
-        private HelperLibs.Controls.ImageDisplay imageDisplay1;
+        private Controls.ImageDisplay imageDisplay1;
         private System.Windows.Forms.TextBox tbImageDimensionsDisplay;
         private System.Windows.Forms.Button button2;
         private System.Windows.Forms.Button button1;

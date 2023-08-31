@@ -1,7 +1,7 @@
 ﻿using System;
-using System.Windows.Forms;
-using WinkingCat.HelperLibs;
 using System.IO;
+using WinkingCat.HelperLibs;
+using WinkingCat.Settings;
 
 namespace WinkingCat
 {

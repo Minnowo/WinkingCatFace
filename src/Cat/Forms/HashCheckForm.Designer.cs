@@ -59,10 +59,10 @@
             this.btnCopyFileHash2 = new System.Windows.Forms.Button();
             this.label7 = new System.Windows.Forms.Label();
             this.tbFileHash2 = new System.Windows.Forms.TextBox();
-            this.colorLabel1 = new WinkingCat.HelperLibs.ColorLabel();
-            this.colorLabel2 = new WinkingCat.HelperLibs.ColorLabel();
-            this.colorLabel3 = new WinkingCat.HelperLibs.ColorLabel();
-            this.colorLabel4 = new WinkingCat.HelperLibs.ColorLabel();
+            this.colorLabel1 = new WinkingCat.Controls.ColorLabel();
+            this.colorLabel2 = new WinkingCat.Controls.ColorLabel();
+            this.colorLabel3 = new WinkingCat.Controls.ColorLabel();
+            this.colorLabel4 = new WinkingCat.Controls.ColorLabel();
             this.SuspendLayout();
             // 
             // cbHashType
@@ -492,9 +492,9 @@
         private System.Windows.Forms.Button btnCopyFileHash2;
         private System.Windows.Forms.Label label7;
         private System.Windows.Forms.TextBox tbFileHash2;
-        private HelperLibs.ColorLabel colorLabel1;
-        private HelperLibs.ColorLabel colorLabel2;
-        private HelperLibs.ColorLabel colorLabel3;
-        private HelperLibs.ColorLabel colorLabel4;
+        private Controls.ColorLabel colorLabel1;
+        private Controls.ColorLabel colorLabel2;
+        private Controls.ColorLabel colorLabel3;
+        private Controls.ColorLabel colorLabel4;
     }
 }

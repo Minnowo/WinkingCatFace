@@ -38,6 +38,7 @@
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
     <Prefer32Bit>false</Prefer32Bit>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <PlatformTarget>AnyCPU</PlatformTarget>
@@ -78,6 +79,7 @@
     <Reference Include="System" />
     <Reference Include="System.Configuration" />
     <Reference Include="System.Core" />
+    <Reference Include="System.Runtime.Remoting" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="Microsoft.CSharp" />
@@ -88,16 +90,82 @@
     <Reference Include="System.Windows.Forms" />
     <Reference Include="System.Xml" />
     <Reference Include="WindowsBase" />
+    <Reference Include="Microsoft.WindowsAPICodePack, Version=1.1.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\Cat\packages\Microsoft.WindowsAPICodePack-Core.1.1.0.0\lib\Microsoft.WindowsAPICodePack.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.WindowsAPICodePack.Shell, Version=1.1.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\Cat\packages\Microsoft.WindowsAPICodePack-Shell.1.1.0.0\lib\Microsoft.WindowsAPICodePack.Shell.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.WindowsAPICodePack.ShellExtensions, Version=1.1.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\Cat\packages\Microsoft.WindowsAPICodePack-Shell.1.1.0.0\lib\Microsoft.WindowsAPICodePack.ShellExtensions.dll</HintPath>
+    </Reference>
     <Reference Include="zxing, Version=0.16.6.0, Culture=neutral, PublicKeyToken=4e88037ac681fe60, processorArchitecture=MSIL">
       <HintPath>packages\ZXing.Net.0.16.6\lib\net47\zxing.dll</HintPath>
     </Reference>
     <Reference Include="zxing.presentation, Version=0.16.6.0, Culture=neutral, PublicKeyToken=4e88037ac681fe60, processorArchitecture=MSIL">
       <HintPath>packages\ZXing.Net.0.16.6\lib\net47\zxing.presentation.dll</HintPath>
     </Reference>
+    <Reference Include="Newtonsoft.Json, Version=12.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+      <HintPath>..\Cat\packages\Newtonsoft.Json.12.0.3\lib\net45\Newtonsoft.Json.dll</HintPath>
+    </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="ClipManager.cs" />
+    <Compile Include="ColorEditor.cs" />
+    <Compile Include="Colors\ColorConverter.cs" />
+    <Compile Include="Colors\ColorHelper.cs" />
+    <Compile Include="Colors\Formats\ARGB.cs" />
+    <Compile Include="Colors\Formats\CMYK.cs" />
+    <Compile Include="Colors\Formats\COLOR.cs" />
+    <Compile Include="Colors\Formats\HSB.cs" />
+    <Compile Include="Colors\Formats\HSL.cs" />
+    <Compile Include="Controls\ColorComboBox.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Controls\ColorComboBox.Designer.cs">
+      <DependentUpon>ColorComboBox.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Controls\ColorDisplay.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Controls\ColorDisplay.designer.cs">
+      <DependentUpon>ColorDisplay.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Controls\ColorLabel.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Controls\ColorLabel.Designer.cs">
+      <DependentUpon>ColorLabel.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Controls\ColorPicker\ColorPicker.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Controls\ColorPicker\ColorPickerBase.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Controls\ColorPicker\ColorPickerBase.Designer.cs">
+      <DependentUpon>ColorPickerBase.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Controls\ColorPicker\ColorPickerBox.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Controls\ColorPicker\ColorPickerBox.Designer.cs">
+      <DependentUpon>ColorPickerBox.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Controls\ColorPicker\ColorPickerSlider.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Controls\ColorPicker\ColorPickerSlider.Designer.cs">
+      <DependentUpon>ColorPickerSlider.cs</DependentUpon>
+    </Compile>
     <Compile Include="Controls\CustomListView.cs">
       <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="Controls\DrawingBoard.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Controls\DrawingBoard.Designer.cs">
+      <DependentUpon>DrawingBoard.cs</DependentUpon>
     </Compile>
     <Compile Include="Controls\FolderView.cs">
       <SubType>UserControl</SubType>
@@ -105,9 +173,45 @@
     <Compile Include="Controls\FolderView.Designer.cs">
       <DependentUpon>FolderView.cs</DependentUpon>
     </Compile>
+    <Compile Include="Controls\ImageDisplay\ImageDisplay.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Controls\ImageDisplay\ImageDrawMode.cs" />
+    <Compile Include="Controls\ImageDisplay\TextArgs.cs" />
+    <Compile Include="Controls\ImageDisplay\ZoomLevelCollection.cs" />
+    <Compile Include="Controls\ImageDisplay\ZoomMode.cs" />
+    <Compile Include="Controls\ImageView.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Controls\ImageView.Designer.cs">
+      <DependentUpon>ImageView.cs</DependentUpon>
+    </Compile>
     <Compile Include="Controls\LISTVIEW.cs">
       <SubType>Component</SubType>
     </Compile>
+    <Compile Include="Controls\ToolStripClickThrough.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="Controls\ZoomDrawingBoard.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Controls\ZoomDrawingBoard.Designer.cs">
+      <DependentUpon>ZoomDrawingBoard.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Controls\_PictureBox.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Enums\ColorFormat.cs" />
+    <Compile Include="Enums\ColorSpaceDrawStyle.cs" />
+    <Compile Include="Enums\Enums.cs" />
+    <Compile Include="Enums\EnumToString.cs" />
+    <Compile Include="Enums\FileSizeUnit.cs" />
+    <Compile Include="Enums\HashType.cs" />
+    <Compile Include="Enums\HotkeyStatus.cs" />
+    <Compile Include="Enums\RegionCaptureMode.cs" />
+    <Compile Include="Enums\RegionResult.cs" />
+    <Compile Include="Enums\SlashType.cs" />
+    <Compile Include="Enums\ToolTipLocation.cs" />
     <Compile Include="Events\CheckboxCheckedEvent.cs" />
     <Compile Include="Controls\HotkeyInputControl.cs">
       <SubType>UserControl</SubType>
@@ -115,11 +219,31 @@
     <Compile Include="Controls\HotkeyInputControl.Designer.cs">
       <DependentUpon>HotkeyInputControl.cs</DependentUpon>
     </Compile>
+    <Compile Include="Events\ColorChangedEvent.cs" />
+    <Compile Include="Events\ImageSavedEvent.cs" />
+    <Compile Include="Extensions\Extensions.cs" />
+    <Compile Include="Extensions\StreamExtensions.cs" />
+    <Compile Include="Extensions\TypeExtensions.cs" />
     <Compile Include="Forms\ApplicationForm.cs">
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="Forms\ApplicationForm.Designer.cs">
       <DependentUpon>ApplicationForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Forms\BaseForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\ClipForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\ClipForm.Designer.cs">
+      <DependentUpon>ClipForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Forms\ColorPickerForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\ColorPickerForm.designer.cs">
+      <DependentUpon>ColorPickerForm.cs</DependentUpon>
     </Compile>
     <Compile Include="Forms\HashCheckForm.cs">
       <SubType>Form</SubType>
@@ -129,6 +253,15 @@
     </Compile>
     <Compile Include="Forms\HotkeyForm.cs">
       <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\ImageViewerForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\OCRForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\OCRForm.Designer.cs">
+      <DependentUpon>OCRForm.cs</DependentUpon>
     </Compile>
     <Compile Include="Forms\QrCodeForm.cs">
       <SubType>Form</SubType>
@@ -142,13 +275,60 @@
     <Compile Include="Forms\RegexForm.Designer.cs">
       <DependentUpon>RegexForm.cs</DependentUpon>
     </Compile>
+    <Compile Include="Forms\RegionCaptureForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\RegionCaptureForm.Designer.cs">
+      <DependentUpon>RegionCaptureForm.cs</DependentUpon>
+    </Compile>
     <Compile Include="Forms\StylesForm.cs">
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="Forms\StylesForm.Designer.cs">
       <DependentUpon>StylesForm.cs</DependentUpon>
     </Compile>
+    <Compile Include="Helpers\ClipboardHelper.cs" />
+    <Compile Include="Helpers\CursorData.cs" />
+    <Compile Include="Helpers\EnumHelper.cs" />
+    <Compile Include="Helpers\Helper.cs" />
+    <Compile Include="Helpers\ImageHelper\ByteHelper.cs" />
+    <Compile Include="Helpers\ImageHelper\Enums\BitDepth.cs" />
+    <Compile Include="Helpers\ImageHelper\Enums\ExifPropertyTag.cs" />
+    <Compile Include="Helpers\ImageHelper\Enums\ImgFormat.cs" />
+    <Compile Include="Helpers\ImageHelper\GraphicsExtensions.cs" />
+    <Compile Include="Helpers\ImageHelper\ImageBinaryReader.cs" />
+    <Compile Include="Helpers\ImageHelper\ImageFormats\BMP.cs" />
+    <Compile Include="Helpers\ImageHelper\ImageFormats\Gif\Gif.cs" />
+    <Compile Include="Helpers\ImageHelper\ImageFormats\Gif\GifDecoder.cs" />
+    <Compile Include="Helpers\ImageHelper\ImageFormats\Gif\GifEncoder.cs" />
+    <Compile Include="Helpers\ImageHelper\ImageFormats\Gif\GifFrame.cs" />
+    <Compile Include="Helpers\ImageHelper\ImageFormats\IMAGE.cs" />
+    <Compile Include="Helpers\ImageHelper\ImageFormats\JPEG.cs" />
+    <Compile Include="Helpers\ImageHelper\ImageFormats\PNG.cs" />
+    <Compile Include="Helpers\ImageHelper\ImageFormats\TIFF.cs" />
+    <Compile Include="Helpers\ImageHelper\ImageFormats\Webp\Enums.cs" />
+    <Compile Include="Helpers\ImageHelper\ImageFormats\Webp\LibWebpStructs.cs" />
+    <Compile Include="Helpers\ImageHelper\ImageFormats\Webp\UnsafeNativeMethods.cs" />
+    <Compile Include="Helpers\ImageHelper\ImageFormats\Webp\Webp.cs" />
+    <Compile Include="Helpers\ImageHelper\ImageFormats\Webp\WebpQuality.cs" />
+    <Compile Include="Helpers\ImageHelper\ImageFormats\WORM.cs" />
+    <Compile Include="Helpers\ImageHelper\ImageHelper.cs" />
+    <Compile Include="Helpers\ImageHelper\ImageProcessor.cs" />
+    <Compile Include="Helpers\ImageHelper\Structs\ResizeImage.cs" />
+    <Compile Include="Helpers\MathHelper.cs" />
+    <Compile Include="Helpers\PathHelper.cs" />
+    <Compile Include="Helpers\ScreenHelper.cs" />
+    <Compile Include="Helpers\ScreenshotHelper.cs" />
+    <Compile Include="Helpers\TranslatorHelper.cs" />
+    <Compile Include="OCRManager.cs" />
+    <Compile Include="Types\WindowsList.cs" />
     <Compile Include="HotkeyManager.cs" />
+    <Compile Include="Interfaces\IUndoable.cs" />
+    <Compile Include="Native\NativeConstants.cs" />
+    <Compile Include="Native\NativeEnums.cs" />
+    <Compile Include="Native\NativeMethods.cs" />
+    <Compile Include="Native\NativeMethod_Helpers.cs" />
+    <Compile Include="Native\NativeStructs.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Forms\SettingsForm.cs">
@@ -158,7 +338,33 @@
       <DependentUpon>SettingsForm.cs</DependentUpon>
     </Compile>
     <Compile Include="Events\TaskExecutedEvent.cs" />
+    <Compile Include="RegionCaptureHelper.cs" />
+    <Compile Include="Settings\ClipOptions.cs" />
+    <Compile Include="Settings\ClipSettings.cs" />
+    <Compile Include="Settings\InternalSettings.cs" />
+    <Compile Include="Settings\MainFormSettings.cs" />
+    <Compile Include="Settings\MiscSettings.cs" />
+    <Compile Include="Settings\RegionCaptureSettings.cs" />
+    <Compile Include="Settings\SettingsManager.cs" />
+    <Compile Include="Settings\StyleClasses\ApplicationStyles.cs" />
+    <Compile Include="Settings\StyleClasses\CustomColorTable.cs" />
+    <Compile Include="Settings\StyleClasses\ToolStripCustomRenderer.cs" />
     <Compile Include="TaskHandler.cs" />
+    <Compile Include="Types\BitmapUndo.cs" />
+    <Compile Include="Types\FolderWatcher.cs" />
+    <Compile Include="Types\Hotkey.cs" />
+    <Compile Include="Types\HotkeySettings.cs" />
+    <Compile Include="Types\InstanceManager.cs" />
+    <Compile Include="Types\RegionReturn.cs" />
+    <Compile Include="Types\TIMER.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="Types\WindowInfo.cs" />
+    <Compile Include="Types\WorkerQueue.cs" />
+    <Compile Include="ValueTypeTypeConverter.cs" />
+    <EmbeddedResource Include="Controls\ColorDisplay.resx">
+      <DependentUpon>ColorDisplay.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Controls\CustomListView.resx">
       <DependentUpon>CustomListView.cs</DependentUpon>
     </EmbeddedResource>
@@ -168,17 +374,35 @@
     <EmbeddedResource Include="Controls\HotkeyInputControl.resx">
       <DependentUpon>HotkeyInputControl.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="Controls\ImageView.resx">
+      <DependentUpon>ImageView.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Forms\ApplicationForm.resx">
       <DependentUpon>ApplicationForm.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="Forms\ClipForm.resx">
+      <DependentUpon>ClipForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\ColorPickerForm.resx">
+      <DependentUpon>ColorPickerForm.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Forms\HashCheckForm.resx">
       <DependentUpon>HashCheckForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\ImageViewerForm.resx">
+      <DependentUpon>ImageViewerForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\OCRForm.resx">
+      <DependentUpon>OCRForm.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\QrCodeForm.resx">
       <DependentUpon>QrCodeForm.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\RegexForm.resx">
       <DependentUpon>RegexForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\RegionCaptureForm.resx">
+      <DependentUpon>RegionCaptureForm.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\SettingsForm.resx">
       <DependentUpon>SettingsForm.cs</DependentUpon>
@@ -224,17 +448,45 @@
     </BootstrapperPackage>
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\Cat.HelperLibs\WinkingCat.HelperLibs.csproj">
-      <Project>{9d5d4aa3-5ff0-46b3-aca4-af277f4713cd}</Project>
-      <Name>WinkingCat.HelperLibs</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\Cat.Uploaders\WinkingCat.Uploaders.csproj">
-      <Project>{3d8102c2-8543-48aa-a357-a1e2fcc7c93c}</Project>
-      <Name>WinkingCat.Uploaders</Name>
-    </ProjectReference>
-  </ItemGroup>
-  <ItemGroup>
     <Content Include="%3b3white.ico" />
+    <None Include="Resources\TEST_DATA.ico" />
+    <None Include="Resources\style-icon.png" />
+    <None Include="Resources\stock_up_one_dir.png" />
+    <None Include="Resources\settings-icon.png" />
+    <None Include="Resources\save-upload-icon.png" />
+    <None Include="Resources\save-download-icon.png" />
+    <None Include="Resources\qrCode.png" />
+    <None Include="Resources\Open-icon.png" />
+    <None Include="Resources\NewFolder16.png" />
+    <None Include="Resources\new-document-icon.png" />
+    <None Include="Resources\new-doc-icon.png" />
+    <None Include="Resources\monitor-icon.png" />
+    <None Include="Resources\magnifiere-32x32-3.png" />
+    <None Include="Resources\magnifiere-32x32-2.png" />
+    <None Include="Resources\layer-stack-arrange-back-icon.png" />
+    <None Include="Resources\layer-shape-text-icon.png" />
+    <None Include="Resources\layer-shape-icon.png" />
+    <None Include="Resources\layer-resize-icon.png" />
+    <None Include="Resources\layer-arrange-icon.png" />
+    <None Include="Resources\hashcheck.png" />
+    <None Include="Resources\google-webmaster-tools-icon.png" />
+    <None Include="Resources\gear-in-icon.png" />
+    <None Include="Resources\fire-icon.png" />
+    <None Include="Resources\failed_to_load.png" />
+    <None Include="Resources\Error-Symbol-icon.png" />
+    <None Include="Resources\Editing-Compare-icon.png" />
+    <None Include="Resources\Ecommerce-Qr-Code-icon.png" />
+    <None Include="Resources\cursor-icon.png" />
+    <None Include="Resources\Crosshair.cur" />
+    <None Include="Resources\color-wheel-icon.png" />
+    <None Include="Resources\color-picker-icon.png" />
+    <None Include="Resources\Clipboard-2-icon.png" />
+    <None Include="Resources\Camera-icon.png" />
+    <None Include="Resources\Binder-Clip-icon.png" />
+    <None Include="Resources\Aero-Window-Explorer-icon.png" />
+    <None Include="Resources\Actions-transform-scale-icon - new.png" />
+    <None Include="Resources\%3b3white.ico" />
+    <None Include="Resources\%3b3black.ico" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

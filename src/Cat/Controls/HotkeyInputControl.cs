@@ -1,16 +1,11 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
 using System.Drawing;
-using System.Data;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
 using WinkingCat.HelperLibs;
- 
 
-namespace WinkingCat
+using WinkingCat.Settings;
+
+namespace WinkingCat.Controls
 {
     public partial class HotkeyInputControl : UserControl
     {
@@ -22,7 +17,7 @@ namespace WinkingCat
         public bool editingHotkey { get; private set; } = false;
         private bool supressCheckboxEvent { get; set; } = false;
         public Function currentSelectedItem { get; private set; }
-        
+
         public HotkeyInputControl(Hotkey hotkey)
         {
             InitializeComponent();
@@ -156,7 +151,7 @@ namespace WinkingCat
                 StopEditing();
             else
                 StartEditing();
-            
+
         }
 
         private void buttonHotkey_Leave(object sender, EventArgs e)

@@ -1,14 +1,9 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using System.Drawing;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.IO;
 using System.Windows.Forms;
+using WinkingCat.Controls;
 using WinkingCat.HelperLibs;
+using WinkingCat.Settings;
 
 namespace WinkingCat
 {
@@ -103,7 +98,7 @@ namespace WinkingCat
 
             // delay settings
             numericUpDown1.Value = SettingsManager.MainFormSettings.Load_Image_Delay.Clamp(0, (int)numericUpDown1.Maximum);
-            numericUpDown2.Value = SettingsManager.MainFormSettings.Tray_Double_Click_Time.Clamp(0, (int)numericUpDown2.Maximum); 
+            numericUpDown2.Value = SettingsManager.MainFormSettings.Tray_Double_Click_Time.Clamp(0, (int)numericUpDown2.Maximum);
             numericUpDown3.Value = SettingsManager.MainFormSettings.Wait_Hide_Time.Clamp(0, (int)numericUpDown3.Maximum);
             numericUpDown4.Value = SettingsManager.MainFormSettings.Image_Failed_To_Load_Message_Time.Clamp(0, (int)numericUpDown4.Maximum);
 
@@ -201,7 +196,7 @@ namespace WinkingCat
         }
 
         private void OnTrayIconDoubleClick_SelectedIndexChanged(object sender, EventArgs e)
-        { 
+        {
             if (preventUpdate) return;
             SettingsManager.MainFormSettings.On_Tray_Double_Click = (Function)cbOnTrayDoubleClick.SelectedItem;
         }
@@ -277,14 +272,14 @@ namespace WinkingCat
             if (preventUpdate) return;
             if (cbDrawScreenWideCrosshair.Checked)
             {
-                SettingsManager.RegionCaptureSettings.Draw_Screen_Wide_Crosshair= true;
-                SettingsManager.RegionCaptureSettings.Draw_Marching_Ants= cbMarchingAnts.Checked;
+                SettingsManager.RegionCaptureSettings.Draw_Screen_Wide_Crosshair = true;
+                SettingsManager.RegionCaptureSettings.Draw_Marching_Ants = cbMarchingAnts.Checked;
                 cbMarchingAnts.Enabled = true;
                 return;
             }
 
-            SettingsManager.RegionCaptureSettings.Draw_Screen_Wide_Crosshair= false;
-            SettingsManager.RegionCaptureSettings.Draw_Marching_Ants= false;
+            SettingsManager.RegionCaptureSettings.Draw_Screen_Wide_Crosshair = false;
+            SettingsManager.RegionCaptureSettings.Draw_Marching_Ants = false;
             cbMarchingAnts.Enabled = false;
         }
 
@@ -294,17 +289,17 @@ namespace WinkingCat
             if (cbMarchingAnts.Checked)
             {
                 cbDrawScreenWideCrosshair.Checked = true;
-                SettingsManager.RegionCaptureSettings.Draw_Marching_Ants= true;
+                SettingsManager.RegionCaptureSettings.Draw_Marching_Ants = true;
                 return;
             }
 
-            SettingsManager.RegionCaptureSettings.Draw_Marching_Ants= false;
+            SettingsManager.RegionCaptureSettings.Draw_Marching_Ants = false;
         }
 
         private void DimBackground_CheckChanged(object sender, EventArgs e)
         {
             if (preventUpdate) return;
-            SettingsManager.RegionCaptureSettings.Draw_Background_Overlay= cbDimBackground.Checked;
+            SettingsManager.RegionCaptureSettings.Draw_Background_Overlay = cbDimBackground.Checked;
         }
 
         private void ShowInfoText_CheckChanged(object sender, EventArgs e)
@@ -336,7 +331,7 @@ namespace WinkingCat
         private void DrawMagnifierCrosshair_CheckChanged(object sender, EventArgs e)
         {
             if (preventUpdate) return;
-            SettingsManager.RegionCaptureSettings.Draw_Crosshair_In_Magnifier= cbDrawMagnifierCrosshair.Checked;
+            SettingsManager.RegionCaptureSettings.Draw_Crosshair_In_Magnifier = cbDrawMagnifierCrosshair.Checked;
         }
 
         private void DrawMagnifierGrid_CheckChanged(object sender, EventArgs e)
@@ -354,7 +349,7 @@ namespace WinkingCat
         private void CenterMagnifierOnMouse_CheckChanged(object sender, EventArgs e)
         {
             if (preventUpdate) return;
-            SettingsManager.RegionCaptureSettings.Center_Magnifier_On_Mouse= cbCenterMagnifierOnMouse.Checked;
+            SettingsManager.RegionCaptureSettings.Center_Magnifier_On_Mouse = cbCenterMagnifierOnMouse.Checked;
         }
 
         private void NUD_ValueChanged(object sender, EventArgs e)

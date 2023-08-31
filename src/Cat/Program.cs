@@ -1,13 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using System.Windows.Forms;
-using System.Runtime.InteropServices;
-using WinkingCat.HelperLibs;
+using System.Diagnostics;
 using System.IO;
 using System.Threading;
-using System.Diagnostics;
+using System.Windows.Forms;
+using WinkingCat.HelperLibs;
+using WinkingCat.Settings;
 
 namespace WinkingCat
 {
@@ -23,7 +21,7 @@ namespace WinkingCat
         {
             Directory.SetCurrentDirectory(AppContext.BaseDirectory);
 
-            if(File.Exists(".MultiInstance"))
+            if (File.Exists(".MultiInstance"))
             {
                 Run();
                 return;
